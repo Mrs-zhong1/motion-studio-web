@@ -1,0 +1,17 @@
+{
+  "editor_loaded": true,
+  "exported_file": true,
+  "chapter_progress_changes": true,
+  "mobile_no_overflow": true,
+  "reduced_motion_respected": true,
+  "glb_original_embedded": true,
+  "texture_animation_metadata_preserved": true,
+  "script_errors": [],
+  "gpu_pbr": "NOT_TESTED (WebGL context unavailable)",
+  "offline_three_bundle": "NOT_BUILT (dependencies inaccessible)",
+  "title_in_export": true,
+  "r11_css_in_export": true,
+  "progress_initial": "0",
+  "progress_scrolled": "0.46511627906976744",
+  "canvas_cpu_frames": "8"
+}
