@@ -1,0 +1,23 @@
+{
+  "webgl_context": false,
+  "gpu_context": false,
+  "hardware_gpu_verified": false,
+  "offline_editor_present": false,
+  "user_glb_uploaded": false,
+  "export_created": false,
+  "standalone_export_opens": false,
+  "three_canvas_frames": 0,
+  "gltf_animation_clips": 0,
+  "texture_maps": 0,
+  "physical_materials": 0,
+  "animation_time": 0,
+  "mesh_count": 0,
+  "no_external_requests": true,
+  "no_javascript_errors": true,
+  "webgl_pipeline_pass": false,
+  "production_gpu_pass": false,
+  "errors": [
+    "RuntimeError: Missing real offline Three.js bundle. Run npm run build:offline in an online build environment."
+  ],
+  "network_requests": []
+}
