@@ -1,0 +1,31 @@
+{
+  "checks": {
+    "frameCount": {
+      "written_by_renderer": true,
+      "read_by_test": true
+    },
+    "gltfAnimations": {
+      "written_by_renderer": true,
+      "read_by_test": true
+    },
+    "textureMaps": {
+      "written_by_renderer": true,
+      "read_by_test": true
+    },
+    "physicalMaterials": {
+      "written_by_renderer": true,
+      "read_by_test": true
+    },
+    "animationTime": {
+      "written_by_renderer": true,
+      "read_by_test": true
+    },
+    "gltfMeshCount": {
+      "written_by_renderer": true,
+      "read_by_test": true
+    },
+    "extraction_executes_in_node": true
+  },
+  "passed": true,
+  "scope": "instrumentation contract only; NO WebGL/PBR proof"
+}
