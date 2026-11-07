@@ -1,0 +1,25 @@
+{
+  "checked_at_utc": "2026-11-06T01:19:43.540857+00:00",
+  "hosts": {
+    "registry.npmjs.org": {
+      "dns": "FAIL",
+      "error_type": "gaierror",
+      "error_code": -3,
+      "message": "[Errno -3] Temporary failure in name resolution"
+    },
+    "cdn.jsdelivr.net": {
+      "dns": "FAIL",
+      "error_type": "gaierror",
+      "error_code": -3,
+      "message": "[Errno -3] Temporary failure in name resolution"
+    },
+    "github.com": {
+      "dns": "FAIL",
+      "error_type": "gaierror",
+      "error_code": -3,
+      "message": "[Errno -3] Temporary failure in name resolution"
+    }
+  },
+  "npm_registry": "https://registry.npmjs.org/",
+  "environment": "current runtime only; not user device"
+}
