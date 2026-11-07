@@ -1,0 +1,17 @@
+{
+  "actual_glb_bytes_preserved": true,
+  "embedded_glb_sha256": "4ee9aa82af052ded3c33a1606694002fe679ba313151a8de97f166d886f6f95a",
+  "source_glb_sha256": "4ee9aa82af052ded3c33a1606694002fe679ba313151a8de97f166d886f6f95a",
+  "glb_has_texture": true,
+  "glb_has_animation": true,
+  "no_remote_resources_required_for_canvas_fallback": true,
+  "editor_loads": true,
+  "export_reopens": true,
+  "scroll_progress_changes": true,
+  "cpu_renderer_frames_increase": false,
+  "mobile_overflow": false,
+  "browser_errors": [],
+  "scope": "HTML, model bytes, Canvas fallback only; Three PBR / GPU is NOT verified",
+  "unsupported_glb_fallback_notice": true,
+  "pass": true
+}
