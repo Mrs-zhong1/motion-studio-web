@@ -1,0 +1,119 @@
+name: Motion Studio — build standalone Three.js HTML and test
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Motion-Studio-Editor.html'
+      - 'three-pbr-module.js'
+      - 'build-offline-three.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'test_gpu_pbr.py'
+      - 'test_r11.py'
+      - 'verify_r12.py'
+      - 'test_r13_contract.py'
+      - 'test_r14_instrumentation.py'
+      - '.github/workflows/build-web-offline.yml'
+permissions:
+  contents: write
+jobs:
+  build-offline-html:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore binary GLB fixtures when uploaded as Base64
+        run: |
+          for name in Sample-Dual-Material Sample-Textured-Animated; do
+            if [ ! -f "$name.glb" ] && [ -f "$name.glb.base64" ]; then
+              base64 --decode "$name.glb.base64" > "$name.glb"
+            fi
+          done
+      - name: Persist restored GLB fixtures in the repository
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          if ls Sample-*.glb.base64 >/dev/null 2>&1; then
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add Sample-*.glb
+            git rm Sample-*.glb.base64
+            git commit -m 'Restore binary GLB fixtures'
+            git push origin HEAD:main
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install exact dependencies and bundle Three.js
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:offline
+      - name: Check HTML contains actual offline Three.js bundle
+        run: python verify_offline_bundle.py
+      - name: Archive standalone HTML immediately (independent of GPU test)
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-offline-editor
+          path: |
+            Motion-Studio-Editor-OFFLINE.html
+            THIRD_PARTY_THREE_LICENSE.txt
+            three-bundle-stats.json
+          if-no-files-found: error
+  browser-acceptance:
+    needs: build-offline-html
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore binary GLB fixtures when uploaded as Base64
+        run: |
+          for name in Sample-Dual-Material Sample-Textured-Animated; do
+            if [ ! -f "$name.glb" ] && [ -f "$name.glb.base64" ]; then
+              base64 --decode "$name.glb.base64" > "$name.glb"
+            fi
+          done
+      - uses: actions/download-artifact@v4
+        with:
+          name: motion-studio-offline-editor
+          path: .
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify built HTML and source contracts
+        run: |
+          python verify_offline_bundle.py
+          python test_r13_contract.py
+          python test_r14_instrumentation.py
+      - name: Install Chromium and Playwright
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Test editor and exported site
+        run: python test_r11.py
+      - name: STRICT WebGL, PBR, textures, and animation test (SwiftShader)
+        id: gpu
+        continue-on-error: true
+        run: xvfb-run -a python test_gpu_pbr.py
+      - name: Record release gate
+        if: always()
+        run: python verify_r12.py
+      - name: Upload browser acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-browser-test-evidence
+          path: |
+            R11_TEST.json
+            R12_GPU_TEST.json
+            R12_RELEASE_GATE.json
+            R13_CONTRACT_TEST.json
+            R14_INSTRUMENTATION.json
+          if-no-files-found: warn
+      - name: Fail GPU acceptance if not proven
+        if: steps.gpu.outcome != 'success'
+        run: |
+          echo 'GPU/PBR test failed. This does NOT invalidate successfully generated offline HTML, which is separately downloadable from the build job.' >&2
+          exit 2
