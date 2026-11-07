@@ -1,0 +1,10 @@
+{
+  "name": "motion-studio-web-standards-offline",
+  "private": true,
+  "type": "module",
+  "version": "0.11.0",
+  "description": "Build pinned Three.js and GLTFLoader into a self-contained browser editor",
+  "scripts": {"build:offline": "node build-offline-three.mjs"},
+  "dependencies": {"three": "0.180.0"},
+  "devDependencies": {"esbuild": "0.25.12"}
+}
