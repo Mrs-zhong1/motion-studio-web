@@ -59,6 +59,21 @@ jobs:
             THIRD_PARTY_THREE_LICENSE.txt
             three-bundle-stats.json
           if-no-files-found: error
+      - name: Publish standalone HTML and checksums to the repository
+        if: github.ref == 'refs/heads/main'
+        run: |
+          output_dir="$(mktemp -d)"
+          cp Motion-Studio-Editor-OFFLINE.html THIRD_PARTY_THREE_LICENSE.txt three-bundle-stats.json "$output_dir/"
+          git fetch origin main
+          git checkout -B main origin/main
+          mkdir -p build-output
+          cp "$output_dir"/* build-output/
+          sha256sum build-output/Motion-Studio-Editor-OFFLINE.html > build-output/SHA256SUMS.txt
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add build-output
+          git commit -m 'Publish verified offline editor build'
+          git push origin main
   browser-acceptance:
     needs: build-offline-html
     runs-on: ubuntu-latest
@@ -112,6 +127,25 @@ jobs:
             R13_CONTRACT_TEST.json
             R14_INSTRUMENTATION.json
           if-no-files-found: warn
+      - name: Publish browser acceptance evidence to the repository
+        if: always() && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          evidence_dir="$(mktemp -d)"
+          for file in R11_TEST.json R12_GPU_TEST.json R12_RELEASE_GATE.json R13_CONTRACT_TEST.json R14_INSTRUMENTATION.json; do
+            if [ -f "$file" ]; then cp "$file" "$evidence_dir/"; fi
+          done
+          git fetch origin main
+          git checkout -B main origin/main
+          mkdir -p build-output/evidence
+          cp "$evidence_dir"/* build-output/evidence/ 2>/dev/null || true
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add build-output/evidence
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish browser acceptance evidence'
+            git push origin main
+          fi
       - name: Fail GPU acceptance if not proven
         if: steps.gpu.outcome != 'success'
         run: |
