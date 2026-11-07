@@ -1,0 +1,1 @@
+Three.js Copyright 2010-2025 Three.js Authors. License: MIT. Source: https://github.com/mrdoob/three.js (r180).
