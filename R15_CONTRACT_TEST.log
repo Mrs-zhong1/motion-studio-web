@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "online_renderer_module_matches_source": true,
+    "no_silent_fake_pbr": true,
+    "strict_test_requires_real_textures_and_animation": true,
+    "ci_step_id_matches_release_guard": true,
+    "ci_build_runs_actual_e2e": true,
+    "offline_editor_content_valid_if_present": true,
+    "sample_glb_contains_texture_and_animation": true,
+    "build_js_syntax": true,
+    "source_js_parses_as_module": true
+  },
+  "pass": true,
+  "production_ready": false,
+  "important": "Contract checks do not prove WebGL/PBR image quality or GPU hardware."
+}
