@@ -56,7 +56,9 @@ jobs:
           } 2>&1 | tee build.log
       - name: Check HTML contains actual offline Three.js bundle
         id: verify
-        run: python verify_offline_bundle.py
+        run: |
+          set -o pipefail
+          python verify_offline_bundle.py 2>&1 | tee verify.log
       - name: Archive standalone HTML immediately (independent of GPU test)
         uses: actions/upload-artifact@v4
         with:
@@ -87,13 +89,18 @@ jobs:
         run: |
           status_dir="$(mktemp -d)"
           if [ -f build.log ]; then cp build.log "$status_dir/"; fi
+          if [ -f verify.log ]; then cp verify.log "$status_dir/"; fi
+          mkdir -p "$status_dir/unverified"
+          for file in Motion-Studio-Editor-OFFLINE.html THIRD_PARTY_THREE_LICENSE.txt three-bundle-stats.json; do
+            if [ -f "$file" ]; then cp "$file" "$status_dir/unverified/"; fi
+          done
           printf '{"build":"%s","verify":"%s","sourceSha":"%s"}\n' \
             '${{ steps.build.outcome }}' '${{ steps.verify.outcome }}' '${{ github.sha }}' \
             > "$status_dir/BUILD_STATUS.json"
           git fetch origin main
           git checkout -B main origin/main
           mkdir -p build-output
-          cp "$status_dir"/* build-output/
+          cp -R "$status_dir"/. build-output/
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add build-output
