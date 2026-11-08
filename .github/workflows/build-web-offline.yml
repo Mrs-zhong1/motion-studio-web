@@ -61,6 +61,7 @@ jobs:
           python verify_offline_bundle.py 2>&1 | tee verify.log
       - name: Archive standalone HTML immediately (independent of GPU test)
         id: archive
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: motion-studio-offline-editor
@@ -71,7 +72,7 @@ jobs:
           if-no-files-found: error
       - name: Publish standalone HTML and checksums to the repository
         id: publish
-        if: github.ref == 'refs/heads/main'
+        if: steps.verify.outcome == 'success' && github.ref == 'refs/heads/main'
         run: |
           set -o pipefail
           {
@@ -126,10 +127,12 @@ jobs:
               base64 --decode "$name.glb.base64" > "$name.glb"
             fi
           done
-      - uses: actions/download-artifact@v4
-        with:
-          name: motion-studio-offline-editor
-          path: .
+      - name: Retrieve verified offline editor from the repository
+        run: |
+          git fetch origin main
+          git show origin/main:build-output/Motion-Studio-Editor-OFFLINE.html > Motion-Studio-Editor-OFFLINE.html
+          git show origin/main:build-output/THIRD_PARTY_THREE_LICENSE.txt > THIRD_PARTY_THREE_LICENSE.txt
+          git show origin/main:build-output/three-bundle-stats.json > three-bundle-stats.json
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
