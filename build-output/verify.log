@@ -1,12 +1,12 @@
 {
   "checks": {
     "html_over_300kb": true,
-    "offline_js_injected": false,
+    "offline_js_injected": true,
     "no_remote_module_imports": true,
     "has_editor_ui": true,
     "bundle_built": true,
     "license_exists": true
   },
-  "passed": false,
+  "passed": true,
   "scope": "offline bundle contents only"
 }
