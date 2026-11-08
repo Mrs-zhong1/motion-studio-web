@@ -86,8 +86,10 @@ jobs:
             git config user.name github-actions[bot]
             git config user.email 41898282+github-actions[bot]@users.noreply.github.com
             git add build-output
-            git commit -m 'Publish verified offline editor build'
-            git push origin main
+            if ! git diff --cached --quiet; then
+              git commit -m 'Publish verified offline editor build'
+              git push origin main
+            fi
           } 2>&1 | tee publish.log
       - name: Publish build outcome and diagnostics
         if: always() && github.ref == 'refs/heads/main'
