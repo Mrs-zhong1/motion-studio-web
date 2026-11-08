@@ -1,14 +1,18 @@
 {
   "editor_loaded": true,
-  "exported_file": false,
-  "chapter_progress_changes": false,
-  "mobile_no_overflow": false,
-  "reduced_motion_respected": false,
-  "glb_original_embedded": false,
-  "texture_animation_metadata_preserved": false,
+  "exported_file": true,
+  "chapter_progress_changes": true,
+  "mobile_no_overflow": true,
+  "reduced_motion_respected": true,
+  "glb_original_embedded": true,
+  "texture_animation_metadata_preserved": true,
   "script_errors": [],
   "gpu_pbr": "SEE R12_GPU_TEST.json",
   "offline_three_bundle": "PRESENT",
-  "exception": "Locator.click: Timeout 3500ms exceeded.\nCall log:\n  - waiting for locator(\"[data-tab=\\\"content\\\"]\")\n    - locator resolved to <button data-tab=\"content\">☷ 内容</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-  "pass": false
+  "title_in_export": true,
+  "r11_css_in_export": true,
+  "progress_initial": "0",
+  "progress_scrolled": "0.46511627906976744",
+  "canvas_cpu_frames": null,
+  "pass": true
 }
