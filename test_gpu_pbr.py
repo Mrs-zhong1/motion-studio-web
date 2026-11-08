@@ -13,12 +13,13 @@ out={'webgl_context':False,'gpu_context':False,'hardware_gpu_verified':False,'of
      'no_external_requests':True,'no_javascript_errors':True,'webgl_pipeline_pass':False,'production_gpu_pass':False,
      'errors':[],'network_requests':[]}
 try:
+ hardware_mode='--hardware' in sys.argv
  html=P/'Motion-Studio-Editor-OFFLINE.html'
  out['offline_editor_present']=html.is_file()
  if not html.is_file():raise RuntimeError('Missing real offline Three.js bundle. Run npm run build:offline in an online build environment.')
  with sync_playwright() as p:
-  b=p.chromium.launch(headless=True,
-       args=['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+  b=p.chromium.launch(headless=not hardware_mode,**({'channel':'chrome'} if hardware_mode else {}),
+       args=['--no-sandbox','--disable-dev-shm-usage']+([] if hardware_mode else ['--use-angle=swiftshader','--enable-unsafe-swiftshader']))
   try:
    ctx=b.new_context(accept_downloads=True,viewport={'width':1380,'height':850})
    page=ctx.new_page()
@@ -30,7 +31,10 @@ try:
    ctx.route('**/*',guard)
    page.on('pageerror',lambda e:out['errors'].append('editor: '+str(e)))
    page.goto(html.resolve().as_uri(),wait_until='domcontentloaded',timeout=30000)
-   out['webgl_context']=page.evaluate("()=>{const c=document.createElement('canvas');try{return !!(c.getContext('webgl2')||c.getContext('webgl'))}catch(e){return false}}")
+   renderer=page.evaluate("()=>{const c=document.createElement('canvas');try{const gl=c.getContext('webgl2')||c.getContext('webgl');if(!gl)return null;const ext=gl.getExtension('WEBGL_debug_renderer_info');return ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)}catch(e){return null}}")
+   out['webgl_renderer']=renderer
+   out['webgl_context']=bool(renderer)
+   out['gpu_context']=bool(hardware_mode and renderer and 'Apple M5' in renderer and 'SwiftShader' not in renderer)
    if not out['webgl_context']:raise RuntimeError('WebGL context creation failed; PBR verification is blocked, not passed.')
    page.locator('#templateList .template-card').nth(1).click(timeout=6000)
    page.locator('#glbInput').set_input_files(str(P/'Sample-Textured-Animated.glb'))
@@ -49,8 +53,8 @@ try:
    out['three_canvas_frames']=info['frames'];out['gltf_animation_clips']=info['animations'];out['texture_maps']=info['textures'];out['physical_materials']=info['physicalMaterials'];out['animation_time']=info['animationTime'];out['mesh_count']=info['meshCount'];out['render_state']=info
    out['no_javascript_errors']=not out['errors']
    out['webgl_pipeline_pass']=(out['webgl_context'] and out['user_glb_uploaded'] and out['export_created'] and out['standalone_export_opens'] and out['mesh_count']>=1 and out['three_canvas_frames']>=3 and out['gltf_animation_clips']>=1 and out['texture_maps']>=1 and out['physical_materials']>=1 and out['animation_time']>0 and out['no_external_requests'] and out['no_javascript_errors'])
-   # SwiftShader is a software WebGL implementation. This check is not hardware GPU proof.
-   out['production_gpu_pass']=False
+   out['hardware_gpu_verified']=bool(out['gpu_context'] and out['webgl_pipeline_pass'])
+   out['production_gpu_pass']=out['hardware_gpu_verified']
   finally:b.close()
 except Exception as e:
  out['errors'].append(type(e).__name__+': '+str(e))
