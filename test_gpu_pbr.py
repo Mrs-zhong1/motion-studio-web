@@ -17,8 +17,8 @@ try:
  out['offline_editor_present']=html.is_file()
  if not html.is_file():raise RuntimeError('Missing real offline Three.js bundle. Run npm run build:offline in an online build environment.')
  with sync_playwright() as p:
-  b=p.chromium.launch(headless=True,executable_path='/usr/bin/chromium' if Path('/usr/bin/chromium').exists() else None,
-       args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+  b=p.chromium.launch(headless=True,
+       args=['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
   try:
    ctx=b.new_context(accept_downloads=True,viewport={'width':1380,'height':850})
    page=ctx.new_page()
@@ -29,7 +29,7 @@ try:
     else:route.continue_()
    ctx.route('**/*',guard)
    page.on('pageerror',lambda e:out['errors'].append('editor: '+str(e)))
-   page.set_content(html.read_text(),wait_until='domcontentloaded',timeout=30000)
+   page.goto(html.resolve().as_uri(),wait_until='domcontentloaded',timeout=30000)
    out['webgl_context']=page.evaluate("()=>{const c=document.createElement('canvas');try{return !!(c.getContext('webgl2')||c.getContext('webgl'))}catch(e){return false}}")
    if not out['webgl_context']:raise RuntimeError('WebGL context creation failed; PBR verification is blocked, not passed.')
    page.locator('#templateList .template-card').nth(1).click(timeout=6000)
@@ -40,7 +40,7 @@ try:
    path=P/'R12-THREE-OFFLINE-EXPORT.html';d.value.save_as(path)
    out['export_created']=path.is_file() and path.stat().st_size>100000
    q=ctx.new_page();q.on('pageerror',lambda e:out['errors'].append('export: '+str(e)))
-   q.set_content(path.read_text(),wait_until='domcontentloaded',timeout=30000)
+   q.goto(path.resolve().as_uri(),wait_until='domcontentloaded',timeout=30000)
    out['standalone_export_opens']=q.locator('body.template-orbit').count()==1
    try:
     q.wait_for_function("()=>Number(document.querySelector('#ms-three-canvas')?.dataset.frameCount||0)>=3",timeout=17000)

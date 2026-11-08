@@ -4,11 +4,11 @@ import json,traceback
 R=Path(__file__).parent
 result={'editor_loaded':False,'exported_file':False,'chapter_progress_changes':False,'mobile_no_overflow':False,'reduced_motion_respected':False,'glb_original_embedded':False,'texture_animation_metadata_preserved':False,'script_errors':[],'gpu_pbr':'NOT_TESTED (WebGL context unavailable)','offline_three_bundle':'NOT_BUILT (dependencies inaccessible)'}
 with sync_playwright() as p:
- b=p.chromium.launch(**({'executable_path':'/usr/bin/chromium'} if Path('/usr/bin/chromium').exists() else {}),headless=True,args=['--no-sandbox']); c=b.new_context(accept_downloads=True,viewport={'width':1380,'height':850});pg=c.new_page()
+ b=p.chromium.launch(headless=True,args=['--no-sandbox','--disable-dev-shm-usage']); c=b.new_context(accept_downloads=True,viewport={'width':1380,'height':850});pg=c.new_page()
  pg.route('**/*',lambda r:r.abort() if r.request.url.startswith('https://') else r.continue_())
  pg.on('pageerror',lambda e:result['script_errors'].append('editor: '+str(e)))
  try:
-  pg.set_content((R/'Motion-Studio-Editor-OFFLINE.html' if (R/'Motion-Studio-Editor-OFFLINE.html').exists() else R/'Motion-Studio-Editor.html').read_text(),wait_until='domcontentloaded',timeout=20000)
+  pg.goto((R/'Motion-Studio-Editor-OFFLINE.html' if (R/'Motion-Studio-Editor-OFFLINE.html').exists() else R/'Motion-Studio-Editor.html').resolve().as_uri(),wait_until='domcontentloaded',timeout=20000)
   pg.wait_for_timeout(900)
   result['editor_loaded']=pg.locator('#exportBtn').count()==1
   # choose ORBIT using documented shortcut.
@@ -24,7 +24,7 @@ with sync_playwright() as p:
   # load actual export and exercise scroll progress
   q=c.new_page();q.route('**/*',lambda r:r.abort() if r.request.url.startswith('https://') else r.continue_())
   q.on('pageerror',lambda e:result['script_errors'].append('export: '+str(e)))
-  q.set_content(doc,wait_until='domcontentloaded',timeout=22000);q.wait_for_timeout(1100)
+  q.goto((R/'ORBIT-R11-editor-export.html').resolve().as_uri(),wait_until='domcontentloaded',timeout=22000);q.wait_for_timeout(1100)
   initial=q.locator('.chapter').first.evaluate("e=>getComputedStyle(e).getPropertyValue('--ms-p')")
   q.evaluate("()=>document.getElementById('chapter-1').scrollIntoView({behavior:'instant'})")
   q.wait_for_timeout(300)
@@ -33,10 +33,10 @@ with sync_playwright() as p:
   result['progress_initial']=initial;result['progress_scrolled']=scrolled
   result['canvas_cpu_frames']=q.locator('#webgl-canvas').get_attribute('data-frame-count')
   q.screenshot(path=str(R/'R11-desktop.png'),timeout=12000)
-  m=c.new_page();m.set_viewport_size({'width':390,'height':844});m.route('**/*',lambda r:r.abort() if r.request.url.startswith('https://') else r.continue_());m.set_content(doc,wait_until='domcontentloaded',timeout=22000);m.wait_for_timeout(800)
+  m=c.new_page();m.set_viewport_size({'width':390,'height':844});m.route('**/*',lambda r:r.abort() if r.request.url.startswith('https://') else r.continue_());m.goto((R/'ORBIT-R11-editor-export.html').resolve().as_uri(),wait_until='domcontentloaded',timeout=22000);m.wait_for_timeout(800)
   result['mobile_no_overflow']=m.evaluate('()=>document.documentElement.scrollWidth<=innerWidth+2')
   m.screenshot(path=str(R/'R11-mobile.png'),timeout=12000)
-  c2=b.new_context(reduced_motion='reduce',viewport={'width':1280,'height':800});a=c2.new_page();a.route('**/*',lambda r:r.abort() if r.request.url.startswith('https://') else r.continue_());a.set_content(doc,wait_until='domcontentloaded',timeout=22000);a.wait_for_timeout(300)
+  c2=b.new_context(reduced_motion='reduce',viewport={'width':1280,'height':800});a=c2.new_page();a.route('**/*',lambda r:r.abort() if r.request.url.startswith('https://') else r.continue_());a.goto((R/'ORBIT-R11-editor-export.html').resolve().as_uri(),wait_until='domcontentloaded',timeout=22000);a.wait_for_timeout(300)
   result['reduced_motion_respected']=a.locator('.chapter').first.evaluate("e=>getComputedStyle(e).getPropertyValue('--ms-p')")=='0.5'
   # Actual textured/animated GLB import + export preserved
   pg.locator('#glbInput').set_input_files(str(R/'Sample-Textured-Animated.glb'))

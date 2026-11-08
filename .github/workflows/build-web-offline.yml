@@ -161,6 +161,7 @@ jobs:
         run: python verify_r12.py
       - name: Upload browser acceptance evidence
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: motion-studio-browser-test-evidence
