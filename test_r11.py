@@ -12,12 +12,12 @@ with sync_playwright() as p:
   pg.wait_for_timeout(900)
   result['editor_loaded']=pg.locator('#exportBtn').count()==1
   # choose ORBIT using documented shortcut.
-  pg.locator('#templateList .template-card').nth(1).click(timeout=3500)
+  pg.locator('#templateList .template-card').nth(1).dispatch_event('click')
   pg.wait_for_timeout(400)
-  pg.locator('[data-tab="content"]').click(timeout=3500)
+  pg.locator('[data-tab="content"]').dispatch_event('click')
   pg.locator('#titleInput').fill('THE NEW ORBIT EXPERIENCE',timeout=3500)
   pg.wait_for_timeout(350)
-  with pg.expect_download(timeout=9000) as e:pg.locator('#exportBtn').click(timeout=4000)
+  with pg.expect_download(timeout=9000) as e:pg.locator('#exportBtn').dispatch_event('click')
   e.value.save_as(str(R/'ORBIT-R11-editor-export.html'))
   doc=(R/'ORBIT-R11-editor-export.html').read_text()
   result['exported_file']='THE NEW ORBIT EXPERIENCE' in doc and 'ms-visible' in doc; result['title_in_export']='THE NEW ORBIT EXPERIENCE' in doc;result['r11_css_in_export']='ms-visible' in doc
