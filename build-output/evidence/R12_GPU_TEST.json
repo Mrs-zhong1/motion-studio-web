@@ -1,23 +1,31 @@
 {
-  "webgl_context": false,
+  "webgl_context": true,
   "gpu_context": false,
   "hardware_gpu_verified": false,
   "offline_editor_present": true,
-  "user_glb_uploaded": false,
-  "export_created": false,
-  "standalone_export_opens": false,
-  "three_canvas_frames": 0,
-  "gltf_animation_clips": 0,
-  "texture_maps": 0,
-  "physical_materials": 0,
-  "animation_time": 0,
-  "mesh_count": 0,
+  "user_glb_uploaded": true,
+  "export_created": true,
+  "standalone_export_opens": true,
+  "three_canvas_frames": 3,
+  "gltf_animation_clips": 1,
+  "texture_maps": 1,
+  "physical_materials": 1,
+  "animation_time": 0.14239999999996508,
+  "mesh_count": 1,
   "no_external_requests": true,
   "no_javascript_errors": true,
-  "webgl_pipeline_pass": false,
+  "webgl_pipeline_pass": true,
   "production_gpu_pass": false,
-  "errors": [
-    "TargetClosedError: Page.set_content: Target page, context or browser has been closed\nCall log:\n  - setting frame content, waiting until \"domcontentloaded\"\n"
-  ],
-  "network_requests": []
+  "errors": [],
+  "network_requests": [],
+  "render_state": {
+    "frames": 3,
+    "animations": 1,
+    "textures": 1,
+    "physicalMaterials": 1,
+    "animationTime": 0.14239999999996508,
+    "meshCount": 1,
+    "hud": "THREE.JS r180 / PBR / ANIMATED",
+    "legacy": ""
+  }
 }
