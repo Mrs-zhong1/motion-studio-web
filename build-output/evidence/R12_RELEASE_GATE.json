@@ -1,16 +1,19 @@
 {
   "checks": {
-    "editor_baseline_tested": true,
+    "editor_baseline_tested": false,
     "offline_bundle_created": true,
-    "offline_webgl_pbr_glb_animation_tested": true,
-    "offline_no_external_requests": true,
+    "offline_webgl_pbr_glb_animation_tested": false,
+    "offline_no_external_requests": false,
     "real_hardware_gpu_tested": false,
     "safari_real_device_tested": false,
     "reference_visual_review_accepted": false
   },
   "status": "NOT_PRODUCTION_READY",
-  "gpu_evidence_file": "R12_GPU_TEST.json",
+  "gpu_evidence_file": null,
   "remaining": [
+    "editor_baseline_tested",
+    "offline_webgl_pbr_glb_animation_tested",
+    "offline_no_external_requests",
     "real_hardware_gpu_tested",
     "safari_real_device_tested",
     "reference_visual_review_accepted"
