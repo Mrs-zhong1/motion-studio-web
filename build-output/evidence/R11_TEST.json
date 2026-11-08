@@ -1,0 +1,13 @@
+{
+  "editor_loaded": false,
+  "exported_file": false,
+  "chapter_progress_changes": false,
+  "mobile_no_overflow": false,
+  "reduced_motion_respected": false,
+  "glb_original_embedded": false,
+  "texture_animation_metadata_preserved": false,
+  "script_errors": [],
+  "gpu_pbr": "NOT_TESTED (WebGL context unavailable)",
+  "offline_three_bundle": "NOT_BUILT (dependencies inaccessible)",
+  "exception": "Page.set_content: Target page, context or browser has been closed\nCall log:\n  - setting frame content, waiting until \"domcontentloaded\"\n"
+}
