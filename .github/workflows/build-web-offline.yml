@@ -153,7 +153,7 @@ jobs:
       - name: STRICT WebGL, PBR, textures, and animation test (SwiftShader)
         id: gpu
         continue-on-error: true
-        run: xvfb-run -a python test_gpu_pbr.py
+        run: python test_gpu_pbr.py
       - name: Record release gate
         if: always()
         run: python verify_r12.py

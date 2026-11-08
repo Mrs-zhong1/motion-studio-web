@@ -18,7 +18,7 @@ try:
  if not html.is_file():raise RuntimeError('Missing real offline Three.js bundle. Run npm run build:offline in an online build environment.')
  with sync_playwright() as p:
   b=p.chromium.launch(headless=True,executable_path='/usr/bin/chromium' if Path('/usr/bin/chromium').exists() else None,
-       args=['--no-sandbox','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+       args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
   try:
    ctx=b.new_context(accept_downloads=True,viewport={'width':1380,'height':850})
    page=ctx.new_page()

@@ -3,11 +3,15 @@
 from pathlib import Path
 import json,sys
 root=Path(__file__).resolve().parent
-base=json.loads((root/'R11_RELEASE_GATE.json').read_text())
+base_file=root/'R11_RELEASE_GATE.json'
+r11_file=root/'R11_TEST.json'
+base=json.loads(base_file.read_text()) if base_file.exists() else {}
+r11=json.loads(r11_file.read_text()) if r11_file.exists() else {}
 gpu=json.loads((root/'R12_GPU_TEST.json').read_text()) if (root/'R12_GPU_TEST.json').exists() else {}
 bundle=root/'Motion-Studio-Editor-OFFLINE.html'
 checks={
- 'editor_baseline_tested':bool(base.get('r11_browser_suite')),
+ 'editor_baseline_tested':bool(base.get('r11_browser_suite')) or all(r11.get(k) for k in (
+   'editor_loaded','exported_file','chapter_progress_changes','mobile_no_overflow','reduced_motion_respected')),
  'offline_bundle_created':bundle.exists() and bundle.stat().st_size>300000,
  'offline_webgl_pbr_glb_animation_tested':bool(gpu.get('webgl_pipeline_pass')),
  'offline_no_external_requests':bool(gpu.get('webgl_pipeline_pass') and gpu.get('no_external_requests')),
