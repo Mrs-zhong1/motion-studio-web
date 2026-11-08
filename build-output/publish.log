@@ -1,0 +1,13 @@
+From https://github.com/Mrs-zhong1/motion-studio-web
+ * branch            main       -> FETCH_HEAD
+Reset branch 'main'
+branch 'main' set up to track 'origin/main'.
+Your branch is up to date with 'origin/main'.
+[main d27378b] Publish verified offline editor build
+ 4 files changed, 452 insertions(+)
+ create mode 100644 build-output/Motion-Studio-Editor-OFFLINE.html
+ create mode 100644 build-output/SHA256SUMS.txt
+ create mode 100644 build-output/THIRD_PARTY_THREE_LICENSE.txt
+ create mode 100644 build-output/three-bundle-stats.json
+To https://github.com/Mrs-zhong1/motion-studio-web
+   3aa95e9..d27378b  main -> main
