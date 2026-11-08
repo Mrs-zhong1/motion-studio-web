@@ -60,6 +60,7 @@ jobs:
           set -o pipefail
           python verify_offline_bundle.py 2>&1 | tee verify.log
       - name: Archive standalone HTML immediately (independent of GPU test)
+        id: archive
         uses: actions/upload-artifact@v4
         with:
           name: motion-studio-offline-editor
@@ -69,20 +70,24 @@ jobs:
             three-bundle-stats.json
           if-no-files-found: error
       - name: Publish standalone HTML and checksums to the repository
+        id: publish
         if: github.ref == 'refs/heads/main'
         run: |
-          output_dir="$(mktemp -d)"
-          cp Motion-Studio-Editor-OFFLINE.html THIRD_PARTY_THREE_LICENSE.txt three-bundle-stats.json "$output_dir/"
-          git fetch origin main
-          git checkout -B main origin/main
-          mkdir -p build-output
-          cp "$output_dir"/* build-output/
-          sha256sum build-output/Motion-Studio-Editor-OFFLINE.html > build-output/SHA256SUMS.txt
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add build-output
-          git commit -m 'Publish verified offline editor build'
-          git push origin main
+          set -o pipefail
+          {
+            output_dir="$(mktemp -d)"
+            cp Motion-Studio-Editor-OFFLINE.html THIRD_PARTY_THREE_LICENSE.txt three-bundle-stats.json "$output_dir/"
+            git fetch origin main
+            git checkout -B main origin/main
+            mkdir -p build-output
+            cp "$output_dir"/* build-output/
+            sha256sum build-output/Motion-Studio-Editor-OFFLINE.html > build-output/SHA256SUMS.txt
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add build-output
+            git commit -m 'Publish verified offline editor build'
+            git push origin main
+          } 2>&1 | tee publish.log
       - name: Publish build outcome and diagnostics
         if: always() && github.ref == 'refs/heads/main'
         continue-on-error: true
@@ -90,12 +95,14 @@ jobs:
           status_dir="$(mktemp -d)"
           if [ -f build.log ]; then cp build.log "$status_dir/"; fi
           if [ -f verify.log ]; then cp verify.log "$status_dir/"; fi
+          if [ -f publish.log ]; then cp publish.log "$status_dir/"; fi
           mkdir -p "$status_dir/unverified"
           for file in Motion-Studio-Editor-OFFLINE.html THIRD_PARTY_THREE_LICENSE.txt three-bundle-stats.json; do
             if [ -f "$file" ]; then cp "$file" "$status_dir/unverified/"; fi
           done
-          printf '{"build":"%s","verify":"%s","sourceSha":"%s"}\n' \
-            '${{ steps.build.outcome }}' '${{ steps.verify.outcome }}' '${{ github.sha }}' \
+          printf '{"build":"%s","verify":"%s","archive":"%s","publish":"%s","sourceSha":"%s"}\n' \
+            '${{ steps.build.outcome }}' '${{ steps.verify.outcome }}' '${{ steps.archive.outcome }}' \
+            '${{ steps.publish.outcome }}' '${{ github.sha }}' \
             > "$status_dir/BUILD_STATUS.json"
           git fetch origin main
           git checkout -B main origin/main
