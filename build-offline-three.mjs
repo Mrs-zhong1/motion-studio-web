@@ -19,7 +19,7 @@ const original=await readFile(resolve(dir,'Motion-Studio-Editor.html'),'utf8');
 if(!moduleCode.includes('gltfMeshCount')||!moduleCode.includes('textureMaps')||!moduleCode.includes('animationTime'))throw Error('Three renderer instrumentation missing; cannot run strict acceptance');
 const needle='window.MotionThreeOfflineModule = null;';
 if(!original.includes(needle))throw Error('Editor offline injection point not found');
-const output=original.replace(needle,'window.MotionThreeOfflineModule = '+safeLiteral+';');
+const output=original.replace(needle,()=> 'window.MotionThreeOfflineModule = '+safeLiteral+';');
 const target=resolve(dir,'Motion-Studio-Editor-OFFLINE.html');
 await writeFile(target,output);
 await writeFile(resolve(dir,'THIRD_PARTY_THREE_LICENSE.txt'),await readFile(resolve(dir,'node_modules/three/LICENSE'),'utf8'));
