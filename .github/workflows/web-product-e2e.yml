@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_web_product_e2e.py'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
