@@ -60,6 +60,22 @@ jobs:
           /usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' 'build/Motion Studio.app/Contents/Info.plist'
           file 'build/Motion Studio.app/Contents/MacOS/MotionStudio'
           lipo -archs 'build/Motion Studio.app/Contents/MacOS/MotionStudio'
+      - name: Execute native WKWebView self-test on Apple Silicon macOS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import subprocess
+          command=['build/Motion Studio.app/Contents/MacOS/MotionStudio','--self-test']
+          try:
+              p=subprocess.run(command,timeout=50,stdout=subprocess.PIPE,
+                  stderr=subprocess.STDOUT,text=True)
+              print(p.stdout[-9000:])
+              if p.returncode or 'MOTION_MAC_SELFTEST_PASS' not in p.stdout:
+                  raise SystemExit('Native WebKit self-test failed')
+          except subprocess.TimeoutExpired as error:
+              print('Native WKWebView did not complete within 50 seconds')
+              raise SystemExit(1) from error
+          PY
       - name: Package and actually mount DMG
         run: |
           set -euo pipefail
@@ -98,7 +114,7 @@ jobs:
             'dmgBytes':dmg.stat().st_size,
             'dmgSHA256':hashlib.sha256(dmg.read_bytes()).hexdigest(),
             'adHocSigned':True,'appleDeveloperSigned':False,'appleNotarized':False,
-            'webViewInteractiveSmokeTested':False,'safariHardwareGpuTested':False,
+            'webViewInteractiveSmokeTested':True,'safariHardwareGpuTested':False,
             'status':'PACKAGING_VALIDATED_NOT_PRODUCTION_SIGNED',
           }
           assert report['appArm64']
