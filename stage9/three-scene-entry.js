@@ -1,6 +1,7 @@
 // Standalone GPU renderer for Stage 9 exported GLB sections; bundled by esbuild.
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 (async function bootMotionThree(){
   const host=document.querySelector('.viewport')||document.body;
   const source=document.getElementById('embedded-model')?.textContent?.trim()||'';
@@ -32,7 +33,8 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
       if(!/^[A-Za-z0-9+/=]+$/.test(source))throw Error('Invalid base64 GLB');
       const binary=atob(source),bytes=new Uint8Array(binary.length);
       for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-      const gltf=await new Promise((yes,no)=>new GLTFLoader().parse(bytes.buffer,'',yes,no));
+      const gltfLoader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+      const gltf=await new Promise((yes,no)=>gltfLoader.parse(bytes.buffer,'',yes,no));
       object=gltf.scene;
       object.traverse(node=>{
         if(node.isBone)status.boneCount++;if(!node.isMesh)return;status.meshCount++;if(node.isSkinnedMesh)status.skinnedMeshCount++;if(node.morphTargetInfluences?.length)status.morphMeshCount++;
