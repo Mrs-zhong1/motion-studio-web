@@ -193,13 +193,20 @@ $('addTitleLayer').onclick=()=>addLayer('title');$('addCaptionLayer').onclick=()
 $('layerList').querySelectorAll('[data-select-layer]').forEach(btn=>btn.onclick=e=>selectLayer(btn.dataset.selectLayer,e.shiftKey));renderLayerProps();
 $('propImage').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>1500000){notify('图片超过 1.5 MB');return}const data=await new Promise((res,rej)=>{let r=new FileReader;r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});if(!/^data:image\/(png|jpeg|webp);base64,/.test(data)){notify('不支持的图片类型');return}updateSection('image',data);renderProps()};if($('clearImage'))$('clearImage').onclick=()=>{updateSection('image','');renderProps()};
  if(s.id==='offline-glb-scene'){
-  const panel=document.createElement('div');panel.className='field';panel.innerHTML='<label for="stage9GlbInput">上传本地静态 GLB（最多 2 MB）</label><input type="file" accept=".glb,model/gltf-binary" id="stage9GlbInput"><p class="small">模型作为 Base64 直接写入工程 JSON 和最终离线 HTML；支持 GLB 2.0 无压缩静态三角面。不保证 PBR、纹理或骨骼动画。</p><p id="stage9ModelInfo" class="small"></p><button id="stage9ClearModel" type="button">移除模型，恢复示例</button>';
+  const panel=document.createElement('div');panel.className='field';panel.innerHTML='<label for="stage9GlbInput">上传本地 GLB（最多 2 MB）</label><input type="file" accept=".glb,model/gltf-binary" id="stage9GlbInput"><p class="small">模型作为 Base64 直接写入工程 JSON 和最终离线 HTML；支持 GLB 2.0 的 PBR、纹理、骨骼与 Morph 动画基础示例；云端软件 WebGL 已测，实机 Safari / GPU 尚未验收。</p><p id="stage9ModelInfo" class="small"></p><button id="stage9ClearModel" type="button">移除模型，恢复示例</button>';
   p.append(panel);$('stage9ModelInfo').textContent=s.glb?'已内嵌模型 · '+Math.round(s.glb.length*.75/1024)+' KB':'尚未导入 · 显示示例立方体';
   $('stage9ClearModel').onclick=()=>{s.glb='';const fr=document.querySelector(`.section[data-uid="${s.uid}"] iframe`);if(fr)fr.srcdoc=frameMarkup(getItem(s),s);saveDraft();renderProps()};
   $('stage9GlbInput').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{
    if(file.size>2*1024*1024)throw Error('单个模型请控制在 2 MB 以内');const buf=await file.arrayBuffer(),v=new DataView(buf);
    if(v.byteLength<28||v.getUint32(0,true)!==0x46546c67||v.getUint32(4,true)!==2||v.getUint32(8,true)!==v.byteLength)throw Error('不是有效 GLB 2.0 文件');
-   const bytes=new Uint8Array(buf);let raw='';for(let j=0;j<bytes.length;j+=32768)raw+=String.fromCharCode(...bytes.subarray(j,j+32768));
+   const bytes=new Uint8Array(buf);
+   const jsonLength=v.getUint32(12,true),jsonChunkType=v.getUint32(16,true);
+   if(jsonChunkType!==0x4e4f534a||jsonLength<2||20+jsonLength>v.byteLength)throw Error('GLB JSON 分块无效');
+   let doc;
+   try{doc=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes.subarray(20,20+jsonLength)))}catch{throw Error('GLB JSON 无法解析')}
+   if(doc.asset?.version!=='2.0'||!Array.isArray(doc.meshes))throw Error('GLB 结构缺失或版本不兼容');
+   if([...(doc.buffers||[]),...(doc.images||[])].some(x=>typeof x.uri==='string' && !x.uri.startsWith('data:')))throw Error('离线模式不支持引用外部文件');
+   let raw='';for(let j=0;j<bytes.length;j+=32768)raw+=String.fromCharCode(...bytes.subarray(j,j+32768));
    s.glb=btoa(raw);const fr=document.querySelector(`.section[data-uid="${s.uid}"] iframe`);if(fr)fr.srcdoc=frameMarkup(getItem(s),s);saveDraft();renderProps();notify('GLB 已加入章节并将内嵌导出');
   }catch(err){notify('GLB 导入失败：'+err.message);}};
  }
