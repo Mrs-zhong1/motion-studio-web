@@ -48,6 +48,16 @@ try:
         first_id=page.evaluate("registry[0].id")
         page.locator("#componentList .comp").first.locator("button").click()
         check("component_add_via_ui",page.evaluate("(id)=>project.sections.length===1 && project.sections[0].id===id",first_id))
+        # A newly added section initially has no .section-art node. Image upload must create it.
+        import base64
+        png_path=ROOT/("WEB_PRODUCT_E2E_IMAGE_"+browser_name+".png")
+        png_path.write_bytes(base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg=="))
+        page.locator("#propImage").set_input_files(str(png_path))
+        page.wait_for_function("() => project.sections[0]?.image?.startsWith('data:image/png;base64,')")
+        check("new_section_image_upload",page.locator(".section.selected .section-art").count()==1)
+        page.locator("#clearImage").click()
+        check("section_image_clear",page.evaluate("project.sections[0].image")=="" and page.locator(".section.selected .section-art").count()==0)
+
         check("component_add_persisted",page.evaluate("(id)=>JSON.parse(localStorage.getItem('motion-studio-draft-v1')).sections[0].id===id",first_id))
         page.reload(wait_until="domcontentloaded")
         check("component_add_survives_reload",page.evaluate("(id)=>project.sections.length===1 && project.sections[0].id===id",first_id))
