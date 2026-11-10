@@ -6,6 +6,7 @@ import Foundation
 final class MotionStudioApp: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKDownloadDelegate, WKUIDelegate {
     private var window: NSWindow!
     private var webView: WKWebView!
+    private let selfTest = CommandLine.arguments.contains("--self-test")
 
     static func main() {
         let app = NSApplication.shared
@@ -40,6 +41,39 @@ final class MotionStudioApp: NSObject, NSApplicationDelegate, WKNavigationDelega
         NSApp.activate(ignoringOtherApps: true)
         // Explicit read access to the bundled document only; does not start a server.
         webView.loadFileURL(file, allowingReadAccessTo: file.deletingLastPathComponent())
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard selfTest else { return }
+        let script = """
+        (() => {
+          try {
+            const count = typeof registry === 'undefined' ? -1 : registry.length;
+            const exportReady = typeof exportDocument === 'function';
+            const hasThree = typeof stage9ThreeEngineURL === 'string'
+                          && stage9ThreeEngineURL.startsWith('data:text/javascript;base64,');
+            const hasShared = typeof stage9SharedEngineURL === 'string'
+                           && stage9SharedEngineURL.startsWith('data:text/javascript;base64,');
+            return { components: count, exportReady, hasThree, hasShared,
+                     location: location.protocol, webgl2: !!document.createElement('canvas').getContext('webgl2') };
+          } catch (error) { return { error: String(error) }; }
+        })()
+        """
+        webView.evaluateJavaScript(script) { value, error in
+            if let result = value as? [String: Any], error == nil,
+               (result["components"] as? Int) == 20,
+               (result["exportReady"] as? Bool) == true,
+               (result["hasThree"] as? Bool) == true,
+               (result["hasShared"] as? Bool) == true,
+               (result["location"] as? String) == "file:" {
+                NSLog("MOTION_MAC_SELFTEST_PASS: %@", String(describing: result))
+                fflush(stdout)
+                exit(0)
+            }
+            NSLog("MOTION_MAC_SELFTEST_FAIL: %@ %@", String(describing: value), String(describing: error))
+            fflush(stderr)
+            exit(2)
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
