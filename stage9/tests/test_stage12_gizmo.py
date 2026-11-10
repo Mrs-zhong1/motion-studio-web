@@ -81,7 +81,7 @@ try:
   res['pass']=(
    res['components']==20 and res['stage12Panel'] and res['initialKeyframes']==3
    and res['initialGizmo']['webgl2'] and res['initialGizmo']['models']==2 and res['initialGizmo']['canvasCount']==1
-   and res['initialGizmo']['state']['handleCount']==3 and res['initialGizmo']['state']['trajectoryPoints']>=20
+   and res['initialGizmo']['state']['handleCount']==3 and res['initialGizmo']['state']['axisArrowsCount']==3 and res['initialGizmo']['state']['trajectoryPoints']>=20
    and res['axisConstrainedX'] and res['gizmoAfterDrag']['dragCount']>=1
    and res['axisView']['axis']=='y' and res['axisView']['view']=='top'
    and res['previewAfterUpdates']['sceneId']==res['initialGizmo']['sceneUuid']
