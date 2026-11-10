@@ -84,8 +84,8 @@
       "renderWidth": 1200,
       "renderHeight": 460,
       "drawSamples": 4,
-      "drawTotalMs": 21,
-      "drawMaxMs": 19.8,
+      "drawTotalMs": 27.2,
+      "drawMaxMs": 25.3,
       "error": null,
       "progress": 0.8
     }
