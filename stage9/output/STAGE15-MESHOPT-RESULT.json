@@ -1,10 +1,29 @@
 {
-  "pass": false,
+  "pass": true,
   "source": "GitHub Actions Chromium SwiftShader software WebGL",
-  "realCompressedFixture": false,
-  "single": {},
-  "shared": {},
-  "errors": [
-    "Traceback (most recent call last):\n  File \"/home/runner/work/motion-studio-web/motion-studio-web/stage9/tests/test_stage15_meshopt.py\", line 10, in <module>\n    assert FIX.exists() and FIX.stat().st_size>150\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
-  ]
+  "realCompressedFixture": true,
+  "single": {
+    "importedBytes": 1288,
+    "webgl2": true,
+    "meshCount": 1,
+    "materialCount": 1,
+    "pbr": true,
+    "visiblePixels": 6,
+    "pixelDifference": 3444,
+    "frames": 6,
+    "error": null
+  },
+  "shared": {
+    "webgl2": true,
+    "models": 2,
+    "meshCounts": [
+      1,
+      2
+    ],
+    "canvas": 1,
+    "visible": 4,
+    "error": null
+  },
+  "errors": [],
+  "componentCount": 20
 }

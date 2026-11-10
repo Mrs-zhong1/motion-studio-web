@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 35.7,
+      "drawTotalMs": 22.5,
       "cameraSamples": [
         {
           "x": 0,
@@ -42,7 +42,7 @@
           "stage11Custom": false
         }
       ],
-      "sceneUuid": "47861b65-1648-496f-8fb3-f0a6c0eca843",
+      "sceneUuid": "928d0215-0bcb-40e4-af9f-3b86e0d70730",
       "contextLost": false,
       "animationClips": 1,
       "cameraKeyframeCount": 2,
@@ -178,7 +178,7 @@
     "renderFrames": 30,
     "visiblePixels": 10,
     "drawSamples": 30,
-    "drawTotalMs": 88.5,
+    "drawTotalMs": 86,
     "cameraSamples": [
       {
         "x": 0,
@@ -571,7 +571,7 @@
         "stage11Custom": false
       }
     ],
-    "sceneUuid": "47861b65-1648-496f-8fb3-f0a6c0eca843",
+    "sceneUuid": "928d0215-0bcb-40e4-af9f-3b86e0d70730",
     "contextLost": false,
     "animationClips": 1,
     "cameraKeyframeCount": 2,

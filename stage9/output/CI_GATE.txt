@@ -11,7 +11,7 @@ Stage13 in/out Bezier math: success
 Stage13 real Three.js handles: success
 Stage14 stability and project recovery: success
 Stage15 true meshopt fixture: success
-Stage15 true meshopt WebGL: failure
-CI run: 42810800487
-Source SHA: 9ff7607bdbe34a9157127af60c88fcc1686a313a
+Stage15 true meshopt WebGL: success
+CI run: 42811399978
+Source SHA: 47f68ad49a2a61c3daa871eadec705ac5c06c3a8
 Real hardware GPU / Safari: NOT TESTED
