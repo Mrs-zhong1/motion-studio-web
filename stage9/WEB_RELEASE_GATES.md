@@ -1,0 +1,32 @@
+# Motion Studio Web · P0–P5 产品交付门槛
+
+更新时间：2026-11-10。本文件区分**代码已提交**与**真实测试通过**。禁止把 CI 编译成功等同于产品发布通过。
+
+| 批次 | 验收要求 | 当前可核实证据 | 结论 |
+|---|---|---|---|
+| P0 工程统一 | Stage 9–15 统一构建，20 组件不丢失；原生 Web 发布规则 | Stage 9–15 输出已存档，发布 manifest 修改已提交，待新 CI | 部分完成 |
+| P1 编辑器 | 无代码模板→编辑→项目保存→新建→重新导入→预览 | `tests/test_web_product_e2e.py` 已提交，待 CI 结果 | 待验收 |
+| P2 3D 素材 | GLB/PBR/纹理/关键帧、异常模型恢复、资源释放 | 旧 Stage 9–15 SwiftShader 软件 WebGL 测试通过；浏览器矩阵未覆盖深度 3D | 部分通过 |
+| P3 导出 | 同一工程编辑与导出，HTML 无远程依赖，章节一致 | 旧 Stage 9–15 导出测试通过；新增端到端待 CI | 待验收 |
+| P4 Web 质量 | Chromium、Firefox、WebKit 的主要流程，移动设备与易用性 | `web-product-e2e.yml` 三浏览器自动化已提交，未核实结果；WebKit≠原生 Safari | 待验收 |
+| P5 部署 | 用户访问 HTTPS 网址，创建、保存和导出成功，具备发布回滚 | 尚无实测生产 URL 或部署环境验收证据 | 未完成 |
+
+## 已提交的新增自动化测试
+
+- `.github/workflows/web-product-e2e.yml`：Node 22 构建 Stage 15 离线编辑器；Chromium/Firefox/WebKit 分别执行真实浏览器 E2E；按浏览器上传测试 JSON、工程 JSON、独立导出的 HTML 和构建 manifest。
+- `stage9/tests/test_web_product_e2e.py`：组件数、模板、编辑项目标题、JSON 保存和导入、移动与桌面预览、导出章节数、网络零请求和 JS pageerror。
+- `stage9/build-offline.mjs`：发布模型从“必须 Apple Silicon GPU”改成 “Web 跨浏览器与端到端验收”。
+
+## 发布规则
+
+- **基础 Web 产品发布阻断项**：P0–P5 全部通过，至少主流桌面浏览器关键流程、正式部署 smoke、导出真实产物、异常恢复和安全检查有可核验证据。
+- **3D 高级能力发布阻断项**：真实浏览器 WebGL、GLB/PBR、资源占用、兼容性可靠；软件 SwiftShader 是基础证据而非所有设备通用结论。
+- **非必需项**：Apple Silicon 特定型号 GPU、macOS 单一机型验收；只作为额外覆盖。
+- **不能混淆**：Playwright WebKit 的通过不等于 Apple Safari 本机/手机实测；Chromium SwiftShader 软件 WebGL 也不是独立 GPU 硬件确认。
+- 最终总体状态：**NOT RELEASED / NOT VERIFIED FOR PRODUCTION**，直到确有生产网址和端到端验收。
+
+## 执行入口
+
+[Web E2E Actions](https://github.com/Mrs-zhong1/motion-studio-web/actions/workflows/web-product-e2e.yml)
+
+[Stage9–15 software WebGL Actions](https://github.com/Mrs-zhong1/motion-studio-web/actions/workflows/stage9-three-offline.yml)
