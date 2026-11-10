@@ -413,9 +413,19 @@ $('propImage').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(f.
    try{doc=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes.subarray(20,20+jsonLength)))}catch{throw Error('GLB JSON 无法解析')}
    if(doc.asset?.version!=='2.0'||!Array.isArray(doc.meshes))throw Error('GLB 结构缺失或版本不兼容');
    if([...(doc.buffers||[]),...(doc.images||[])].some(x=>typeof x.uri==='string' && !x.uri.startsWith('data:')))throw Error('离线模式不支持引用外部文件');
-   const unsupported=(doc.extensionsRequired||[]).filter(x=>['KHR_draco_mesh_compression','EXT_meshopt_compression','KHR_texture_basisu'].includes(x));
+   const unsupported=(doc.extensionsRequired||[]).filter(x=>['KHR_draco_mesh_compression','KHR_texture_basisu'].includes(x));
    if(unsupported.length)throw Error('此离线版本缺少压缩解码器：'+unsupported.join('、')+'；请先导出普通 GLB');
-   if(doc.extensionsRequired?.some(x=>!['KHR_materials_unlit','KHR_materials_clearcoat','KHR_materials_transmission','KHR_materials_ior','KHR_materials_sheen','KHR_materials_specular','KHR_materials_emissive_strength','KHR_texture_transform','KHR_lights_punctual'].includes(x)))throw Error('GLB 包含未验证的必需扩展，请先转换为普通 GLB');
+   if(doc.extensionsRequired?.includes('EXT_meshopt_compression')){
+     const views=(doc.bufferViews||[]).filter(v=>v.extensions?.EXT_meshopt_compression);
+     if(!views.length||views.some(v=>{
+       const e=v.extensions.EXT_meshopt_compression;
+       return !Number.isInteger(e.count)||e.count<1||!Number.isInteger(e.byteStride)||e.byteStride<1
+         ||!Number.isInteger(e.byteOffset)||e.byteOffset<0||!Number.isInteger(e.byteLength)||e.byteLength<1
+         ||!['ATTRIBUTES','TRIANGLES','INDICES'].includes(e.mode)
+         ||!Number.isInteger(e.buffer)||!doc.buffers?.[e.buffer];
+     }))throw Error('meshopt 压缩元数据无效');
+   }
+   if(doc.extensionsRequired?.some(x=>!['EXT_meshopt_compression','KHR_materials_unlit','KHR_materials_clearcoat','KHR_materials_transmission','KHR_materials_ior','KHR_materials_sheen','KHR_materials_specular','KHR_materials_emissive_strength','KHR_texture_transform','KHR_lights_punctual'].includes(x)))throw Error('GLB 包含未验证的必需扩展，请先转换为普通 GLB');
    let raw='';for(let j=0;j<bytes.length;j+=32768)raw+=String.fromCharCode(...bytes.subarray(j,j+32768));
    s.glb=btoa(raw);const fr=document.querySelector(`.section[data-uid="${s.uid}"] iframe`);if(fr)fr.srcdoc=frameMarkup(getItem(s),s);saveDraft();renderProps();notify('GLB 已加入章节并将内嵌导出');
   }catch(err){notify('GLB 导入失败：'+err.message);}};

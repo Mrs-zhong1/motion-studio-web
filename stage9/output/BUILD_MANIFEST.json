@@ -2,7 +2,7 @@
   "three": "0.180.0",
   "engineBytes": 609198,
   "sharedEngineBytes": 622948,
-  "editorBytes": 1798930,
+  "editorBytes": 1799579,
   "offline": true,
   "source": "Motion Studio Stage9-14, projected axis dragging, independent Bezier handles and 4MB GLB validation",
   "gpuAcceptanceRequired": true,
