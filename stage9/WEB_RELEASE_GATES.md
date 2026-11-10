@@ -76,3 +76,12 @@
 - 已确认相关源代码和测试代码通过 GitHub 文件读取回查；最新新测试 **尚未有 CI 执行通过证据**。
 - 当前 GitHub 连接没有新 workflow dispatch API；工作流执行由 GitHub Actions 触发器完成，只有收到实际运行 ID 和日志才能认定完成。
 - Vercel 项目列表中没有 `Mrs-zhong1/motion-studio-web` 绑定项目；当前未直接创建自动公开部署，避免绕过浏览器与 3D 发布门槛。
+
+
+## P5 发布产物一致性加强（2026-11-10）
+
+- 修复“浏览器验证一份 HTML，部署时又重新构建另一份 HTML”的风险：Chromium E2E 作业将其**实际测试的 Stage15 HTML、Three.js 许可和构建清单**作为 `release-candidate-tested-html` artifact 保存；`publish` 通过 `actions/download-artifact@v4` 原样取回并部署，不再执行第二次 npm 构建。
+- `publish` 仍依赖独立的三浏览器 Web 产品测试和 PBR/GLB 回归；两者全通过才运行。
+- `test_live_deployment.py` 新增远端 `WEB_RELEASE.json` 校验：对线上响应 HTML 计算 SHA256 并与该发布清单的 SHA256 对比，检查**实际对外服务的字节**是否匹配候选产物。
+- `test_web_product_e2e.py` 改为使用临时 `127.0.0.1` HTTP 服务打开单文件编辑器；使浏览器的 localStorage 草稿测试有稳定的 HTTP origin。离线导出页依旧独立检查零 HTTP(S) 请求。
+- 此批有 GitHub 提交和文件回查证据，但**无新的 CI run ID、未获得实际三浏览器通过报告、未上线**。本地受沙箱浏览器访问策略限制，不能用其页面访问结果替代 GitHub Actions 测试。
