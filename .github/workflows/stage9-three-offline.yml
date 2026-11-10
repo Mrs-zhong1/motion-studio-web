@@ -86,12 +86,20 @@ jobs:
         id: stage14
         continue-on-error: true
         run: python tests/test_stage14_stability.py
+      - name: Generate real Meshopt compressed GLB with encoder and byte-perfect decoder roundtrip
+        id: meshopt_fixture
+        continue-on-error: true
+        run: node tests/make_meshopt_fixture.mjs
+      - name: Verify Meshopt compressed GLB in single and shared offline Three.js WebGL
+        id: meshopt
+        continue-on-error: true
+        run: python tests/test_stage15_meshopt.py
       - name: Commit generated HTML, actual browser evidence, and manifests to repository
         if: always()
         working-directory: .
         run: |
           mkdir -p stage9/output
-          for f in Motion-Studio-Stage9-THREE-OFFLINE.html Motion-Studio-Stage10-Camera-Editor-OFFLINE.html Motion-Studio-Stage11-Timeline-OFFLINE.html Motion-Studio-Stage12-Spatial-Gizmo-OFFLINE.html Motion-Studio-Stage13-Bezier-OFFLINE.html Motion-Studio-Stage14-Stability-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-Sample-Dual-Material-EXPORTED.html STAGE9-Sample-Textured-Animated-EXPORTED.html STAGE9-Sample-Dual-Material-CAPTURE.png STAGE9-Sample-Textured-Animated-CAPTURE.png STAGE9-Sample-Skinned-Morph-MultiClip-EXPORTED.html STAGE9-Sample-Skinned-Morph-MultiClip-CAPTURE.png STAGE9-INVALID-GLB-RESULT.json STAGE9-INVALID-GLB-RECOVERY.html STAGE9-SHARED-SCENE-RESULT.json STAGE9-SHARED-TWO-GLB-EXPORTED.html STAGE9-SHARED-SCENE.png STAGE10-CAMERA-RESULT.json STAGE10-CAMERA-EXPORTED.html STAGE10-CAMERA-CAPTURE.png STAGE10-CAMERA-PROJECT.json STAGE11-TIMELINE-RESULT.json STAGE11-TIMELINE-PROJECT.json STAGE11-TIMELINE-EXPORTED.html STAGE11-TIMELINE-CAPTURE.png STAGE12-GIZMO-RESULT.json STAGE12-GIZMO-PROJECT.json STAGE12-GIZMO-EXPORTED.html STAGE12-GIZMO-CAPTURE.png STAGE13-BEZIER-RESULT.json STAGE13-BEZIER-PROJECT.json STAGE13-BEZIER-EXPORTED.html STAGE13-BEZIER-CAPTURE.png STAGE14-STRESS-RESULT.json STAGE14-STRESS-EXPORTED.html STAGE14-STRESS-CAPTURE.png; do
+          for f in Motion-Studio-Stage9-THREE-OFFLINE.html Motion-Studio-Stage10-Camera-Editor-OFFLINE.html Motion-Studio-Stage11-Timeline-OFFLINE.html Motion-Studio-Stage12-Spatial-Gizmo-OFFLINE.html Motion-Studio-Stage13-Bezier-OFFLINE.html Motion-Studio-Stage14-Stability-OFFLINE.html Motion-Studio-Stage15-Meshopt-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-Sample-Dual-Material-EXPORTED.html STAGE9-Sample-Textured-Animated-EXPORTED.html STAGE9-Sample-Dual-Material-CAPTURE.png STAGE9-Sample-Textured-Animated-CAPTURE.png STAGE9-Sample-Skinned-Morph-MultiClip-EXPORTED.html STAGE9-Sample-Skinned-Morph-MultiClip-CAPTURE.png STAGE9-INVALID-GLB-RESULT.json STAGE9-INVALID-GLB-RECOVERY.html STAGE9-SHARED-SCENE-RESULT.json STAGE9-SHARED-TWO-GLB-EXPORTED.html STAGE9-SHARED-SCENE.png STAGE10-CAMERA-RESULT.json STAGE10-CAMERA-EXPORTED.html STAGE10-CAMERA-CAPTURE.png STAGE10-CAMERA-PROJECT.json STAGE11-TIMELINE-RESULT.json STAGE11-TIMELINE-PROJECT.json STAGE11-TIMELINE-EXPORTED.html STAGE11-TIMELINE-CAPTURE.png STAGE12-GIZMO-RESULT.json STAGE12-GIZMO-PROJECT.json STAGE12-GIZMO-EXPORTED.html STAGE12-GIZMO-CAPTURE.png STAGE13-BEZIER-RESULT.json STAGE13-BEZIER-PROJECT.json STAGE13-BEZIER-EXPORTED.html STAGE13-BEZIER-CAPTURE.png STAGE14-STRESS-RESULT.json STAGE14-STRESS-EXPORTED.html STAGE14-STRESS-CAPTURE.png STAGE15-MESHOPT-RESULT.json STAGE15-MESHOPT-SINGLE-EXPORTED.html STAGE15-MESHOPT-SHARED-EXPORTED.html STAGE15-MESHOPT-CAPTURE.png STAGE15-MESHOPT-SHARED-CAPTURE.png; do
             if [ -f "stage9/$f" ]; then cp "stage9/$f" "stage9/output/$f"; fi
           done
           cat > stage9/output/CI_GATE.txt <<EOF
@@ -107,6 +115,8 @@ jobs:
           Stage13 in/out Bezier math: ${{ steps.stage13math.outcome }}
           Stage13 real Three.js handles: ${{ steps.stage13.outcome }}
           Stage14 stability and project recovery: ${{ steps.stage14.outcome }}
+          Stage15 true meshopt fixture: ${{ steps.meshopt_fixture.outcome }}
+          Stage15 true meshopt WebGL: ${{ steps.meshopt.outcome }}
           CI run: ${{ github.run_id }}
           Source SHA: ${{ github.sha }}
           Real hardware GPU / Safari: NOT TESTED
@@ -135,7 +145,7 @@ jobs:
             fi
           done
       - name: Gate production if software WebGL verification failed
-        if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success' || steps.stage13math.outcome != 'success' || steps.stage13.outcome != 'success' || steps.stage14.outcome != 'success'
+        if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success' || steps.stage13math.outcome != 'success' || steps.stage13.outcome != 'success' || steps.stage14.outcome != 'success' || steps.meshopt_fixture.outcome != 'success' || steps.meshopt.outcome != 'success'
         run: |
           echo "Stage 9 GPU software acceptance failed. Inspect stage9/output/ in repository."
           exit 1
