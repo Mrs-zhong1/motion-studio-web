@@ -1,0 +1,10 @@
+{
+  "pass": false,
+  "source": "GitHub Actions Chromium SwiftShader software WebGL",
+  "realCompressedFixture": false,
+  "single": {},
+  "shared": {},
+  "errors": [
+    "Traceback (most recent call last):\n  File \"/home/runner/work/motion-studio-web/motion-studio-web/stage9/tests/test_stage15_meshopt.py\", line 10, in <module>\n    assert FIX.exists() and FIX.stat().st_size>150\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+  ]
+}

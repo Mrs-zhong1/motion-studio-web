@@ -18,7 +18,7 @@
       "patchCount": 0,
       "trajectoryPoints": 51,
       "selected": 1,
-      "sceneId": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
+      "sceneId": "f88de730-e97f-47a7-9312-756a11ac9af5",
       "rendererShared": true,
       "handleScreen": [
         {
@@ -67,7 +67,7 @@
         }
       ]
     },
-    "sceneUuid": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
+    "sceneUuid": "f88de730-e97f-47a7-9312-756a11ac9af5",
     "webgl2": true,
     "models": 2,
     "canvasCount": 1
@@ -103,7 +103,7 @@
     "patchCount": 7,
     "trajectoryPoints": 51,
     "selected": 1,
-    "sceneId": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
+    "sceneId": "f88de730-e97f-47a7-9312-756a11ac9af5",
     "rendererShared": true,
     "handleScreen": [
       {
@@ -156,7 +156,7 @@
   "axisView": {
     "axis": "y",
     "view": "top",
-    "scene": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
+    "scene": "f88de730-e97f-47a7-9312-756a11ac9af5",
     "handles": 3
   },
   "tensionAfterEdit": 0.75,
@@ -164,7 +164,7 @@
     "mode": true,
     "patches": 1,
     "dragCount": 7,
-    "sceneId": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
+    "sceneId": "f88de730-e97f-47a7-9312-756a11ac9af5",
     "canvas": 1
   },
   "reloaded": [
@@ -202,9 +202,9 @@
       "tension": 0
     }
   ],
-  "exportBytes": 875531,
+  "exportBytes": 904995,
   "exportScene": {
-    "sceneId": "93a9e87d-cfb8-48c7-bd4e-5eefd7dfa8de",
+    "sceneId": "787d4f6d-f6b4-44c8-8480-b40f472b2ecb",
     "models": 2,
     "webgl2": true,
     "canvasCount": 1,
