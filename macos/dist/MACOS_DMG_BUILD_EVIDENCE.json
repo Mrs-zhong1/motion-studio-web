@@ -7,12 +7,12 @@
   "dmgMountedAndVerified": true,
   "htmlBytes": 1740002,
   "appArm64": true,
-  "dmgBytes": 888832,
-  "dmgSHA256": "e63f551772ea85500a20541d43d7581cb4cc1efcaf1e485bb2f5c1c1bc0ee510",
+  "dmgBytes": 894387,
+  "dmgSHA256": "f3720f188ea2a953138c361c389b4efdad20c6fdb5500f0378303b1621b8f5ca",
   "adHocSigned": true,
   "appleDeveloperSigned": false,
   "appleNotarized": false,
-  "webViewInteractiveSmokeTested": false,
+  "webViewInteractiveSmokeTested": true,
   "safariHardwareGpuTested": false,
   "status": "PACKAGING_VALIDATED_NOT_PRODUCTION_SIGNED"
 }
