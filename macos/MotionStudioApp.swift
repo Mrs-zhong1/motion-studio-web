@@ -17,7 +17,7 @@ final class MotionStudioApp: NSObject, NSApplicationDelegate, WKNavigationDelega
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        guard let file = Bundle.main.url(forResource: "Motion-Studio-Stage14-Stability-OFFLINE", withExtension: "html") else {
+        guard let file = Bundle.main.url(forResource: "Motion-Studio-Stage15-Meshopt-OFFLINE", withExtension: "html") else {
             NSAlert(error: NSError(domain: "MotionStudio", code: 1,
                 userInfo: [NSLocalizedDescriptionKey: "Offline editor resource is missing from the application bundle."])).runModal()
             NSApp.terminate(nil)
