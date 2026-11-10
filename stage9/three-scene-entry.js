@@ -43,7 +43,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
         }
       });
       status.animationClips=gltf.animations.length;status.animationClipNames=gltf.animations.map(c=>c.name);
-      boneNode=object.getObjectByProperty('isBone',true)||null;morphNode=null;object.traverse(n=>{if(!morphNode&&n.isMesh&&n.morphTargetInfluences?.length)morphNode=n;});
+      boneNode=null;morphNode=null;object.traverse(n=>{if(n.isBone)boneNode=n;if(!morphNode&&n.isMesh&&n.morphTargetInfluences?.length)morphNode=n;});
       if(gltf.animations.length){
         trackedNode=object.getObjectByProperty('isMesh',true)||object.children[0]||object;
         mixer=new THREE.AnimationMixer(object);
