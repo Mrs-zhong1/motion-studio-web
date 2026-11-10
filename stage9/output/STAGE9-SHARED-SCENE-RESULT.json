@@ -7,7 +7,7 @@
   "errors": [],
   "count": 20,
   "uploadedModelCount": 2,
-  "exportBytes": 853896,
+  "exportBytes": 854514,
   "initial": {
     "status": {
       "mode": "one-shared-three-scene",
@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 22.4,
+      "drawTotalMs": 36.4,
       "cameraSamples": [
         {
           "x": 0,
@@ -37,7 +37,7 @@
           "focus": 300
         }
       ],
-      "sceneUuid": "8ea39ebd-36cc-45ef-abf0-79e80c6b880e",
+      "sceneUuid": "a62cc3b1-dca2-4059-ae4d-3cf27b8b5346",
       "contextLost": false,
       "animationClips": 1,
       "error": null,
@@ -108,10 +108,10 @@
       4,
       5
     ],
-    "renderFrames": 39,
-    "visiblePixels": 11,
-    "drawSamples": 39,
-    "drawTotalMs": 86.2,
+    "renderFrames": 30,
+    "visiblePixels": 10,
+    "drawSamples": 30,
+    "drawTotalMs": 102.3,
     "cameraSamples": [
       {
         "x": 0,
@@ -154,14 +154,6 @@
         "focus": 2112
       },
       {
-        "x": 0.4961,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.155,
-        "focus": 2223
-      },
-      {
         "x": 0.5039,
         "y": 0,
         "z": 5.5,
@@ -184,70 +176,6 @@
         "segment": 0,
         "blend": 0.1649,
         "focus": 2227
-      },
-      {
-        "x": 0.6607,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.2065,
-        "focus": 2243
-      },
-      {
-        "x": 1.0321,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.3225,
-        "focus": 2283
-      },
-      {
-        "x": 1.2734,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.3979,
-        "focus": 2307
-      },
-      {
-        "x": 1.4074,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4398,
-        "focus": 2320
-      },
-      {
-        "x": 1.4905,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4658,
-        "focus": 2328
-      },
-      {
-        "x": 1.5426,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4821,
-        "focus": 2333
-      },
-      {
-        "x": 1.5739,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4918,
-        "focus": 2336
-      },
-      {
-        "x": 1.5948,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4984,
-        "focus": 2338
       },
       {
         "x": 1.6052,
@@ -426,12 +354,17 @@
         "focus": 2531
       }
     ],
-    "sceneUuid": "8ea39ebd-36cc-45ef-abf0-79e80c6b880e",
+    "sceneUuid": "a62cc3b1-dca2-4059-ae4d-3cf27b8b5346",
     "contextLost": false,
     "animationClips": 1,
     "error": null,
     "remoteRequests": 0,
     "active": true,
     "modelStates": []
+  },
+  "simulatedContextLossRecovery": {
+    "flagged": true,
+    "canvasHidden": true,
+    "iframeFallbacks": true
   }
 }
