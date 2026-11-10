@@ -42,15 +42,18 @@ jobs:
         run: python tests/test_web_product_e2e.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
-      - name: Archive browser reports and generated HTML
+      # GitHub Actions artifact storage quota is exhausted in this repository.
+      # Record the evidence in job logs and GitHub's step summary without uploading large HTML.
+      - name: Publish browser result in job summary (zero artifact storage)
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: motion-studio-web-product-e2e-${{ matrix.browser }}
-          path: |
-            stage9/WEB_PRODUCT_E2E_RESULT_*.json
-            stage9/WEB_PRODUCT_E2E_PROJECT_*.json
-            stage9/WEB_PRODUCT_E2E_EXPORTED_*.html
-            stage9/Motion-Studio-Stage15-Meshopt-OFFLINE.html
-            stage9/BUILD_MANIFEST.json
-          if-no-files-found: warn
+        shell: bash
+        run: |
+          echo "### Motion Studio E2E — ${{ matrix.browser }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json ]; then
+            echo '~~~json' >> "$GITHUB_STEP_SUMMARY"
+            cat WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json >> "$GITHUB_STEP_SUMMARY"
+            echo '~~~' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Result JSON unavailable: build, setup, or browser launch failed before result creation." >> "$GITHUB_STEP_SUMMARY"
+          fi
