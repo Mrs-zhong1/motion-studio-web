@@ -19,10 +19,10 @@
       "webgl2": true,
       "canvas": 1,
       "models": 2,
-      "frames": 129,
+      "frames": 130,
       "error": null,
       "contextLost": false,
-      "sceneId": "2bd92f4b-cb2f-4abf-ab12-0bdeee1fbb7c"
+      "sceneId": "c89c96d4-1db6-461f-bed4-5527aff37be9"
     }
   },
   "errors": []

@@ -1,17 +1,17 @@
-WebGL software acceptance step: skipped
-GLB compatibility matrix: skipped
-Invalid GLB resilience: skipped
-Shared 3D continuity: skipped
-Stage10 editable camera: skipped
-Stage11 curve interpolation: skipped
-Stage11 timeline live WebGL: skipped
-Stage12 tangent curve: skipped
-Stage12 real spatial gizmo: skipped
-Stage13 in/out Bezier math: skipped
-Stage13 real Three.js handles: skipped
-Stage14 stability and project recovery: skipped
-Stage15 true meshopt fixture: skipped
-Stage15 true meshopt WebGL: skipped
-CI run: 42828388590
-Source SHA: b56a6ac7be4f5bcffbfa780329873e78a46bb0dd
+WebGL software acceptance step: success
+GLB compatibility matrix: success
+Invalid GLB resilience: success
+Shared 3D continuity: success
+Stage10 editable camera: success
+Stage11 curve interpolation: success
+Stage11 timeline live WebGL: success
+Stage12 tangent curve: success
+Stage12 real spatial gizmo: success
+Stage13 in/out Bezier math: success
+Stage13 real Three.js handles: success
+Stage14 stability and project recovery: success
+Stage15 true meshopt fixture: success
+Stage15 true meshopt WebGL: success
+CI run: 42828474363
+Source SHA: 6b4e5c01116590acc42db6fa5d34dcf3a8cf8ba4
 Real hardware GPU / Safari: NOT TESTED
