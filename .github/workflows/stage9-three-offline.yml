@@ -33,6 +33,8 @@ jobs:
         run: |
           python -m pip install playwright
           python -m playwright install --with-deps chromium
+      - name: Generate and validate deterministic complex skinned morph GLB fixture
+        run: python tests/make_advanced_fixture.py
       - name: Strict animated PBR texture and pixel verification (SwiftShader)
         id: gpu
         continue-on-error: true
@@ -46,7 +48,7 @@ jobs:
         working-directory: .
         run: |
           mkdir -p stage9/output
-          for f in Motion-Studio-Stage9-THREE-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-Sample-Dual-Material-EXPORTED.html STAGE9-Sample-Textured-Animated-EXPORTED.html STAGE9-Sample-Dual-Material-CAPTURE.png STAGE9-Sample-Textured-Animated-CAPTURE.png; do
+          for f in Motion-Studio-Stage9-THREE-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-Sample-Dual-Material-EXPORTED.html STAGE9-Sample-Textured-Animated-EXPORTED.html STAGE9-Sample-Dual-Material-CAPTURE.png STAGE9-Sample-Textured-Animated-CAPTURE.png STAGE9-Sample-Skinned-Morph-MultiClip-EXPORTED.html STAGE9-Sample-Skinned-Morph-MultiClip-CAPTURE.png; do
             if [ -f "stage9/$f" ]; then cp "stage9/$f" "stage9/output/$f"; fi
           done
           cat > stage9/output/CI_GATE.txt <<EOF
