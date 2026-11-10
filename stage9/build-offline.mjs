@@ -24,6 +24,7 @@ await writeFile(resolve(root,'Motion-Studio-Stage11-Timeline-OFFLINE.html'),outp
 await writeFile(resolve(root,'Motion-Studio-Stage12-Spatial-Gizmo-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage13-Bezier-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage14-Stability-OFFLINE.html'),output);
+await writeFile(resolve(root,'Motion-Studio-Stage15-Meshopt-OFFLINE.html'),output);
 await writeFile(resolve(root,'THREE_LICENSE.txt'),await readFile(resolve(root,'node_modules/three/LICENSE'),'utf8'));
-await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,sharedEngineBytes:sharedEngine.length,editorBytes:Buffer.byteLength(output),offline:true,source:'Motion Studio Stage9-14, projected axis dragging, independent Bezier handles and 4MB GLB validation',gpuAcceptanceRequired:true,gpuTested:false},null,2));
+await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,sharedEngineBytes:sharedEngine.length,editorBytes:Buffer.byteLength(output),offline:true,source:'Motion Studio Stage9-15, real offline MeshoptDecoder and 4MB GLB validation',gpuAcceptanceRequired:true,gpuTested:false},null,2));
 console.log('Stage9 genuine offline Three.js bundle',engine.length,Buffer.byteLength(output));
