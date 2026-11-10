@@ -13,7 +13,7 @@ export function addCameraEditorStage11(source){
  `;
  once("function normSection(s)",schema+"function normSection(s)");
  once("camera3d:normStage10Camera(s.camera3d),glb:","camera3d:normStage10Camera(s.camera3d),cameraPath11:normStage11Path(s.cameraPath11),glb:");
- once("camera3d:normStage10Camera(s.camera3d)}","camera3d:normStage10Camera(s.camera3d),cameraPath11:normStage11Path(s.cameraPath11)}");
+ once("camera3d:normStage10Camera(s.camera3d)}","camera3d:normStage10Camera(s.camera3d),cameraPath11:normStage11Path(s.cameraPath11),uid:s.uid}");
  // Stage10 sliders share same active WebGL preview as Stage11.
  once("if(output)output.textContent=input.value;saveDraft();","if(output)output.textContent=input.value;saveDraft();window.stage11NotifyCamera?.(s);");
  const ui=String.raw`if(s.id==='offline-glb-scene'){
@@ -27,7 +27,12 @@ export function addCameraEditorStage11(source){
    function ensure(){
      if(s.cameraPath11.length<2){
        const base=normStage10Camera(s.camera3d);
-       s.cameraPath11=[{...base,at:0},{...base,at:50,x:Math.min(4,base.x+1)},{...base,at:100}];
+       const chapters=project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb);
+       const chapterIndex=chapters.findIndex(x=>x.uid===s.uid);
+       const dest=normStage10Camera(chapters[chapterIndex+1]?.camera3d||s.camera3d);
+       const mid={};for(const key of Object.keys(base))mid[key]=(base[key]+dest[key])/2;
+       mid.x=Math.max(-4,Math.min(4,mid.x+.8));
+       s.cameraPath11=[{...base,at:0},{...mid,at:50},{...dest,at:100}];
      }
    }
    function notify(){
@@ -48,7 +53,7 @@ export function addCameraEditorStage11(source){
    }
    function refresh(){
      const path=s.cameraPath11;
-     panel.innerHTML='<h3>Stage 11 · 3D 镜头轨迹与时间轴</h3><p class="small">最多 8 点。拖动轨迹圆点：左右改时间（端点固定），上下改镜头 X；选择节点后可改全部 7 项参数。变化会同步至已开启的共享 3D 预览。</p>'
+     panel.innerHTML='<h3>Stage 11 · 3D 镜头轨迹与时间轴</h3><p class="small">每章的轨迹控制从当前 GLB 到下一 GLB 的过渡，最多 8 点。拖动圆点：左右改时间（端点固定），上下改 X；选择节点编辑七项镜头参数；改动即时发送到共享 3D 预览。</p>'
        +'<div class="selected-controls"><button type="button" id="stage11Enable">'+(path.length?'重置为三点轨迹':'启用三点轨迹')+'</button><button type="button" id="stage11Add" '+(path.length>=8?'disabled':'')+'>＋ 增加关键帧</button><button type="button" id="stage11Delete" '+(path.length<=2?'disabled':'')+'>删除选中帧</button></div>'
        +(path.length?plot()+'<div class="field"><label>当前关键帧 <select id="stage11KeySelect">'+path.map((k,i)=>'<option value="'+i+'" '+(i===selected?'selected':'')+'>帧 '+(i+1)+' · '+k.at.toFixed(1)+'%</option>').join('')+'</select></label></div>'
        +'<div class="field"><label>时间点 <output id="stage11TimeOut">'+path[selected].at.toFixed(1)+'%</output></label><input id="stage11Time" type="range" min="'+(selected===0?0:path[selected-1].at+.5)+'" max="'+(selected===path.length-1?100:path[selected+1].at-.5)+'" step=".5" value="'+path[selected].at+'" '+(selected===0||selected===path.length-1?'disabled':'')+'></div>'
@@ -71,25 +76,26 @@ export function addCameraEditorStage11(source){
      if(!path.length)return;
      panel.querySelector('#stage11KeySelect').onchange=e=>{selected=Number(e.target.value);refresh()};
      panel.querySelector('#stage11Time').oninput=e=>{
-       path[selected].at=Number(e.target.value);panel.querySelector('#stage11TimeOut').textContent=e.target.value+'%';panel.querySelector('#stage11Track').outerHTML=plot();notify();
+       path[selected].at=Number(e.target.value);panel.querySelector('#stage11TimeOut').textContent=e.target.value+'%';redrawSvg();notify();
      };
      panel.querySelectorAll('[data-stage11-param]').forEach(el=>el.oninput=e=>{
        const key=el.dataset.stage11Param;path[selected][key]=Number(el.value);panel.querySelector('#stage11Value_'+key).textContent=el.value;
        panel.querySelector('#stage11Track').outerHTML=plot();notify();
      });
      const svg=panel.querySelector('#stage11Track');
+     function redrawSvg(){if(!svg)return;const doc=new DOMParser().parseFromString(plot(),'image/svg+xml');svg.innerHTML=doc.documentElement.innerHTML;}
      svg.onpointerdown=e=>{
        const circle=e.target.closest('[data-keypoint]');if(!circle)return;
        selected=Number(circle.dataset.keypoint);drag={pointerId:e.pointerId};svg.setPointerCapture(e.pointerId);
      };
      svg.onpointermove=e=>{
        if(!drag)return;const bounds=svg.getBoundingClientRect(),p=s.cameraPath11[selected];
-       const x=Math.max(0,Math.min(1,(e.clientX-bounds.left)/Math.max(1,bounds.width)));
-       const y=Math.max(0,Math.min(1,(e.clientY-bounds.top)/Math.max(1,bounds.height)));
+       const x=Math.max(0,Math.min(1,((e.clientX-bounds.left)/Math.max(1,bounds.width)*340-16)/306));
+       const y=Math.max(0,Math.min(1,((e.clientY-bounds.top)/Math.max(1,bounds.height))*132));
        if(selected>0&&selected<path.length-1)p.at=Math.max(path[selected-1].at+.5,Math.min(path[selected+1].at-.5,x*100));
        p.x=Math.max(-4,Math.min(4,(110-y*132)/11-4));
        const circles=svg.querySelectorAll('[data-keypoint]');circles.forEach((c,i)=>{c.setAttribute('cx',16+path[i].at*3.06);c.setAttribute('cy',110-(path[i].x+4)*11);});
-       notify();
+       redrawSvg();notify();
      };
      svg.onpointerup=()=>{if(drag){drag=null;refresh();}};
      svg.onpointercancel=()=>{drag=null;refresh()};
