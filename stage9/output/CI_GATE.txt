@@ -12,6 +12,6 @@ Stage13 real Three.js handles: skipped
 Stage14 stability and project recovery: skipped
 Stage15 true meshopt fixture: skipped
 Stage15 true meshopt WebGL: skipped
-CI run: 42823467309
-Source SHA: 90761e8b27aa7505747ae8fec6fe2a5510efc737
+CI run: 42823550480
+Source SHA: bb6691f8459e9dcf545ad13a8ca80e5d571df977
 Real hardware GPU / Safari: NOT TESTED
