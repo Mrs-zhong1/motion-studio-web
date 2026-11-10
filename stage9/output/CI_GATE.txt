@@ -1,4 +1,5 @@
 WebGL software acceptance step: success
-CI run: 42734507599
-Source SHA: 24c32ea2ddbb1205f23f8c8052e2b7e3eebc9e16
+GLB compatibility matrix: success
+CI run: 42738009716
+Source SHA: 30003da45f9731532cbf0497000408e471eaeafb
 Real hardware GPU / Safari: NOT TESTED

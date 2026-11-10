@@ -1,0 +1,89 @@
+{
+  "test": "Stage9 GLB compatibility matrix",
+  "source": "GitHub Actions cloud Chromium with SwiftShader",
+  "hardwareGpuTested": false,
+  "safariTested": false,
+  "results": [
+    {
+      "fixture": "Sample-Dual-Material.glb",
+      "errors": [],
+      "remoteRequests": [],
+      "passed": true,
+      "components": 20,
+      "modelBase64Length": 12352,
+      "exportBytes": 875815,
+      "renderer": {
+        "engine": "three",
+        "threeVersion": "180",
+        "webgl2": true,
+        "pbr": true,
+        "meshCount": 2,
+        "materialCount": 2,
+        "textureCount": 0,
+        "animationClips": 0,
+        "frames": 6,
+        "visiblePixels": 6,
+        "pixelDifference": 3514,
+        "animationMoved": false,
+        "animationRotationSamples": [],
+        "rendererName": "WebKit WebGL",
+        "renderWidth": 1100,
+        "renderHeight": 460,
+        "drawSamples": 6,
+        "drawTotalMs": 26.2,
+        "drawMaxMs": 23.7,
+        "error": null,
+        "progress": 0.96
+      },
+      "avgDrawMs": 4.367,
+      "modelPass": true
+    },
+    {
+      "fixture": "Sample-Textured-Animated.glb",
+      "errors": [],
+      "remoteRequests": [],
+      "passed": true,
+      "components": 20,
+      "modelBase64Length": 2520,
+      "exportBytes": 865983,
+      "renderer": {
+        "engine": "three",
+        "threeVersion": "180",
+        "webgl2": true,
+        "pbr": true,
+        "meshCount": 1,
+        "materialCount": 1,
+        "textureCount": 1,
+        "animationClips": 1,
+        "frames": 6,
+        "visiblePixels": 12,
+        "pixelDifference": 4780,
+        "animationMoved": true,
+        "animationRotationSamples": [
+          "0,0,0.03141,0.99951",
+          "0,0,0,1",
+          "0,0,0.36812,0.92978",
+          "0,0,0.92978,0.36812",
+          "0,0,0.99803,0.06279"
+        ],
+        "rendererName": "WebKit WebGL",
+        "renderWidth": 1100,
+        "renderHeight": 460,
+        "drawSamples": 6,
+        "drawTotalMs": 34.2,
+        "drawMaxMs": 31.7,
+        "error": null,
+        "progress": 0.96
+      },
+      "avgDrawMs": 5.7,
+      "modelPass": true
+    }
+  ],
+  "pass": true,
+  "mobile": {
+    "componentCount": 20,
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false
+  }
+}
