@@ -1,0 +1,160 @@
+{
+  "pass": true,
+  "stage": "12",
+  "environment": "GitHub Actions Ubuntu Chromium SwiftShader software WebGL",
+  "macHardwareTested": false,
+  "safariTested": false,
+  "errors": [],
+  "components": 20,
+  "stage12Panel": true,
+  "initialKeyframes": 3,
+  "initialGizmo": {
+    "state": {
+      "mode": true,
+      "view": "front",
+      "axis": "x",
+      "handleCount": 3,
+      "dragCount": 0,
+      "patchCount": 0,
+      "trajectoryPoints": 51,
+      "selected": 1,
+      "sceneId": "0a8d359e-4b8b-4064-9eb5-383bb61449c0",
+      "rendererShared": true,
+      "handleScreen": [
+        {
+          "index": 0,
+          "x": 78.87942828170031,
+          "y": 169.690361261959
+        },
+        {
+          "index": 1,
+          "x": 135.31028585914987,
+          "y": 169.690361261959
+        },
+        {
+          "index": 2,
+          "x": 154.1205717182997,
+          "y": 169.690361261959
+        }
+      ]
+    },
+    "sceneUuid": "0a8d359e-4b8b-4064-9eb5-383bb61449c0",
+    "webgl2": true,
+    "models": 2,
+    "canvasCount": 1
+  },
+  "handleProjection": {
+    "index": 1,
+    "x": 135.31028585914987,
+    "y": 169.690361261959
+  },
+  "frameRect": {
+    "x": 1177,
+    "y": 310.15625,
+    "width": 235,
+    "height": 340
+  },
+  "dragBefore": {
+    "x": 0.8,
+    "y": 0,
+    "z": 5.5
+  },
+  "dragAfter": {
+    "x": 1.7599999999999998,
+    "y": 0,
+    "z": 5.5
+  },
+  "axisConstrainedX": true,
+  "gizmoAfterDrag": {
+    "mode": true,
+    "view": "front",
+    "axis": "x",
+    "handleCount": 3,
+    "dragCount": 7,
+    "patchCount": 7,
+    "trajectoryPoints": 51,
+    "selected": 1,
+    "sceneId": "0a8d359e-4b8b-4064-9eb5-383bb61449c0",
+    "rendererShared": true,
+    "handleScreen": [
+      {
+        "index": 0,
+        "x": 78.87942828170031,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "x": 157.88262889012967,
+        "y": 169.690361261959
+      },
+      {
+        "index": 2,
+        "x": 154.1205717182997,
+        "y": 169.690361261959
+      }
+    ]
+  },
+  "axisView": {
+    "axis": "y",
+    "view": "top",
+    "scene": "0a8d359e-4b8b-4064-9eb5-383bb61449c0",
+    "handles": 3
+  },
+  "tensionAfterEdit": 0.75,
+  "previewAfterUpdates": {
+    "mode": true,
+    "patches": 1,
+    "dragCount": 7,
+    "sceneId": "0a8d359e-4b8b-4064-9eb5-383bb61449c0",
+    "canvas": 1
+  },
+  "reloaded": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 1.7599999999999998,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0.75
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "exportBytes": 867875,
+  "exportScene": {
+    "sceneId": "a4261e40-f780-457b-af15-d0110bb2ef19",
+    "models": 2,
+    "webgl2": true,
+    "canvasCount": 1,
+    "stage12Mode": false,
+    "stage12Handles": 0,
+    "stage11Paths": [
+      3,
+      0
+    ],
+    "error": null
+  }
+}

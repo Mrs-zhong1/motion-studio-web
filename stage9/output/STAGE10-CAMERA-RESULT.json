@@ -37,7 +37,7 @@
     "roll": 12,
     "fov": 59
   },
-  "exportBytes": 858826,
+  "exportBytes": 867630,
   "sharedStart": {
     "cameraKeys": [
       {
@@ -59,7 +59,7 @@
         "fov": 59
       }
     ],
-    "sceneId": "2aad5353-cbe5-4305-9ab4-4d17b3c397fa",
+    "sceneId": "b5d61b0b-68de-4e4b-bf0b-a9dde9dbc9c8",
     "loadedModels": 2,
     "context": true,
     "error": null,
@@ -143,7 +143,7 @@
     }
   ],
   "sharedEnd": {
-    "sceneId": "2aad5353-cbe5-4305-9ab4-4d17b3c397fa",
+    "sceneId": "b5d61b0b-68de-4e4b-bf0b-a9dde9dbc9c8",
     "frames": 27,
     "pixels": 10,
     "contextLost": false,
