@@ -14,7 +14,7 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
  const pointer=new THREE.Vector2();
  const colors={x:0xe87575,y:0x82d7a1,z:0x8bb9f4};
  let enabled=false,axis='x',view='front',targetIndex=0,drag=null,selection=0;
- const data={mode:false,view,axis,handleCount:0,dragCount:0,patchCount:0,trajectoryPoints:0,selected:0,sceneId:diag.sceneUuid,rendererShared:true};
+ const data={mode:false,view,axis,handleCount:0,dragCount:0,patchCount:0,trajectoryPoints:0,selected:0,sceneId:diag.sceneUuid,rendererShared:true,handleScreen:[]};
  window.__motionStage12Gizmo=data;
  function clear(){
    for(const h of handles){group.remove(h);h.geometry.dispose();h.material.dispose()}
@@ -56,6 +56,9 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
      handle.position.copy(pos);handle.userData.keyframeIndex=i;
      handle.renderOrder=9;group.add(handle);handles.push(handle);
    }
+   overview.updateMatrixWorld();
+   const rect=canvas.getBoundingClientRect();
+   data.handleScreen=handles.map((h,i)=>{const v=h.position.clone().project(overview);return {index:i,x:(v.x+1)*rect.width/2,y:(1-v.y)*rect.height/2}});
    data.handleCount=handles.length;data.trajectoryPoints=points.length;data.selected=selection;
  }
  function emitChange(){
@@ -131,5 +134,5 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
    canvas.removeEventListener('pointercancel',endDrag);
    clear();scene.remove(group);
  }
- return {getCamera:()=>enabled?overview:null,updateAspect,dispose,diag:data};
+ return {getCamera:()=>enabled?overview:null,updateAspect,refresh:()=>{if(enabled){chooseCamera();rebuild()}},dispose,diag:data};
 }
