@@ -2,7 +2,7 @@
 export function addCameraEditorStage12(source){
  const anchor="     panel.querySelector('#stage11Enable').onclick=";
  if(source.split(anchor).length!==2)throw Error('Stage12 Stage11 camera panel hook changed');
- const insert=String.raw\`
+ const insert=String.raw`
      const stage12Controls=document.createElement('div');
      stage12Controls.id='stage12ViewportControls';
      stage12Controls.style.cssText='padding:12px;margin:12px 0;border:1px solid #536a78;border-radius:10px;background:#122333';
@@ -67,7 +67,7 @@ export function addCameraEditorStage12(source){
      for(const axis of ['X','Y','Z']){
        panel.querySelector('#stage12Axis'+axis).onclick=()=>{active.axis=axis.toLowerCase();status();pushMode();};
      }
- \`;
+ `;
  source=source.replace(anchor,insert+"\n"+anchor);
  return source;
 }
