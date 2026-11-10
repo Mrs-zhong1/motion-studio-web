@@ -54,8 +54,29 @@ final class MotionStudioApp: NSObject, NSApplicationDelegate, WKNavigationDelega
                           && stage9ThreeEngineURL.startsWith('data:text/javascript;base64,');
             const hasShared = typeof stage9SharedEngineURL === 'string'
                            && stage9SharedEngineURL.startsWith('data:text/javascript;base64,');
-            return { components: count, exportReady, hasThree, hasShared,
-                     location: location.protocol, webgl2: !!document.createElement('canvas').getContext('webgl2') };
+            const gl = document.createElement('canvas').getContext('webgl2', {preserveDrawingBuffer:true});
+            let drawnPixel = false;
+            if (gl) {
+              const vs = gl.createShader(gl.VERTEX_SHADER);
+              gl.shaderSource(vs, '#version 300 es\\nvoid main(){vec2 p[3]=vec2[3](vec2(-1.,-1.),vec2(3.,-1.),vec2(-1.,3.));gl_Position=vec4(p[gl_VertexID],0.,1.);}');
+              gl.compileShader(vs);
+              const fs = gl.createShader(gl.FRAGMENT_SHADER);
+              gl.shaderSource(fs, '#version 300 es\\nprecision highp float;out vec4 color;void main(){color=vec4(0.9,0.2,0.15,1.);}');
+              gl.compileShader(fs);
+              const program = gl.createProgram();
+              gl.attachShader(program, vs);gl.attachShader(program, fs);
+              gl.linkProgram(program);gl.useProgram(program);
+              gl.viewport(0,0,300,150);
+              gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);
+              gl.drawArrays(gl.TRIANGLES,0,3);
+              const pixel = new Uint8Array(4);
+              gl.readPixels(150,75,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+              drawnPixel = gl.getError()===0 && pixel[0]>180 && pixel[1]>25 && pixel[2]<100;
+            }
+            const exported = exportReady ? exportDocument() : '';
+            const exportPassed = exported.includes('motion-studio') && exported.length>15000;
+            return { components: count, exportReady, exportPassed, hasThree, hasShared,
+                     location: location.protocol, webgl2: !!gl, drawnPixel };
           } catch (error) { return { error: String(error) }; }
         })()
         """
@@ -65,6 +86,8 @@ final class MotionStudioApp: NSObject, NSApplicationDelegate, WKNavigationDelega
                (result["exportReady"] as? Bool) == true,
                (result["hasThree"] as? Bool) == true,
                (result["hasShared"] as? Bool) == true,
+               (result["exportPassed"] as? Bool) == true,
+               (result["drawnPixel"] as? Bool) == true,
                (result["location"] as? String) == "file:" {
                 NSLog("MOTION_MAC_SELFTEST_PASS: %@", String(describing: result))
                 fflush(stdout)
