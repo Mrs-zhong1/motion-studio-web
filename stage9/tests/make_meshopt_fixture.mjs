@@ -36,6 +36,6 @@ const out=Buffer.alloc(12+8+json.length+8+bin.length);
 out.write('glTF',0);out.writeUInt32LE(2,4);out.writeUInt32LE(out.length,8);
 out.writeUInt32LE(json.length,12);out.write('JSON',16);json.copy(out,20);
 const at=20+json.length;out.writeUInt32LE(bin.length,at);out.write('BIN\0',at+4);bin.copy(out,at+8);
-const target=resolve(dir,'../Sample-Meshopt-Compressed.glb');
+const target=resolve(dir,'../../Sample-Meshopt-Compressed.glb');
 await fs.writeFile(target,out);
 console.log(JSON.stringify({fixture:target,bytes:out.length,encoded:encoded.length,decoded:decoded.length,extension:gltf.extensionsRequired[0]},null,2));
