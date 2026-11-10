@@ -11,7 +11,7 @@ out=root/'Motion-Studio-Stage9-THREE-OFFLINE.html'
 assert out.exists(),'Offline HTML not built'
 html=out.read_text()
 assert len(html)>len(source)+100000
-assert 'stage9ThreeEngine=atob("' in html
+assert 'stage9ThreeEngineURL="data:text/javascript;base64,' in html
 assert "return page.replace('</body>'" in html
 manifest=json.loads((root/'BUILD_MANIFEST.json').read_text())
 assert manifest['offline'] and manifest['engineBytes']>100000
