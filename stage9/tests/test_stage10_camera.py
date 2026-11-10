@@ -26,6 +26,15 @@ try:
   res['edited']=page.evaluate("project.sections.filter(s=>s.id==='offline-glb-scene')[1].camera3d")
   page.locator('#stage10CameraPreview').click()
   res['previewHasSharedMarkup']=page.locator('#stage10PreviewFrame').evaluate("el=>el.srcdoc.includes('motion-shared-scene-data') && el.srcdoc.includes('stage9SharedEngineURL')===false && el.srcdoc.includes('data:text/javascript;base64,')")
+  page.wait_for_timeout(1100)
+  previewStates=[]
+  for frame in page.frames[1:]:
+   try:
+    state=frame.evaluate("window.__motionSharedThree ? {models:window.__motionSharedThree.loadedModels,webgl2:window.__motionSharedThree.webgl2,error:window.__motionSharedThree.error,canvasCount:document.querySelectorAll('#motion-shared-three-canvas').length,frames:window.__motionSharedThree.renderFrames} : null")
+    if state:previewStates.append(state)
+   except Exception as ex:res['errors'].append('preview frame inspect: '+str(ex))
+  res['previewGpuStates']=previewStates
+  res['previewGpuLoaded']=any(x.get('webgl2') and x.get('models')==2 and x.get('canvasCount')==1 and not x.get('error') for x in previewStates)
   # Camera data exported as standalone project JSON; reload it to prove persistence.
   with page.expect_download() as dl:page.locator('#saveProject').click()
   saved=ROOT/'STAGE10-CAMERA-PROJECT.json';dl.value.save_as(saved)
@@ -58,7 +67,7 @@ try:
    res['componentCount']==20 and res['glbCount']==2 and res['controlsVisible']==7
    and all(abs(res['edited'][k]-value)<.001 for k,value in values.items())
    and all(abs(res['reloaded'][k]-value)<.001 for k,value in values.items())
-   and res['jsonSaved'] and res['previewHasSharedMarkup']
+   and res['jsonSaved'] and res['previewHasSharedMarkup'] and res['previewGpuLoaded']
    and len(keys)==2 and all(abs(keys[1][k]-value)<.001 for k,value in values.items())
    and res['sharedStart']['canvasCount']==1 and res['sharedStart']['context'] and res['sharedStart']['loadedModels']==2
    and res['sharedStart']['sceneId']==res['sharedEnd']['sceneId']
