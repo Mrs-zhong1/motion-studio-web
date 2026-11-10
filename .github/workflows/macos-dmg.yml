@@ -4,9 +4,10 @@ on:
   push:
     paths:
       - 'macos/**'
+      - '!macos/dist/**'
       - '.github/workflows/macos-dmg.yml'
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: motion-studio-mac-build-${{ github.ref }}
   cancel-in-progress: true
@@ -104,12 +105,26 @@ jobs:
           Path('build/reports/MACOS_DMG_BUILD_EVIDENCE.json').write_text(json.dumps(report,indent=2))
           print(json.dumps(report,indent=2))
           PY
-      - name: Upload unsigned DMG, native app and build evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: motion-studio-stage14-macos-arm64-unsigned-dmg
-          path: |
-            build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg
-            build/reports/MACOS_DMG_BUILD_EVIDENCE.json
-          if-no-files-found: error
-          retention-days: 30
+      - name: Publish unsigned DMG and build evidence directly to repository
+        run: |
+          set -euo pipefail
+          mkdir -p macos/dist
+          cp 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg' macos/dist/
+          cp 'build/reports/MACOS_DMG_BUILD_EVIDENCE.json' macos/dist/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --mixed origin/main
+            git add -f macos/dist
+            if git diff --cached --quiet; then
+              echo 'DMG package already available in repository'
+              break
+            fi
+            git commit -m 'Publish verified unsigned Apple Silicon DMG [skip ci]'
+            if git push origin HEAD:main; then
+              echo 'DMG binary is published under macos/dist/'
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then exit 1; fi
+          done
