@@ -8,19 +8,21 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
  group.name='Stage12SpatialTrajectoryGizmo';
  group.visible=false;
  scene.add(group);
- const handles=[],segments=[],axisHelpers=[];
+ const handles=[],segments=[],axisHelpers=[],tangentHandles=[],tangentLines=[];
  const overview=new THREE.PerspectiveCamera(47,1,.1,150);
  const raycaster=new THREE.Raycaster();
  const pointer=new THREE.Vector2();
  const colors={x:0xe87575,y:0x82d7a1,z:0x8bb9f4};
  let enabled=false,axis='x',view='front',targetIndex=0,drag=null,selection=0;
- const data={mode:false,view,axis,handleCount:0,dragCount:0,patchCount:0,trajectoryPoints:0,selected:0,sceneId:diag.sceneUuid,rendererShared:true,handleScreen:[],axisArrowsCount:0};
+ const data={mode:false,view,axis,handleCount:0,dragCount:0,patchCount:0,trajectoryPoints:0,selected:0,sceneId:diag.sceneUuid,rendererShared:true,handleScreen:[],axisArrowsCount:0,tangentHandleCount:0,tangentDragCount:0,tangentScreen:[]};
  window.__motionStage12Gizmo=data;
  function clear(){
    for(const h of handles){group.remove(h);h.geometry.dispose();h.material.dispose()}
    for(const line of segments){group.remove(line);line.geometry.dispose();line.material.dispose()}
    for(const a of axisHelpers){group.remove(a);for(const obj of [a.line,a.cone]){obj.geometry?.dispose();obj.material?.dispose();}}
-   handles.length=0;segments.length=0;axisHelpers.length=0;
+   for(const h of tangentHandles){group.remove(h);h.geometry.dispose();h.material.dispose();}
+   for(const l of tangentLines){group.remove(l);l.geometry.dispose();l.material.dispose();}
+   handles.length=0;segments.length=0;axisHelpers.length=0;tangentHandles.length=0;tangentLines.length=0;
  }
  function keyWorld(index,k){
    const a=records[index],b=records[Math.min(index+1,records.length-1)];
@@ -57,6 +59,22 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
      handle.position.copy(pos);handle.userData.keyframeIndex=i;
      handle.renderOrder=9;group.add(handle);handles.push(handle);
    }
+   for(let i=0;i<path.length;i++){
+     const originPoint=keyWorld(targetIndex,path[i]);
+     for(const side of ['handleIn','handleOut']){
+       if(side==='handleIn'&&i===0||side==='handleOut'&&i===path.length-1)continue;
+       const h=path[i][side]||{};
+       const dx=h.x===undefined?(side==='handleIn'?-.65:.65):h.x;
+       const delta=new THREE.Vector3(dx,h.y||0,h.z||0);
+       const endpoint=originPoint.clone().add(delta);
+       const g=new THREE.Mesh(new THREE.SphereGeometry(.14,12,10),new THREE.MeshBasicMaterial({color:side==='handleIn'?0xffc87c:0xb8c8ff,depthTest:false}));
+       g.position.copy(endpoint);g.userData={keyframeIndex:i,tangentSide:side};
+       g.renderOrder=11;group.add(g);tangentHandles.push(g);
+       const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([originPoint,endpoint]),new THREE.LineBasicMaterial({color:0x90a7bf,depthTest:false,transparent:true,opacity:.7}));
+       l.renderOrder=8;group.add(l);tangentLines.push(l);
+     }
+   }
+   data.tangentHandleCount=tangentHandles.length;
    const origin=handles[Math.min(selection,handles.length-1)]?.position;
    if(origin){
      const axes=[['x',new THREE.Vector3(1,0,0)],['y',new THREE.Vector3(0,1,0)],['z',new THREE.Vector3(0,0,1)]];
@@ -73,6 +91,7 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
    overview.updateMatrixWorld();
    const rect=canvas.getBoundingClientRect();
    data.handleScreen=handles.map((h,i)=>{const v=h.position.clone().project(overview);return {index:i,x:(v.x+1)*rect.width/2,y:(1-v.y)*rect.height/2}});
+   data.tangentScreen=tangentHandles.map(h=>{const v=h.position.clone().project(overview);return {index:h.userData.keyframeIndex,side:h.userData.tangentSide,x:(v.x+1)*rect.width/2,y:(1-v.y)*rect.height/2}});
    data.handleCount=handles.length;data.trajectoryPoints=points.length;data.selected=selection;
  }
  function emitChange(){
@@ -90,10 +109,10 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
    pointer.x=((e.clientX-rect.left)/rect.width)*2-1;
    pointer.y=-((e.clientY-rect.top)/rect.height)*2+1;
    raycaster.setFromCamera(pointer,overview);
-   const found=raycaster.intersectObjects(handles,false)[0];
+   const found=raycaster.intersectObjects([...handles,...tangentHandles],false)[0];
    if(!found)return;
    selection=found.object.userData.keyframeIndex;data.selected=selection;
-   drag={id:e.pointerId,x:e.clientX,y:e.clientY};
+   drag={id:e.pointerId,x:e.clientX,y:e.clientY,side:found.object.userData.tangentSide||null};
    canvas.setPointerCapture(e.pointerId);
    e.preventDefault();
    rebuild();render();
@@ -106,9 +125,18 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
    // Constraints are intentional: 1 axis at a time, preserves t and other attributes.
    // Perspective view is a guide; precise values are edited with the numeric sliders.
    const factor=view==='side'?.06:.04;
-   if(axis==='x')k.x=clamp(k.x+dx*factor,-4,4);
-   if(axis==='y')k.y=clamp(k.y-dy*factor,-4,4);
-   if(axis==='z')k.z=clamp(k.z-dy*factor,2,12);
+   if(drag.side){
+     if(!k[drag.side])k[drag.side]={};
+     const h=k[drag.side];
+     const defaults=axis==='x'?(drag.side==='handleIn'?-.65:.65):0;
+     const prev=Number.isFinite(Number(h[axis]))?Number(h[axis]):defaults;
+     h[axis]=clamp(prev+(axis==='x'?dx:-dy)*factor,-8,8);
+     data.tangentDragCount++;
+   }else{
+     if(axis==='x')k.x=clamp(k.x+dx*factor,-4,4);
+     if(axis==='y')k.y=clamp(k.y-dy*factor,-4,4);
+     if(axis==='z')k.z=clamp(k.z-dy*factor,2,12);
+   }
    data.dragCount++;emitChange();rebuild();render();
    e.preventDefault();
  }
