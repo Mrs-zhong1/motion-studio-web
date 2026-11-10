@@ -42,6 +42,17 @@ jobs:
         run: python tests/test_web_product_e2e.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: Preserve exact browser-tested release artifact
+        if: matrix.browser == 'chromium'
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-candidate-tested-html
+          path: |
+            stage9/Motion-Studio-Stage15-Meshopt-OFFLINE.html
+            stage9/THREE_LICENSE.txt
+            stage9/BUILD_MANIFEST.json
+          if-no-files-found: error
+          retention-days: 14
       - name: Save test evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4
@@ -110,21 +121,31 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Restore exact editor artifact tested by Chromium
+        uses: actions/download-artifact@v4
         with:
-          node-version: '22'
-      - name: Build release site from actual offline editor
-        working-directory: stage9
+          name: release-candidate-tested-html
+          path: release-candidate
+      - name: Verify release candidate matches its build manifest
         run: |
-          npm install --no-audit --no-fund
-          npm run build
-          python tests/check_build.py
+          python - <<'PY'
+          import json,pathlib
+          root=pathlib.Path('release-candidate')
+          html=root/'Motion-Studio-Stage15-Meshopt-OFFLINE.html'
+          license=root/'THREE_LICENSE.txt'
+          manifest=json.loads((root/'BUILD_MANIFEST.json').read_text(encoding='utf-8'))
+          assert html.is_file() and license.is_file()
+          assert html.stat().st_size>250000
+          assert manifest.get('offline') is True
+          assert manifest.get('editorBytes')==html.stat().st_size
+          print('Publishing exact browser-tested HTML:',html.stat().st_size,'bytes')
+          PY
       - name: Prepare static Pages site, manifest and SHA256
         run: |
           mkdir -p dist
-          cp stage9/Motion-Studio-Stage15-Meshopt-OFFLINE.html dist/index.html
-          cp stage9/THREE_LICENSE.txt dist/THREE_LICENSE.txt
-          cp stage9/BUILD_MANIFEST.json dist/BUILD_MANIFEST.json
+          cp release-candidate/Motion-Studio-Stage15-Meshopt-OFFLINE.html dist/index.html
+          cp release-candidate/THREE_LICENSE.txt dist/THREE_LICENSE.txt
+          cp release-candidate/BUILD_MANIFEST.json dist/BUILD_MANIFEST.json
           python - <<'PY'
           import json,hashlib,pathlib,os
           root=pathlib.Path("dist")
