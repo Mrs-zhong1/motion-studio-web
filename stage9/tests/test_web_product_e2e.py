@@ -1,6 +1,8 @@
 """P0/P1/P3: real browser end-to-end user journey, not only renderer unit tests."""
 from pathlib import Path
-import json, traceback, os
+import json, traceback, os, threading
+from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+from functools import partial
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -17,6 +19,11 @@ def check(name,condition):
 
 try:
     check("built_editor_exists",EDITOR.exists())
+    # A real HTTP origin gives stable localStorage semantics across browser engines.
+    server=ThreadingHTTPServer(("127.0.0.1",0),partial(SimpleHTTPRequestHandler,directory=str(ROOT)))
+    server_thread=threading.Thread(target=server.serve_forever,daemon=True)
+    server_thread.start()
+    result["origin"]="http://127.0.0.1:<ephemeral>"
     with sync_playwright() as pw:
         engine=getattr(pw,browser_name)
         launch_args={"headless":True}
@@ -26,7 +33,7 @@ try:
         page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
         page_errors=[]
         page.on("pageerror",lambda e:page_errors.append(str(e)))
-        page.goto(EDITOR.as_uri(),wait_until="domcontentloaded")
+        page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
         check("20_components",page.evaluate("registry.length")==20)
         page.locator("#loadTemplate").click()
         check("template_loaded",page.evaluate("project.sections.length")>0)
@@ -101,6 +108,9 @@ try:
 except Exception:
     result["errors"].append(traceback.format_exc(limit=6))
 finally:
+    if "server" in locals():
+        server.shutdown()
+        server.server_close()
     REPORT.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
     print(json.dumps(result,ensure_ascii=False,indent=2))
 assert result["pass"],"Web product E2E failed; inspect WEB_PRODUCT_E2E_RESULT.json"
