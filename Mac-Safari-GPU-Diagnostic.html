@@ -29,7 +29,7 @@ $('run').onclick=async()=>{
    const now=performance.now();data.frameTimeMs.push(Math.round((now-last)*100)/100);last=now;
    gl.viewport(0,0,c.width,c.height);gl.clearColor(0.03,0.06,0.1,1);gl.clear(gl.COLOR_BUFFER_BIT);
    gl.uniform1f(angle,i*.04);gl.drawArrays(gl.TRIANGLES,0,3);data.frames++;
-   if(i%10===0){gl.readPixels(550,225,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);if(pixel[0]+pixel[1]+pixel[2]>45)data.nonblankPixels++;}
+   if(i%10===0){gl.readPixels(550,225,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);if(pixel[0]+pixel[1]+pixel[2]>120)data.nonblankPixels++;}
  }
  data.glError=gl.getError();data.p50FrameIntervalMs=data.frameTimeMs.slice().sort((a,b)=>a-b)[50];data.p95FrameIntervalMs=data.frameTimeMs.slice().sort((a,b)=>a-b)[95];
  data.passed=!!(data.webgl2&&data.frames===100&&data.nonblankPixels>0&&data.glError===0);
