@@ -2,13 +2,66 @@
   "buildExists": true,
   "gpuAccepted": false,
   "errors": [
-    "Unexpected token '<'",
-    "Unexpected token '<'",
-    "export:Unexpected token '<'"
+    {
+      "message": "Unexpected token '<'",
+      "stack": ""
+    },
+    {
+      "message": "Unexpected token '<'",
+      "stack": ""
+    },
+    {
+      "message": "export:Unexpected token '<'",
+      "stack": ""
+    }
   ],
   "componentCount": 20,
   "editorModelBytes": 2520,
   "exportBytes": 707770,
   "exportedFrames": 6,
+  "frameScripts": [
+    {
+      "title": "文字逐字揭示 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "交错图片网格 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "固定滚动分镜 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "层叠卡片交互 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "Motion Studio Â· ç¦»çº¿ GLB å·¥ä½å°",
+      "scriptCount": 4,
+      "scriptPreview": [
+        "\n/* Motion Studio GLB static scene importer. MIT-style local project m",
+        "Z2xURgIAAABgBwAAfAYAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAiLCJnZW5lcm",
+        "\n(()=>{'use strict';const $=id=>document.getElementById(id), canvas=$(",
+        "(()=>{/**\n * @license\n * Copyright 2010-2025 Three.js Authors\n * SPDX-"
+      ]
+    }
+  ],
   "exportThreeStatuses": []
 }
