@@ -10,7 +10,7 @@ try:
  with sync_playwright() as p:
   browser=p.chromium.launch(headless=True,args=['--no-sandbox','--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--enable-unsafe-swiftshader'])
   page=browser.new_page(viewport={'width':1330,'height':900},accept_downloads=True)
-  page.on('pageerror',lambda e:res['errors'].append('editor: '+str(e)))
+  page.on('pageerror',lambda e:res['errors'].append('editor: '+str(e)+' | STACK: '+str(e.stack)))
   page.set_content(HTML.read_text(encoding='utf-8'),wait_until='domcontentloaded')
   res['componentCount']=page.evaluate('registry.length')
   for fixture in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
@@ -37,7 +37,7 @@ try:
   exported=ROOT/'STAGE10-CAMERA-EXPORTED.html';dl.value.save_as(exported)
   res['exportBytes']=exported.stat().st_size
   exp=browser.new_page(viewport={'width':1180,'height':680})
-  exp.on('pageerror',lambda e:res['errors'].append('export: '+str(e)))
+  exp.on('pageerror',lambda e:res['errors'].append('export: '+str(e)+' | STACK: '+str(e.stack)))
   exp.set_content(exported.read_text(encoding='utf-8'),wait_until='domcontentloaded')
   exp.wait_for_function("window.__motionSharedThree?.loadedModels===2 || !!window.__motionSharedThree?.error",timeout=20000)
   res['sharedStart']=exp.evaluate("({cameraKeys:window.__motionSharedThree.cameraKeyframes,sceneId:window.__motionSharedThree.sceneUuid,loadedModels:window.__motionSharedThree.loadedModels,context:window.__motionSharedThree.webgl2,error:window.__motionSharedThree.error,canvasCount:document.querySelectorAll('#motion-shared-three-canvas').length})")
