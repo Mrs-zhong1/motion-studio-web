@@ -17,6 +17,16 @@
     "fov": 59
   },
   "previewHasSharedMarkup": true,
+  "previewGpuStates": [
+    {
+      "models": 2,
+      "webgl2": true,
+      "error": null,
+      "canvasCount": 1,
+      "frames": 1
+    }
+  ],
+  "previewGpuLoaded": true,
   "jsonSaved": true,
   "reloaded": {
     "x": 1.5,
@@ -49,7 +59,7 @@
         "fov": 59
       }
     ],
-    "sceneId": "23faad8b-dc74-4f2d-985f-35acb4796c6c",
+    "sceneId": "68e15b10-50e5-41d2-a409-0cf58a14598a",
     "loadedModels": 2,
     "context": true,
     "error": null,
@@ -128,8 +138,8 @@
     }
   ],
   "sharedEnd": {
-    "sceneId": "23faad8b-dc74-4f2d-985f-35acb4796c6c",
-    "frames": 27,
+    "sceneId": "68e15b10-50e5-41d2-a409-0cf58a14598a",
+    "frames": 29,
     "pixels": 10,
     "contextLost": false,
     "error": null
