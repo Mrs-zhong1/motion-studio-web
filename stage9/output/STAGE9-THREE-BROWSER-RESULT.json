@@ -85,7 +85,7 @@
       "renderHeight": 460,
       "drawSamples": 4,
       "drawTotalMs": 19,
-      "drawMaxMs": 16,
+      "drawMaxMs": 15.5,
       "error": null,
       "progress": 0.8
     }

@@ -4,7 +4,7 @@ Invalid GLB resilience: success
 Shared 3D continuity: success
 Stage10 editable camera: success
 Stage11 curve interpolation: success
-Stage11 timeline live WebGL: failure
-CI run: 42780805431
-Source SHA: 7422746e6b2dbea725aa64ca99c4b36ce532d706
+Stage11 timeline live WebGL: success
+CI run: 42781324778
+Source SHA: 0ca40d852f28497391b6fe9ddee3ef368b966a99
 Real hardware GPU / Safari: NOT TESTED

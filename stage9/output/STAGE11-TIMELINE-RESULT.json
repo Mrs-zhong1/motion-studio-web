@@ -1,5 +1,5 @@
 {
-  "pass": false,
+  "pass": true,
   "stage": "11",
   "webglEnvironment": "Ubuntu Chromium SwiftShader software WebGL",
   "macHardwareTested": false,
@@ -21,7 +21,7 @@
     "x": -4
   },
   "previewBefore": {
-    "uuid": "786da0cb-0efb-497e-9fe7-f770290ead8a",
+    "uuid": "57db8391-b9a4-4e3f-b562-4481cd9386e4",
     "count": 0,
     "paths": [
       3,
@@ -32,7 +32,7 @@
     "canvas": 1
   },
   "previewAfter": {
-    "uuid": "786da0cb-0efb-497e-9fe7-f770290ead8a",
+    "uuid": "57db8391-b9a4-4e3f-b562-4481cd9386e4",
     "count": 1,
     "paths": [
       3,
@@ -107,7 +107,7 @@
       "at": 100
     }
   ],
-  "exportBytes": 858994,
+  "exportBytes": 859022,
   "exportCameraSamples": [
     {
       "focus": 2109,
@@ -120,6 +120,7 @@
       "pitch": -0.026143544012492807,
       "roll": 0.01525040067395414,
       "fov": 42.0566443453604,
+      "stage11Custom": true,
       "progress": 0.0010869565217391304,
       "near3d": true
     },
@@ -134,6 +135,7 @@
       "pitch": -7.532580216980356,
       "roll": 4.394005126571875,
       "fov": 58.3205904701241,
+      "stage11Custom": true,
       "progress": 0.2510869565217391,
       "near3d": true
     },
@@ -148,6 +150,7 @@
       "pitch": -11.9998867017342,
       "roll": 6.99993390934495,
       "fov": 67.99975452042409,
+      "stage11Custom": true,
       "progress": 0.5010869565217392,
       "near3d": true
     },
@@ -162,6 +165,7 @@
       "pitch": -7.467363072244593,
       "roll": 4.35596179214268,
       "fov": 58.17928665652995,
+      "stage11Custom": true,
       "progress": 0.7510869565217392,
       "near3d": true
     },
@@ -176,19 +180,20 @@
       "pitch": -4.946859332621023,
       "roll": 2.8856679440289303,
       "fov": 52.718195220678886,
+      "stage11Custom": true,
       "progress": 0.8315217391304348,
       "near3d": true
     }
   ],
   "exportShared": {
-    "id": "07b8f357-5c6d-4647-9808-2eeb01b9a2dd",
+    "id": "8f91e651-f645-48c3-966b-2a295ddbb66a",
     "webgl": true,
     "models": 2,
     "pathCounts": [
       3,
       0
     ],
-    "frames": 27,
+    "frames": 31,
     "pixels": 5,
     "error": null,
     "canvas": 1
