@@ -1,6 +1,6 @@
 WebGL software acceptance step: success
 GLB compatibility matrix: success
 Invalid GLB resilience: success
-CI run: 42741372505
-Source SHA: 75b35385a9dc0662cfeb21b9cf5db0348e01c00b
+CI run: 42741605979
+Source SHA: 69871bc7b1f3cf2c7e9a74a2f7310bb13dd51164
 Real hardware GPU / Safari: NOT TESTED
