@@ -37,16 +37,21 @@ jobs:
         id: gpu
         continue-on-error: true
         run: python tests/test_browser.py
+      - name: Stage 9 GLB compatibility, mobile layout, offline and drawing performance matrix
+        id: matrix
+        continue-on-error: true
+        run: python tests/test_matrix.py
       - name: Commit generated HTML, actual browser evidence, and manifests to repository
         if: always()
         working-directory: .
         run: |
           mkdir -p stage9/output
-          for f in Motion-Studio-Stage9-THREE-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json; do
+          for f in Motion-Studio-Stage9-THREE-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-Sample-Dual-Material-EXPORTED.html STAGE9-Sample-Textured-Animated-EXPORTED.html STAGE9-Sample-Dual-Material-CAPTURE.png STAGE9-Sample-Textured-Animated-CAPTURE.png; do
             if [ -f "stage9/$f" ]; then cp "stage9/$f" "stage9/output/$f"; fi
           done
           cat > stage9/output/CI_GATE.txt <<EOF
           WebGL software acceptance step: ${{ steps.gpu.outcome }}
+          GLB compatibility matrix: ${{ steps.matrix.outcome }}
           CI run: ${{ github.run_id }}
           Source SHA: ${{ github.sha }}
           Real hardware GPU / Safari: NOT TESTED
@@ -59,7 +64,7 @@ jobs:
             git push origin HEAD:main
           fi
       - name: Gate production if software WebGL verification failed
-        if: steps.gpu.outcome != 'success'
+        if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success'
         run: |
           echo "Stage 9 GPU software acceptance failed. Inspect stage9/output/ in repository."
           exit 1
