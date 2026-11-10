@@ -1,5 +1,5 @@
-WebGL software acceptance step: success
-GLB compatibility matrix: cancelled
+WebGL software acceptance step: skipped
+GLB compatibility matrix: skipped
 Invalid GLB resilience: skipped
 Shared 3D continuity: skipped
 Stage10 editable camera: skipped
@@ -12,6 +12,6 @@ Stage13 real Three.js handles: skipped
 Stage14 stability and project recovery: skipped
 Stage15 true meshopt fixture: skipped
 Stage15 true meshopt WebGL: skipped
-CI run: 42823599908
-Source SHA: 13c76e64268054e2d417248c466e1084946d0d36
+CI run: 42823914238
+Source SHA: 179957b4c261c4af94748e0a0182c5aad4914372
 Real hardware GPU / Safari: NOT TESTED

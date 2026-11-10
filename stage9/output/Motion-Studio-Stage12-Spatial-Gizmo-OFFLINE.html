@@ -195,7 +195,25 @@ function notify(t){const el=$('toast');el.textContent=t;el.classList.add('show')
 function addComponent(id,idx){const meta=registry.find(x=>x.id===id);if(!meta)return;const s=normSection({id,text:meta.defaultText});if(Number.isInteger(idx))project.sections.splice(idx,0,s);else project.sections.push(s);active=s.uid;activeLayer=s.layers[0]?.id||null;render();notify('已添加 '+meta.title)}
 function selectSection(key){active=key;activeLayer=project.sections.find(x=>x.uid===key)?.layers[0]?.id||null;selectedLayers.clear();if(activeLayer)selectedLayers.add(activeLayer);render();}
 function updateSection(k,v){const s=project.sections.find(x=>x.uid===active);if(!s)return;s[k]=v;const sec=document.querySelector(`.section[data-uid="${s.uid}"]`);if(k==='height'&&sec){sec.querySelector('iframe').style.height=s.height+'px'}if(['text','speed','depth','accent','motion'].includes(k)&&sec){const fr=sec.querySelector('iframe');fr.srcdoc=frameMarkup(getItem(s),s)}if(k==='image'&&sec){const art=sec.querySelector('.section-art');art.style.backgroundImage=s.image?`url("${s.image}")`:'';} if(k==='text'&&sec){sec.querySelectorAll('.motion-layer').forEach(el=>{const layer=s.layers.find(l=>l.id===el.dataset.layerId);if(layer&&layer.kind!=='image'&&!layer.text)el.textContent=s.text.slice(0,55)})}if(k==='overlay'){refreshOverlays();}if(k==='text'){const nav=document.querySelector(`.timeline-node[data-uid="${s.uid}"]`);if(nav)nav.textContent=s.text.slice(0,28)||getItem(s).title}saveDraft();}
-function persistDraftWithoutHistory(){try{localStorage.setItem('motion-studio-draft-v1',JSON.stringify(project))}catch(e){}}
+let draftPersistFailed=false,draftPersistWarned=false;
+function persistDraftWithoutHistory(){
+  try{
+    localStorage.setItem('motion-studio-draft-v1',JSON.stringify(project));
+    draftPersistFailed=false;draftPersistWarned=false;
+    return true;
+  }catch(e){
+    draftPersistFailed=true;
+    if(!draftPersistWarned){
+      draftPersistWarned=true;
+      notify('浏览器自动保存失败（存储空间可能不足），请立即点击「保存工程 JSON」备份');
+    }
+    return false;
+  }
+}
+window.addEventListener('beforeunload',e=>{
+  if(!draftPersistFailed)return;
+  e.preventDefault();e.returnValue='';
+});
 function saveDraft(){if(!historyBusy){const now=snapshot();if(lastHistoryState&&lastHistoryState!==now){historyStack.push(lastHistoryState);if(historyStack.length>65)historyStack.shift();futureStack=[];}lastHistoryState=now;syncHistoryButtons()}persistDraftWithoutHistory()}
 function layerMarkup(l,s,i,forExport=false){const content=l.kind==='image'?(l.src?`<img src="${l.src}" alt="用户图片">`:'<span>上传图片</span>'):safe(l.text||s.text.slice(0,55));return `<div class="motion-layer kind-${l.kind}${!forExport&&s.uid===active&&l.id===activeLayer?' selected-layer':''}" data-layer-id="${safe(l.id)}" data-section-id="${safe(s.uid)}" data-layer-index="${i}" role="button" tabindex="0" aria-label="编辑图层 ${i+1}" ${l.enabled?'':'hidden'}>${content}</div>`;}
 function buildSection(s,i,forExport=false){let safeTitle=safe(getItem(s).title);let art=s.image?`<div class="section-art" style="background-image:url('${s.image}')"></div>`:'';let raw=(forExport&&s.id==='offline-glb-scene'&&project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb).length>=2)
