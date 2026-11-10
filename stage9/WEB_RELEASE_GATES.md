@@ -85,3 +85,13 @@
 - `test_live_deployment.py` 新增远端 `WEB_RELEASE.json` 校验：对线上响应 HTML 计算 SHA256 并与该发布清单的 SHA256 对比，检查**实际对外服务的字节**是否匹配候选产物。
 - `test_web_product_e2e.py` 改为使用临时 `127.0.0.1` HTTP 服务打开单文件编辑器；使浏览器的 localStorage 草稿测试有稳定的 HTTP origin。离线导出页依旧独立检查零 HTTP(S) 请求。
 - 此批有 GitHub 提交和文件回查证据，但**无新的 CI run ID、未获得实际三浏览器通过报告、未上线**。本地受沙箱浏览器访问策略限制，不能用其页面访问结果替代 GitHub Actions 测试。
+
+
+## 2026-11-10 GitHub E2E #14 实测故障定位与修复
+
+- Run：`42830149869`，三个 job：Chromium `129877749113`、Firefox `129877749706`、WebKit `129877749584`。
+- 三份 job 日志均显示完整 E2E JSON checks 为 `true`、`errors: []`；编辑器加载、20 组件、添加、自动草稿、JSON 导入、图片上传移除、响应式切换、HTML 导出与离线请求检查均通过。
+- 红叉来自 **`actions/upload-artifact@v4` 的 GitHub Artifact storage quota exhausted**，并非浏览器功能断言失败。不要将旧运行的 workflow conclusion 直接解释为功能失败。
+- 已修改 `.github/workflows/web-product-e2e.yml`：不再上传大容量 HTML/附件，将每个浏览器结果 JSON 写入 `$GITHUB_STEP_SUMMARY`，并保留普通 job 日志。此调整已提交，但新工作流仍需实跑确认绿色。
+- **P5 不可绕过**：`web-release-pages.yml` 的被测原始 HTML 归档、`upload-pages-artifact` 是部署同一文件的关键，当前配额不足时仍会失败；需先在 GitHub Actions 清理过期/不必要的历史 artifacts，并等待存储用量更新，或调整计划/配额。不可删除候选产物门槛来伪造发布成功。
+- Playwright WebKit 通过不代表 macOS Safari 实机测试通过。
