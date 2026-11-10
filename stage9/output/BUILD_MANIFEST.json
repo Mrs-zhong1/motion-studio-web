@@ -1,0 +1,19 @@
+{
+  "three": "0.180.0",
+  "engineBytes": 609198,
+  "sharedEngineBytes": 622948,
+  "editorBytes": 1799838,
+  "offline": true,
+  "source": "Motion Studio Stage9-15, real offline MeshoptDecoder and 4MB GLB validation",
+  "releasePolicy": "web-browser-matrix",
+  "gpuAcceptanceRequired": false,
+  "gpuTested": false,
+  "macHardwareGpuOptional": true,
+  "requiredChecks": [
+    "web-product-e2e",
+    "offline-export",
+    "cross-browser-acceptance",
+    "deployment-smoke"
+  ],
+  "releaseAccepted": false
+}

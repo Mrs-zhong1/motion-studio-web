@@ -1,0 +1,93 @@
+{
+  "buildExists": true,
+  "gpuAccepted": true,
+  "errors": [],
+  "componentCount": 20,
+  "editorModelBytes": 2520,
+  "exportBytes": 896418,
+  "exportedFrames": 6,
+  "frameScripts": [
+    {
+      "title": "文字逐字揭示 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "交错图片网格 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "固定滚动分镜 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "层叠卡片交互 · Motion Studio",
+      "scriptCount": 2,
+      "scriptPreview": [
+        "(()=>{'use strict';const reduced=false||matchMedia('(prefers-reduced-m",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    },
+    {
+      "title": "Motion Studio Â· ç¦»çº¿ GLB å·¥ä½å°",
+      "scriptCount": 5,
+      "scriptPreview": [
+        "\n/* Motion Studio GLB static scene importer. MIT-style local project m",
+        "Z2xURgIAAABgBwAAfAYAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAiLCJnZW5lcm",
+        "\n(()=>{'use strict';const $=id=>document.getElementById(id), canvas=$(",
+        "",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
+      ]
+    }
+  ],
+  "animationAtStart": "0,0,0.07846,0.99692",
+  "animationAtEnd": "0,0,0.95106,0.30902",
+  "exportThreeStatuses": [
+    {
+      "engine": "three",
+      "threeVersion": "180",
+      "webgl2": true,
+      "pbr": true,
+      "meshCount": 1,
+      "materialCount": 1,
+      "textureCount": 1,
+      "animationClips": 1,
+      "frames": 4,
+      "visiblePixels": 12,
+      "pixelDifference": 4720,
+      "animationMoved": true,
+      "animationRotationSamples": [
+        "0,0,0,1",
+        "0,0,0.07846,0.99692",
+        "0,0,0.95106,0.30902"
+      ],
+      "skinnedMeshCount": 0,
+      "morphMeshCount": 0,
+      "boneCount": 0,
+      "morphInfluenceSamples": [],
+      "boneRotationSamples": [],
+      "animationClipNames": [
+        "Rotation test"
+      ],
+      "rendererName": "WebKit WebGL",
+      "renderWidth": 1200,
+      "renderHeight": 460,
+      "drawSamples": 4,
+      "drawTotalMs": 23.9,
+      "drawMaxMs": 21.6,
+      "error": null,
+      "progress": 0.8
+    }
+  ]
+}
