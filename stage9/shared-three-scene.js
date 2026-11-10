@@ -14,7 +14,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
  canvas.setAttribute('aria-hidden','true');
  canvas.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;z-index:7;pointer-events:none;opacity:0;transition:opacity .16s;display:block';
  document.body.appendChild(canvas);
- const contextLost=e=>{e.preventDefault();diag.contextLost=true;diag.active=false;canvas.style.opacity='0'};
+ const contextLost=e=>{e.preventDefault();diag.contextLost=true;diag.active=false;canvas.style.opacity='0';for(const iframe of document.querySelectorAll('.section[data-shared-three] iframe'))iframe.style.opacity='1';};
  canvas.addEventListener('webglcontextlost',contextLost,false);
  let renderer;
  try{
