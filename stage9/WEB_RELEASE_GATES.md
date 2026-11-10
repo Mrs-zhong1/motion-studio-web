@@ -30,3 +30,13 @@
 [Web E2E Actions](https://github.com/Mrs-zhong1/motion-studio-web/actions/workflows/web-product-e2e.yml)
 
 [Stage9–15 software WebGL Actions](https://github.com/Mrs-zhong1/motion-studio-web/actions/workflows/stage9-three-offline.yml)
+
+
+## P5 新增自动化发布链（2026-11-10）
+
+- `.github/workflows/web-release-pages.yml`：真实 Stage15 Web 编辑器构建 → Chromium / Firefox / WebKit 真实浏览器用户流程测试（任一失败则不能部署）→ 生成独立 `dist/index.html`、`THREE_LICENSE.txt`、`WEB_RELEASE.json` 与 SHA256 → 通过 `actions/deploy-pages@v4` 发布 → 在线 HTTPS 浏览器 smoke。
+- `stage9/tests/test_live_deployment.py`：直接访问部署后正式 URL，验证 HTTP 200、20 组件、模板加载、项目 JSON 下载、HTML 下载、JS 页面错误，并上传产物。
+- **注意**：仓库的 GitHub Pages 需由仓库管理员在 Settings → Pages 设置 GitHub Actions 作为 Source；如未启用或仓库权限不足，部署任务会失败，不能视为已上线。
+- 当前状态：发布脚本与工作流**已提交但未取得成功运行证据**。正式 URL 尚未验证。
+- GitHub Actions 工作流入口：https://github.com/Mrs-zhong1/motion-studio-web/actions/workflows/web-release-pages.yml
+- 正式交付须留存：三浏览器 E2E artifacts、Pages deploy URL、`P5_LIVE_SMOKE.json` 全部通过、导出的真实 HTML、SHA256 校验。
