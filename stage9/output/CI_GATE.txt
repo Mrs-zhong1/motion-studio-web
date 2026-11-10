@@ -10,6 +10,6 @@ Stage12 real spatial gizmo: skipped
 Stage13 in/out Bezier math: skipped
 Stage13 real Three.js handles: skipped
 Stage14 stability and project recovery: skipped
-CI run: 42810646898
-Source SHA: 8a75b8a2e5f0147d174693f85fe4f7027b8c99b3
+CI run: 42810760948
+Source SHA: 2f07e86188b1737ce483643118b9c6f348dccf21
 Real hardware GPU / Safari: NOT TESTED
