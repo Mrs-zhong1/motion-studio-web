@@ -1,10 +1,10 @@
 {
   "buildExists": true,
-  "gpuAccepted": false,
+  "gpuAccepted": true,
   "errors": [],
   "componentCount": 20,
   "editorModelBytes": 2520,
-  "exportBytes": 865507,
+  "exportBytes": 865631,
   "exportedFrames": 6,
   "frameScripts": [
     {
@@ -63,7 +63,7 @@
       "materialCount": 1,
       "textureCount": 1,
       "animationClips": 1,
-      "frames": 1,
+      "frames": 4,
       "visiblePixels": 12,
       "pixelDifference": 4720,
       "animationMoved": true,

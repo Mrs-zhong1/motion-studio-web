@@ -1,4 +1,4 @@
-WebGL software acceptance step: failure
-CI run: 42734283799
-Source SHA: 2a3ef6d9514d2d487e18229a657e50d107d8caa3
+WebGL software acceptance step: success
+CI run: 42734507599
+Source SHA: 24c32ea2ddbb1205f23f8c8052e2b7e3eebc9e16
 Real hardware GPU / Safari: NOT TESTED
