@@ -12,6 +12,7 @@ RESULT=ROOT/'STAGE9-MATRIX-RESULT.json'
 FIXTURES=[
  {"file":"Sample-Dual-Material.glb","min_materials":2,"min_textures":0,"min_animations":0},
  {"file":"Sample-Textured-Animated.glb","min_materials":1,"min_textures":1,"min_animations":1},
+ {"file":"Sample-Skinned-Morph-MultiClip.glb","min_materials":1,"min_textures":0,"min_animations":2,"skinned":1,"morph":1,"bones":2},
 ]
 result={"test":"Stage9 GLB compatibility matrix","source":"GitHub Actions cloud Chromium with SwiftShader","hardwareGpuTested":False,"safariTested":False,"results":[],"pass":False}
 try:
@@ -55,6 +56,13 @@ try:
     item["renderer"]=target.evaluate("window.__motionThreeStatus")
     stat=item["renderer"]
     item["avgDrawMs"]=round(stat.get("drawTotalMs",0)/max(1,stat.get("drawSamples",0)),3)
+    item["skinMorphPass"]=(
+     (not spec.get("skinned") or stat.get("skinnedMeshCount",0)>=spec["skinned"])
+     and (not spec.get("morph") or stat.get("morphMeshCount",0)>=spec["morph"])
+     and (not spec.get("bones") or stat.get("boneCount",0)>=spec["bones"])
+     and (not spec.get("skinned") or len(set(stat.get("boneRotationSamples",[])))>=2)
+     and (not spec.get("morph") or len(set(stat.get("morphInfluenceSamples",[])))>=2)
+    )
     item["modelPass"]=(
      item["components"]==20
      and item["modelBase64Length"]>1000
@@ -67,6 +75,7 @@ try:
      and stat.get("visiblePixels",0)>=2
      and stat.get("pixelDifference",0)>20
      and stat.get("drawSamples",0)>=4
+     and item["skinMorphPass"]
      and not stat.get("error")
     )
     item["passed"]=bool(item["modelPass"] and not item["remoteRequests"] and not item["errors"])
