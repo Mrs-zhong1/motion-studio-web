@@ -4,7 +4,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 (async function bootMotionThree(){
   const host=document.querySelector('.viewport')||document.body;
   const source=document.getElementById('embedded-model')?.textContent?.trim()||'';
-  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0};
+  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],skinnedMeshCount:0,morphMeshCount:0,boneCount:0,morphInfluenceSamples:[],boneRotationSamples:[],animationClipNames:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0};
   window.__motionThreeStatus=status;
   let gl;
   try {gl=document.createElement('canvas').getContext('webgl2');}catch(e){}
@@ -27,7 +27,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
     scene.add(new THREE.AmbientLight(0xffffff,1.25));
     const key=new THREE.DirectionalLight(0xffebda,3.4);key.position.set(4,5,6);scene.add(key);
     const fill=new THREE.DirectionalLight(0x9fbaff,2);fill.position.set(-4,1,-3);scene.add(fill);
-    let object,mixer=null,duration=0,trackedNode=null;
+    let object,mixer=null,duration=0,trackedNode=null,boneNode=null,morphNode=null;
     if(source){
       if(!/^[A-Za-z0-9+/=]+$/.test(source))throw Error('Invalid base64 GLB');
       const binary=atob(source),bytes=new Uint8Array(binary.length);
@@ -35,14 +35,15 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
       const gltf=await new Promise((yes,no)=>new GLTFLoader().parse(bytes.buffer,'',yes,no));
       object=gltf.scene;
       object.traverse(node=>{
-        if(!node.isMesh)return;status.meshCount++;
+        if(node.isBone)status.boneCount++;if(!node.isMesh)return;status.meshCount++;if(node.isSkinnedMesh)status.skinnedMeshCount++;if(node.morphTargetInfluences?.length)status.morphMeshCount++;
         for(const mat of (Array.isArray(node.material)?node.material:[node.material])){
           if(!mat)continue;
           if(mat.isMeshStandardMaterial||mat.isMeshPhysicalMaterial)status.materialCount++;
           for(const f of ['map','normalMap','roughnessMap','metalnessMap','emissiveMap','aoMap']) if(mat[f]?.isTexture)status.textureCount++;
         }
       });
-      status.animationClips=gltf.animations.length;
+      status.animationClips=gltf.animations.length;status.animationClipNames=gltf.animations.map(c=>c.name);
+      boneNode=object.getObjectByProperty('isBone',true)||null;morphNode=null;object.traverse(n=>{if(!morphNode&&n.isMesh&&n.morphTargetInfluences?.length)morphNode=n;});
       if(gltf.animations.length){
         trackedNode=object.getObjectByProperty('isMesh',true)||object.children[0]||object;
         mixer=new THREE.AnimationMixer(object);
@@ -73,6 +74,8 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
           if(!status.animationRotationSamples.includes(snap))status.animationRotationSamples.push(snap);
           status.animationMoved=status.animationRotationSamples.length>1;
         }
+        if(boneNode){const q=boneNode.quaternion;const snap=[q.x,q.y,q.z,q.w].map(v=>Number(v.toFixed(5))).join(',');if(!status.boneRotationSamples.includes(snap))status.boneRotationSamples.push(snap);}
+        if(morphNode){const snap=morphNode.morphTargetInfluences.map(v=>Number(v.toFixed(5))).join(',');if(!status.morphInfluenceSamples.includes(snap))status.morphInfluenceSamples.push(snap);}
       }
     }
     window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll'){changeProgress(event.data.progress);if(renderer){try{object.rotation.y=progress*Math.PI*2+.25;const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;}catch(error){status.error=String(error);}}}});
