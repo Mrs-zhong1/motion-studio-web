@@ -56,3 +56,13 @@
 - E2E 新增组件库完整计数为 20、通过真实 UI 添加组件、添加后草稿写入、浏览器刷新恢复测试。
 - 此批修改已提交 GitHub；新工作流尚无可访问的成功记录，**不能将新增用例标为通过**。
 - 若计划正式公开用户使用，仍需对 localStorage 容量限制、不同浏览器、上传资产和项目备份体验作实际验收。
+
+
+## 发布流水线安全修正（最新）
+
+- `web-release-pages.yml` 已取消 push 自动部署触发，仅在 GitHub Actions 手动启动时运行，避免未验收源码提交即被当作正式版发布。
+- 同次发布必须同时通过 **Chromium / Firefox / WebKit** 编辑器端到端测试和独立的 **Three.js/GLB WebGL** 回归任务（真实 PBR 动画/像素、模型矩阵、异常 GLB、共享 3D 场景）。任何一个任务失败则 `publish` 不执行。
+- `test_web_product_e2e.py` 已对异步 JSON 导入增加等待，并验证手动导入不会带入上一工程的撤销/重做历史。
+- `Motion-Studio-Unified-Editor.html` 已区分用户显式导入与内部 undo/redo 载入：前者重置撤销历史，后者保留。
+- **仍未得到新 GitHub Actions 执行证据。** CI 配置提交不等于通过；Pages 部署在真实运行和完成线上 smoke 前保持未验收。
+- 注意：Pages 在部署后才运行 live-smoke；部署后一旦 smoke 失败，需回滚/撤销发布或修复后重新部署，不能把该设计描述为“未验证前绝不公开”。
