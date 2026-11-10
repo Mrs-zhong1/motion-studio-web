@@ -41,3 +41,13 @@ python verify_r11.py
 - 标准 GLTFLoader 代码支持读取 GLB 内嵌贴图与动画，并带有 PBR 灯光场景，但尚缺可复核 GPU 画面和跨设备性能证据。
 
 这是可继续研发的 A 阶段工程版，**不是商业正式版**。
+
+
+## 2026-11-10 · Stage 9–16 最新状态（优先于上方 R11 历史说明）
+
+- Stage 9–15 已有 **GitHub Actions Chromium SwiftShader 软件 WebGL** 实测产物：`stage9/output/CI_GATE.txt`（Run `42811399978`），以及各阶段 JSON、截图、离线 HTML。原有组件计数为 20。
+- Stage 16 新增 `stage9/tests/test_stage16_mac_hardware.py` 与 `stage9/STAGE16_MAC_ACCEPTANCE.md`，用于在目标 Apple Silicon Mac 的原生 Chrome 检查真实 GPU 渲染器、PBR/GLB、动画像素变化和离线请求。
+- `.github/workflows/stage16-mac-acceptance.yml` 只验证脚本语法与防伪通过守卫，**绝不代表 macOS 实测成功**。
+- **真实 Apple GPU、原生 Safari、30 分钟 GPU 稳定性仍未通过验收；不得宣称正式生产就绪。**
+
+运行方式和必要验收证据请阅读 [Stage 16 本地硬件验收说明](stage9/STAGE16_MAC_ACCEPTANCE.md)。
