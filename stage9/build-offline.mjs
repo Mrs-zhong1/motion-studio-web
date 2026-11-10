@@ -17,6 +17,7 @@ const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buff
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
 output=output.replace('const stage9ThreeEngineURL=',sharedUrl+'const stage9ThreeEngineURL=');
 await writeFile(resolve(root,'Motion-Studio-Stage9-THREE-OFFLINE.html'),output);
+await writeFile(resolve(root,'Motion-Studio-Stage10-Camera-Editor-OFFLINE.html'),output);
 await writeFile(resolve(root,'THREE_LICENSE.txt'),await readFile(resolve(root,'node_modules/three/LICENSE'),'utf8'));
 await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,sharedEngineBytes:sharedEngine.length,editorBytes:Buffer.byteLength(output),offline:true,source:'Stage 9 unified editor + Stage 10 camera keyframe tools',gpuAcceptanceRequired:true,gpuTested:false},null,2));
 console.log('Stage9 genuine offline Three.js bundle',engine.length,Buffer.byteLength(output));
