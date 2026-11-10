@@ -15,7 +15,7 @@ export function injectOfflineEngine(editor,engine){
  // An opaque data: JS module is still offline and avoids corrupting or prematurely
  // terminating iframe script elements when a large minified bundle is injected.
  const transformed=orig.replace('return stage9LabBase.replace(','const page=stage9LabBase.replace(')+
-   "\n return page.replace('</body>','<script src=\\"'+stage9ThreeEngineURL+'\\"></'+'script></body>');";
+   "\n return page.replace('</body>','<script src=\"'+stage9ThreeEngineURL+'\"></'+'script></body>');";
  const encoded=Buffer.from(engine,'utf8').toString('base64');
  const result=editor.slice(0,start)+ 'const stage9ThreeEngineURL="data:text/javascript;base64,'+encoded+'";\n'+fn.slice(0,pos)+transformed+fn.slice(stop+1)+editor.slice(end);
  if(result===editor||!result.includes('stage9ThreeEngineURL'))throw Error('Injection failed');
