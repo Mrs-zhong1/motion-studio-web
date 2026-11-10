@@ -69,7 +69,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
         }
       }
     }
-    window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll')changeProgress(event.data.progress);});
+    window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll'){changeProgress(event.data.progress);if(renderer){try{object.rotation.y=progress*Math.PI*2+.25;renderer.render(scene,camera);status.frames++;}catch(error){status.error=String(error);}}}});
     const resize=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
     resize();window.addEventListener('resize',resize);
     function update(){
