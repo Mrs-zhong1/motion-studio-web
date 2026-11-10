@@ -1,0 +1,14 @@
+{
+  "buildExists": true,
+  "gpuAccepted": false,
+  "errors": [
+    "Unexpected token '<'",
+    "Unexpected token '<'",
+    "export:Unexpected token '<'"
+  ],
+  "componentCount": 20,
+  "editorModelBytes": 2520,
+  "exportBytes": 707770,
+  "exportedFrames": 6,
+  "exportThreeStatuses": []
+}
