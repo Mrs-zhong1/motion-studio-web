@@ -1,0 +1,15 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {build} from 'esbuild';
+import {fileURLToPath} from 'node:url';
+import {dirname,resolve} from 'node:path';
+import {injectOfflineEngine} from './inject-offline-engine.mjs';
+const root=dirname(fileURLToPath(import.meta.url));
+const result=await build({entryPoints:[resolve(root,'three-scene-entry.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
+const engine=result.outputFiles[0].text;
+if(engine.length<100000||/\bimport\s*\(/.test(engine))throw Error('Three.js bundle incomplete or has runtime dynamic imports');
+const editor=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
+const output=injectOfflineEngine(editor,engine);
+await writeFile(resolve(root,'Motion-Studio-Stage9-THREE-OFFLINE.html'),output);
+await writeFile(resolve(root,'THREE_LICENSE.txt'),await readFile(resolve(root,'node_modules/three/LICENSE'),'utf8'));
+await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,editorBytes:Buffer.byteLength(output),offline:true,source:'Stage 9 unified editor',gpuAcceptanceRequired:true,gpuTested:false},null,2));
+console.log('Stage9 genuine offline Three.js bundle',engine.length,Buffer.byteLength(output));
