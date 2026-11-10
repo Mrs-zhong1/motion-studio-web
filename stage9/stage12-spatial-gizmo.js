@@ -122,21 +122,39 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
    const path=records[targetIndex].source.cameraPath11,k=path[selection];
    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
    drag.x=e.clientX;drag.y=e.clientY;
-   // Constraints are intentional: 1 axis at a time, preserves t and other attributes.
-   // Perspective view is a guide; precise values are edited with the numeric sliders.
-   const factor=view==='side'?.06:.04;
+   // Stage14: camera-projected world-axis drag rather than a fixed pixel multiplier.
+   // Derivative d(pixel)/d(world) is calculated at the current handle depth and
+   // accounts for perspective, zoom, viewport dimensions and selected camera view.
+   const axisVector=axis==='x'?new THREE.Vector3(1,0,0):axis==='y'?new THREE.Vector3(0,1,0):new THREE.Vector3(0,0,1);
+   const parentPoint=keyWorld(targetIndex,k);
+   const h=drag.side?(k[drag.side]||(k[drag.side]={})):null;
+   const coord=drag.side
+     ?(Number.isFinite(Number(h[axis]))?Number(h[axis]):(axis==='x'?(drag.side==='handleIn'?-.65:.65):0))
+     :k[axis];
+   const anchor=drag.side
+     ?parentPoint.clone().add(new THREE.Vector3(
+        Number(h.x??(drag.side==='handleIn'?-.65:.65)),
+        Number(h.y??0),Number(h.z??0)))
+     :parentPoint;
+   const rect=canvas.getBoundingClientRect();
+   overview.updateMatrixWorld();
+   const ndcA=anchor.clone().project(overview);
+   const ndcB=anchor.clone().add(axisVector).project(overview);
+   const vx=(ndcB.x-ndcA.x)*rect.width*.5,vy=-(ndcB.y-ndcA.y)*rect.height*.5;
+   const denom=vx*vx+vy*vy;
+   // If looking straight down an axis, use viewport-height world scale as a
+   // predictable fallback; the projected axis has near-zero screen extent.
+   const dist=Math.max(.5,overview.position.distanceTo(anchor));
+   const worldPerPixel=2*dist*Math.tan(THREE.MathUtils.degToRad(overview.fov)*.5)/Math.max(1,rect.height);
+   const worldDelta=denom>5?(dx*vx+dy*vy)/denom:(-dy||dx)*worldPerPixel;
    if(drag.side){
-     if(!k[drag.side])k[drag.side]={};
-     const h=k[drag.side];
-     const defaults=axis==='x'?(drag.side==='handleIn'?-.65:.65):0;
-     const prev=Number.isFinite(Number(h[axis]))?Number(h[axis]):defaults;
-     h[axis]=clamp(prev+(axis==='x'?dx:-dy)*factor,-8,8);
+     h[axis]=clamp(coord+worldDelta,-8,8);
      data.tangentDragCount++;
    }else{
-     if(axis==='x')k.x=clamp(k.x+dx*factor,-4,4);
-     if(axis==='y')k.y=clamp(k.y-dy*factor,-4,4);
-     if(axis==='z')k.z=clamp(k.z-dy*factor,2,12);
+     const min=axis==='z'?2:-4,max=axis==='z'?12:4;
+     k[axis]=clamp(coord+worldDelta,min,max);
    }
+   data.dragProjectionCount=(data.dragProjectionCount||0)+1;
    data.dragCount++;emitChange();rebuild();render();
    e.preventDefault();
  }
