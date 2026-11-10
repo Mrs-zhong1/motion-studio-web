@@ -1,10 +1,10 @@
 {
   "three": "0.180.0",
   "engineBytes": 587100,
-  "sharedEngineBytes": 586769,
-  "editorBytes": 1706559,
+  "sharedEngineBytes": 588486,
+  "editorBytes": 1716378,
   "offline": true,
-  "source": "Stage 9 unified editor + Stage 10 camera keyframe tools",
+  "source": "Stage 9 editor + Stage10 camera keyframe UI + Stage11 cubic spline timeline",
   "gpuAcceptanceRequired": true,
   "gpuTested": false
 }

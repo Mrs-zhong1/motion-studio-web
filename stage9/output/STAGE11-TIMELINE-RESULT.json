@@ -1,0 +1,196 @@
+{
+  "pass": false,
+  "stage": "11",
+  "webglEnvironment": "Ubuntu Chromium SwiftShader software WebGL",
+  "macHardwareTested": false,
+  "safariTested": false,
+  "errors": [],
+  "componentCount": 20,
+  "glbChapters": 2,
+  "panelVisible": true,
+  "initialPoints": 3,
+  "afterAdd": 4,
+  "afterDelete": 3,
+  "dragModified": true,
+  "dragBefore": {
+    "at": 50,
+    "x": 0.8
+  },
+  "dragAfter": {
+    "at": 61.82310814950981,
+    "x": -4
+  },
+  "previewBefore": {
+    "uuid": "786da0cb-0efb-497e-9fe7-f770290ead8a",
+    "count": 0,
+    "paths": [
+      3,
+      0
+    ],
+    "models": 2,
+    "webgl": true,
+    "canvas": 1
+  },
+  "previewAfter": {
+    "uuid": "786da0cb-0efb-497e-9fe7-f770290ead8a",
+    "count": 1,
+    "paths": [
+      3,
+      0
+    ],
+    "models": 2,
+    "webgl": true,
+    "canvas": 1
+  },
+  "livePatched": true,
+  "editedPath": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0
+    },
+    {
+      "x": 3.5,
+      "y": 1.4,
+      "z": 7.3,
+      "yaw": 28,
+      "pitch": -12,
+      "roll": 7,
+      "fov": 68,
+      "at": 50
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100
+    }
+  ],
+  "reloadedPath": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0
+    },
+    {
+      "x": 3.5,
+      "y": 1.4,
+      "z": 7.3,
+      "yaw": 28,
+      "pitch": -12,
+      "roll": 7,
+      "fov": 68,
+      "at": 50
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100
+    }
+  ],
+  "exportBytes": 858994,
+  "exportCameraSamples": [
+    {
+      "focus": 2109,
+      "segment": 0,
+      "blend": 3.5418550176707494e-06,
+      "x": 0.007636534273033616,
+      "y": 0.0030500801347908267,
+      "z": 5.503921531601874,
+      "yaw": 0.06100160269581656,
+      "pitch": -0.026143544012492807,
+      "roll": 0.01525040067395414,
+      "fov": 42.0566443453604,
+      "progress": 0.0010869565217391304,
+      "near3d": true
+    },
+    {
+      "focus": 2224,
+      "segment": 0,
+      "blend": 0.15747459573025396,
+      "x": 2.70092126962275,
+      "y": 0.8788010253143748,
+      "z": 6.629887032547053,
+      "yaw": 17.5760205062875,
+      "pitch": -7.532580216980356,
+      "roll": 4.394005126571875,
+      "fov": 58.3205904701241,
+      "progress": 0.2510869565217391,
+      "near3d": true
+    },
+    {
+      "focus": 2339,
+      "segment": 0,
+      "blend": 0.5016304322141859,
+      "x": 5.10518433775787,
+      "y": 1.39998678186899,
+      "z": 7.299983005260129,
+      "yaw": 27.9997356373798,
+      "pitch": -11.9998867017342,
+      "roll": 6.99993390934495,
+      "fov": 67.99975452042409,
+      "progress": 0.5010869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2454,
+      "segment": 0,
+      "blend": 0.8449710513068136,
+      "x": 4.8818882602531435,
+      "y": 0.8711923584285358,
+      "z": 6.620104460836689,
+      "yaw": 17.42384716857072,
+      "pitch": -7.467363072244593,
+      "roll": 4.35596179214268,
+      "fov": 58.17928665652995,
+      "progress": 0.7510869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2491,
+      "segment": 0,
+      "blend": 0.9244097122339113,
+      "x": 4.4009450511629815,
+      "y": 0.577133588805786,
+      "z": 6.242028899893153,
+      "yaw": 11.542671776115721,
+      "pitch": -4.946859332621023,
+      "roll": 2.8856679440289303,
+      "fov": 52.718195220678886,
+      "progress": 0.8315217391304348,
+      "near3d": true
+    }
+  ],
+  "exportShared": {
+    "id": "07b8f357-5c6d-4647-9808-2eeb01b9a2dd",
+    "webgl": true,
+    "models": 2,
+    "pathCounts": [
+      3,
+      0
+    ],
+    "frames": 27,
+    "pixels": 5,
+    "error": null,
+    "canvas": 1
+  }
+}
