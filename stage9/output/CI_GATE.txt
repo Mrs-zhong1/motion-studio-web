@@ -9,6 +9,7 @@ Stage12 tangent curve: skipped
 Stage12 real spatial gizmo: skipped
 Stage13 in/out Bezier math: skipped
 Stage13 real Three.js handles: skipped
-CI run: 42806520553
-Source SHA: 12cf675533da60d3bc555db95e22c22ff2ebaae5
+Stage14 stability and project recovery: skipped
+CI run: 42807222910
+Source SHA: ea756de011db9c84d3cde67680e686fb1a5952b8
 Real hardware GPU / Safari: NOT TESTED
