@@ -233,7 +233,7 @@ if(s.id==='offline-glb-scene'){
        const dest=normStage10Camera(chapters[chapterIndex+1]?.camera3d||s.camera3d);
        const mid={};for(const key of Object.keys(base))mid[key]=(base[key]+dest[key])/2;
        mid.x=Math.max(-4,Math.min(4,mid.x+.8));
-       s.cameraPath11=[{...base,at:0},{...mid,at:50},{...dest,at:100}];
+       s.cameraPath11=[{...base,at:0,tension:0},{...mid,at:50,tension:0},{...dest,at:100,tension:0}];
      }
    }
    function notify(){
@@ -335,7 +335,7 @@ if(s.id==='offline-glb-scene'){
        let width=-1;for(let j=0;j<path.length-1;j++){const gap=path[j+1].at-path[j].at;if(gap>width){width=gap;index=j;}}
        const left=path[index],right=path[index+1],v={};
        for(const k of Object.keys(limits))v[k]=(left[k]+right[k])/2;
-       v.at=(left.at+right.at)/2;path.splice(index+1,0,v);selected=index+1;refresh();notify();
+       v.at=(left.at+right.at)/2;v.tension=((Number(left.tension)||0)+(Number(right.tension)||0))/2;path.splice(index+1,0,v);selected=index+1;refresh();notify();
      };
      panel.querySelector('#stage11Delete').onclick=()=>{
        if(s.cameraPath11.length<=2||selected===0||selected===s.cameraPath11.length-1)return;

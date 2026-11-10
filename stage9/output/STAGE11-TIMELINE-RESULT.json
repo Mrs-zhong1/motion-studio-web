@@ -1,5 +1,5 @@
 {
-  "pass": false,
+  "pass": true,
   "stage": "11",
   "webglEnvironment": "Ubuntu Chromium SwiftShader software WebGL",
   "macHardwareTested": false,
@@ -21,7 +21,7 @@
     "x": 1.7169067382812493
   },
   "previewBefore": {
-    "uuid": "ebd4c9c5-49c6-4f99-9340-4f31c0342cf5",
+    "uuid": "33daee80-3b2a-4aa7-8f00-f4bc4e51bb7b",
     "count": 0,
     "paths": [
       3,
@@ -32,7 +32,7 @@
     "canvas": 1
   },
   "previewAfter": {
-    "uuid": "ebd4c9c5-49c6-4f99-9340-4f31c0342cf5",
+    "uuid": "33daee80-3b2a-4aa7-8f00-f4bc4e51bb7b",
     "count": 1,
     "paths": [
       3,
@@ -52,7 +52,8 @@
       "pitch": 0,
       "roll": 0,
       "fov": 42,
-      "at": 0
+      "at": 0,
+      "tension": 0
     },
     {
       "x": 3.5,
@@ -62,7 +63,8 @@
       "pitch": -12,
       "roll": 7,
       "fov": 68,
-      "at": 50
+      "at": 50,
+      "tension": 0
     },
     {
       "x": 0,
@@ -72,7 +74,8 @@
       "pitch": 0,
       "roll": 0,
       "fov": 42,
-      "at": 100
+      "at": 100,
+      "tension": 0
     }
   ],
   "reloadedPath": [
@@ -189,7 +192,7 @@
     }
   ],
   "exportShared": {
-    "id": "be5ee0ca-0adb-435e-b354-c17797af21a5",
+    "id": "9ea1f7d3-f6ce-4779-9556-b8d579c486d7",
     "webgl": true,
     "models": 2,
     "pathCounts": [
