@@ -113,28 +113,27 @@ jobs:
           EOF
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f stage9/output
-          if ! git diff --cached --quiet; then
-            git commit -m "Stage 9-13 CI: persist real offline HTML and GPU evidence [skip ci]"
-            # Other commits (e.g. documentation) may land while browser tests run.
-            # Rebase the generated-output commit onto current main, then push safely.
-            for attempt in 1 2 3; do
-              git fetch origin main
-              if ! git rebase origin/main; then
-                git rebase --abort || true
-                echo "Output rebase conflict: human review required"
-                exit 1
-              fi
-              if git push origin HEAD:main; then
-                echo "Generated evidence committed on attempt $attempt"
-                break
-              fi
-              if [ "$attempt" -eq 3 ]; then
-                echo "Could not persist outputs after 3 attempts"
-                exit 1
-              fi
-            done
-          fi
+          # Only generated output files are committed, never stale source files.
+          # Reset the index to the newest remote tree while preserving the freshly
+          # generated working-tree outputs. Avoid merge/rebase of CI_GATE.txt.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --mixed origin/main
+            git add -f stage9/output
+            if git diff --cached --quiet; then
+              echo "CI evidence is already up to date"
+              break
+            fi
+            git commit -m "Stage 14 CI: publish offline HTML and measured evidence [skip ci]"
+            if git push origin HEAD:main; then
+              echo "Published generated artifacts on attempt $attempt"
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "Could not push evidence after three safe attempts"
+              exit 1
+            fi
+          done
       - name: Gate production if software WebGL verification failed
         if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success' || steps.stage13math.outcome != 'success' || steps.stage13.outcome != 'success' || steps.stage14.outcome != 'success'
         run: |
