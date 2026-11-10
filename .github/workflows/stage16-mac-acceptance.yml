@@ -1,0 +1,36 @@
+name: Motion Studio Stage16 - acceptance probe static checks
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'stage9/tests/test_stage16_mac_hardware.py'
+      - 'stage9/STAGE16_MAC_ACCEPTANCE.md'
+      - '.github/workflows/stage16-mac-acceptance.yml'
+permissions:
+  contents: read
+jobs:
+  validate-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Python syntax verification
+        run: python -m py_compile stage9/tests/test_stage16_mac_hardware.py
+      - name: Ensure Linux CI cannot claim native Mac GPU / Safari pass
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('stage9/tests/test_stage16_mac_hardware.py').read_text(encoding='utf-8')
+          assert 'sys.platform!="darwin"' in p
+          assert 'channel="chrome", headless=False' in p
+          assert '"safariAccepted":False' in p
+          assert '"longRunGpuMemoryAccepted":False' in p
+          assert 'result["releaseAccepted"]=False' in p
+          assert 'hardwareRendererIdentified' in p
+          assert 'remoteRequests' in p
+          print('Static guardrails verified; hardware and Safari remain NOT TESTED.')
+          PY
