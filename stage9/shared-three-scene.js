@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {normalizeCameraPath11,evaluateCameraPath11} from './stage11-camera-curve.js';
+import {installStage12Gizmo} from './stage12-spatial-gizmo.js';
 (async()=>{
  const script=document.getElementById('motion-shared-scene-data');
  if(!script)return;
@@ -93,6 +94,7 @@ import {normalizeCameraPath11,evaluateCameraPath11} from './stage11-camera-curve
      diag.stage11PatchCount++;
      update();
    });
+   let stage12=null;
    const isReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
    const modelMix=(idx,blend)=>{
      const a=records[idx],b=records[idx+1]||a;
@@ -131,7 +133,7 @@ import {normalizeCameraPath11,evaluateCameraPath11} from './stage11-camera-curve
      canvas.style.opacity=near3d?'1':'0';
      diag.active=near3d;
      const start=performance.now();
-     renderer.render(scene,camera);diag.renderFrames++;
+     renderer.render(scene,stage12?.getCamera()||camera);diag.renderFrames++;
      diag.drawTotalMs=Number((diag.drawTotalMs+performance.now()-start).toFixed(3));diag.drawSamples++;
      if(diag.cameraSamples.length<120)diag.cameraSamples.push({x:Number(camera.position.x.toFixed(4)),y:0,z:5.5,segment:ix,blend:Number(t.toFixed(4)),focus:Math.round(focus),y:Number(y.toFixed(4)),z:Number(z.toFixed(4)),yaw:Number(yaw.toFixed(4)),pitch:Number(pitch.toFixed(4)),roll:Number(roll.toFixed(4)),fov:Number(fov.toFixed(4)),stage11Custom:!!custom});
      if(diag.renderFrames<=8){
@@ -146,10 +148,11 @@ import {normalizeCameraPath11,evaluateCameraPath11} from './stage11-camera-curve
    const resize=()=>{renderer.setSize(Math.max(1,innerWidth),Math.max(1,innerHeight),false);camera.aspect=innerWidth/Math.max(1,innerHeight);camera.updateProjectionMatrix();updateAnchors();update()};
    addEventListener('resize',resize,{passive:true});
    addEventListener('scroll',update,{passive:true});
+   stage12=installStage12Gizmo({scene,renderer,canvas,records,diag,render:()=>update()});
    resize();
    // Hide per-chapter 3D iframe only after shared real WebGL is active.
    for(const el of anchors){el.dataset.sharedThree='true';const iframe=el.querySelector('iframe');if(iframe){iframe.style.opacity='0';iframe.style.pointerEvents='none';}}
    diag.active=true;
-   window.__motionSharedThreeControl={update,resize,anchors:()=>[...baseline],records:()=>records.length,dispose:()=>{canvas.remove();renderer.dispose();}};
+   window.__motionSharedThreeControl={update,resize,anchors:()=>[...baseline],records:()=>records.length,dispose:()=>{stage12?.dispose();canvas.remove();renderer.dispose();}};
  }catch(err){diag.error=String(err?.stack||err);canvas.remove();renderer?.dispose();}
 })();
