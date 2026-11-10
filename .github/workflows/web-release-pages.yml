@@ -58,6 +58,8 @@ jobs:
             stage9/BUILD_MANIFEST.json
           if-no-files-found: warn
   publish:
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     needs: build-and-browser-gate
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -117,4 +119,33 @@ jobs:
             dist/BUILD_MANIFEST.json
             dist/WEB_RELEASE.json
             dist/SHA256SUMS.txt
+          if-no-files-found: warn
+
+  live-smoke:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser for real deployed site
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Verify live HTTPS page, editor, project save and HTML export
+        run: python stage9/tests/test_live_deployment.py
+        env:
+          MOTION_STUDIO_URL: ${{ needs.publish.outputs.page_url }}
+      - name: Upload deployment smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-live-deployment-smoke
+          path: |
+            P5_LIVE_SMOKE.json
+            P5_LIVE_PROJECT.json
+            P5_LIVE_EXPORTED.html
+            P5_LIVE_EDITOR.png
           if-no-files-found: warn
