@@ -1,23 +1,10 @@
 {
   "buildExists": true,
   "gpuAccepted": false,
-  "errors": [
-    {
-      "message": "Unexpected token '<'",
-      "stack": ""
-    },
-    {
-      "message": "Unexpected token '<'",
-      "stack": ""
-    },
-    {
-      "message": "export:Unexpected token '<'",
-      "stack": ""
-    }
-  ],
+  "errors": [],
   "componentCount": 20,
   "editorModelBytes": 2520,
-  "exportBytes": 707770,
+  "exportBytes": 865507,
   "exportedFrames": 6,
   "frameScripts": [
     {
@@ -54,14 +41,42 @@
     },
     {
       "title": "Motion Studio Â· ç¦»çº¿ GLB å·¥ä½å°",
-      "scriptCount": 4,
+      "scriptCount": 5,
       "scriptPreview": [
         "\n/* Motion Studio GLB static scene importer. MIT-style local project m",
         "Z2xURgIAAABgBwAAfAYAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAiLCJnZW5lcm",
         "\n(()=>{'use strict';const $=id=>document.getElementById(id), canvas=$(",
-        "(()=>{/**\n * @license\n * Copyright 2010-2025 Three.js Authors\n * SPDX-"
+        "",
+        "window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio"
       ]
     }
   ],
-  "exportThreeStatuses": []
+  "animationAtStart": "0,0,0.07846,0.99692",
+  "animationAtEnd": "0,0,0.95106,0.30902",
+  "exportThreeStatuses": [
+    {
+      "engine": "three",
+      "threeVersion": "180",
+      "webgl2": true,
+      "pbr": true,
+      "meshCount": 1,
+      "materialCount": 1,
+      "textureCount": 1,
+      "animationClips": 1,
+      "frames": 1,
+      "visiblePixels": 12,
+      "pixelDifference": 4720,
+      "animationMoved": true,
+      "animationRotationSamples": [
+        "0,0,0,1",
+        "0,0,0.07846,0.99692",
+        "0,0,0.95106,0.30902"
+      ],
+      "rendererName": "WebKit WebGL",
+      "renderWidth": 1200,
+      "renderHeight": 460,
+      "error": null,
+      "progress": 0.8
+    }
+  ]
 }
