@@ -8,7 +8,7 @@ res={'buildExists':True,'gpuAccepted':False,'errors':[]}
 with sync_playwright() as p:
  browser=p.chromium.launch(headless=True,args=['--no-sandbox','--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--enable-unsafe-swiftshader'])
  page=browser.new_page(viewport={'width':1440,'height':900},accept_downloads=True)
- page.on('pageerror',lambda e:res['errors'].append(str(e)))
+ page.on('pageerror',lambda e:res['errors'].append({'message':str(e),'stack':str(e.stack)}))
  page.set_content(out.read_text(),wait_until='domcontentloaded')
  page.wait_for_timeout(600)
  res['componentCount']=page.evaluate('registry.length')
@@ -20,7 +20,7 @@ with sync_playwright() as p:
  path=root/'STAGE9-THREE-EXPORTED.html';dl.value.save_as(path)
  res['exportBytes']=path.stat().st_size
  exp=browser.new_page(viewport={'width':1200,'height':850})
- exp.on('pageerror',lambda e:res['errors'].append('export:'+str(e)))
+ exp.on('pageerror',lambda e:res['errors'].append({'message':'export:'+str(e),'stack':str(e.stack)}))
  exp.set_content(path.read_text(),wait_until='domcontentloaded')
  exp.wait_for_timeout(2500)
  statuses=[]
@@ -31,6 +31,7 @@ with sync_playwright() as p:
    if v:statuses.append(v);frames.append(f)
   except Exception as e:res['errors'].append('iframe:'+str(e))
  res['exportedFrames']=len(exp.frames)
+ res['frameScripts']=[{'title':f.evaluate('document.title'),'scriptCount':f.evaluate('document.scripts.length'),'scriptPreview':f.evaluate('Array.from(document.scripts).map(x=>x.textContent.slice(0,70))')} for f in exp.frames[1:]]
  if frames:
   target=frames[0]
   target.evaluate("window.postMessage({type:'motion-studio-scroll',progress:0.05}, '*')")
