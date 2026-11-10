@@ -8,18 +8,19 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
  group.name='Stage12SpatialTrajectoryGizmo';
  group.visible=false;
  scene.add(group);
- const handles=[],segments=[];
+ const handles=[],segments=[],axisHelpers=[];
  const overview=new THREE.PerspectiveCamera(47,1,.1,150);
  const raycaster=new THREE.Raycaster();
  const pointer=new THREE.Vector2();
  const colors={x:0xe87575,y:0x82d7a1,z:0x8bb9f4};
  let enabled=false,axis='x',view='front',targetIndex=0,drag=null,selection=0;
- const data={mode:false,view,axis,handleCount:0,dragCount:0,patchCount:0,trajectoryPoints:0,selected:0,sceneId:diag.sceneUuid,rendererShared:true,handleScreen:[]};
+ const data={mode:false,view,axis,handleCount:0,dragCount:0,patchCount:0,trajectoryPoints:0,selected:0,sceneId:diag.sceneUuid,rendererShared:true,handleScreen:[],axisArrowsCount:0};
  window.__motionStage12Gizmo=data;
  function clear(){
    for(const h of handles){group.remove(h);h.geometry.dispose();h.material.dispose()}
    for(const line of segments){group.remove(line);line.geometry.dispose();line.material.dispose()}
-   handles.length=0;segments.length=0;
+   for(const a of axisHelpers){group.remove(a);for(const obj of [a.line,a.cone]){obj.geometry?.dispose();obj.material?.dispose();}}
+   handles.length=0;segments.length=0;axisHelpers.length=0;
  }
  function keyWorld(index,k){
    const a=records[index],b=records[Math.min(index+1,records.length-1)];
@@ -56,6 +57,19 @@ export function installStage12Gizmo({scene,renderer,canvas,records,diag,render})
      handle.position.copy(pos);handle.userData.keyframeIndex=i;
      handle.renderOrder=9;group.add(handle);handles.push(handle);
    }
+   const origin=handles[Math.min(selection,handles.length-1)]?.position;
+   if(origin){
+     const axes=[['x',new THREE.Vector3(1,0,0)],['y',new THREE.Vector3(0,1,0)],['z',new THREE.Vector3(0,0,1)]];
+     for(const [name,dir] of axes){
+       const arrow=new THREE.ArrowHelper(dir,origin,.85,colors[name],.2,.12);
+       for(const obj of [arrow.line,arrow.cone]){
+         if(obj.material){obj.material.depthTest=false;obj.material.depthWrite=false}
+         obj.renderOrder=10;
+       }
+       group.add(arrow);axisHelpers.push(arrow);
+     }
+   }
+   data.axisArrowsCount=axisHelpers.length;
    overview.updateMatrixWorld();
    const rect=canvas.getBoundingClientRect();
    data.handleScreen=handles.map((h,i)=>{const v=h.position.clone().project(overview);return {index:i,x:(v.x+1)*rect.width/2,y:(1-v.y)*rect.height/2}});
