@@ -1,0 +1,120 @@
+name: Motion Studio Web - gated Pages deployment
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'stage9/**'
+      - '!stage9/output/**'
+      - '!stage9/*.md'
+      - '.github/workflows/web-release-pages.yml'
+concurrency:
+  group: motion-studio-web-pages
+  cancel-in-progress: false
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build-and-browser-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build pinned offline editor
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          python tests/check_build.py
+      - name: Browser dependencies
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps ${{ matrix.browser }}
+      - name: Run actual edit-save-import-export browser journey
+        run: python tests/test_web_product_e2e.py
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
+      - name: Save test evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-e2e-${{ matrix.browser }}
+          path: |
+            stage9/WEB_PRODUCT_E2E_RESULT_*.json
+            stage9/WEB_PRODUCT_E2E_PROJECT_*.json
+            stage9/WEB_PRODUCT_E2E_EXPORTED_*.html
+            stage9/BUILD_MANIFEST.json
+          if-no-files-found: warn
+  publish:
+    needs: build-and-browser-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build release site from actual offline editor
+        working-directory: stage9
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          python tests/check_build.py
+      - name: Prepare static Pages site, manifest and SHA256
+        run: |
+          mkdir -p dist
+          cp stage9/Motion-Studio-Stage15-Meshopt-OFFLINE.html dist/index.html
+          cp stage9/THREE_LICENSE.txt dist/THREE_LICENSE.txt
+          cp stage9/BUILD_MANIFEST.json dist/BUILD_MANIFEST.json
+          python - <<'PY'
+          import json,hashlib,pathlib,os
+          root=pathlib.Path("dist")
+          index=root/"index.html"
+          raw=index.read_bytes()
+          assert len(raw)>250000, "Refusing to publish incomplete editor"
+          html=raw.decode("utf-8")
+          assert "offline-glb-scene" in html and "exportPage" in html
+          manifest={"app":"Motion Studio Web","sourceCommit":os.environ["GITHUB_SHA"],
+                    "browserGate":"three Playwright browser engines passed",
+                    "artifact":"index.html","bytes":len(raw),
+                    "sha256":hashlib.sha256(raw).hexdigest(),
+                    "deploymentSmoke":"PENDING (not claimed by this workflow)",
+                    "nativeSafari":"NOT TESTED",
+                    "realDevicePerformance":"NOT TESTED"}
+          (root/"WEB_RELEASE.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf8")
+          (root/".nojekyll").write_text("")
+          PY
+          sha256sum dist/index.html > dist/SHA256SUMS.txt
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Deploy to GitHub Pages after browser gate
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Archive release manifest and HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-pages-release-evidence
+          path: |
+            dist/index.html
+            dist/BUILD_MANIFEST.json
+            dist/WEB_RELEASE.json
+            dist/SHA256SUMS.txt
+          if-no-files-found: warn
