@@ -6,7 +6,7 @@
   "errors": [],
   "components": 20,
   "beforeGizmo": {
-    "scene": "423321b4-15fb-46f7-b0ab-2461cbb81f9d",
+    "scene": "fded4b1b-1248-44a9-ad4b-eb8bb25069e0",
     "tangents": 4,
     "handles": 3,
     "tangentScreen": [
@@ -112,7 +112,7 @@
   ],
   "tangentDrag": {
     "count": 7,
-    "scene": "423321b4-15fb-46f7-b0ab-2461cbb81f9d",
+    "scene": "fded4b1b-1248-44a9-ad4b-eb8bb25069e0",
     "canvas": 1
   },
   "edited": [
@@ -248,7 +248,7 @@
   "exportScene": {
     "webgl": true,
     "models": 2,
-    "scene": "951701b3-53a9-464d-90bb-d76f76d1fcb7",
+    "scene": "d48bc9d2-d166-447d-afc3-eec1ea857add",
     "error": null,
     "gizmo": false,
     "canvas": 1

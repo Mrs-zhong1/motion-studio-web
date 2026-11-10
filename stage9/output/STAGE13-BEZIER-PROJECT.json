@@ -4,7 +4,7 @@
   "transition": "fade",
   "sections": [
     {
-      "uid": "section-mwapslcy-1",
+      "uid": "section-mwaq3lig-1",
       "id": "text-reveal",
       "text": "MOTION IS A LANGUAGE",
       "speed": 85,
@@ -29,7 +29,7 @@
           "locked": false,
           "groupId": "",
           "easing": "smooth",
-          "id": "section-mwapslcy-2",
+          "id": "section-mwaq3lig-2",
           "kind": "title",
           "enabled": true,
           "text": "MOTION IS A LANGUAGE",
@@ -73,7 +73,7 @@
           "locked": false,
           "groupId": "",
           "easing": "smooth",
-          "id": "section-mwapslcy-3",
+          "id": "section-mwaq3lig-3",
           "kind": "caption",
           "enabled": true,
           "text": "CRAFTED IN MOTION",
@@ -148,7 +148,7 @@
       }
     },
     {
-      "uid": "section-mwapslcy-4",
+      "uid": "section-mwaq3lig-4",
       "id": "image-columns",
       "text": "Fragments of a story",
       "speed": 85,
@@ -204,7 +204,7 @@
       }
     },
     {
-      "uid": "section-mwapslcy-5",
+      "uid": "section-mwaq3lig-5",
       "id": "pinned-story",
       "text": "THE SPACE BETWEEN MOMENTS",
       "speed": 90,
@@ -260,7 +260,7 @@
       }
     },
     {
-      "uid": "section-mwapslcy-6",
+      "uid": "section-mwaq3lig-6",
       "id": "stacked-cards",
       "text": "COLLECT / CREATE / REMEMBER",
       "speed": 100,
@@ -316,7 +316,7 @@
       }
     },
     {
-      "uid": "section-mwapslln-7",
+      "uid": "section-mwaq3lr1-7",
       "id": "offline-glb-scene",
       "text": "A SCULPTURAL MOMENT",
       "speed": 100,
@@ -412,7 +412,7 @@
       }
     },
     {
-      "uid": "section-mwapso5x-8",
+      "uid": "section-mwaq3nst-8",
       "id": "offline-glb-scene",
       "text": "A SCULPTURAL MOMENT",
       "speed": 100,
