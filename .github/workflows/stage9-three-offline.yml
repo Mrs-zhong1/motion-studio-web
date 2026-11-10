@@ -74,12 +74,20 @@ jobs:
         id: stage12
         continue-on-error: true
         run: python tests/test_stage12_gizmo.py
+      - name: Stage13 independent Bezier in/out handle curve regression
+        id: stage13math
+        continue-on-error: true
+        run: node tests/test_stage13_bezier.mjs
+      - name: Stage13 real 3D tangent drag, project persistence and offline export
+        id: stage13
+        continue-on-error: true
+        run: python tests/test_stage13_bezier.py
       - name: Commit generated HTML, actual browser evidence, and manifests to repository
         if: always()
         working-directory: .
         run: |
           mkdir -p stage9/output
-          for f in Motion-Studio-Stage9-THREE-OFFLINE.html Motion-Studio-Stage10-Camera-Editor-OFFLINE.html Motion-Studio-Stage11-Timeline-OFFLINE.html Motion-Studio-Stage12-Spatial-Gizmo-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-Sample-Dual-Material-EXPORTED.html STAGE9-Sample-Textured-Animated-EXPORTED.html STAGE9-Sample-Dual-Material-CAPTURE.png STAGE9-Sample-Textured-Animated-CAPTURE.png STAGE9-Sample-Skinned-Morph-MultiClip-EXPORTED.html STAGE9-Sample-Skinned-Morph-MultiClip-CAPTURE.png STAGE9-INVALID-GLB-RESULT.json STAGE9-INVALID-GLB-RECOVERY.html STAGE9-SHARED-SCENE-RESULT.json STAGE9-SHARED-TWO-GLB-EXPORTED.html STAGE9-SHARED-SCENE.png STAGE10-CAMERA-RESULT.json STAGE10-CAMERA-EXPORTED.html STAGE10-CAMERA-CAPTURE.png STAGE10-CAMERA-PROJECT.json STAGE11-TIMELINE-RESULT.json STAGE11-TIMELINE-PROJECT.json STAGE11-TIMELINE-EXPORTED.html STAGE11-TIMELINE-CAPTURE.png STAGE12-GIZMO-RESULT.json STAGE12-GIZMO-PROJECT.json STAGE12-GIZMO-EXPORTED.html STAGE12-GIZMO-CAPTURE.png; do
+          for f in Motion-Studio-Stage9-THREE-OFFLINE.html Motion-Studio-Stage10-Camera-Editor-OFFLINE.html Motion-Studio-Stage11-Timeline-OFFLINE.html Motion-Studio-Stage12-Spatial-Gizmo-OFFLINE.html Motion-Studio-Stage13-Bezier-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-Sample-Dual-Material-EXPORTED.html STAGE9-Sample-Textured-Animated-EXPORTED.html STAGE9-Sample-Dual-Material-CAPTURE.png STAGE9-Sample-Textured-Animated-CAPTURE.png STAGE9-Sample-Skinned-Morph-MultiClip-EXPORTED.html STAGE9-Sample-Skinned-Morph-MultiClip-CAPTURE.png STAGE9-INVALID-GLB-RESULT.json STAGE9-INVALID-GLB-RECOVERY.html STAGE9-SHARED-SCENE-RESULT.json STAGE9-SHARED-TWO-GLB-EXPORTED.html STAGE9-SHARED-SCENE.png STAGE10-CAMERA-RESULT.json STAGE10-CAMERA-EXPORTED.html STAGE10-CAMERA-CAPTURE.png STAGE10-CAMERA-PROJECT.json STAGE11-TIMELINE-RESULT.json STAGE11-TIMELINE-PROJECT.json STAGE11-TIMELINE-EXPORTED.html STAGE11-TIMELINE-CAPTURE.png STAGE12-GIZMO-RESULT.json STAGE12-GIZMO-PROJECT.json STAGE12-GIZMO-EXPORTED.html STAGE12-GIZMO-CAPTURE.png STAGE13-BEZIER-RESULT.json STAGE13-BEZIER-PROJECT.json STAGE13-BEZIER-EXPORTED.html STAGE13-BEZIER-CAPTURE.png; do
             if [ -f "stage9/$f" ]; then cp "stage9/$f" "stage9/output/$f"; fi
           done
           cat > stage9/output/CI_GATE.txt <<EOF
@@ -92,6 +100,8 @@ jobs:
           Stage11 timeline live WebGL: ${{ steps.stage11.outcome }}
           Stage12 tangent curve: ${{ steps.stage12math.outcome }}
           Stage12 real spatial gizmo: ${{ steps.stage12.outcome }}
+          Stage13 in/out Bezier math: ${{ steps.stage13math.outcome }}
+          Stage13 real Three.js handles: ${{ steps.stage13.outcome }}
           CI run: ${{ github.run_id }}
           Source SHA: ${{ github.sha }}
           Real hardware GPU / Safari: NOT TESTED
@@ -104,7 +114,7 @@ jobs:
             git push origin HEAD:main
           fi
       - name: Gate production if software WebGL verification failed
-        if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success'
+        if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success' || steps.stage13math.outcome != 'success' || steps.stage13.outcome != 'success'
         run: |
           echo "Stage 9 GPU software acceptance failed. Inspect stage9/output/ in repository."
           exit 1
