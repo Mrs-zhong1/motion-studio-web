@@ -1,0 +1,256 @@
+{
+  "pass": true,
+  "environment": "GitHub Actions Chromium SwiftShader software WebGL",
+  "macHardwareTested": false,
+  "safariTested": false,
+  "errors": [],
+  "components": 20,
+  "beforeGizmo": {
+    "scene": "ccddf891-a7ee-4326-90c9-bf79e752f300",
+    "tangents": 4,
+    "handles": 3,
+    "tangentScreen": [
+      {
+        "index": 0,
+        "side": "handleOut",
+        "x": 94.16278554225956,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "side": "handleIn",
+        "x": 120.0269285985906,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "side": "handleOut",
+        "x": 150.5936431197091,
+        "y": 169.690361261959
+      },
+      {
+        "index": 2,
+        "side": "handleIn",
+        "x": 138.83721445774043,
+        "y": 169.690361261959
+      }
+    ],
+    "webgl": true
+  },
+  "beforePath": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "afterPath": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0,
+      "handleOut": {
+        "x": 1.6500000000000004
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "tangentDrag": {
+    "count": 7,
+    "scene": "ccddf891-a7ee-4326-90c9-bf79e752f300",
+    "canvas": 1
+  },
+  "edited": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0,
+      "handleOut": {
+        "x": 1.6500000000000004
+      },
+      "handleIn": {
+        "y": 1.6
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "restored": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0,
+      "handleIn": {
+        "y": 1.6
+      },
+      "handleOut": {
+        "x": 1.6500000000000004
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "exportBytes": 874955,
+  "cameraSamples": [
+    {
+      "focus": 2224,
+      "segment": 0,
+      "blend": 0.15747459573025396,
+      "x": 1.0060907208021699,
+      "y": 0.602597304183447,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "stage11Custom": true,
+      "progress": 0.2510869565217391,
+      "near3d": true
+    },
+    {
+      "focus": 2339,
+      "segment": 0,
+      "blend": 0.5016304322141859,
+      "x": 2.4159239638982504,
+      "y": 0,
+      "z": 5.499999999999998,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 41.99999999999999,
+      "stage11Custom": true,
+      "progress": 0.5010869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2454,
+      "segment": 0,
+      "blend": 0.8449710513068136,
+      "x": 3.8177797058642233,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "stage11Custom": true,
+      "progress": 0.7510869565217392,
+      "near3d": true
+    }
+  ],
+  "exportScene": {
+    "webgl": true,
+    "models": 2,
+    "scene": "366eb318-0560-4f4f-9c77-e99a9ade894e",
+    "error": null,
+    "gizmo": false,
+    "canvas": 1
+  }
+}

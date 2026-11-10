@@ -7,7 +7,7 @@
   "errors": [],
   "count": 20,
   "uploadedModelCount": 2,
-  "exportBytes": 872510,
+  "exportBytes": 874662,
   "initial": {
     "status": {
       "mode": "one-shared-three-scene",
@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 30.2,
+      "drawTotalMs": 27.9,
       "cameraSamples": [
         {
           "x": 0,
@@ -42,7 +42,7 @@
           "stage11Custom": false
         }
       ],
-      "sceneUuid": "f1587a61-ded3-44cd-999e-5de8c284ab2b",
+      "sceneUuid": "e2344c38-dc66-4028-847e-6c3dabf34f25",
       "contextLost": false,
       "animationClips": 1,
       "cameraKeyframeCount": 2,
@@ -178,7 +178,7 @@
     "renderFrames": 30,
     "visiblePixels": 10,
     "drawSamples": 30,
-    "drawTotalMs": 100.2,
+    "drawTotalMs": 100.7,
     "cameraSamples": [
       {
         "x": 0,
@@ -571,7 +571,7 @@
         "stage11Custom": false
       }
     ],
-    "sceneUuid": "f1587a61-ded3-44cd-999e-5de8c284ab2b",
+    "sceneUuid": "e2344c38-dc66-4028-847e-6c3dabf34f25",
     "contextLost": false,
     "animationClips": 1,
     "cameraKeyframeCount": 2,

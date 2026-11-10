@@ -7,6 +7,8 @@ Stage11 curve interpolation: success
 Stage11 timeline live WebGL: success
 Stage12 tangent curve: success
 Stage12 real spatial gizmo: success
-CI run: 42791202200
-Source SHA: 65bf38d26abbbaa74ae7f3b73b03aba484625d5c
+Stage13 in/out Bezier math: success
+Stage13 real Three.js handles: success
+CI run: 42793251430
+Source SHA: 55770ea7e317255b6c25f0f21d5416411a44c825
 Real hardware GPU / Safari: NOT TESTED

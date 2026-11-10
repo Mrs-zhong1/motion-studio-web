@@ -1,10 +1,10 @@
 {
   "three": "0.180.0",
   "engineBytes": 587100,
-  "sharedEngineBytes": 598774,
-  "editorBytes": 1734918,
+  "sharedEngineBytes": 600389,
+  "editorBytes": 1738744,
   "offline": true,
-  "source": "Motion Studio Stage9-12 unified editor, shared real WebGL spatial camera gizmo, cubic tension timeline",
+  "source": "Motion Studio Stage9-13, real Three.js spatial gizmo with independent Bezier in/out handles",
   "gpuAcceptanceRequired": true,
   "gpuTested": false
 }
