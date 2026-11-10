@@ -82,7 +82,7 @@ export function addCameraEditorStage11(source){
      };
      panel.querySelectorAll('[data-stage11-param]').forEach(el=>el.oninput=e=>{
        const key=el.dataset.stage11Param;path[selected][key]=Number(el.value);panel.querySelector('#stage11Value_'+key).textContent=el.value;
-       panel.querySelector('#stage11Track').outerHTML=plot();notify();
+       redrawSvg();notify();
      });
      const svg=panel.querySelector('#stage11Track');
      function redrawSvg(){if(!svg)return;const doc=new DOMParser().parseFromString(plot(),'image/svg+xml');svg.innerHTML=doc.documentElement.innerHTML;}
