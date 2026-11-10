@@ -92,6 +92,7 @@ import {installStage12Gizmo} from './stage12-spatial-gizmo.js';
      cameraKeys[i]=toKey(event.data.camera3d);
      diag.cameraKeyframes=cameraKeys.map(x=>({...x}));diag.stage11PathCounts=records.map(r=>r.source.cameraPath11.length);
      diag.stage11PatchCount++;
+     stage12?.refresh();
      update();
    });
    let stage12=null;
