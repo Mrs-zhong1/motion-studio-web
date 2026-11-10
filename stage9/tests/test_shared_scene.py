@@ -56,6 +56,17 @@ try:
    and not t.get("error") and not t.get("contextLost")
    and not result["errors"] and not result.get("externalRequests")
   )
+  # This is an injected DOM event test of fallback UI, not an actual GPU device-loss test.
+  result["simulatedContextLossRecovery"]=page.evaluate("""() => {
+    const c=document.getElementById('motion-shared-three-canvas');
+    c.dispatchEvent(new Event('webglcontextlost',{cancelable:true}));
+    return {
+      flagged:window.__motionSharedThree.contextLost,
+      canvasHidden:c.style.opacity==='0',
+      iframeFallbacks:[...document.querySelectorAll('.section[data-shared-three] iframe')].every(f=>f.style.opacity==='1')
+    }
+  }""")
+  result["pass"]=bool(result["pass"] and all(result["simulatedContextLossRecovery"].values()))
   browser.close()
 except Exception:result["errors"].append(traceback.format_exc(limit=4))
 finally:
