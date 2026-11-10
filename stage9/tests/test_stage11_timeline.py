@@ -33,14 +33,15 @@ try:
   # Verify dragging the middle keypoint changes time or horizontal path coordinate.
   old=editor.evaluate("(uid)=>({...project.sections.find(s=>s.uid===uid).cameraPath11[1]})",uid)
   c=editor.locator('#stage11Track circle[data-keypoint="1"]')
+  c.scroll_into_view_if_needed(timeout=5000)
   rect=c.bounding_box()
-  assert rect,"Stage11 SVG point is missing"
+  assert rect and rect['y']>=0 and rect['y']+rect['height']<=950,"Stage11 SVG point is not visible"
   editor.mouse.move(rect['x']+rect['width']/2,rect['y']+rect['height']/2)
   editor.mouse.down()
   editor.mouse.move(rect['x']+rect['width']/2+25,rect['y']+rect['height']/2-14,steps=6)
   editor.mouse.up()
   moved=editor.evaluate("(uid)=>({...project.sections.find(s=>s.uid===uid).cameraPath11[1]})",uid)
-  result['dragModified']=abs(moved['at']-old['at'])>.1 or abs(moved['x']-old['x'])>.05
+  result['dragModified']=moved['at']>old['at']+.5 and moved['x']>old['x']+.05
   result['dragBefore']={'at':old['at'],'x':old['x']}
   result['dragAfter']={'at':moved['at'],'x':moved['x']}
   # Select middle frame and give it a distinct intentional camera shape.
