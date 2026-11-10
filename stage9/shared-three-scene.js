@@ -141,7 +141,7 @@ import {normalizeCameraPath11,evaluateCameraPath11} from './stage11-camera-curve
        for(let y=1;y<=6;y++)for(let x=1;x<=6;x++){gl.readPixels(Math.floor(w*x/7),Math.floor(h*y/7),1,1,gl.RGBA,gl.UNSIGNED_BYTE,px);if(px[3]>0&&px[0]+px[1]+px[2]>25)hits++;}
        diag.visiblePixels=Math.max(diag.visiblePixels,hits);
      }
-     return {focus,segment:ix,blend:t,x,y,z,yaw,pitch,roll,fov,progress,near3d};
+     return {focus,segment:ix,blend:t,x,y,z,yaw,pitch,roll,fov,stage11Custom:!!custom,progress,near3d};
    };
    const resize=()=>{renderer.setSize(Math.max(1,innerWidth),Math.max(1,innerHeight),false);camera.aspect=innerWidth/Math.max(1,innerHeight);camera.updateProjectionMatrix();updateAnchors();update()};
    addEventListener('resize',resize,{passive:true});
