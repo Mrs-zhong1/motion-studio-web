@@ -4,7 +4,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 (async function bootMotionThree(){
   const host=document.querySelector('.viewport')||document.body;
   const source=document.getElementById('embedded-model')?.textContent?.trim()||'';
-  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],rendererName:null,renderWidth:0,renderHeight:0,error:null,progress:0};
+  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0};
   window.__motionThreeStatus=status;
   let gl;
   try {gl=document.createElement('canvas').getContext('webgl2');}catch(e){}
@@ -57,6 +57,12 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
     object.position.sub(center).multiplyScalar(scale);object.scale.multiplyScalar(scale);
     scene.add(object);status.pbr=status.materialCount>0;
     let progress=0;
+    function recordDraw(start){
+      const elapsed=performance.now()-start;
+      status.drawSamples++;
+      status.drawTotalMs=Number((status.drawTotalMs+elapsed).toFixed(3));
+      status.drawMaxMs=Math.max(status.drawMaxMs,Number(elapsed.toFixed(3)));
+    }
     function changeProgress(p){
       progress=Math.min(1,Math.max(0,Number(p)||0));status.progress=progress;
       if(mixer&&duration){
@@ -69,14 +75,14 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
         }
       }
     }
-    window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll'){changeProgress(event.data.progress);if(renderer){try{object.rotation.y=progress*Math.PI*2+.25;renderer.render(scene,camera);status.frames++;}catch(error){status.error=String(error);}}}});
+    window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll'){changeProgress(event.data.progress);if(renderer){try{object.rotation.y=progress*Math.PI*2+.25;const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;}catch(error){status.error=String(error);}}}});
     const resize=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
     resize();window.addEventListener('resize',resize);
     function update(){
       if(!renderer)return;
       object.rotation.y=progress*Math.PI*2+.25;
       try{
-        renderer.render(scene,camera);status.frames++;
+        const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;
         if(status.frames<=5||status.frames%30===0){
           const g=renderer.getContext(),w=g.drawingBufferWidth,h=g.drawingBufferHeight;
           status.renderWidth=w;status.renderHeight=h;let visible=0,spread=0,last=-1;
