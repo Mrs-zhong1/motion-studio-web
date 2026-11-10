@@ -6,6 +6,9 @@ on:
       - 'stage9/**'
       - '!stage9/output/**'
       - '.github/workflows/stage9-three-offline.yml'
+concurrency:
+  group: stage9-ci-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: write
 jobs:
