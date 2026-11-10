@@ -48,6 +48,13 @@ try:
         check("roundtrip_restored",page.evaluate("project.title")=="Web Product Acceptance" and page.evaluate("project.sections.length")==len(data["sections"]))
         page.reload(wait_until="domcontentloaded")
         check("imported_project_survives_reload",page.evaluate("project.title")=="Web Product Acceptance" and page.evaluate("project.sections.length")==len(data["sections"]))
+        # Invalid project must be rejected without replacing the active project.
+        invalid_path=ROOT/("WEB_PRODUCT_E2E_INVALID_"+browser_name+".json")
+        invalid_path.write_text('{"schema":"unsupported","sections":[]}',encoding="utf8")
+        before=page.evaluate("JSON.stringify(project)")
+        page.locator("#openFile").set_input_files(str(invalid_path))
+        check("invalid_import_preserves_project",page.evaluate("JSON.stringify(project)")==before)
+        check("invalid_import_shows_error",page.locator("#toast").inner_text().find("打开失败")>=0)
         page.locator("#mobileView").click()
         check("mobile_preview",page.locator("#canvasWrap").evaluate("(el)=>el.classList.contains('mobile')"))
         page.locator("#desktopView").click()
