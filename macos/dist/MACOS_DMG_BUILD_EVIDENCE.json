@@ -1,0 +1,18 @@
+{
+  "run": "macos GitHub hosted Apple Silicon, not users own Mac",
+  "system": "macOS-15.8.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "appBuilt": true,
+  "dmgCreated": true,
+  "dmgMountedAndVerified": true,
+  "htmlBytes": 1740002,
+  "appArm64": true,
+  "dmgBytes": 888832,
+  "dmgSHA256": "e63f551772ea85500a20541d43d7581cb4cc1efcaf1e485bb2f5c1c1bc0ee510",
+  "adHocSigned": true,
+  "appleDeveloperSigned": false,
+  "appleNotarized": false,
+  "webViewInteractiveSmokeTested": false,
+  "safariHardwareGpuTested": false,
+  "status": "PACKAGING_VALIDATED_NOT_PRODUCTION_SIGNED"
+}
