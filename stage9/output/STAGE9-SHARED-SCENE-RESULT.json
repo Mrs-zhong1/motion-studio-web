@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 32.7,
+      "drawTotalMs": 28,
       "cameraSamples": [
         {
           "x": 0,
@@ -42,7 +42,7 @@
           "stage11Custom": false
         }
       ],
-      "sceneUuid": "5c4f0534-f148-47dd-9835-0200c412caa8",
+      "sceneUuid": "89725c9c-63b8-4851-a14f-a33833f7de28",
       "contextLost": false,
       "animationClips": 1,
       "cameraKeyframeCount": 2,
@@ -175,10 +175,10 @@
       4,
       5
     ],
-    "renderFrames": 39,
-    "visiblePixels": 11,
-    "drawSamples": 39,
-    "drawTotalMs": 101,
+    "renderFrames": 30,
+    "visiblePixels": 10,
+    "drawSamples": 30,
+    "drawTotalMs": 94.4,
     "cameraSamples": [
       {
         "x": 0,
@@ -246,19 +246,6 @@
         "stage11Custom": false
       },
       {
-        "x": 0.4806,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.1502,
-        "focus": 2221,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
         "x": 0.5039,
         "y": 0,
         "z": 5.5,
@@ -291,110 +278,6 @@
         "segment": 0,
         "blend": 0.1649,
         "focus": 2227,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 0.6607,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.2065,
-        "focus": 2243,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 1.0321,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.3225,
-        "focus": 2283,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 1.2734,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.3979,
-        "focus": 2307,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 1.4074,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4398,
-        "focus": 2320,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 1.4905,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4658,
-        "focus": 2328,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 1.5426,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4821,
-        "focus": 2333,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 1.5739,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4918,
-        "focus": 2336,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 1.5948,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.4984,
-        "focus": 2338,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -688,7 +571,7 @@
         "stage11Custom": false
       }
     ],
-    "sceneUuid": "5c4f0534-f148-47dd-9835-0200c412caa8",
+    "sceneUuid": "89725c9c-63b8-4851-a14f-a33833f7de28",
     "contextLost": false,
     "animationClips": 1,
     "cameraKeyframeCount": 2,
