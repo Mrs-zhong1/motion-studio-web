@@ -22,6 +22,7 @@ await writeFile(resolve(root,'Motion-Studio-Stage9-THREE-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage10-Camera-Editor-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage11-Timeline-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage12-Spatial-Gizmo-OFFLINE.html'),output);
+await writeFile(resolve(root,'Motion-Studio-Stage13-Bezier-OFFLINE.html'),output);
 await writeFile(resolve(root,'THREE_LICENSE.txt'),await readFile(resolve(root,'node_modules/three/LICENSE'),'utf8'));
-await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,sharedEngineBytes:sharedEngine.length,editorBytes:Buffer.byteLength(output),offline:true,source:'Motion Studio Stage9-12 unified editor, shared real WebGL spatial camera gizmo, cubic tension timeline',gpuAcceptanceRequired:true,gpuTested:false},null,2));
+await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,sharedEngineBytes:sharedEngine.length,editorBytes:Buffer.byteLength(output),offline:true,source:'Motion Studio Stage9-13, real Three.js spatial gizmo with independent Bezier in/out handles',gpuAcceptanceRequired:true,gpuTested:false},null,2));
 console.log('Stage9 genuine offline Three.js bundle',engine.length,Buffer.byteLength(output));
