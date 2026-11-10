@@ -7,7 +7,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
  try{chapters=JSON.parse(script.textContent||'[]');}catch(e){return;}
  const sources=(chapters||[]).map((c,i)=>({...c,index:i})).filter(c=>c.id==='offline-glb-scene'&&c.glb&&c.glb.length>=32);
  if(sources.length<2)return;
- const diag={mode:'one-shared-three-scene',context:'software-or-hardware-unverified',canvasCount:0,webgl2:false,loadedModels:0,modelMeshCounts:[],modelIds:[],renderFrames:0,visiblePixels:0,drawSamples:0,drawTotalMs:0,cameraSamples:[],sceneUuid:null,contextLost:false,animationClips:0,error:null,remoteRequests:0,active:false,modelStates:[]};
+ const diag={mode:'one-shared-three-scene',context:'software-or-hardware-unverified',canvasCount:0,webgl2:false,loadedModels:0,modelMeshCounts:[],modelIds:[],renderFrames:0,visiblePixels:0,drawSamples:0,drawTotalMs:0,cameraSamples:[],sceneUuid:null,contextLost:false,animationClips:0,cameraKeyframeCount:0,cameraKeyframes:[],error:null,remoteRequests:0,active:false,modelStates:[]};
  window.__motionSharedThree=diag;
  const canvas=document.createElement('canvas');
  canvas.id='motion-shared-three-canvas';
@@ -70,6 +70,16 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
    }
    updateAnchors();
    const lerp=(a,b,t)=>a+(b-a)*t;
+   const defaults={x:0,y:0,z:5.5,yaw:0,pitch:0,roll:0,fov:42};
+   const clampKey=(val,low,high,def)=>Number.isFinite(Number(val))?clamp(Number(val),low,high):def;
+   const toKey=(raw)=>{const p=raw&&typeof raw==='object'?raw:{};return {
+     x:clampKey(p.x,-4,4,0),y:clampKey(p.y,-4,4,0),z:clampKey(p.z,2,12,5.5),
+     yaw:clampKey(p.yaw,-120,120,0),pitch:clampKey(p.pitch,-80,80,0),
+     roll:clampKey(p.roll,-90,90,0),fov:clampKey(p.fov,22,90,42)
+   }};
+   const cameraKeys=records.map(r=>toKey(r.source.camera3d));
+   diag.cameraKeyframeCount=cameraKeys.length;
+   diag.cameraKeyframes=cameraKeys;
    const isReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
    const modelMix=(idx,blend)=>{
      const a=records[idx],b=records[idx+1]||a;
@@ -87,9 +97,18 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
      const a=baseline[ix],b=baseline[Math.min(ix+1,baseline.length-1)];
      const raw=ix===baseline.length-1?0:clamp((focus-a)/Math.max(1,b-a),0,1);
      const t=ease(raw);
-     const x=lerp(records[ix].worldX,records[Math.min(ix+1,records.length-1)].worldX,t);
-     // The same camera object moves between physical models across chapters.
-     camera.position.set(x,0,5.5);camera.lookAt(x,0,0);
+     const next=Math.min(ix+1,records.length-1);
+     const k0=cameraKeys[ix],k1=cameraKeys[next];
+     const mix=(key)=>lerp(k0[key],k1[key],t);
+     const x=lerp(records[ix].worldX+k0.x,records[next].worldX+k1.x,t);
+     const y=mix('y'),z=mix('z'),yaw=mix('yaw'),pitch=mix('pitch'),roll=mix('roll'),fov=mix('fov');
+     // One physical camera, interpolated position, orientation and optical FOV.
+     camera.position.set(x,y,z);
+     const yawRad=yaw*Math.PI/180,pitchRad=pitch*Math.PI/180;
+     const dir=new THREE.Vector3(Math.sin(yawRad)*Math.cos(pitchRad),Math.sin(pitchRad),-Math.cos(yawRad)*Math.cos(pitchRad));
+     camera.lookAt(camera.position.clone().add(dir));
+     camera.rotateZ(roll*Math.PI/180);
+     camera.fov=fov;camera.updateProjectionMatrix();
      modelMix(ix,t);
      const progress=clamp((focus-baseline[0])/Math.max(1,baseline.at(-1)-baseline[0]),0,1);
      for(const r of records)if(r.mixer&&r.duration)r.mixer.setTime(r.duration*progress);
@@ -99,7 +118,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
      const start=performance.now();
      renderer.render(scene,camera);diag.renderFrames++;
      diag.drawTotalMs=Number((diag.drawTotalMs+performance.now()-start).toFixed(3));diag.drawSamples++;
-     if(diag.cameraSamples.length<120)diag.cameraSamples.push({x:Number(camera.position.x.toFixed(4)),y:0,z:5.5,segment:ix,blend:Number(t.toFixed(4)),focus:Math.round(focus)});
+     if(diag.cameraSamples.length<120)diag.cameraSamples.push({x:Number(camera.position.x.toFixed(4)),y:0,z:5.5,segment:ix,blend:Number(t.toFixed(4)),focus:Math.round(focus),y:Number(y.toFixed(4)),z:Number(z.toFixed(4)),yaw:Number(yaw.toFixed(4)),pitch:Number(pitch.toFixed(4)),roll:Number(roll.toFixed(4)),fov:Number(fov.toFixed(4))});
      if(diag.renderFrames<=8){
        const gl=renderer.getContext(),w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
        const px=new Uint8Array(4);
@@ -107,7 +126,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
        for(let y=1;y<=6;y++)for(let x=1;x<=6;x++){gl.readPixels(Math.floor(w*x/7),Math.floor(h*y/7),1,1,gl.RGBA,gl.UNSIGNED_BYTE,px);if(px[3]>0&&px[0]+px[1]+px[2]>25)hits++;}
        diag.visiblePixels=Math.max(diag.visiblePixels,hits);
      }
-     return {focus,segment:ix,blend:t,x,progress,near3d};
+     return {focus,segment:ix,blend:t,x,y,z,yaw,pitch,roll,fov,progress,near3d};
    };
    const resize=()=>{renderer.setSize(Math.max(1,innerWidth),Math.max(1,innerHeight),false);camera.aspect=innerWidth/Math.max(1,innerHeight);camera.updateProjectionMatrix();updateAnchors();update()};
    addEventListener('resize',resize,{passive:true});
