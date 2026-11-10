@@ -11,7 +11,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 12352,
-      "exportBytes": 875815,
+      "exportBytes": 876751,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -26,16 +26,23 @@
         "pixelDifference": 3514,
         "animationMoved": false,
         "animationRotationSamples": [],
+        "skinnedMeshCount": 0,
+        "morphMeshCount": 0,
+        "boneCount": 0,
+        "morphInfluenceSamples": [],
+        "boneRotationSamples": [],
+        "animationClipNames": [],
         "rendererName": "WebKit WebGL",
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 28.9,
-        "drawMaxMs": 18.5,
+        "drawTotalMs": 28.7,
+        "drawMaxMs": 24.4,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 4.817,
+      "avgDrawMs": 4.783,
+      "skinMorphPass": true,
       "modelPass": true
     },
     {
@@ -45,7 +52,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 2520,
-      "exportBytes": 865983,
+      "exportBytes": 866919,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -60,22 +67,89 @@
         "pixelDifference": 4780,
         "animationMoved": true,
         "animationRotationSamples": [
-          "0,0,0,1",
           "0,0,0.03141,0.99951",
+          "0,0,0,1",
           "0,0,0.36812,0.92978",
           "0,0,0.92978,0.36812",
           "0,0,0.99803,0.06279"
+        ],
+        "skinnedMeshCount": 0,
+        "morphMeshCount": 0,
+        "boneCount": 0,
+        "morphInfluenceSamples": [],
+        "boneRotationSamples": [],
+        "animationClipNames": [
+          "Rotation test"
         ],
         "rendererName": "WebKit WebGL",
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 16.3,
-        "drawMaxMs": 14.2,
+        "drawTotalMs": 36.3,
+        "drawMaxMs": 30.3,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 2.717,
+      "avgDrawMs": 6.05,
+      "skinMorphPass": true,
+      "modelPass": true
+    },
+    {
+      "fixture": "Sample-Skinned-Morph-MultiClip.glb",
+      "errors": [],
+      "remoteRequests": [],
+      "passed": true,
+      "components": 20,
+      "modelBase64Length": 3756,
+      "exportBytes": 868155,
+      "renderer": {
+        "engine": "three",
+        "threeVersion": "180",
+        "webgl2": true,
+        "pbr": true,
+        "meshCount": 1,
+        "materialCount": 1,
+        "textureCount": 0,
+        "animationClips": 2,
+        "frames": 6,
+        "visiblePixels": 12,
+        "pixelDifference": 6960,
+        "animationMoved": false,
+        "animationRotationSamples": [
+          "0,0,0,1"
+        ],
+        "skinnedMeshCount": 1,
+        "morphMeshCount": 1,
+        "boneCount": 2,
+        "morphInfluenceSamples": [
+          "0",
+          "0.04",
+          "0.48",
+          "0.61",
+          "0.31"
+        ],
+        "boneRotationSamples": [
+          "0,0,0,1",
+          "0,0,0.01326,0.99991",
+          "0,0,0.1585,0.98736",
+          "0,0,0.01396,0.9999",
+          "0,0,-0.22835,0.97358"
+        ],
+        "animationClipNames": [
+          "BoneSwivel",
+          "MorphPulse"
+        ],
+        "rendererName": "WebKit WebGL",
+        "renderWidth": 1100,
+        "renderHeight": 460,
+        "drawSamples": 6,
+        "drawTotalMs": 33.5,
+        "drawMaxMs": 30.8,
+        "error": null,
+        "progress": 0.96
+      },
+      "avgDrawMs": 5.583,
+      "skinMorphPass": true,
       "modelPass": true
     }
   ],

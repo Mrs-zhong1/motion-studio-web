@@ -4,7 +4,7 @@
   "errors": [],
   "componentCount": 20,
   "editorModelBytes": 2520,
-  "exportBytes": 865983,
+  "exportBytes": 866919,
   "exportedFrames": 6,
   "frameScripts": [
     {
@@ -72,12 +72,20 @@
         "0,0,0.07846,0.99692",
         "0,0,0.95106,0.30902"
       ],
+      "skinnedMeshCount": 0,
+      "morphMeshCount": 0,
+      "boneCount": 0,
+      "morphInfluenceSamples": [],
+      "boneRotationSamples": [],
+      "animationClipNames": [
+        "Rotation test"
+      ],
       "rendererName": "WebKit WebGL",
       "renderWidth": 1200,
       "renderHeight": 460,
       "drawSamples": 4,
-      "drawTotalMs": 14.4,
-      "drawMaxMs": 12.4,
+      "drawTotalMs": 24.3,
+      "drawMaxMs": 21.8,
       "error": null,
       "progress": 0.8
     }
