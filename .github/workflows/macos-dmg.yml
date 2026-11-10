@@ -1,0 +1,115 @@
+name: Motion Studio macOS Apple Silicon unsigned DMG - build and validate
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'macos/**'
+      - '.github/workflows/macos-dmg.yml'
+permissions:
+  contents: read
+concurrency:
+  group: motion-studio-mac-build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build-unsigned-dmg:
+    runs-on: macos-15
+    timeout-minutes: 35
+    steps:
+      - name: Checkout source and published offline editor
+        uses: actions/checkout@v4
+      - name: Inspect actual runner OS and Apple Silicon architecture
+        run: |
+          set -euo pipefail
+          sw_vers
+          uname -m
+          xcrun --find swiftc
+          swiftc --version
+          test "$(uname -m)" = "arm64"
+      - name: Compile native macOS application and embed offline editor
+        run: |
+          set -euo pipefail
+          EDITOR="stage9/output/Motion-Studio-Stage14-Stability-OFFLINE.html"
+          test -s "$EDITOR"
+          mkdir -p build/"Motion Studio.app"/Contents/{MacOS,Resources}
+          xcrun swiftc -parse-as-library -O -target arm64-apple-macos13.0 \
+            -framework AppKit -framework WebKit -framework Foundation \
+            macos/MotionStudioApp.swift -o 'build/Motion Studio.app/Contents/MacOS/MotionStudio'
+          cp "$EDITOR" 'build/Motion Studio.app/Contents/Resources/'
+          python3 - <<'PY'
+          import plistlib
+          from pathlib import Path
+          plist = {
+            "CFBundleExecutable":"MotionStudio",
+            "CFBundleIdentifier":"studio.motion.offline",
+            "CFBundleName":"Motion Studio",
+            "CFBundleDisplayName":"Motion Studio",
+            "CFBundlePackageType":"APPL",
+            "CFBundleVersion":"14.0.0",
+            "CFBundleShortVersionString":"14.0",
+            "LSMinimumSystemVersion":"13.0",
+            "NSHighResolutionCapable":True,
+            "NSAppTransportSecurity":{"NSAllowsArbitraryLoads":False},
+            "NSHumanReadableCopyright":"Motion Studio — unsigned test build",
+          }
+          path=Path("build/Motion Studio.app/Contents/Info.plist")
+          path.write_bytes(plistlib.dumps(plist))
+          PY
+          codesign --force --sign - 'build/Motion Studio.app'
+          codesign --verify --verbose=2 'build/Motion Studio.app'
+          /usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' 'build/Motion Studio.app/Contents/Info.plist'
+          file 'build/Motion Studio.app/Contents/MacOS/MotionStudio'
+          lipo -archs 'build/Motion Studio.app/Contents/MacOS/MotionStudio'
+      - name: Package and actually mount DMG
+        run: |
+          set -euo pipefail
+          mkdir -p build/dmgroot
+          cp -R 'build/Motion Studio.app' build/dmgroot/
+          ln -s /Applications build/dmgroot/Applications
+          hdiutil create -volname "Motion Studio 14" -srcfolder build/dmgroot \
+            -format UDZO -ov 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg'
+          hdiutil verify 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg'
+          mkdir -p build/mounted
+          hdiutil attach 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg' \
+            -nobrowse -readonly -mountpoint build/mounted
+          test -f 'build/mounted/Motion Studio.app/Contents/Resources/Motion-Studio-Stage14-Stability-OFFLINE.html'
+          test -x 'build/mounted/Motion Studio.app/Contents/MacOS/MotionStudio'
+          hdiutil detach build/mounted
+      - name: macOS WKWebView offline HTML check and test manifest
+        run: |
+          set -euo pipefail
+          mkdir -p build/reports
+          python3 - <<'PY'
+          import json,subprocess,hashlib,platform
+          from pathlib import Path
+          app=Path('build/Motion Studio.app')
+          dmg=Path('build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg')
+          html=app/'Contents/Resources/Motion-Studio-Stage14-Stability-OFFLINE.html'
+          body=html.read_text()
+          assert 'stage9SharedEngineURL' in body and 'offline-glb-scene' in body
+          assert len(body)>1_000_000
+          report={
+            'run':'macos GitHub hosted Apple Silicon, not users own Mac',
+            'system':platform.platform(),
+            'machine':platform.machine(),
+            'appBuilt':True,'dmgCreated':True,'dmgMountedAndVerified':True,
+            'htmlBytes':html.stat().st_size,
+            'appArm64': 'arm64' in subprocess.check_output(['lipo','-archs',str(app/'Contents/MacOS/MotionStudio')],text=True),
+            'dmgBytes':dmg.stat().st_size,
+            'dmgSHA256':hashlib.sha256(dmg.read_bytes()).hexdigest(),
+            'adHocSigned':True,'appleDeveloperSigned':False,'appleNotarized':False,
+            'webViewInteractiveSmokeTested':False,'safariHardwareGpuTested':False,
+            'status':'PACKAGING_VALIDATED_NOT_PRODUCTION_SIGNED',
+          }
+          assert report['appArm64']
+          Path('build/reports/MACOS_DMG_BUILD_EVIDENCE.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Upload unsigned DMG, native app and build evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-stage14-macos-arm64-unsigned-dmg
+          path: |
+            build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg
+            build/reports/MACOS_DMG_BUILD_EVIDENCE.json
+          if-no-files-found: error
+          retention-days: 30
