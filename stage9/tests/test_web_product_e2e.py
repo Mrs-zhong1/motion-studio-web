@@ -1,12 +1,16 @@
 """P0/P1/P3: real browser end-to-end user journey, not only renderer unit tests."""
 from pathlib import Path
-import json, traceback
+import json, traceback, os
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
 EDITOR=ROOT/"Motion-Studio-Stage15-Meshopt-OFFLINE.html"
-REPORT=ROOT/"WEB_PRODUCT_E2E_RESULT.json"
-result={"pass":False,"suite":"Motion Studio Web product E2E","checks":{},"errors":[],"browser":"Chromium"}
+REPORT=ROOT/("WEB_PRODUCT_E2E_RESULT_"+os.environ.get("MOTION_BROWSER","chromium").lower()+".json")
+browser_name=os.environ.get("MOTION_BROWSER","chromium").strip().lower()
+if browser_name not in ("chromium","firefox","webkit"):
+    raise ValueError("MOTION_BROWSER must be chromium, firefox, or webkit")
+result={"pass":False,"suite":"Motion Studio Web product E2E","checks":{},"errors":[],"browser":browser_name,
+        "webkitIsSafari":False,"scope":"Desktop automated engine smoke, not native Safari/mobile device acceptance"}
 def check(name,condition):
     result["checks"][name]=bool(condition)
     assert condition,name
@@ -14,7 +18,11 @@ def check(name,condition):
 try:
     check("built_editor_exists",EDITOR.exists())
     with sync_playwright() as pw:
-        browser=pw.chromium.launch(headless=True,args=["--no-sandbox","--use-gl=angle","--use-angle=swiftshader","--enable-webgl","--enable-unsafe-swiftshader"])
+        engine=getattr(pw,browser_name)
+        launch_args={"headless":True}
+        if browser_name=="chromium":
+            launch_args["args"]=["--no-sandbox","--use-gl=angle","--use-angle=swiftshader","--enable-webgl","--enable-unsafe-swiftshader"]
+        browser=engine.launch(**launch_args)
         page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
         page_errors=[]
         page.on("pageerror",lambda e:page_errors.append(str(e)))
@@ -26,7 +34,7 @@ try:
         check("title_edited",page.evaluate("project.title")=="Web Product Acceptance")
         with page.expect_download() as saved:
             page.locator("#saveProject").click()
-        saved_path=ROOT/"WEB_PRODUCT_E2E_PROJECT.json"
+        saved_path=ROOT/("WEB_PRODUCT_E2E_PROJECT_"+browser_name+".json")
         saved.value.save_as(saved_path)
         data=json.loads(saved_path.read_text(encoding="utf8"))
         check("valid_saved_project",data.get("schema")=="motion-studio-composition-v1" and len(data["sections"])>0)
@@ -41,7 +49,7 @@ try:
         check("desktop_preview",not page.locator("#canvasWrap").evaluate("(el)=>el.classList.contains('mobile')"))
         with page.expect_download() as exported:
             page.locator("#exportPage").click()
-        exported_path=ROOT/"WEB_PRODUCT_E2E_EXPORTED.html"
+        exported_path=ROOT/("WEB_PRODUCT_E2E_EXPORTED_"+browser_name+".html")
         exported.value.save_as(exported_path)
         html=exported_path.read_text(encoding="utf8")
         check("html_export",len(html)>1000 and "<!doctype html>" in html.lower() and "Web Product Acceptance" in html)
