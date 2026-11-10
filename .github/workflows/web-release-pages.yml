@@ -1,12 +1,8 @@
 name: Motion Studio Web - gated Pages deployment
+# Production publication is an explicit operation; ordinary commits only trigger E2E CI.
+# Do not turn this workflow into auto-deploy on push before release gates are verified.
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'stage9/**'
-      - '!stage9/output/**'
-      - '!stage9/*.md'
-      - '.github/workflows/web-release-pages.yml'
 concurrency:
   group: motion-studio-web-pages
   cancel-in-progress: false
