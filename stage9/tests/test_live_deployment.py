@@ -1,7 +1,7 @@
 """P5 production URL smoke: GitHub Pages must serve a working editor, not a placeholder."""
-import json, os, sys, traceback
+import json, os, sys, traceback, hashlib
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 from playwright.sync_api import sync_playwright
 
 url=os.environ.get("MOTION_STUDIO_URL","").strip()
@@ -19,6 +19,15 @@ try:
         page.on("pageerror",lambda e:errors.append(str(e)))
         response=page.goto(url,wait_until="domcontentloaded",timeout=45000)
         verify("served_successfully",response is not None and response.status==200)
+        manifest_response=page.request.get(urljoin(url,"WEB_RELEASE.json"),timeout=45000)
+        verify("release_manifest_served",manifest_response.status==200)
+        manifest=manifest_response.json()
+        html_bytes=response.body()
+        observed_sha=hashlib.sha256(html_bytes).hexdigest()
+        report["servedHtmlSha256"]=observed_sha
+        report["manifestHtmlSha256"]=manifest.get("sha256")
+        report["sourceCommit"]=manifest.get("sourceCommit")
+        verify("served_html_matches_tested_release",observed_sha==manifest.get("sha256"))
         page.wait_for_timeout(300)
         verify("20_components",page.evaluate("typeof registry!=='undefined' && registry.length===20"))
         page.locator("#loadTemplate").click()
