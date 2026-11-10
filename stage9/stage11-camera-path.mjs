@@ -5,7 +5,7 @@ export function addCameraEditorStage11(source){
   if(!Array.isArray(raw))return [];
   const points=raw.slice(0,8).map((v)=>{
     const p=normStage10Camera(v),at=Number(v?.at);
-    return {...p,at:Number.isFinite(at)?Math.max(0,Math.min(100,at)):0};
+    return {...p,at:Number.isFinite(at)?Math.max(0,Math.min(100,at)):0,tension:Number.isFinite(Number(v?.tension))?Math.max(0,Math.min(1,Number(v.tension))):0};
   }).sort((a,b)=>a.at-b.at);
   for(let i=1;i<points.length;i++)if(points[i].at<=points[i-1].at)points[i].at=Math.min(100,points[i-1].at+0.01);
   return points.length>=2&&points[0].at===0&&points.at(-1).at===100?points:[];
@@ -57,6 +57,7 @@ export function addCameraEditorStage11(source){
        +'<div class="selected-controls"><button type="button" id="stage11Enable">'+(path.length?'重置为三点轨迹':'启用三点轨迹')+'</button><button type="button" id="stage11Add" '+(path.length>=8?'disabled':'')+'>＋ 增加关键帧</button><button type="button" id="stage11Delete" '+(path.length<=2?'disabled':'')+'>删除选中帧</button></div>'
        +(path.length?plot()+'<div class="field"><label>当前关键帧 <select id="stage11KeySelect">'+path.map((k,i)=>'<option value="'+i+'" '+(i===selected?'selected':'')+'>帧 '+(i+1)+' · '+k.at.toFixed(1)+'%</option>').join('')+'</select></label></div>'
        +'<div class="field"><label>时间点 <output id="stage11TimeOut">'+path[selected].at.toFixed(1)+'%</output></label><input id="stage11Time" type="range" min="'+(selected===0?0:path[selected-1].at+.5)+'" max="'+(selected===path.length-1?100:path[selected+1].at-.5)+'" step=".5" value="'+path[selected].at+'" '+(selected===0||selected===path.length-1?'disabled':'')+'></div>'
+       +'<div class="field"><label>曲线手柄强度（0 自然、1 平直） <output id="stage12TensionOut">'+(path[selected].tension||0)+'</output></label><input id="stage12Tension" type="range" min="0" max="1" step=".05" value="'+(path[selected].tension||0)+'"></div>'
        +'<div class="cp-grid">'+Object.entries(limits).map(([key,[min,max,step]])=>'<label>'+labels[key]+' <output id="stage11Value_'+key+'">'+path[selected][key]+'</output><input data-stage11-param="'+key+'" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+path[selected][key]+'"></label>').join('')+'</div>'
        :'<p class="small">尚未启用轨迹，将使用 Stage 10 的章节级镜头关键帧。</p>');
      panel.querySelector('#stage11Enable').onclick=()=>{s.cameraPath11=[];ensure();selected=1;refresh();notify()};
@@ -75,6 +76,7 @@ export function addCameraEditorStage11(source){
      };
      if(!path.length)return;
      panel.querySelector('#stage11KeySelect').onchange=e=>{selected=Number(e.target.value);refresh()};
+     panel.querySelector('#stage12Tension').oninput=e=>{path[selected].tension=Number(e.target.value);panel.querySelector('#stage12TensionOut').textContent=e.target.value;notify();};
      panel.querySelector('#stage11Time').oninput=e=>{
        path[selected].at=Number(e.target.value);panel.querySelector('#stage11TimeOut').textContent=e.target.value+'%';redrawSvg();notify();
      };
