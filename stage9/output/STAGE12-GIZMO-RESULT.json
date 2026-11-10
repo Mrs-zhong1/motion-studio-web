@@ -18,7 +18,7 @@
       "patchCount": 0,
       "trajectoryPoints": 51,
       "selected": 1,
-      "sceneId": "e7fbc471-8171-4265-9da2-ebefbb5250c9",
+      "sceneId": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
       "rendererShared": true,
       "handleScreen": [
         {
@@ -67,7 +67,7 @@
         }
       ]
     },
-    "sceneUuid": "e7fbc471-8171-4265-9da2-ebefbb5250c9",
+    "sceneUuid": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
     "webgl2": true,
     "models": 2,
     "canvasCount": 1
@@ -89,7 +89,7 @@
     "z": 5.5
   },
   "dragAfter": {
-    "x": 1.7599999999999998,
+    "x": 1.8207181402647628,
     "y": 0,
     "z": 5.5
   },
@@ -103,7 +103,7 @@
     "patchCount": 7,
     "trajectoryPoints": 51,
     "selected": 1,
-    "sceneId": "e7fbc471-8171-4265-9da2-ebefbb5250c9",
+    "sceneId": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
     "rendererShared": true,
     "handleScreen": [
       {
@@ -113,7 +113,7 @@
       },
       {
         "index": 1,
-        "x": 157.88262889012967,
+        "x": 159.31028585914984,
         "y": 169.690361261959
       },
       {
@@ -135,13 +135,13 @@
       {
         "index": 1,
         "side": "handleIn",
-        "x": 142.5992716295704,
+        "x": 144.0269285985906,
         "y": 169.690361261959
       },
       {
         "index": 1,
         "side": "handleOut",
-        "x": 173.16598615068892,
+        "x": 174.5936431197091,
         "y": 169.690361261959
       },
       {
@@ -150,12 +150,13 @@
         "x": 138.83721445774043,
         "y": 169.690361261959
       }
-    ]
+    ],
+    "dragProjectionCount": 7
   },
   "axisView": {
     "axis": "y",
     "view": "top",
-    "scene": "e7fbc471-8171-4265-9da2-ebefbb5250c9",
+    "scene": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
     "handles": 3
   },
   "tensionAfterEdit": 0.75,
@@ -163,7 +164,7 @@
     "mode": true,
     "patches": 1,
     "dragCount": 7,
-    "sceneId": "e7fbc471-8171-4265-9da2-ebefbb5250c9",
+    "sceneId": "91431f1f-fcd0-48de-81bc-2378dbdf1b2b",
     "canvas": 1
   },
   "reloaded": [
@@ -179,7 +180,7 @@
       "tension": 0
     },
     {
-      "x": 1.7599999999999998,
+      "x": 1.8207181402647628,
       "y": 0,
       "z": 5.5,
       "yaw": 0,
@@ -201,9 +202,9 @@
       "tension": 0
     }
   ],
-  "exportBytes": 874915,
+  "exportBytes": 875531,
   "exportScene": {
-    "sceneId": "77449dc7-ebe5-4d2d-8f2c-4f2a373db701",
+    "sceneId": "93a9e87d-cfb8-48c7-bd4e-5eefd7dfa8de",
     "models": 2,
     "webgl2": true,
     "canvasCount": 1,

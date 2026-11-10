@@ -4,7 +4,7 @@
   "transition": "fade",
   "sections": [
     {
-      "uid": "section-mwaicx41-1",
+      "uid": "section-mwalwjof-1",
       "id": "text-reveal",
       "text": "MOTION IS A LANGUAGE",
       "speed": 85,
@@ -29,7 +29,7 @@
           "locked": false,
           "groupId": "",
           "easing": "smooth",
-          "id": "section-mwaicx41-2",
+          "id": "section-mwalwjof-2",
           "kind": "title",
           "enabled": true,
           "text": "MOTION IS A LANGUAGE",
@@ -73,7 +73,7 @@
           "locked": false,
           "groupId": "",
           "easing": "smooth",
-          "id": "section-mwaicx42-3",
+          "id": "section-mwalwjof-3",
           "kind": "caption",
           "enabled": true,
           "text": "CRAFTED IN MOTION",
@@ -148,7 +148,7 @@
       }
     },
     {
-      "uid": "section-mwaicx42-4",
+      "uid": "section-mwalwjof-4",
       "id": "image-columns",
       "text": "Fragments of a story",
       "speed": 85,
@@ -204,7 +204,7 @@
       }
     },
     {
-      "uid": "section-mwaicx42-5",
+      "uid": "section-mwalwjof-5",
       "id": "pinned-story",
       "text": "THE SPACE BETWEEN MOMENTS",
       "speed": 90,
@@ -260,7 +260,7 @@
       }
     },
     {
-      "uid": "section-mwaicx42-6",
+      "uid": "section-mwalwjof-6",
       "id": "stacked-cards",
       "text": "COLLECT / CREATE / REMEMBER",
       "speed": 100,
@@ -316,7 +316,7 @@
       }
     },
     {
-      "uid": "section-mwaicxce-7",
+      "uid": "section-mwalwjx4-7",
       "id": "offline-glb-scene",
       "text": "A SCULPTURAL MOMENT",
       "speed": 100,
@@ -356,7 +356,7 @@
           "at": 50,
           "tension": 0,
           "handleOut": {
-            "x": 1.6500000000000004
+            "x": 1.7132480627757944
           },
           "handleIn": {
             "y": 1.6
@@ -412,7 +412,7 @@
       }
     },
     {
-      "uid": "section-mwaiczq6-8",
+      "uid": "section-mwalwmf3-8",
       "id": "offline-glb-scene",
       "text": "A SCULPTURAL MOMENT",
       "speed": 100,
