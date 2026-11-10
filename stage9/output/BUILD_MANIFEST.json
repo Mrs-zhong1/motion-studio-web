@@ -1,7 +1,8 @@
 {
   "three": "0.180.0",
   "engineBytes": 587100,
-  "editorBytes": 920261,
+  "sharedEngineBytes": 585695,
+  "editorBytes": 1701983,
   "offline": true,
   "source": "Stage 9 unified editor",
   "gpuAcceptanceRequired": true,

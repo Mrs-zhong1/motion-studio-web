@@ -1,0 +1,437 @@
+{
+  "pass": true,
+  "test": "one WebGL scene, two GLB chapters and continuous camera",
+  "environment": "GitHub Actions Chromium SwiftShader (software WebGL)",
+  "hardwareGpuTested": false,
+  "safariTested": false,
+  "errors": [],
+  "count": 20,
+  "uploadedModelCount": 2,
+  "exportBytes": 853896,
+  "initial": {
+    "status": {
+      "mode": "one-shared-three-scene",
+      "context": "software-or-hardware-unverified",
+      "canvasCount": 1,
+      "webgl2": true,
+      "loadedModels": 2,
+      "modelMeshCounts": [
+        2,
+        1
+      ],
+      "modelIds": [
+        4,
+        5
+      ],
+      "renderFrames": 1,
+      "visiblePixels": 4,
+      "drawSamples": 1,
+      "drawTotalMs": 22.4,
+      "cameraSamples": [
+        {
+          "x": 0,
+          "y": 0,
+          "z": 5.5,
+          "segment": 0,
+          "blend": 0,
+          "focus": 300
+        }
+      ],
+      "sceneUuid": "8ea39ebd-36cc-45ef-abf0-79e80c6b880e",
+      "contextLost": false,
+      "animationClips": 1,
+      "error": null,
+      "remoteRequests": 0,
+      "active": true,
+      "modelStates": []
+    },
+    "anchors": [
+      2108.5,
+      2568.5
+    ],
+    "iframes": 2,
+    "canvasCount": 1
+  },
+  "cameraPositions": [
+    {
+      "focus": 2109,
+      "segment": 0,
+      "blend": 3.5418550176707494e-06,
+      "x": 1.1333936056546398e-05,
+      "progress": 0.0010869565217391304,
+      "near3d": true
+    },
+    {
+      "focus": 2224,
+      "segment": 0,
+      "blend": 0.15747459573025396,
+      "x": 0.5039187063368127,
+      "progress": 0.2510869565217391,
+      "near3d": true
+    },
+    {
+      "focus": 2339,
+      "segment": 0,
+      "blend": 0.5016304322141859,
+      "x": 1.605217383085395,
+      "progress": 0.5010869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2454,
+      "segment": 0,
+      "blend": 0.8449710513068136,
+      "x": 2.703907364181804,
+      "progress": 0.7510869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2531,
+      "segment": 0,
+      "blend": 0.9811461715089997,
+      "x": 3.139667748828799,
+      "progress": 0.9184782608695652,
+      "near3d": true
+    }
+  ],
+  "final": {
+    "mode": "one-shared-three-scene",
+    "context": "software-or-hardware-unverified",
+    "canvasCount": 1,
+    "webgl2": true,
+    "loadedModels": 2,
+    "modelMeshCounts": [
+      2,
+      1
+    ],
+    "modelIds": [
+      4,
+      5
+    ],
+    "renderFrames": 39,
+    "visiblePixels": 11,
+    "drawSamples": 39,
+    "drawTotalMs": 86.2,
+    "cameraSamples": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0,
+        "focus": 300
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0,
+        "focus": 302
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0,
+        "focus": 2109
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0,
+        "focus": 2109
+      },
+      {
+        "x": 0.0006,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.0002,
+        "focus": 2112
+      },
+      {
+        "x": 0.4961,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.155,
+        "focus": 2223
+      },
+      {
+        "x": 0.5039,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.1575,
+        "focus": 2224
+      },
+      {
+        "x": 0.5039,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.1575,
+        "focus": 2224
+      },
+      {
+        "x": 0.5277,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.1649,
+        "focus": 2227
+      },
+      {
+        "x": 0.6607,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.2065,
+        "focus": 2243
+      },
+      {
+        "x": 1.0321,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.3225,
+        "focus": 2283
+      },
+      {
+        "x": 1.2734,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.3979,
+        "focus": 2307
+      },
+      {
+        "x": 1.4074,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.4398,
+        "focus": 2320
+      },
+      {
+        "x": 1.4905,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.4658,
+        "focus": 2328
+      },
+      {
+        "x": 1.5426,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.4821,
+        "focus": 2333
+      },
+      {
+        "x": 1.5739,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.4918,
+        "focus": 2336
+      },
+      {
+        "x": 1.5948,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.4984,
+        "focus": 2338
+      },
+      {
+        "x": 1.6052,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.5016,
+        "focus": 2339
+      },
+      {
+        "x": 1.6052,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.5016,
+        "focus": 2339
+      },
+      {
+        "x": 1.6365,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.5114,
+        "focus": 2342
+      },
+      {
+        "x": 1.803,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.5634,
+        "focus": 2358
+      },
+      {
+        "x": 2.207,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.6897,
+        "focus": 2398
+      },
+      {
+        "x": 2.433,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.7603,
+        "focus": 2422
+      },
+      {
+        "x": 2.5479,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.7962,
+        "focus": 2435
+      },
+      {
+        "x": 2.6154,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.8173,
+        "focus": 2443
+      },
+      {
+        "x": 2.6563,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.8301,
+        "focus": 2448
+      },
+      {
+        "x": 2.6803,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.8376,
+        "focus": 2451
+      },
+      {
+        "x": 2.6961,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.8425,
+        "focus": 2453
+      },
+      {
+        "x": 2.7039,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.845,
+        "focus": 2454
+      },
+      {
+        "x": 2.7039,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.845,
+        "focus": 2454
+      },
+      {
+        "x": 2.7271,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.8522,
+        "focus": 2457
+      },
+      {
+        "x": 2.8772,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.8991,
+        "focus": 2478
+      },
+      {
+        "x": 3.0388,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.9496,
+        "focus": 2506
+      },
+      {
+        "x": 3.0887,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.9652,
+        "focus": 2517
+      },
+      {
+        "x": 3.116,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.9737,
+        "focus": 2524
+      },
+      {
+        "x": 3.13,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.9781,
+        "focus": 2528
+      },
+      {
+        "x": 3.1365,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.9802,
+        "focus": 2530
+      },
+      {
+        "x": 3.1397,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.9811,
+        "focus": 2531
+      },
+      {
+        "x": 3.1397,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.9811,
+        "focus": 2531
+      }
+    ],
+    "sceneUuid": "8ea39ebd-36cc-45ef-abf0-79e80c6b880e",
+    "contextLost": false,
+    "animationClips": 1,
+    "error": null,
+    "remoteRequests": 0,
+    "active": true,
+    "modelStates": []
+  }
+}
