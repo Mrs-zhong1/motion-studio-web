@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {normalizeCameraPath11,evaluateCameraPath11} from './stage11-camera-curve.js';
 (async()=>{
  const script=document.getElementById('motion-shared-scene-data');
  if(!script)return;
@@ -7,7 +8,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
  try{chapters=JSON.parse(script.textContent||'[]');}catch(e){return;}
  const sources=(chapters||[]).map((c,i)=>({...c,index:i})).filter(c=>c.id==='offline-glb-scene'&&c.glb&&c.glb.length>=32);
  if(sources.length<2)return;
- const diag={mode:'one-shared-three-scene',context:'software-or-hardware-unverified',canvasCount:0,webgl2:false,loadedModels:0,modelMeshCounts:[],modelIds:[],renderFrames:0,visiblePixels:0,drawSamples:0,drawTotalMs:0,cameraSamples:[],sceneUuid:null,contextLost:false,animationClips:0,cameraKeyframeCount:0,cameraKeyframes:[],error:null,remoteRequests:0,active:false,modelStates:[]};
+ const diag={mode:'one-shared-three-scene',context:'software-or-hardware-unverified',canvasCount:0,webgl2:false,loadedModels:0,modelMeshCounts:[],modelIds:[],renderFrames:0,visiblePixels:0,drawSamples:0,drawTotalMs:0,cameraSamples:[],sceneUuid:null,contextLost:false,animationClips:0,cameraKeyframeCount:0,cameraKeyframes:[],stage11PathCounts:[],stage11PatchCount:0,stage11Active:false,error:null,remoteRequests:0,active:false,modelStates:[]};
  window.__motionSharedThree=diag;
  const canvas=document.createElement('canvas');
  canvas.id='motion-shared-three-canvas';
@@ -80,6 +81,18 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
    const cameraKeys=records.map(r=>toKey(r.source.camera3d));
    diag.cameraKeyframeCount=cameraKeys.length;
    diag.cameraKeyframes=cameraKeys;
+   for(const r of records)r.source.cameraPath11=normalizeCameraPath11(r.source.cameraPath11);
+   diag.stage11PathCounts=records.map(r=>r.source.cameraPath11.length);
+   window.addEventListener('message',event=>{
+     if(event.data?.type!=='motion-stage11-camera-patch')return;
+     if(window.parent!==window&&event.source!==window.parent)return;
+     const i=records.findIndex(r=>r.source.uid===event.data.uid);if(i<0)return;
+     records[i].source.cameraPath11=normalizeCameraPath11(event.data.path);
+     cameraKeys[i]=toKey(event.data.camera3d);
+     diag.cameraKeyframes=cameraKeys.map(x=>({...x}));diag.stage11PathCounts=records.map(r=>r.source.cameraPath11.length);
+     diag.stage11PatchCount++;
+     update();
+   });
    const isReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
    const modelMix=(idx,blend)=>{
      const a=records[idx],b=records[idx+1]||a;
@@ -99,8 +112,10 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
      const t=ease(raw);
      const next=Math.min(ix+1,records.length-1);
      const k0=cameraKeys[ix],k1=cameraKeys[next];
-     const mix=(key)=>lerp(k0[key],k1[key],t);
-     const x=lerp(records[ix].worldX+k0.x,records[next].worldX+k1.x,t);
+     const custom=ix===next?null:evaluateCameraPath11(records[ix].source.cameraPath11,raw*100);
+     diag.stage11Active=!!custom;
+     const mix=(key)=>custom?custom[key]:lerp(k0[key],k1[key],t);
+     const x=lerp(records[ix].worldX,records[next].worldX,t)+mix('x');
      const y=mix('y'),z=mix('z'),yaw=mix('yaw'),pitch=mix('pitch'),roll=mix('roll'),fov=mix('fov');
      // One physical camera, interpolated position, orientation and optical FOV.
      camera.position.set(x,y,z);
@@ -118,7 +133,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
      const start=performance.now();
      renderer.render(scene,camera);diag.renderFrames++;
      diag.drawTotalMs=Number((diag.drawTotalMs+performance.now()-start).toFixed(3));diag.drawSamples++;
-     if(diag.cameraSamples.length<120)diag.cameraSamples.push({x:Number(camera.position.x.toFixed(4)),y:0,z:5.5,segment:ix,blend:Number(t.toFixed(4)),focus:Math.round(focus),y:Number(y.toFixed(4)),z:Number(z.toFixed(4)),yaw:Number(yaw.toFixed(4)),pitch:Number(pitch.toFixed(4)),roll:Number(roll.toFixed(4)),fov:Number(fov.toFixed(4))});
+     if(diag.cameraSamples.length<120)diag.cameraSamples.push({x:Number(camera.position.x.toFixed(4)),y:0,z:5.5,segment:ix,blend:Number(t.toFixed(4)),focus:Math.round(focus),y:Number(y.toFixed(4)),z:Number(z.toFixed(4)),yaw:Number(yaw.toFixed(4)),pitch:Number(pitch.toFixed(4)),roll:Number(roll.toFixed(4)),fov:Number(fov.toFixed(4)),stage11Custom:!!custom});
      if(diag.renderFrames<=8){
        const gl=renderer.getContext(),w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
        const px=new Uint8Array(4);
