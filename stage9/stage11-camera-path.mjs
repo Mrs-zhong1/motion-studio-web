@@ -5,7 +5,17 @@ export function addCameraEditorStage11(source){
   if(!Array.isArray(raw))return [];
   const points=raw.slice(0,8).map((v)=>{
     const p=normStage10Camera(v),at=Number(v?.at);
-    return {...p,at:Number.isFinite(at)?Math.max(0,Math.min(100,at)):0,tension:Number.isFinite(Number(v?.tension))?Math.max(0,Math.min(1,Number(v.tension))):0};
+    const point={...p,at:Number.isFinite(at)?Math.max(0,Math.min(100,at)):0,tension:Number.isFinite(Number(v?.tension))?Math.max(0,Math.min(1,Number(v.tension))):0};
+    for(const side of ['handleIn','handleOut']){
+      if(v?.[side]&&typeof v[side]==='object'){
+        const handle={};
+        for(const axis of ['x','y','z']){
+          if(v[side][axis]!==undefined&&Number.isFinite(Number(v[side][axis])))handle[axis]=Math.max(-8,Math.min(8,Number(v[side][axis])));
+        }
+        if(Object.keys(handle).length)point[side]=handle;
+      }
+    }
+    return point;
   }).sort((a,b)=>a.at-b.at);
   for(let i=1;i<points.length;i++)if(points[i].at<=points[i-1].at)points[i].at=Math.min(100,points[i-1].at+0.01);
   return points.length>=2&&points[0].at===0&&points.at(-1).at===100?points:[];
@@ -58,6 +68,9 @@ export function addCameraEditorStage11(source){
        +(path.length?plot()+'<div class="field"><label>当前关键帧 <select id="stage11KeySelect">'+path.map((k,i)=>'<option value="'+i+'" '+(i===selected?'selected':'')+'>帧 '+(i+1)+' · '+k.at.toFixed(1)+'%</option>').join('')+'</select></label></div>'
        +'<div class="field"><label>时间点 <output id="stage11TimeOut">'+path[selected].at.toFixed(1)+'%</output></label><input id="stage11Time" type="range" min="'+(selected===0?0:path[selected-1].at+.5)+'" max="'+(selected===path.length-1?100:path[selected+1].at-.5)+'" step=".5" value="'+path[selected].at+'" '+(selected===0||selected===path.length-1?'disabled':'')+'></div>'
        +'<div class="field"><label>曲线手柄强度（0 自然、1 平直） <output id="stage12TensionOut">'+(path[selected].tension||0)+'</output></label><input id="stage12Tension" type="range" min="0" max="1" step=".05" value="'+(path[selected].tension||0)+'"></div>'
+       +'<div id="stage13Bezier"><h4>Stage 13 · 独立贝塞尔入/出手柄</h4><p class="small">入/出手柄分别控制到达和离开此帧的空间路径。参数为相对于关键帧的 X/Y/Z 位移，修改后实时同步到共享 Three.js 场景。</p>'
+       +['handleIn','handleOut'].map(side=>'<fieldset><legend>'+(side==='handleIn'?'入手柄':'出手柄')+'</legend>'+['x','y','z'].map(axis=>'<label>'+axis.toUpperCase()+' <input type="number" step="0.1" min="-8" max="8" data-stage13-handle="'+side+'" data-axis="'+axis+'" value="'+(path[selected][side]?.[axis]??0)+'"></label>').join('')+'</fieldset>').join('')
+       +'<button type="button" id="stage13ResetHandles">清除当前帧独立手柄（恢复自动切线）</button></div>'
        +'<div class="cp-grid">'+Object.entries(limits).map(([key,[min,max,step]])=>'<label>'+labels[key]+' <output id="stage11Value_'+key+'">'+path[selected][key]+'</output><input data-stage11-param="'+key+'" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+path[selected][key]+'"></label>').join('')+'</div>'
        :'<p class="small">尚未启用轨迹，将使用 Stage 10 的章节级镜头关键帧。</p>');
      panel.querySelector('#stage11Enable').onclick=()=>{s.cameraPath11=[];ensure();selected=1;refresh();notify()};
@@ -76,6 +89,13 @@ export function addCameraEditorStage11(source){
      };
      if(!path.length)return;
      panel.querySelector('#stage11KeySelect').onchange=e=>{selected=Number(e.target.value);refresh()};
+     panel.querySelectorAll('[data-stage13-handle]').forEach(input=>input.onchange=()=>{
+       const side=input.dataset.stage13Handle,axis=input.dataset.axis;
+       if(!path[selected][side])path[selected][side]={};
+       path[selected][side][axis]=Math.max(-8,Math.min(8,Number(input.value)||0));
+       input.value=path[selected][side][axis];notify();
+     });
+     panel.querySelector('#stage13ResetHandles').onclick=()=>{delete path[selected].handleIn;delete path[selected].handleOut;refresh();notify()};
      panel.querySelector('#stage12Tension').oninput=e=>{path[selected].tension=Number(e.target.value);panel.querySelector('#stage12TensionOut').textContent=e.target.value;notify();};
      panel.querySelector('#stage11Time').oninput=e=>{
        path[selected].at=Number(e.target.value);panel.querySelector('#stage11TimeOut').textContent=e.target.value+'%';redrawSvg();notify();
