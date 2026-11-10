@@ -7,7 +7,7 @@
   "errors": [],
   "count": 20,
   "uploadedModelCount": 2,
-  "exportBytes": 854514,
+  "exportBytes": 856232,
   "initial": {
     "status": {
       "mode": "one-shared-three-scene",
@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 36.4,
+      "drawTotalMs": 26.8,
       "cameraSamples": [
         {
           "x": 0,
@@ -34,12 +34,37 @@
           "z": 5.5,
           "segment": 0,
           "blend": 0,
-          "focus": 300
+          "focus": 300,
+          "yaw": 0,
+          "pitch": 0,
+          "roll": 0,
+          "fov": 42
         }
       ],
-      "sceneUuid": "a62cc3b1-dca2-4059-ae4d-3cf27b8b5346",
+      "sceneUuid": "852ed2c8-f6a2-4d1f-a8e4-63992a3a6601",
       "contextLost": false,
       "animationClips": 1,
+      "cameraKeyframeCount": 2,
+      "cameraKeyframes": [
+        {
+          "x": 0,
+          "y": 0,
+          "z": 5.5,
+          "yaw": 0,
+          "pitch": 0,
+          "roll": 0,
+          "fov": 42
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 5.5,
+          "yaw": 0,
+          "pitch": 0,
+          "roll": 0,
+          "fov": 42
+        }
+      ],
       "error": null,
       "remoteRequests": 0,
       "active": true,
@@ -58,6 +83,12 @@
       "segment": 0,
       "blend": 3.5418550176707494e-06,
       "x": 1.1333936056546398e-05,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
       "progress": 0.0010869565217391304,
       "near3d": true
     },
@@ -66,6 +97,12 @@
       "segment": 0,
       "blend": 0.15747459573025396,
       "x": 0.5039187063368127,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
       "progress": 0.2510869565217391,
       "near3d": true
     },
@@ -74,6 +111,12 @@
       "segment": 0,
       "blend": 0.5016304322141859,
       "x": 1.605217383085395,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
       "progress": 0.5010869565217392,
       "near3d": true
     },
@@ -82,6 +125,12 @@
       "segment": 0,
       "blend": 0.8449710513068136,
       "x": 2.703907364181804,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
       "progress": 0.7510869565217392,
       "near3d": true
     },
@@ -90,6 +139,12 @@
       "segment": 0,
       "blend": 0.9811461715089997,
       "x": 3.139667748828799,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
       "progress": 0.9184782608695652,
       "near3d": true
     }
@@ -111,7 +166,7 @@
     "renderFrames": 30,
     "visiblePixels": 10,
     "drawSamples": 30,
-    "drawTotalMs": 102.3,
+    "drawTotalMs": 98.6,
     "cameraSamples": [
       {
         "x": 0,
@@ -119,7 +174,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0,
-        "focus": 300
+        "focus": 300,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 0,
@@ -127,7 +186,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0,
-        "focus": 302
+        "focus": 302,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 0,
@@ -135,7 +198,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0,
-        "focus": 2109
+        "focus": 2109,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 0,
@@ -143,7 +210,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0,
-        "focus": 2109
+        "focus": 2109,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 0.0006,
@@ -151,7 +222,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.0002,
-        "focus": 2112
+        "focus": 2112,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 0.5039,
@@ -159,7 +234,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.1575,
-        "focus": 2224
+        "focus": 2224,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 0.5039,
@@ -167,7 +246,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.1575,
-        "focus": 2224
+        "focus": 2224,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 0.5277,
@@ -175,7 +258,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.1649,
-        "focus": 2227
+        "focus": 2227,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 1.6052,
@@ -183,7 +270,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.5016,
-        "focus": 2339
+        "focus": 2339,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 1.6052,
@@ -191,7 +282,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.5016,
-        "focus": 2339
+        "focus": 2339,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 1.6365,
@@ -199,7 +294,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.5114,
-        "focus": 2342
+        "focus": 2342,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 1.803,
@@ -207,7 +306,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.5634,
-        "focus": 2358
+        "focus": 2358,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.207,
@@ -215,7 +318,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.6897,
-        "focus": 2398
+        "focus": 2398,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.433,
@@ -223,7 +330,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.7603,
-        "focus": 2422
+        "focus": 2422,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.5479,
@@ -231,7 +342,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.7962,
-        "focus": 2435
+        "focus": 2435,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.6154,
@@ -239,7 +354,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.8173,
-        "focus": 2443
+        "focus": 2443,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.6563,
@@ -247,7 +366,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.8301,
-        "focus": 2448
+        "focus": 2448,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.6803,
@@ -255,7 +378,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.8376,
-        "focus": 2451
+        "focus": 2451,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.6961,
@@ -263,7 +390,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.8425,
-        "focus": 2453
+        "focus": 2453,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.7039,
@@ -271,7 +402,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.845,
-        "focus": 2454
+        "focus": 2454,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.7039,
@@ -279,7 +414,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.845,
-        "focus": 2454
+        "focus": 2454,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.7271,
@@ -287,7 +426,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.8522,
-        "focus": 2457
+        "focus": 2457,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 2.8772,
@@ -295,7 +438,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.8991,
-        "focus": 2478
+        "focus": 2478,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 3.0388,
@@ -303,7 +450,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.9496,
-        "focus": 2506
+        "focus": 2506,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 3.0887,
@@ -311,7 +462,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.9652,
-        "focus": 2517
+        "focus": 2517,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 3.116,
@@ -319,7 +474,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.9737,
-        "focus": 2524
+        "focus": 2524,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 3.13,
@@ -327,7 +486,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.9781,
-        "focus": 2528
+        "focus": 2528,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 3.1365,
@@ -335,7 +498,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.9802,
-        "focus": 2530
+        "focus": 2530,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 3.1397,
@@ -343,7 +510,11 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.9811,
-        "focus": 2531
+        "focus": 2531,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       },
       {
         "x": 3.1397,
@@ -351,12 +522,37 @@
         "z": 5.5,
         "segment": 0,
         "blend": 0.9811,
-        "focus": 2531
+        "focus": 2531,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
       }
     ],
-    "sceneUuid": "a62cc3b1-dca2-4059-ae4d-3cf27b8b5346",
+    "sceneUuid": "852ed2c8-f6a2-4d1f-a8e4-63992a3a6601",
     "contextLost": false,
     "animationClips": 1,
+    "cameraKeyframeCount": 2,
+    "cameraKeyframes": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
+      }
+    ],
     "error": null,
     "remoteRequests": 0,
     "active": true,

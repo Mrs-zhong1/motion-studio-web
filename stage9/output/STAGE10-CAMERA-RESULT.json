@@ -1,0 +1,139 @@
+{
+  "pass": false,
+  "source": "Stage10 bundled editor GitHub Actions Chromium SwiftShader",
+  "hardwareGpuTested": false,
+  "safariTested": false,
+  "errors": [
+    "editor: Cannot read properties of null (reading 'groups')"
+  ],
+  "componentCount": 20,
+  "glbCount": 2,
+  "controlsVisible": 7,
+  "edited": {
+    "x": 1.5,
+    "y": 0.8,
+    "z": 7.2,
+    "yaw": 26,
+    "pitch": -14,
+    "roll": 12,
+    "fov": 59
+  },
+  "previewHasSharedMarkup": true,
+  "jsonSaved": true,
+  "reloaded": {
+    "x": 1.5,
+    "y": 0.8,
+    "z": 7.2,
+    "yaw": 26,
+    "pitch": -14,
+    "roll": 12,
+    "fov": 59
+  },
+  "exportBytes": 856240,
+  "sharedStart": {
+    "cameraKeys": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
+      },
+      {
+        "x": 1.5,
+        "y": 0.8,
+        "z": 7.2,
+        "yaw": 26,
+        "pitch": -14,
+        "roll": 12,
+        "fov": 59
+      }
+    ],
+    "sceneId": "f9ca6850-6f9e-4954-afa8-ce8001906af4",
+    "loadedModels": 2,
+    "context": true,
+    "error": null,
+    "canvasCount": 1
+  },
+  "cameraSamples": [
+    {
+      "focus": 2109,
+      "segment": 0,
+      "blend": 3.5418550176707494e-06,
+      "x": 1.6646718583052524e-05,
+      "y": 2.8334840141365996e-06,
+      "z": 5.50000602115353,
+      "yaw": 9.208823045943949e-05,
+      "pitch": -4.9585970247390494e-05,
+      "roll": 4.250226021204899e-05,
+      "fov": 42.0000602115353,
+      "progress": 0.0010869565217391304,
+      "near3d": true
+    },
+    {
+      "focus": 2224,
+      "segment": 0,
+      "blend": 0.15747459573025396,
+      "x": 0.7401305999321937,
+      "y": 0.12597967658420317,
+      "z": 5.767706812741432,
+      "yaw": 4.094339488986603,
+      "pitch": -2.2046443402235556,
+      "roll": 1.8896951487630476,
+      "fov": 44.677068127414316,
+      "progress": 0.2510869565217391,
+      "near3d": true
+    },
+    {
+      "focus": 2339,
+      "segment": 0,
+      "blend": 0.5016304322141859,
+      "x": 2.3576630314066738,
+      "y": 0.40130434577134877,
+      "z": 6.352771734764116,
+      "yaw": 13.042391237568834,
+      "pitch": -7.022826050998603,
+      "roll": 6.019565186570231,
+      "fov": 50.52771734764116,
+      "progress": 0.5010869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2454,
+      "segment": 0,
+      "blend": 0.8449710513068136,
+      "x": 3.971363941142024,
+      "y": 0.675976841045451,
+      "z": 6.936450787221583,
+      "yaw": 21.969247333977155,
+      "pitch": -11.82959471829539,
+      "roll": 10.139652615681763,
+      "fov": 56.36450787221583,
+      "progress": 0.7510869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2491,
+      "segment": 0,
+      "blend": 0.9244097122339113,
+      "x": 4.344725647499383,
+      "y": 0.7395277697871291,
+      "z": 7.071496510797649,
+      "yaw": 24.034652518081696,
+      "pitch": -12.941735971274758,
+      "roll": 11.092916546806936,
+      "fov": 57.7149651079765,
+      "progress": 0.8315217391304348,
+      "near3d": true
+    }
+  ],
+  "sharedEnd": {
+    "sceneId": "f9ca6850-6f9e-4954-afa8-ce8001906af4",
+    "frames": 27,
+    "pixels": 10,
+    "contextLost": false,
+    "error": null
+  }
+}
