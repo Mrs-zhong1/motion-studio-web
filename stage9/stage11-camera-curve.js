@@ -8,7 +8,7 @@ export function normalizeCameraPath11(raw){
  if(!Array.isArray(raw)||raw.length<2||raw.length>8)return [];
  const p=raw.map(obj=>{const item={at:clamp(finite(obj?.at),0,100)};
    for(const k of CAMERA11_KEYS){const [low,high]=CAMERA11_LIMITS[k];item[k]=clamp(finite(obj?.[k],k==='z'?5.5:k==='fov'?42:0),low,high);}
-   return item;
+   item.tension=clamp(finite(obj?.tension,0),0,1);return item;
  }).sort((a,b)=>a.at-b.at);
  if(Math.abs(p[0].at)>1e-6||Math.abs(p.at(-1).at-100)>1e-6)return [];
  for(let i=1;i<p.length;i++)if(p[i].at-p[i-1].at<.1)return [];
@@ -24,7 +24,7 @@ export function evaluateCameraPath11(path,at){
    const prev=p[Math.max(i-1,0)],next=p[Math.min(i+2,p.length-1)];
    const mA=i===0?(b[key]-a[key])/step:(b[key]-prev[key])/(b.at-prev.at);
    const mB=i+2>=p.length?(b[key]-a[key])/step:(next[key]-a[key])/(next.at-a.at);
-   const v=(2*u3-3*u2+1)*a[key]+(u3-2*u2+u)*step*mA+(-2*u3+3*u2)*b[key]+(u3-u2)*step*mB;
+   const v=(2*u3-3*u2+1)*a[key]+(u3-2*u2+u)*step*mA*(1-a.tension)+(-2*u3+3*u2)*b[key]+(u3-u2)*step*mB*(1-b.tension);
    const [lo,hi]=CAMERA11_LIMITS[key];out[key]=clamp(v,lo,hi);
  }
  return out;
