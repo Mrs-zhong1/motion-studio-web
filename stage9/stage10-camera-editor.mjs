@@ -1,3 +1,4 @@
+import {Buffer} from 'node:buffer';
 // Stage 10 integration, applied only during the bundled offline build.
 // Preserves Stage 9 source and all 20 components. Per GLB chapter = one spatial camera keyframe.
 export function addCameraEditorStage10(source){
@@ -32,5 +33,14 @@ export function addCameraEditorStage10(source){
   // A project can be loaded from JSON; the normSection call above guarantees old documents migrate.
   once("glb:s.id==='offline-glb-scene'?s.glb:''","glb:s.id==='offline-glb-scene'?s.glb:'',camera3d:normStage10Camera(s.camera3d)");
   if(!source.includes('camera3d:normStage10Camera(s.camera3d)'))throw Error('Camera serialization missing');
+  // Legacy Stage8 GLB canvas can paint before its async mesh is ready.
+  // Guard GPU drawGPU() instead of suppressing the editor error globally.
+  const match=source.match(/stage9LabBase=atob\("([A-Za-z0-9+/=]+)"\)/);
+  if(!match)throw Error('Stage9 embedded GLB lab missing');
+  let lab=Buffer.from(match[1],'base64').toString('utf8');
+  const oldDraw='function drawGPU(){const w=canvas.width,h=canvas.height;';
+  if(!lab.includes(oldDraw))throw Error('Legacy GLB drawGPU contract missing');
+  lab=lab.replace(oldDraw,'function drawGPU(){if(!mesh||!mesh.groups||!gl)return;const w=canvas.width,h=canvas.height;');
+  source=source.replace(match[1],Buffer.from(lab,'utf8').toString('base64'));
   return source;
 }
