@@ -18,7 +18,7 @@
       "patchCount": 0,
       "trajectoryPoints": 51,
       "selected": 1,
-      "sceneId": "337b3d55-4c98-40c1-85e5-8a5207604fe7",
+      "sceneId": "10b36381-42ba-43ce-b6e1-97c58170a5d8",
       "rendererShared": true,
       "handleScreen": [
         {
@@ -36,9 +36,10 @@
           "x": 154.1205717182997,
           "y": 169.690361261959
         }
-      ]
+      ],
+      "axisArrowsCount": 3
     },
-    "sceneUuid": "337b3d55-4c98-40c1-85e5-8a5207604fe7",
+    "sceneUuid": "10b36381-42ba-43ce-b6e1-97c58170a5d8",
     "webgl2": true,
     "models": 2,
     "canvasCount": 1
@@ -74,7 +75,7 @@
     "patchCount": 7,
     "trajectoryPoints": 51,
     "selected": 1,
-    "sceneId": "337b3d55-4c98-40c1-85e5-8a5207604fe7",
+    "sceneId": "10b36381-42ba-43ce-b6e1-97c58170a5d8",
     "rendererShared": true,
     "handleScreen": [
       {
@@ -92,12 +93,13 @@
         "x": 154.1205717182997,
         "y": 169.690361261959
       }
-    ]
+    ],
+    "axisArrowsCount": 3
   },
   "axisView": {
     "axis": "y",
     "view": "top",
-    "scene": "337b3d55-4c98-40c1-85e5-8a5207604fe7",
+    "scene": "10b36381-42ba-43ce-b6e1-97c58170a5d8",
     "handles": 3
   },
   "tensionAfterEdit": 0.75,
@@ -105,7 +107,7 @@
     "mode": true,
     "patches": 1,
     "dragCount": 7,
-    "sceneId": "337b3d55-4c98-40c1-85e5-8a5207604fe7",
+    "sceneId": "10b36381-42ba-43ce-b6e1-97c58170a5d8",
     "canvas": 1
   },
   "reloaded": [
@@ -143,9 +145,9 @@
       "tension": 0
     }
   ],
-  "exportBytes": 867875,
+  "exportBytes": 872763,
   "exportScene": {
-    "sceneId": "ae99d4d4-27fd-4052-a4df-3a5577be7c96",
+    "sceneId": "3a3f4fbd-51ad-4d0b-8acf-5ab0fe678a9b",
     "models": 2,
     "webgl2": true,
     "canvasCount": 1,

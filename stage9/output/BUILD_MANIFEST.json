@@ -1,8 +1,8 @@
 {
   "three": "0.180.0",
   "engineBytes": 587100,
-  "sharedEngineBytes": 595110,
-  "editorBytes": 1730072,
+  "sharedEngineBytes": 598774,
+  "editorBytes": 1734918,
   "offline": true,
   "source": "Motion Studio Stage9-12 unified editor, shared real WebGL spatial camera gizmo, cubic tension timeline",
   "gpuAcceptanceRequired": true,

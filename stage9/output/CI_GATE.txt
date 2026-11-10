@@ -7,6 +7,6 @@ Stage11 curve interpolation: success
 Stage11 timeline live WebGL: success
 Stage12 tangent curve: success
 Stage12 real spatial gizmo: success
-CI run: 42790346609
-Source SHA: 9ea394e037e992d1d40e7075e2c401d983d40a26
+CI run: 42791202200
+Source SHA: 65bf38d26abbbaa74ae7f3b73b03aba484625d5c
 Real hardware GPU / Safari: NOT TESTED
