@@ -36,12 +36,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 18.9,
-        "drawMaxMs": 15.7,
+        "drawTotalMs": 12.7,
+        "drawMaxMs": 10.5,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 3.15,
+      "avgDrawMs": 2.117,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -67,8 +67,8 @@
         "pixelDifference": 4780,
         "animationMoved": true,
         "animationRotationSamples": [
-          "0,0,0,1",
           "0,0,0.03141,0.99951",
+          "0,0,0,1",
           "0,0,0.36812,0.92978",
           "0,0,0.92978,0.36812",
           "0,0,0.99803,0.06279"
@@ -85,12 +85,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 22.6,
-        "drawMaxMs": 20.2,
+        "drawTotalMs": 19.4,
+        "drawMaxMs": 17.6,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 3.767,
+      "avgDrawMs": 3.233,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -143,12 +143,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 20.6,
-        "drawMaxMs": 17,
+        "drawTotalMs": 30,
+        "drawMaxMs": 27.7,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 3.433,
+      "avgDrawMs": 5.0,
       "skinMorphPass": true,
       "modelPass": true
     }
