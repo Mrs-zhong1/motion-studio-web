@@ -1,0 +1,78 @@
+name: Motion Studio Stage 9 - offline Three.js + strict GLB GPU test
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'stage9/**'
+      - '.github/workflows/stage9-three-offline.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install fixed Three.js and esbuild versions
+        run: npm install --no-audit --no-fund
+      - name: Build Stage 9 standalone offline HTML
+        run: npm run build
+      - name: Verify offline engine injection and licensing
+        run: python3 tests/check_build.py
+      - name: Upload genuine Stage 9 HTML even if separate GPU acceptance fails
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage9-genuine-three-offline-html
+          path: |
+            stage9/Motion-Studio-Stage9-THREE-OFFLINE.html
+            stage9/THREE_LICENSE.txt
+            stage9/BUILD_MANIFEST.json
+          if-no-files-found: error
+  graphics-test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: stage9-genuine-three-offline-html
+          path: stage9
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser and Playwright for SwiftShader WebGL validation
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Test GLB texture + PBR + actual pixels + scroll-driven animation
+        id: gpu
+        continue-on-error: true
+        run: python tests/test_browser.py
+      - name: Preserve logs, browser evidence, and exported page
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage9-strict-gpu-evidence
+          path: |
+            stage9/STAGE9-THREE-EXPORTED.html
+            stage9/STAGE9-THREE-EXPORT.png
+            stage9/STAGE9-THREE-BROWSER-RESULT.json
+          if-no-files-found: warn
+      - name: Release gate - fail if GLB/PBR/animation is not visually proven
+        if: steps.gpu.outcome != 'success'
+        run: |
+          echo 'Stage 9 GPU acceptance failed. See uploaded evidence.'
+          exit 1
