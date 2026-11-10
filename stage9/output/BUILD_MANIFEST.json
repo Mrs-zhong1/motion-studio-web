@@ -1,8 +1,8 @@
 {
   "three": "0.180.0",
   "engineBytes": 587100,
-  "sharedEngineBytes": 600389,
-  "editorBytes": 1738744,
+  "sharedEngineBytes": 600852,
+  "editorBytes": 1739360,
   "offline": true,
   "source": "Motion Studio Stage9-13, real Three.js spatial gizmo with independent Bezier in/out handles",
   "gpuAcceptanceRequired": true,
