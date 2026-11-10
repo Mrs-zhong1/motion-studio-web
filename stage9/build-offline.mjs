@@ -9,7 +9,7 @@ const engine=result.outputFiles[0].text;
 if(engine.length<100000||/\bimport\s*\(/.test(engine))throw Error('Three.js bundle incomplete or has runtime dynamic imports');
 const sharedBuild=await build({entryPoints:[resolve(root,'shared-three-scene.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const sharedEngine=sharedBuild.outputFiles[0].text;
-if(sharedEngine.length<100000||/\\bimport\\s*\\(/.test(sharedEngine))throw Error('Shared Three.js build is incomplete');
+if(sharedEngine.length<100000||/\bimport\s*\(/.test(sharedEngine))throw Error('Shared Three.js build is incomplete');
 const editor=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
