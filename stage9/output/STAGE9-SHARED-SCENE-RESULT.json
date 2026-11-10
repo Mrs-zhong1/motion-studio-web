@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 27.3,
+      "drawTotalMs": 24.2,
       "cameraSamples": [
         {
           "x": 0,
@@ -41,7 +41,7 @@
           "fov": 42
         }
       ],
-      "sceneUuid": "939e5af8-629b-4aeb-bb66-fba8cdfa2e6b",
+      "sceneUuid": "00d068c7-d639-4da5-9cfd-c4dcb33dc84a",
       "contextLost": false,
       "animationClips": 1,
       "cameraKeyframeCount": 2,
@@ -166,7 +166,7 @@
     "renderFrames": 30,
     "visiblePixels": 10,
     "drawSamples": 30,
-    "drawTotalMs": 95,
+    "drawTotalMs": 92.1,
     "cameraSamples": [
       {
         "x": 0,
@@ -529,7 +529,7 @@
         "fov": 42
       }
     ],
-    "sceneUuid": "939e5af8-629b-4aeb-bb66-fba8cdfa2e6b",
+    "sceneUuid": "00d068c7-d639-4da5-9cfd-c4dcb33dc84a",
     "contextLost": false,
     "animationClips": 1,
     "cameraKeyframeCount": 2,

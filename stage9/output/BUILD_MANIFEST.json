@@ -2,7 +2,7 @@
   "three": "0.180.0",
   "engineBytes": 587100,
   "sharedEngineBytes": 586769,
-  "editorBytes": 1706511,
+  "editorBytes": 1706559,
   "offline": true,
   "source": "Stage 9 unified editor + Stage 10 camera keyframe tools",
   "gpuAcceptanceRequired": true,

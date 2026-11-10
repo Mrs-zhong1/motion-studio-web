@@ -1,11 +1,9 @@
 {
-  "pass": false,
+  "pass": true,
   "source": "Stage10 bundled editor GitHub Actions Chromium SwiftShader",
   "hardwareGpuTested": false,
   "safariTested": false,
-  "errors": [
-    "editor: Cannot read properties of null (reading 'groups') | STACK: TypeError: Cannot read properties of null (reading 'groups')\n    at drawGPU (about:srcdoc:67:678)\n    at paint (about:srcdoc:70:126)"
-  ],
+  "errors": [],
   "componentCount": 20,
   "glbCount": 2,
   "controlsVisible": 7,
@@ -51,7 +49,7 @@
         "fov": 59
       }
     ],
-    "sceneId": "78ecddf5-b8ab-4bfc-8d8a-d5bfc13e3967",
+    "sceneId": "23faad8b-dc74-4f2d-985f-35acb4796c6c",
     "loadedModels": 2,
     "context": true,
     "error": null,
@@ -130,7 +128,7 @@
     }
   ],
   "sharedEnd": {
-    "sceneId": "78ecddf5-b8ab-4bfc-8d8a-d5bfc13e3967",
+    "sceneId": "23faad8b-dc74-4f2d-985f-35acb4796c6c",
     "frames": 27,
     "pixels": 10,
     "contextLost": false,

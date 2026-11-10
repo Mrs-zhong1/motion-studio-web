@@ -11,7 +11,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 12352,
-      "exportBytes": 876751,
+      "exportBytes": 876786,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -36,12 +36,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 21.4,
-        "drawMaxMs": 13.1,
+        "drawTotalMs": 22.4,
+        "drawMaxMs": 16.9,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 3.567,
+      "avgDrawMs": 3.733,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -52,7 +52,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 2520,
-      "exportBytes": 866919,
+      "exportBytes": 866954,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -67,8 +67,8 @@
         "pixelDifference": 4780,
         "animationMoved": true,
         "animationRotationSamples": [
-          "0,0,0,1",
           "0,0,0.03141,0.99951",
+          "0,0,0,1",
           "0,0,0.36812,0.92978",
           "0,0,0.92978,0.36812",
           "0,0,0.99803,0.06279"
@@ -85,12 +85,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 21,
-        "drawMaxMs": 19.2,
+        "drawTotalMs": 24.3,
+        "drawMaxMs": 20.7,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 3.5,
+      "avgDrawMs": 4.05,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -101,7 +101,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 3756,
-      "exportBytes": 868155,
+      "exportBytes": 868190,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -143,12 +143,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 34.7,
-        "drawMaxMs": 32.1,
+        "drawTotalMs": 28.9,
+        "drawMaxMs": 25.9,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 5.783,
+      "avgDrawMs": 4.817,
       "skinMorphPass": true,
       "modelPass": true
     }

@@ -2,7 +2,7 @@ WebGL software acceptance step: success
 GLB compatibility matrix: success
 Invalid GLB resilience: success
 Shared 3D continuity: success
-Stage10 editable camera: failure
-CI run: 42777448244
-Source SHA: 4943f5979dbc9c315e47b35e7690e2b73b4a658b
+Stage10 editable camera: success
+CI run: 42777896327
+Source SHA: dcae254290e06f1f1af015d4adf93fde6a3db9dc
 Real hardware GPU / Safari: NOT TESTED
