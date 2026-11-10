@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {normalizeCameraPath11,evaluateCameraPath11} from './stage11-camera-curve.js';
 import {installStage12Gizmo} from './stage12-spatial-gizmo.js';
 (async()=>{
@@ -32,7 +33,7 @@ import {installStage12Gizmo} from './stage12-spatial-gizmo.js';
    const rim=new THREE.DirectionalLight(0xa3bbff,2);rim.position.set(-4,2,-3);scene.add(rim);
    const camera=new THREE.PerspectiveCamera(42,1,.1,100);
    let records=[];
-   const loader=new GLTFLoader();
+   const loader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
    for(let k=0;k<sources.length;k++){
      const c=sources[k];
      if(!/^[A-Za-z0-9+/=]+$/.test(c.glb))throw Error('Invalid shared GLB base64');
