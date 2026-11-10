@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 28,
+      "drawTotalMs": 21.1,
       "cameraSamples": [
         {
           "x": 0,
@@ -42,7 +42,7 @@
           "stage11Custom": false
         }
       ],
-      "sceneUuid": "89725c9c-63b8-4851-a14f-a33833f7de28",
+      "sceneUuid": "5661c409-ccd6-4831-ab87-d4bcf744ffa4",
       "contextLost": false,
       "animationClips": 1,
       "cameraKeyframeCount": 2,
@@ -175,10 +175,10 @@
       4,
       5
     ],
-    "renderFrames": 30,
+    "renderFrames": 32,
     "visiblePixels": 10,
-    "drawSamples": 30,
-    "drawTotalMs": 94.4,
+    "drawSamples": 32,
+    "drawTotalMs": 78.3,
     "cameraSamples": [
       {
         "x": 0,
@@ -278,6 +278,32 @@
         "segment": 0,
         "blend": 0.1649,
         "focus": 2227,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42,
+        "stage11Custom": false
+      },
+      {
+        "x": 1.5739,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.4918,
+        "focus": 2336,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42,
+        "stage11Custom": false
+      },
+      {
+        "x": 1.5948,
+        "y": 0,
+        "z": 5.5,
+        "segment": 0,
+        "blend": 0.4984,
+        "focus": 2338,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -571,7 +597,7 @@
         "stage11Custom": false
       }
     ],
-    "sceneUuid": "89725c9c-63b8-4851-a14f-a33833f7de28",
+    "sceneUuid": "5661c409-ccd6-4831-ab87-d4bcf744ffa4",
     "contextLost": false,
     "animationClips": 1,
     "cameraKeyframeCount": 2,

@@ -1,5 +1,5 @@
 {
-  "pass": false,
+  "pass": true,
   "stage": "11",
   "webglEnvironment": "Ubuntu Chromium SwiftShader software WebGL",
   "macHardwareTested": false,
@@ -11,17 +11,17 @@
   "initialPoints": 3,
   "afterAdd": 4,
   "afterDelete": 3,
-  "dragModified": false,
+  "dragModified": true,
   "dragBefore": {
     "at": 50,
     "x": 0.8
   },
   "dragAfter": {
     "at": 61.82310814950981,
-    "x": -4
+    "x": 1.7169067382812493
   },
   "previewBefore": {
-    "uuid": "296af544-e852-4b8b-a461-8d5bb9055024",
+    "uuid": "2d21106a-9aa5-455a-97db-ccc241908da1",
     "count": 0,
     "paths": [
       3,
@@ -32,7 +32,7 @@
     "canvas": 1
   },
   "previewAfter": {
-    "uuid": "296af544-e852-4b8b-a461-8d5bb9055024",
+    "uuid": "2d21106a-9aa5-455a-97db-ccc241908da1",
     "count": 1,
     "paths": [
       3,
@@ -186,7 +186,7 @@
     }
   ],
   "exportShared": {
-    "id": "7a021b31-2eac-4abe-b60f-cecbb2ab8bf6",
+    "id": "15057f2c-fc7b-4be8-9cd8-7350d7682867",
     "webgl": true,
     "models": 2,
     "pathCounts": [

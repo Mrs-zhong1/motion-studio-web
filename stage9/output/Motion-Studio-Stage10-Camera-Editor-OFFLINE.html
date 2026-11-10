@@ -292,7 +292,7 @@ if(s.id==='offline-glb-scene'){
      svg.onpointermove=e=>{
        if(!drag)return;const bounds=svg.getBoundingClientRect(),p=s.cameraPath11[selected];
        const x=Math.max(0,Math.min(1,((e.clientX-bounds.left)/Math.max(1,bounds.width)*340-16)/306));
-       const y=Math.max(0,Math.min(1,((e.clientY-bounds.top)/Math.max(1,bounds.height))*132));
+       const y=Math.max(0,Math.min(1,(e.clientY-bounds.top)/Math.max(1,bounds.height)));
        if(selected>0&&selected<path.length-1)p.at=Math.max(path[selected-1].at+.5,Math.min(path[selected+1].at-.5,x*100));
        p.x=Math.max(-4,Math.min(4,(110-y*132)/11-4));
        const circles=svg.querySelectorAll('[data-keypoint]');circles.forEach((c,i)=>{c.setAttribute('cx',16+path[i].at*3.06);c.setAttribute('cy',110-(path[i].x+4)*11);});
