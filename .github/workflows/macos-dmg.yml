@@ -29,7 +29,7 @@ jobs:
       - name: Compile native macOS application and embed offline editor
         run: |
           set -euo pipefail
-          EDITOR="stage9/output/Motion-Studio-Stage14-Stability-OFFLINE.html"
+          EDITOR="stage9/output/Motion-Studio-Stage15-Meshopt-OFFLINE.html"
           test -s "$EDITOR"
           mkdir -p build/"Motion Studio.app"/Contents/{MacOS,Resources}
           xcrun swiftc -parse-as-library -O -target arm64-apple-macos13.0 \
@@ -45,8 +45,8 @@ jobs:
             "CFBundleName":"Motion Studio",
             "CFBundleDisplayName":"Motion Studio",
             "CFBundlePackageType":"APPL",
-            "CFBundleVersion":"14.0.0",
-            "CFBundleShortVersionString":"14.0",
+            "CFBundleVersion":"15.0.0",
+            "CFBundleShortVersionString":"15.0",
             "LSMinimumSystemVersion":"13.0",
             "NSHighResolutionCapable":True,
             "NSAppTransportSecurity":{"NSAllowsArbitraryLoads":False},
@@ -82,13 +82,13 @@ jobs:
           mkdir -p build/dmgroot
           cp -R 'build/Motion Studio.app' build/dmgroot/
           ln -s /Applications build/dmgroot/Applications
-          hdiutil create -volname "Motion Studio 14" -srcfolder build/dmgroot \
-            -format UDZO -ov 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg'
-          hdiutil verify 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg'
+          hdiutil create -volname "Motion Studio 15" -srcfolder build/dmgroot \
+            -format UDZO -ov 'build/Motion-Studio-Stage15-macOS-AppleSilicon-UNSIGNED.dmg'
+          hdiutil verify 'build/Motion-Studio-Stage15-macOS-AppleSilicon-UNSIGNED.dmg'
           mkdir -p build/mounted
-          hdiutil attach 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg' \
+          hdiutil attach 'build/Motion-Studio-Stage15-macOS-AppleSilicon-UNSIGNED.dmg' \
             -nobrowse -readonly -mountpoint build/mounted
-          test -f 'build/mounted/Motion Studio.app/Contents/Resources/Motion-Studio-Stage14-Stability-OFFLINE.html'
+          test -f 'build/mounted/Motion Studio.app/Contents/Resources/Motion-Studio-Stage15-Meshopt-OFFLINE.html'
           test -x 'build/mounted/Motion Studio.app/Contents/MacOS/MotionStudio'
           hdiutil detach build/mounted
       - name: macOS WKWebView offline HTML check and test manifest
@@ -99,8 +99,8 @@ jobs:
           import json,subprocess,hashlib,platform
           from pathlib import Path
           app=Path('build/Motion Studio.app')
-          dmg=Path('build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg')
-          html=app/'Contents/Resources/Motion-Studio-Stage14-Stability-OFFLINE.html'
+          dmg=Path('build/Motion-Studio-Stage15-macOS-AppleSilicon-UNSIGNED.dmg')
+          html=app/'Contents/Resources/Motion-Studio-Stage15-Meshopt-OFFLINE.html'
           body=html.read_text()
           assert 'stage9SharedEngineURL' in body and 'offline-glb-scene' in body
           assert len(body)>1_000_000
@@ -125,7 +125,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p macos/dist
-          cp 'build/Motion-Studio-Stage14-macOS-AppleSilicon-UNSIGNED.dmg' macos/dist/
+          cp 'build/Motion-Studio-Stage15-macOS-AppleSilicon-UNSIGNED.dmg' macos/dist/
           cp 'build/reports/MACOS_DMG_BUILD_EVIDENCE.json' macos/dist/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
