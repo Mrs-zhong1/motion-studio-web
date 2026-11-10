@@ -12,6 +12,10 @@ jobs:
   web-product-e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     defaults:
       run:
         working-directory: stage9
@@ -32,18 +36,20 @@ jobs:
       - name: Install Playwright browser
         run: |
           python -m pip install playwright
-          python -m playwright install --with-deps chromium
+          python -m playwright install --with-deps ${{ matrix.browser }}
       - name: Real browser edit-save-reopen-export smoke
         run: python tests/test_web_product_e2e.py
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
       - name: Archive browser reports and generated HTML
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: motion-studio-web-product-e2e-evidence
+          name: motion-studio-web-product-e2e-${{ matrix.browser }}
           path: |
-            stage9/WEB_PRODUCT_E2E_RESULT.json
-            stage9/WEB_PRODUCT_E2E_PROJECT.json
-            stage9/WEB_PRODUCT_E2E_EXPORTED.html
+            stage9/WEB_PRODUCT_E2E_RESULT_*.json
+            stage9/WEB_PRODUCT_E2E_PROJECT_*.json
+            stage9/WEB_PRODUCT_E2E_EXPORTED_*.html
             stage9/Motion-Studio-Stage15-Meshopt-OFFLINE.html
             stage9/BUILD_MANIFEST.json
           if-no-files-found: warn
