@@ -40,3 +40,11 @@
 - 当前状态：发布脚本与工作流**已提交但未取得成功运行证据**。正式 URL 尚未验证。
 - GitHub Actions 工作流入口：https://github.com/Mrs-zhong1/motion-studio-web/actions/workflows/web-release-pages.yml
 - 正式交付须留存：三浏览器 E2E artifacts、Pages deploy URL、`P5_LIVE_SMOKE.json` 全部通过、导出的真实 HTML、SHA256 校验。
+
+
+## P1 数据恢复修复与回归（本轮）
+
+- 修复 `Motion-Studio-Unified-Editor.html`：新建工程时立即清空并写回自动草稿，同时清理旧项目撤销/重做历史；导入 JSON 工程时写回草稿；加载模板时立即存储草稿。
+- 扩展 `tests/test_web_product_e2e.py`：通过实际 `file://` 加载离线编辑器，验证新建空工程和导入工程均能在浏览器刷新后保持；同时保留模板、保存、移动预览、HTML 导出检查。
+- 修改 `web-product-e2e.yml` 触发范围：核心编辑器源码变更时自动触发，避免只测试测试脚本变更。
+- **状态：已提交代码和测试；尚未取得新浏览器 CI 成功结果。**
