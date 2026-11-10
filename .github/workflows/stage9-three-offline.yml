@@ -1,16 +1,17 @@
-name: Motion Studio Stage 9 - offline Three.js + strict GLB GPU test
+name: Motion Studio Stage 9 - standalone Three.js + strict GLB WebGL test
 on:
   workflow_dispatch:
   push:
     paths:
       - 'stage9/**'
+      - '!stage9/output/**'
       - '.github/workflows/stage9-three-offline.yml'
 permissions:
-  contents: read
+  contents: write
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: stage9
@@ -22,57 +23,43 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install fixed Three.js and esbuild versions
+      - name: Install fixed Three.js dependencies
         run: npm install --no-audit --no-fund
-      - name: Build Stage 9 standalone offline HTML
+      - name: Build real offline Stage 9 HTML
         run: npm run build
-      - name: Verify offline engine injection and licensing
+      - name: Verify bundled Three.js, GLTFLoader, license, no remote imports
         run: python3 tests/check_build.py
-      - name: Upload genuine Stage 9 HTML even if separate GPU acceptance fails
-        uses: actions/upload-artifact@v4
-        with:
-          name: stage9-genuine-three-offline-html
-          path: |
-            stage9/Motion-Studio-Stage9-THREE-OFFLINE.html
-            stage9/THREE_LICENSE.txt
-            stage9/BUILD_MANIFEST.json
-          if-no-files-found: error
-  graphics-test:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    defaults:
-      run:
-        working-directory: stage9
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: stage9-genuine-three-offline-html
-          path: stage9
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install browser and Playwright for SwiftShader WebGL validation
+      - name: Install headless Chromium and Playwright
         run: |
           python -m pip install playwright
           python -m playwright install --with-deps chromium
-      - name: Test GLB texture + PBR + actual pixels + scroll-driven animation
+      - name: Strict animated PBR texture and pixel verification (SwiftShader)
         id: gpu
         continue-on-error: true
         run: python tests/test_browser.py
-      - name: Preserve logs, browser evidence, and exported page
+      - name: Commit generated HTML, actual browser evidence, and manifests to repository
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: stage9-strict-gpu-evidence
-          path: |
-            stage9/STAGE9-THREE-EXPORTED.html
-            stage9/STAGE9-THREE-EXPORT.png
-            stage9/STAGE9-THREE-BROWSER-RESULT.json
-          if-no-files-found: warn
-      - name: Release gate - fail if GLB/PBR/animation is not visually proven
+        working-directory: .
+        run: |
+          mkdir -p stage9/output
+          for f in Motion-Studio-Stage9-THREE-OFFLINE.html THREE_LICENSE.txt BUILD_MANIFEST.json STAGE9-THREE-EXPORTED.html STAGE9-THREE-EXPORT.png STAGE9-THREE-BROWSER-RESULT.json; do
+            if [ -f "stage9/$f" ]; then cp "stage9/$f" "stage9/output/$f"; fi
+          done
+          cat > stage9/output/CI_GATE.txt <<EOF
+          WebGL software acceptance step: ${{ steps.gpu.outcome }}
+          CI run: ${{ github.run_id }}
+          Source SHA: ${{ github.sha }}
+          Real hardware GPU / Safari: NOT TESTED
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f stage9/output
+          if ! git diff --cached --quiet; then
+            git commit -m "Stage 9 CI: persist actual offline HTML and GPU evidence [skip ci]"
+            git push origin HEAD:main
+          fi
+      - name: Gate production if software WebGL verification failed
         if: steps.gpu.outcome != 'success'
         run: |
-          echo 'Stage 9 GPU acceptance failed. See uploaded evidence.'
+          echo "Stage 9 GPU software acceptance failed. Inspect stage9/output/ in repository."
           exit 1
