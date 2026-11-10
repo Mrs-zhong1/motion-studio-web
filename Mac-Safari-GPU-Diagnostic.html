@@ -1,0 +1,41 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion Studio · Mac Safari GPU 实机验收</title><style>body{margin:0;background:#101a28;color:#e5eefa;font:15px system-ui;padding:24px;max-width:900px}h1{font-size:24px}button{border:0;border-radius:9px;padding:12px 18px;background:#d5efa1;color:#12200c;font-weight:700;cursor:pointer;margin-right:8px}canvas{width:100%;height:270px;border:1px solid #51627c;border-radius:12px}pre{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#1a283a;padding:12px;border-radius:10px}small{color:#b4c3d3}</style></head><body><h1>Motion Studio · macOS / Safari GPU 实机诊断</h1><p>此文件可离线运行。请使用实际 Mac 的 Chrome 与 Safari 分别运行，并下载 JSON 回传。页面不会自动上传设备信息。</p><button id="run">开始 GPU 渲染测试</button><button id="save" disabled>保存 JSON 报告</button><p id="status">尚未开始</p><canvas id="canvas" width="1100" height="450"></canvas><pre id="report">无结果</pre><small>注：WebGL2 成功只能证明此浏览器/设备能创建并使用 WebGL2 上下文。完整模型、真实 FPS、GPU 芯片与长时间稳定性仍需后续实机验收。本页面不在云端假装测试 Mac 硬件。</small><script>
+const $=x=>document.getElementById(x);let result=null;
+$('run').onclick=async()=>{
+ $('run').disabled=true;$('save').disabled=true;$('status').textContent='进行中...';
+ const c=$('canvas'),gl=c.getContext('webgl2',{antialias:false,preserveDrawingBuffer:true});
+ const data={test:'Motion Studio Stage13 actual device WebGL2 smoke',timestamp:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,webgl2:!!gl,frames:0,frameTimeMs:[],nonblankPixels:0,error:null,hardwareAccelerationVerified:false};
+ result=data;
+ try{
+ if(!gl)throw Error('WebGL2 unavailable on this browser/device');
+ data.renderer=gl.getParameter(gl.RENDERER);data.vendor=gl.getParameter(gl.VENDOR);
+ data.webglVersion=gl.getParameter(gl.VERSION);data.glsl=gl.getParameter(gl.SHADING_LANGUAGE_VERSION);
+ data.maxTextureSize=gl.getParameter(gl.MAX_TEXTURE_SIZE);
+ const ext=gl.getExtension('WEBGL_debug_renderer_info');
+ if(ext){data.unmaskedRenderer=gl.getParameter(ext.UNMASKED_RENDERER_WEBGL);data.unmaskedVendor=gl.getParameter(ext.UNMASKED_VENDOR_WEBGL);}
+ const vs=gl.createShader(gl.VERTEX_SHADER);
+ gl.shaderSource(vs,'#version 300 es\nprecision highp float;in vec2 pos;uniform float angle;void main(){float c=cos(angle),s=sin(angle);vec2 p=vec2(c*pos.x-s*pos.y,s*pos.x+c*pos.y);gl_Position=vec4(p,0.,1.);}');gl.compileShader(vs);
+ if(!gl.getShaderParameter(vs,gl.COMPILE_STATUS))throw Error('vertex shader: '+gl.getShaderInfoLog(vs));
+ const fs=gl.createShader(gl.FRAGMENT_SHADER);
+ gl.shaderSource(fs,'#version 300 es\nprecision highp float;out vec4 frag;void main(){frag=vec4(.2+.7*gl_FragCoord.x/1100.,.3,.7,1.);}');gl.compileShader(fs);
+ if(!gl.getShaderParameter(fs,gl.COMPILE_STATUS))throw Error('fragment shader: '+gl.getShaderInfoLog(fs));
+ const prog=gl.createProgram();gl.attachShader(prog,vs);gl.attachShader(prog,fs);gl.linkProgram(prog);
+ if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw Error('program: '+gl.getProgramInfoLog(prog));
+ gl.useProgram(prog);const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-0.7,-0.6,0.8,-0.5,0,0.8]),gl.STATIC_DRAW);
+ const pos=gl.getAttribLocation(prog,'pos');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
+ const angle=gl.getUniformLocation(prog,'angle');
+ let last=performance.now();const pixel=new Uint8Array(4);
+ for(let i=0;i<100;i++){
+   await new Promise(resolve=>requestAnimationFrame(resolve));
+   const now=performance.now();data.frameTimeMs.push(Math.round((now-last)*100)/100);last=now;
+   gl.viewport(0,0,c.width,c.height);gl.clearColor(0.03,0.06,0.1,1);gl.clear(gl.COLOR_BUFFER_BIT);
+   gl.uniform1f(angle,i*.04);gl.drawArrays(gl.TRIANGLES,0,3);data.frames++;
+   if(i%10===0){gl.readPixels(550,225,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);if(pixel[0]+pixel[1]+pixel[2]>45)data.nonblankPixels++;}
+ }
+ data.glError=gl.getError();data.p50FrameIntervalMs=data.frameTimeMs.slice().sort((a,b)=>a-b)[50];data.p95FrameIntervalMs=data.frameTimeMs.slice().sort((a,b)=>a-b)[95];
+ data.passed=!!(data.webgl2&&data.frames===100&&data.nonblankPixels>0&&data.glError===0);
+ }catch(e){data.error=String(e);data.passed=false;}
+ $('report').textContent=JSON.stringify(data,null,2);$('status').textContent=data.passed?'基础 WebGL2 渲染成功（尚未证明真实硬件加速）':'测试失败，请查看报告';
+ $('save').disabled=false;$('run').disabled=false;
+};
+$('save').onclick=()=>{if(!result)return;const data=new Blob([JSON.stringify(result,null,2)],{type:'application/json'});const url=URL.createObjectURL(data);const a=document.createElement('a');a.href=url;a.download='Motion-Studio-Mac-GPU-Diagnostic-'+Date.now()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+</script></body></html>
