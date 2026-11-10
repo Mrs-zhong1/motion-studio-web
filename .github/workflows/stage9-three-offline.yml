@@ -110,8 +110,25 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f stage9/output
           if ! git diff --cached --quiet; then
-            git commit -m "Stage 9 CI: persist actual offline HTML and GPU evidence [skip ci]"
-            git push origin HEAD:main
+            git commit -m "Stage 9-13 CI: persist real offline HTML and GPU evidence [skip ci]"
+            # Other commits (e.g. documentation) may land while browser tests run.
+            # Rebase the generated-output commit onto current main, then push safely.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                echo "Output rebase conflict: human review required"
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                echo "Generated evidence committed on attempt $attempt"
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "Could not persist outputs after 3 attempts"
+                exit 1
+              fi
+            done
           fi
       - name: Gate production if software WebGL verification failed
         if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success' || steps.stage13math.outcome != 'success' || steps.stage13.outcome != 'success'
