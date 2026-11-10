@@ -4,7 +4,7 @@
   "hardwareGpuTested": false,
   "safariTested": false,
   "errors": [
-    "editor: Cannot read properties of null (reading 'groups')"
+    "editor: Cannot read properties of null (reading 'groups') | STACK: TypeError: Cannot read properties of null (reading 'groups')\n    at drawGPU (about:srcdoc:67:678)\n    at paint (about:srcdoc:70:126)"
   ],
   "componentCount": 20,
   "glbCount": 2,
@@ -51,7 +51,7 @@
         "fov": 59
       }
     ],
-    "sceneId": "f9ca6850-6f9e-4954-afa8-ce8001906af4",
+    "sceneId": "78ecddf5-b8ab-4bfc-8d8a-d5bfc13e3967",
     "loadedModels": 2,
     "context": true,
     "error": null,
@@ -130,7 +130,7 @@
     }
   ],
   "sharedEnd": {
-    "sceneId": "f9ca6850-6f9e-4954-afa8-ce8001906af4",
+    "sceneId": "78ecddf5-b8ab-4bfc-8d8a-d5bfc13e3967",
     "frames": 27,
     "pixels": 10,
     "contextLost": false,

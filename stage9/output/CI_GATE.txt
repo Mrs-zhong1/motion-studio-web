@@ -3,6 +3,6 @@ GLB compatibility matrix: success
 Invalid GLB resilience: success
 Shared 3D continuity: success
 Stage10 editable camera: failure
-CI run: 42777076628
-Source SHA: c26dc1e0ee7ee61a9f9be59e8e0b243d39c83f4c
+CI run: 42777448244
+Source SHA: 4943f5979dbc9c315e47b35e7690e2b73b4a658b
 Real hardware GPU / Safari: NOT TESTED
