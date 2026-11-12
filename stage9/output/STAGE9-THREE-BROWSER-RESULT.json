@@ -4,7 +4,7 @@
   "errors": [],
   "componentCount": 20,
   "editorModelBytes": 2520,
-  "exportBytes": 896418,
+  "exportBytes": 900595,
   "exportedFrames": 6,
   "frameScripts": [
     {
@@ -84,8 +84,8 @@
       "renderWidth": 1200,
       "renderHeight": 460,
       "drawSamples": 4,
-      "drawTotalMs": 32.8,
-      "drawMaxMs": 30.1,
+      "drawTotalMs": 20.1,
+      "drawMaxMs": 18.8,
       "error": null,
       "progress": 0.8
     }

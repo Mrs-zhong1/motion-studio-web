@@ -2,7 +2,7 @@
   "three": "0.180.0",
   "engineBytes": 609198,
   "sharedEngineBytes": 622948,
-  "editorBytes": 1800820,
+  "editorBytes": 2258637,
   "offline": true,
   "source": "Motion Studio Stage9-15, real offline MeshoptDecoder and 4MB GLB validation",
   "releasePolicy": "web-browser-matrix",
