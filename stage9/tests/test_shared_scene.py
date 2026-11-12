@@ -13,6 +13,8 @@ try:
   ed.on("pageerror",lambda e:result["errors"].append("editor:"+str(e)))
   ed.set_content(E.read_text(encoding="utf8"),wait_until="domcontentloaded")
   ed.wait_for_timeout(350)
+  ed.locator('#resumeProject').click()
+  ed.locator('[data-asset-tier-button="l3"]').click()
   for fixture in ["Sample-Dual-Material.glb","Sample-Textured-Animated.glb"]:
    ed.locator('.comp[data-id="offline-glb-scene"] button').click()
    ed.locator("#stage9GlbInput").set_input_files(str(R.parent/fixture))

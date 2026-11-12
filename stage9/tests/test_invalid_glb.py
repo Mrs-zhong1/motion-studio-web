@@ -23,6 +23,8 @@ try:
     page=browser.new_page(viewport={'width':1440,'height':850},accept_downloads=True)
     page.on('pageerror',lambda e:result['errors'].append(str(e)))
     page.set_content((ROOT/'Motion-Studio-Stage9-THREE-OFFLINE.html').read_text(),wait_until='domcontentloaded')
+    page.locator('#resumeProject').click()
+    page.locator('[data-asset-tier-button="l3"]').click()
     page.locator('.comp[data-id="offline-glb-scene"] button').click()
     page.locator('#stage9GlbInput').set_input_files(str(GOOD))
     page.wait_for_timeout(250)

@@ -13,7 +13,12 @@ if(engine.length<100000||/\bimport\s*\(/.test(engine))throw Error('Three.js bund
 const sharedBuild=await build({entryPoints:[resolve(root,'shared-three-scene.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const sharedEngine=sharedBuild.outputFiles[0].text;
 if(sharedEngine.length<100000||/\bimport\s*\(/.test(sharedEngine))throw Error('Shared Three.js build is incomplete');
-const editor=addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8'))));
+const thumbnailIds=['editorial','product-3d','cinematic','architecture','agency','fashion','gallery','saas'];
+const thumbnailEntries=await Promise.all(thumbnailIds.map(async id=>[id,'data:image/jpeg;base64,'+await readFile(resolve(root,'template-thumbnails',id+'.jpg'),'base64')]));
+const thumbnailData=JSON.stringify(Object.fromEntries(thumbnailEntries));
+const source=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
+if(!source.includes('const templateThumbnailImages={};'))throw Error('Template thumbnail injection marker missing');
+const editor=addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(source.replace('const templateThumbnailImages={};','const templateThumbnailImages='+thumbnailData+';'))));
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');

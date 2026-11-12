@@ -12,6 +12,8 @@ with sync_playwright() as p:
  page.set_content(out.read_text(),wait_until='domcontentloaded')
  page.wait_for_timeout(600)
  res['componentCount']=page.evaluate('registry.length')
+ page.locator('#resumeProject').click()
+ page.locator('[data-asset-tier-button="l3"]').click()
  page.locator('.comp[data-id="offline-glb-scene"] button').click()
  page.locator('#stage9GlbInput').set_input_files(str(root.parent/'Sample-Textured-Animated.glb'))
  page.wait_for_timeout(1700)
