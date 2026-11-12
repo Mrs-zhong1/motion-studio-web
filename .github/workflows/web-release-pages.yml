@@ -6,6 +6,12 @@ on:
   push:
     branches: [main]
     paths:
+      - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/tests/test_web_product_e2e.py'
+      - 'stage9/tests/test_product_restructure.py'
+      - 'stage9/tests/test_live_deployment.py'
+      - 'stage9/output/Motion-Studio-Stage15-Meshopt-OFFLINE.html'
+      - 'stage9/output/BUILD_MANIFEST.json'
       - '.github/workflows/web-release-pages.yml'
 concurrency:
   group: motion-studio-web-pages
@@ -42,6 +48,10 @@ jobs:
           python -m playwright install --with-deps ${{ matrix.browser }}
       - name: Run actual edit-save-import-export browser journey
         run: python tests/test_web_product_e2e.py
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
+      - name: Verify template discovery, immersive preview and editor workspace
+        run: python tests/test_product_restructure.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
       - name: Verify browser-tested HTML matches committed release candidate

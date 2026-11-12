@@ -107,6 +107,35 @@ def test_product_restructure():
             )
             assert len(template_shapes) == 8
             assert len(set(template_shapes.values())) == 8
+            template_exports = page.evaluate(
+                """() => MotionStudioUnified.templates.map(t => {
+                    const project = MotionStudioUnified.createProjectFromTemplate(t.id);
+                    MotionStudioUnified.load(project, {resetHistory: true});
+                    const html = MotionStudioUnified.build();
+                    return {
+                      id: t.id,
+                      sectionCount: project.sections.length,
+                      renderedCount: (html.match(/<section class=\"section/g) || []).length,
+                      hasTitle: html.includes(t.name),
+                      hasRemoteScript: /<script[^>]+src=[\"']https?:/.test(html)
+                    };
+                })"""
+            )
+            assert all(
+                item["sectionCount"] == item["renderedCount"]
+                and item["hasTitle"]
+                and not item["hasRemoteScript"]
+                for item in template_exports
+            )
+            legacy_template = page.evaluate(
+                """() => {
+                    const legacy = MotionStudioUnified.createProjectFromTemplate('editorial');
+                    delete legacy.templateId;
+                    MotionStudioUnified.load(legacy, {resetHistory: true});
+                    return MotionStudioUnified.getProject().templateId;
+                }"""
+            )
+            assert legacy_template == "custom"
             assert not errors, errors
             browser.close()
     finally:

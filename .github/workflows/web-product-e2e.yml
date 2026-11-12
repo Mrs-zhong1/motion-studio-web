@@ -5,6 +5,7 @@ on:
     paths:
       - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_web_product_e2e.py'
+      - 'stage9/tests/test_product_restructure.py'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
 permissions:
@@ -40,6 +41,10 @@ jobs:
           python -m playwright install --with-deps ${{ matrix.browser }}
       - name: Real browser edit-save-reopen-export smoke
         run: python tests/test_web_product_e2e.py
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
+      - name: Template discovery, preview and three-pane editor journey
+        run: python tests/test_product_restructure.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
       # GitHub Actions artifact storage quota is exhausted in this repository.

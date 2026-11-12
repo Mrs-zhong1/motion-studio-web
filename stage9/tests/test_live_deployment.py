@@ -30,7 +30,11 @@ try:
         verify("served_html_matches_tested_release",observed_sha==manifest.get("sha256"))
         page.wait_for_timeout(300)
         verify("20_components",page.evaluate("typeof registry!=='undefined' && registry.length===20"))
-        page.locator("#loadTemplate").click()
+        verify("template_discovery_default",page.locator("#discoveryView").is_visible())
+        verify("eight_full_templates",page.locator("[data-template-card]").count()==8)
+        page.locator("[data-template-card='editorial']").click()
+        page.locator("#previewUse").click()
+        page.locator("#editorView").wait_for(state="visible")
         verify("template_usable",page.evaluate("project.sections.length>0"))
         with page.expect_download() as download:
             page.locator("#saveProject").click()
