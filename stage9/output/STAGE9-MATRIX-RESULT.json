@@ -11,7 +11,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 12352,
-      "exportBytes": 906250,
+      "exportBytes": 910427,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -36,12 +36,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 15.4,
-        "drawMaxMs": 13.2,
+        "drawTotalMs": 25.8,
+        "drawMaxMs": 16.2,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 2.567,
+      "avgDrawMs": 4.3,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -52,7 +52,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 2520,
-      "exportBytes": 896418,
+      "exportBytes": 900595,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -67,8 +67,8 @@
         "pixelDifference": 4780,
         "animationMoved": true,
         "animationRotationSamples": [
-          "0,0,0,1",
           "0,0,0.03141,0.99951",
+          "0,0,0,1",
           "0,0,0.36812,0.92978",
           "0,0,0.92978,0.36812",
           "0,0,0.99803,0.06279"
@@ -85,12 +85,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 25.4,
-        "drawMaxMs": 23.6,
+        "drawTotalMs": 27.4,
+        "drawMaxMs": 25.6,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 4.233,
+      "avgDrawMs": 4.567,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -101,7 +101,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 3756,
-      "exportBytes": 897654,
+      "exportBytes": 901831,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -122,15 +122,15 @@
         "morphMeshCount": 1,
         "boneCount": 2,
         "morphInfluenceSamples": [
-          "0",
           "0.04",
+          "0",
           "0.48",
           "0.61",
           "0.31"
         ],
         "boneRotationSamples": [
-          "0,0,0,1",
           "0,0,0.01326,0.99991",
+          "0,0,0,1",
           "0,0,0.1585,0.98736",
           "0,0,0.01396,0.9999",
           "0,0,-0.22835,0.97358"
@@ -143,12 +143,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 35.2,
-        "drawMaxMs": 31.7,
+        "drawTotalMs": 25.4,
+        "drawMaxMs": 23.1,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 5.867,
+      "avgDrawMs": 4.233,
       "skinMorphPass": true,
       "modelPass": true
     }
