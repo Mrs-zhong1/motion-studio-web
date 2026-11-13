@@ -93,6 +93,13 @@ def test_product_restructure():
                 "project.sections.length"
             )
             capture(page, "visual-editor")
+            assert page.locator("#chapterList .chapter-thumb[data-effect]").count() == 5
+            before_order = page.evaluate("project.sections.map(s => s.uid)")
+            page.locator("#chapterList [data-chapter-id]").last.drag_to(
+                page.locator("#chapterList [data-chapter-id]").first
+            )
+            after_order = page.evaluate("project.sections.map(s => s.uid)")
+            assert after_order[0] == before_order[-1]
 
             assert page.locator("[data-asset-tier]").count() == 3
             assert page.locator("[data-asset-tier='l1']").is_visible()
