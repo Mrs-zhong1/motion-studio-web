@@ -1,0 +1,11 @@
+{
+  "app": "Motion Studio Web",
+  "sourceCommit": "98b99670df2c5f1e580a12838c432d3ff421ab12",
+  "browserGate": "three Playwright browser engines passed",
+  "artifact": "index.html",
+  "bytes": 2234480,
+  "sha256": "f9b502ad3642489fdda244bae70e65ab3207f44b195163e44525396f6f64975b",
+  "deploymentSmoke": "PENDING (not claimed by this workflow)",
+  "nativeSafari": "NOT TESTED",
+  "realDevicePerformance": "NOT TESTED"
+}
