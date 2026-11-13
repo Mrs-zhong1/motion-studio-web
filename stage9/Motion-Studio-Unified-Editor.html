@@ -237,7 +237,7 @@ function templateLayers(index,entry,templateId='editorial'){
   saas:{align:'left',caption:'WORK THAT STAYS IN MOTION'}
  };
  const p=profiles[templateId]||profiles.editorial;
- if(index===0)return [{kind:'caption',text:p.caption,x:p.align==='right'?72:18,y:16,scale:78,color:entry.accent||'#d9ff67',fromX:p.align==='right'?80:-80,toX:0,fromY:12,toY:0,start:12,end:78,fromOpacity:0,toOpacity:95}];
+ if(index===0)return [{kind:'caption',text:p.caption,x:p.align==='right'?72:18,y:7,scale:78,color:entry.accent||'#d9ff67',fromX:p.align==='right'?80:-80,toX:0,fromY:12,toY:0,start:12,end:78,fromOpacity:0,toOpacity:95}];
  if(index===1&&['editorial','architecture','fashion','gallery'].includes(templateId))return [{kind:'caption',text:String(entry.text||'').split('/')[0].trim(),x:templateId==='fashion'?74:22,y:22,scale:72,color:entry.accent||'#d9ff67',fromY:46,toY:0,start:8,end:70,fromOpacity:0,toOpacity:95}];
  return [];
 }
