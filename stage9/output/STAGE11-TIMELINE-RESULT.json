@@ -21,7 +21,7 @@
     "x": 1.761275809151786
   },
   "previewBefore": {
-    "uuid": "c22dec30-6c51-4e7e-ac65-3f6fa85fe387",
+    "uuid": "86d271ef-6ee2-4033-be91-83871a20b32b",
     "count": 0,
     "paths": [
       3,
@@ -32,7 +32,7 @@
     "canvas": 1
   },
   "previewAfter": {
-    "uuid": "c22dec30-6c51-4e7e-ac65-3f6fa85fe387",
+    "uuid": "86d271ef-6ee2-4033-be91-83871a20b32b",
     "count": 1,
     "paths": [
       3,
@@ -113,7 +113,7 @@
       "tension": 0
     }
   ],
-  "exportBytes": 909159,
+  "exportBytes": 909158,
   "exportCameraSamples": [
     {
       "focus": 2109,
@@ -192,15 +192,15 @@
     }
   ],
   "exportShared": {
-    "id": "234e31d5-6b26-45ad-9c00-6d063e734711",
+    "id": "52b6f197-b9ae-496a-8dae-1d8450c96abc",
     "webgl": true,
     "models": 2,
     "pathCounts": [
       3,
       0
     ],
-    "frames": 37,
-    "pixels": 5,
+    "frames": 38,
+    "pixels": 4,
     "error": null,
     "canvas": 1
   }
