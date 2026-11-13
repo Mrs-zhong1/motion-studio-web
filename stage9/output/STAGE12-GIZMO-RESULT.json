@@ -1,11 +1,219 @@
 {
-  "pass": false,
+  "pass": true,
   "stage": "12",
   "environment": "GitHub Actions Ubuntu Chromium SwiftShader software WebGL",
   "macHardwareTested": false,
   "safariTested": false,
-  "errors": [
-    "Traceback (most recent call last):\n  File \"/home/runner/work/motion-studio-web/motion-studio-web/stage9/tests/test_stage12_gizmo.py\", line 17, in <module>\n    ed.locator('.comp[data-id=\"offline-glb-scene\"] button').click()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/sync_api/_generated.py\", line 11045, in click\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/_sync_base.py\", line 124, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/locator.py\", line 222, in click\n    return await self._frame.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/frame.py\", line 587, in click\n    return await self._channel.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/channel_owner.py\", line 387, in finish\n    raise e from None\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/channel_owner.py\", line 352, in finish\n    result = await zone.run_async(lambda: awaitable)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nplaywright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\".comp[data-id=\\\"offline-glb-scene\\\"] button\")\n    - locator resolved to <button title=\"添加到画布\" aria-label=\"添加 GLB 离线三维章节\">＋</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n\n"
+  "errors": [],
+  "components": 20,
+  "stage12Panel": true,
+  "initialKeyframes": 3,
+  "initialGizmo": {
+    "state": {
+      "mode": true,
+      "view": "front",
+      "axis": "x",
+      "handleCount": 3,
+      "dragCount": 0,
+      "patchCount": 0,
+      "trajectoryPoints": 51,
+      "selected": 1,
+      "sceneId": "c658e139-ec2e-4a5a-aca6-6e0153cc7535",
+      "rendererShared": true,
+      "handleScreen": [
+        {
+          "index": 0,
+          "x": 88.8794282817003,
+          "y": 169.690361261959
+        },
+        {
+          "index": 1,
+          "x": 145.31028585914987,
+          "y": 169.690361261959
+        },
+        {
+          "index": 2,
+          "x": 164.1205717182997,
+          "y": 169.690361261959
+        }
+      ],
+      "axisArrowsCount": 3,
+      "tangentHandleCount": 4,
+      "tangentDragCount": 0,
+      "tangentScreen": [
+        {
+          "index": 0,
+          "side": "handleOut",
+          "x": 104.16278554225956,
+          "y": 169.690361261959
+        },
+        {
+          "index": 1,
+          "side": "handleIn",
+          "x": 130.0269285985906,
+          "y": 169.690361261959
+        },
+        {
+          "index": 1,
+          "side": "handleOut",
+          "x": 160.5936431197091,
+          "y": 169.690361261959
+        },
+        {
+          "index": 2,
+          "side": "handleIn",
+          "x": 148.83721445774046,
+          "y": 169.690361261959
+        }
+      ]
+    },
+    "sceneUuid": "c658e139-ec2e-4a5a-aca6-6e0153cc7535",
+    "webgl2": true,
+    "models": 2,
+    "canvasCount": 1
+  },
+  "handleProjection": {
+    "index": 1,
+    "x": 145.31028585914987,
+    "y": 169.690361261959
+  },
+  "frameRect": {
+    "x": 1159,
+    "y": 342.15625,
+    "width": 255,
+    "height": 340
+  },
+  "dragBefore": {
+    "x": 0.8,
+    "y": 0,
+    "z": 5.5
+  },
+  "dragAfter": {
+    "x": 1.8207181402647628,
+    "y": 0,
+    "z": 5.5
+  },
+  "axisConstrainedX": true,
+  "gizmoAfterDrag": {
+    "mode": true,
+    "view": "front",
+    "axis": "x",
+    "handleCount": 3,
+    "dragCount": 7,
+    "patchCount": 7,
+    "trajectoryPoints": 51,
+    "selected": 1,
+    "sceneId": "c658e139-ec2e-4a5a-aca6-6e0153cc7535",
+    "rendererShared": true,
+    "handleScreen": [
+      {
+        "index": 0,
+        "x": 88.8794282817003,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "x": 169.31028585914984,
+        "y": 169.690361261959
+      },
+      {
+        "index": 2,
+        "x": 164.1205717182997,
+        "y": 169.690361261959
+      }
+    ],
+    "axisArrowsCount": 3,
+    "tangentHandleCount": 4,
+    "tangentDragCount": 0,
+    "tangentScreen": [
+      {
+        "index": 0,
+        "side": "handleOut",
+        "x": 104.16278554225956,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "side": "handleIn",
+        "x": 154.0269285985906,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "side": "handleOut",
+        "x": 184.5936431197091,
+        "y": 169.690361261959
+      },
+      {
+        "index": 2,
+        "side": "handleIn",
+        "x": 148.83721445774046,
+        "y": 169.690361261959
+      }
+    ],
+    "dragProjectionCount": 7
+  },
+  "axisView": {
+    "axis": "y",
+    "view": "top",
+    "scene": "c658e139-ec2e-4a5a-aca6-6e0153cc7535",
+    "handles": 3
+  },
+  "tensionAfterEdit": 0.75,
+  "previewAfterUpdates": {
+    "mode": true,
+    "patches": 1,
+    "dragCount": 7,
+    "sceneId": "c658e139-ec2e-4a5a-aca6-6e0153cc7535",
+    "canvas": 1
+  },
+  "reloaded": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 1.8207181402647628,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0.75
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
   ],
-  "components": 20
+  "exportBytes": 909172,
+  "exportScene": {
+    "sceneId": "a6b50af7-4339-4a76-ad72-4f9b287a9042",
+    "models": 2,
+    "webgl2": true,
+    "canvasCount": 1,
+    "stage12Mode": false,
+    "stage12Handles": 0,
+    "stage11Paths": [
+      3,
+      0
+    ],
+    "error": null
+  }
 }

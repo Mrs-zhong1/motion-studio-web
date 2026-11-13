@@ -2,16 +2,16 @@ WebGL software acceptance step: success
 GLB compatibility matrix: success
 Invalid GLB resilience: success
 Shared 3D continuity: success
-Stage10 editable camera: failure
+Stage10 editable camera: success
 Stage11 curve interpolation: success
-Stage11 timeline live WebGL: failure
+Stage11 timeline live WebGL: success
 Stage12 tangent curve: success
-Stage12 real spatial gizmo: failure
+Stage12 real spatial gizmo: success
 Stage13 in/out Bezier math: success
-Stage13 real Three.js handles: failure
-Stage14 stability and project recovery: failure
+Stage13 real Three.js handles: success
+Stage14 stability and project recovery: success
 Stage15 true meshopt fixture: success
-Stage15 true meshopt WebGL: failure
-CI run: 43329167075
-Source SHA: 6f9345325684af05f352561ab3f1a644d0021c0d
+Stage15 true meshopt WebGL: success
+CI run: 43367345614
+Source SHA: 27b70b684177c7d9a88d2f802b40ac4928b0f8e0
 Real hardware GPU / Safari: NOT TESTED

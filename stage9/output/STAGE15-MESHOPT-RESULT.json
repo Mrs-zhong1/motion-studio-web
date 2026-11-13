@@ -1,10 +1,29 @@
 {
-  "pass": false,
+  "pass": true,
   "source": "GitHub Actions Chromium SwiftShader software WebGL",
   "realCompressedFixture": true,
-  "single": {},
-  "shared": {},
-  "errors": [
-    "Traceback (most recent call last):\n  File \"/home/runner/work/motion-studio-web/motion-studio-web/stage9/tests/test_stage15_meshopt.py\", line 19, in <module>\n    ed.locator('.comp[data-id=\"offline-glb-scene\"] button').click()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/sync_api/_generated.py\", line 11045, in click\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/_sync_base.py\", line 124, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/locator.py\", line 222, in click\n    return await self._frame.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/frame.py\", line 587, in click\n    return await self._channel.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/channel_owner.py\", line 387, in finish\n    raise e from None\nplaywright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\".comp[data-id=\\\"offline-glb-scene\\\"] button\")\n    - locator resolved to <button title=\"添加到画布\" aria-label=\"添加 GLB 离线三维章节\">＋</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n\n"
-  ]
+  "single": {
+    "importedBytes": 1288,
+    "webgl2": true,
+    "meshCount": 1,
+    "materialCount": 1,
+    "pbr": true,
+    "visiblePixels": 6,
+    "pixelDifference": 3444,
+    "frames": 6,
+    "error": null
+  },
+  "shared": {
+    "webgl2": true,
+    "models": 2,
+    "meshCounts": [
+      1,
+      2
+    ],
+    "canvas": 1,
+    "visible": 4,
+    "error": null
+  },
+  "errors": [],
+  "componentCount": 20
 }

@@ -4,7 +4,7 @@
   "transition": "fade",
   "sections": [
     {
-      "uid": "section-mwbh59tn-1",
+      "uid": "section-mwehu4wg-1",
       "id": "text-reveal",
       "text": "MOTION IS A LANGUAGE",
       "speed": 85,
@@ -29,29 +29,29 @@
           "locked": false,
           "groupId": "",
           "easing": "smooth",
-          "id": "section-mwbh59tn-2",
-          "kind": "title",
+          "id": "section-mwehu4wh-2",
+          "kind": "caption",
           "enabled": true,
-          "text": "MOTION IS A LANGUAGE",
+          "text": "INDEPENDENT CREATIVE PRACTICE",
           "src": "",
-          "color": "#fff2db",
-          "x": 50,
-          "y": 39,
-          "scale": 124,
+          "color": "#d9ac7d",
+          "x": 18,
+          "y": 16,
+          "scale": 78,
           "rotation": 0,
-          "start": 6,
+          "start": 12,
           "end": 78,
-          "fromX": 0,
+          "fromX": -80,
           "toX": 0,
-          "fromY": 90,
-          "toY": -22,
+          "fromY": 12,
+          "toY": 0,
           "fromOpacity": 0,
-          "toOpacity": 100,
+          "toOpacity": 95,
           "keyframes": [
             {
-              "at": 6,
-              "dx": 0,
-              "dy": 90,
+              "at": 12,
+              "dx": -80,
+              "dy": 12,
               "opacity": 0,
               "scale": 100,
               "rotation": 0,
@@ -60,49 +60,106 @@
             {
               "at": 78,
               "dx": 0,
-              "dy": -22,
-              "opacity": 100,
+              "dy": 0,
+              "opacity": 95,
               "scale": 100,
               "rotation": 0,
               "easing": "smooth"
             }
           ],
           "_selectedFrame": 0
-        },
+        }
+      ],
+      "camera": {
+        "preset": "none",
+        "start": 0,
+        "end": 100,
+        "power": 55,
+        "advanced": false,
+        "path": [
+          {
+            "at": 0,
+            "x": 0,
+            "y": 42,
+            "zoom": 115,
+            "tilt": -5,
+            "opacity": 75
+          },
+          {
+            "at": 50,
+            "x": 0,
+            "y": 0,
+            "zoom": 100,
+            "tilt": 0,
+            "opacity": 100
+          },
+          {
+            "at": 100,
+            "x": 0,
+            "y": -25,
+            "zoom": 108,
+            "tilt": 4,
+            "opacity": 85
+          }
+        ]
+      }
+    },
+    {
+      "uid": "section-mwehu4wh-3",
+      "id": "image-columns",
+      "text": "Fragments of a story",
+      "speed": 85,
+      "depth": 65,
+      "accent": "#dbb48c",
+      "motion": "auto",
+      "height": 460,
+      "camera3d": {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
+      },
+      "cameraPath11": [],
+      "glb": "",
+      "image": "",
+      "layers": [
         {
           "locked": false,
           "groupId": "",
           "easing": "smooth",
-          "id": "section-mwbh59tn-3",
+          "id": "section-mwehu4wh-4",
           "kind": "caption",
           "enabled": true,
-          "text": "CRAFTED IN MOTION",
+          "text": "Fragments of a story",
           "src": "",
-          "color": "#d1f18a",
-          "x": 50,
-          "y": 72,
-          "scale": 85,
+          "color": "#dbb48c",
+          "x": 22,
+          "y": 22,
+          "scale": 72,
           "rotation": 0,
-          "start": 14,
-          "end": 76,
-          "fromX": -80,
+          "start": 8,
+          "end": 70,
+          "fromX": 0,
           "toX": 0,
-          "fromY": 20,
+          "fromY": 46,
           "toY": 0,
           "fromOpacity": 0,
           "toOpacity": 95,
           "keyframes": [
             {
-              "at": 14,
-              "dx": -80,
-              "dy": 20,
+              "at": 8,
+              "dx": 0,
+              "dy": 46,
               "opacity": 0,
               "scale": 100,
               "rotation": 0,
               "easing": "smooth"
             },
             {
-              "at": 76,
+              "at": 70,
               "dx": 0,
               "dy": 0,
               "opacity": 95,
@@ -148,63 +205,7 @@
       }
     },
     {
-      "uid": "section-mwbh59tn-4",
-      "id": "image-columns",
-      "text": "Fragments of a story",
-      "speed": 85,
-      "depth": 65,
-      "accent": "#dbb48c",
-      "motion": "auto",
-      "height": 460,
-      "camera3d": {
-        "x": 0,
-        "y": 0,
-        "z": 5.5,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42
-      },
-      "cameraPath11": [],
-      "glb": "",
-      "image": "",
-      "layers": [],
-      "camera": {
-        "preset": "none",
-        "start": 0,
-        "end": 100,
-        "power": 55,
-        "advanced": false,
-        "path": [
-          {
-            "at": 0,
-            "x": 0,
-            "y": 42,
-            "zoom": 115,
-            "tilt": -5,
-            "opacity": 75
-          },
-          {
-            "at": 50,
-            "x": 0,
-            "y": 0,
-            "zoom": 100,
-            "tilt": 0,
-            "opacity": 100
-          },
-          {
-            "at": 100,
-            "x": 0,
-            "y": -25,
-            "zoom": 108,
-            "tilt": 4,
-            "opacity": 85
-          }
-        ]
-      }
-    },
-    {
-      "uid": "section-mwbh59tn-5",
+      "uid": "section-mwehu4wh-5",
       "id": "pinned-story",
       "text": "THE SPACE BETWEEN MOMENTS",
       "speed": 90,
@@ -260,7 +261,7 @@
       }
     },
     {
-      "uid": "section-mwbh59tn-6",
+      "uid": "section-mwehu4wh-6",
       "id": "stacked-cards",
       "text": "COLLECT / CREATE / REMEMBER",
       "speed": 100,
@@ -316,7 +317,7 @@
       }
     },
     {
-      "uid": "section-mwbh5a14-7",
+      "uid": "section-mwehu5b2-7",
       "id": "offline-glb-scene",
       "text": "A SCULPTURAL MOMENT",
       "speed": 100,
@@ -356,7 +357,7 @@
           "at": 50,
           "tension": 0,
           "handleOut": {
-            "x": 1.7132480627757944
+            "x": 1.7132480627757947
           },
           "handleIn": {
             "y": 1.6
@@ -412,7 +413,7 @@
       }
     },
     {
-      "uid": "section-mwbh5c54-8",
+      "uid": "section-mwehu7ol-8",
       "id": "offline-glb-scene",
       "text": "A SCULPTURAL MOMENT",
       "speed": 100,
