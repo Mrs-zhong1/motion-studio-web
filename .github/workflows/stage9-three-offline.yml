@@ -95,7 +95,7 @@ jobs:
         continue-on-error: true
         run: python tests/test_stage15_meshopt.py
       - name: Commit generated HTML, actual browser evidence, and manifests to repository
-        if: always()
+        if: always() && github.ref == 'refs/heads/main'
         working-directory: .
         run: |
           mkdir -p stage9/output

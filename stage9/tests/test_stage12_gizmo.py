@@ -12,6 +12,9 @@ try:
   ed=browser.new_page(viewport={'width':1440,'height':960},accept_downloads=True)
   ed.on('pageerror',lambda e:res['errors'].append('editor: '+str(e)+' | '+str(e.stack)))
   ed.set_content(HTML.read_text(encoding='utf8'),wait_until='domcontentloaded')
+  ed.locator('#resumeProject').click()
+  ed.locator('#modeToggle').click()
+  ed.locator('[data-asset-tier-button="l3"]').click()
   res['components']=ed.evaluate('registry.length')
   for fixture in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
    ed.locator('.comp[data-id="offline-glb-scene"] button').click()

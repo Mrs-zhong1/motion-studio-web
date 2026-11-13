@@ -11,6 +11,9 @@ try:
   page=b.new_page(viewport={'width':1440,'height':960},accept_downloads=True)
   page.on('pageerror',lambda e:res['errors'].append('editor '+str(e)))
   page.set_content((R/'Motion-Studio-Stage13-Bezier-OFFLINE.html').read_text(encoding='utf8'),wait_until='domcontentloaded')
+  page.locator('#resumeProject').click()
+  page.locator('#modeToggle').click()
+  page.locator('[data-asset-tier-button="l3"]').click()
   for name in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
    page.locator('.comp[data-id="offline-glb-scene"] button').click()
    page.locator('#stage9GlbInput').set_input_files(str(R.parent/name))

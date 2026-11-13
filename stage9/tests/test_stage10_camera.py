@@ -12,11 +12,14 @@ try:
   page=browser.new_page(viewport={'width':1330,'height':900},accept_downloads=True)
   page.on('pageerror',lambda e:res['errors'].append('editor: '+str(e)+' | STACK: '+str(e.stack)))
   page.set_content(HTML.read_text(encoding='utf-8'),wait_until='domcontentloaded')
+  page.locator('#resumeProject').click()
+  page.locator('#modeToggle').click()
+  page.locator('[data-asset-tier-button="l3"]').click()
   res['componentCount']=page.evaluate('registry.length')
   for fixture in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
    page.locator('.comp[data-id="offline-glb-scene"] button').click()
    page.locator('#stage9GlbInput').set_input_files(str(ROOT.parent/fixture))
-   page.wait_for_timeout(150)
+   page.wait_for_function("project.sections.filter(s=>s.id==='offline-glb-scene'&&s.glb.length>1000).length===project.sections.filter(s=>s.id==='offline-glb-scene').length")
   res['glbCount']=page.evaluate("project.sections.filter(s=>s.id==='offline-glb-scene'&&s.glb).length")
   res['controlsVisible']=page.locator('#stage10CameraPanel [data-camera3d]').count()
   # Edit second GLB chapter; every property must persist in the section state.

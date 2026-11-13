@@ -14,6 +14,9 @@ try:
   editor=b.new_page(viewport={'width':1380,'height':950},accept_downloads=True)
   editor.on('pageerror',lambda e:result['errors'].append('editor: '+str(e)+'\n'+str(e.stack)))
   editor.set_content(HTML.read_text(encoding='utf8'),wait_until='domcontentloaded')
+  editor.locator('#resumeProject').click()
+  editor.locator('#modeToggle').click()
+  editor.locator('[data-asset-tier-button="l3"]').click()
   result['componentCount']=editor.evaluate('registry.length')
   for fixture in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
    editor.locator('.comp[data-id="offline-glb-scene"] button').click()
