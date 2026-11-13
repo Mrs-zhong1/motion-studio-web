@@ -14,15 +14,15 @@
       "redone": 1.3,
       "passed": true
     },
-    "exportBytes": 5091127,
+    "exportBytes": 5091144,
     "sharedStress": {
       "webgl2": true,
       "canvas": 1,
       "models": 2,
-      "frames": 137,
+      "frames": 129,
       "error": null,
       "contextLost": false,
-      "sceneId": "08bab5da-a767-4633-83a9-4963220484e3"
+      "sceneId": "fbbb7f88-2ee0-408c-8a6b-2b2d306993a9"
     }
   },
   "errors": []

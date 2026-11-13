@@ -7,7 +7,7 @@
   "errors": [],
   "count": 20,
   "uploadedModelCount": 2,
-  "exportBytes": 908918,
+  "exportBytes": 908935,
   "initial": {
     "status": {
       "mode": "one-shared-three-scene",
@@ -26,7 +26,7 @@
       "renderFrames": 1,
       "visiblePixels": 4,
       "drawSamples": 1,
-      "drawTotalMs": 19.9,
+      "drawTotalMs": 22.3,
       "cameraSamples": [
         {
           "x": 0,
@@ -42,7 +42,7 @@
           "stage11Custom": false
         }
       ],
-      "sceneUuid": "27ac70c6-c290-42be-a01f-880ce30b22f3",
+      "sceneUuid": "2550162e-1e30-4ef9-a6dd-e6bdb5eb03b5",
       "contextLost": false,
       "animationClips": 1,
       "cameraKeyframeCount": 2,
@@ -146,10 +146,10 @@
       "near3d": true
     },
     {
-      "focus": 2531,
+      "focus": 2499,
       "segment": 0,
-      "blend": 0.9811461715089997,
-      "x": 3.139667748828799,
+      "blend": 0.9384159997328841,
+      "x": 3.0029311991452294,
       "y": 0,
       "z": 5.5,
       "yaw": 0,
@@ -157,7 +157,7 @@
       "roll": 0,
       "fov": 42,
       "stage11Custom": false,
-      "progress": 0.9184782608695652,
+      "progress": 0.8489130434782609,
       "near3d": true
     }
   ],
@@ -175,10 +175,10 @@
       4,
       5
     ],
-    "renderFrames": 39,
+    "renderFrames": 37,
     "visiblePixels": 10,
-    "drawSamples": 39,
-    "drawTotalMs": 89.6,
+    "drawSamples": 37,
+    "drawTotalMs": 79.6,
     "cameraSamples": [
       {
         "x": 0,
@@ -246,12 +246,12 @@
         "stage11Custom": false
       },
       {
-        "x": 0.278,
+        "x": 0.1468,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.0869,
-        "focus": 2192,
+        "blend": 0.0459,
+        "focus": 2168,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -571,12 +571,12 @@
         "stage11Custom": false
       },
       {
-        "x": 2.7271,
+        "x": 2.7348,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.8522,
-        "focus": 2457,
+        "blend": 0.8546,
+        "focus": 2458,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -584,12 +584,12 @@
         "stage11Custom": false
       },
       {
-        "x": 2.8772,
+        "x": 2.8902,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.8991,
-        "focus": 2478,
+        "blend": 0.9032,
+        "focus": 2480,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -597,12 +597,12 @@
         "stage11Custom": false
       },
       {
-        "x": 3.0388,
+        "x": 2.9581,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.9496,
-        "focus": 2506,
+        "blend": 0.9244,
+        "focus": 2491,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -610,12 +610,12 @@
         "stage11Custom": false
       },
       {
-        "x": 3.0887,
+        "x": 2.981,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.9652,
-        "focus": 2517,
+        "blend": 0.9316,
+        "focus": 2495,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -623,12 +623,12 @@
         "stage11Custom": false
       },
       {
-        "x": 3.116,
+        "x": 2.9975,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.9737,
-        "focus": 2524,
+        "blend": 0.9367,
+        "focus": 2498,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -636,12 +636,12 @@
         "stage11Custom": false
       },
       {
-        "x": 3.13,
+        "x": 3.0029,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.9781,
-        "focus": 2528,
+        "blend": 0.9384,
+        "focus": 2499,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -649,38 +649,12 @@
         "stage11Custom": false
       },
       {
-        "x": 3.1365,
+        "x": 3.0029,
         "y": 0,
         "z": 5.5,
         "segment": 0,
-        "blend": 0.9802,
-        "focus": 2530,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 3.1397,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.9811,
-        "focus": 2531,
-        "yaw": 0,
-        "pitch": 0,
-        "roll": 0,
-        "fov": 42,
-        "stage11Custom": false
-      },
-      {
-        "x": 3.1397,
-        "y": 0,
-        "z": 5.5,
-        "segment": 0,
-        "blend": 0.9811,
-        "focus": 2531,
+        "blend": 0.9384,
+        "focus": 2499,
         "yaw": 0,
         "pitch": 0,
         "roll": 0,
@@ -688,7 +662,7 @@
         "stage11Custom": false
       }
     ],
-    "sceneUuid": "27ac70c6-c290-42be-a01f-880ce30b22f3",
+    "sceneUuid": "2550162e-1e30-4ef9-a6dd-e6bdb5eb03b5",
     "contextLost": false,
     "animationClips": 1,
     "cameraKeyframeCount": 2,

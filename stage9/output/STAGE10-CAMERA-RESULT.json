@@ -37,7 +37,7 @@
     "roll": 12,
     "fov": 59
   },
-  "exportBytes": 908926,
+  "exportBytes": 908943,
   "sharedStart": {
     "cameraKeys": [
       {
@@ -59,7 +59,7 @@
         "fov": 59
       }
     ],
-    "sceneId": "1240f422-33b4-4e38-87ec-7e1ba6d0a491",
+    "sceneId": "e4eb323f-6020-4c60-adb2-81ee06db307e",
     "loadedModels": 2,
     "context": true,
     "error": null,
@@ -127,24 +127,24 @@
       "near3d": true
     },
     {
-      "focus": 2491,
+      "focus": 2459,
       "segment": 0,
-      "blend": 0.9244097122339113,
-      "x": 4.344725647499383,
-      "y": 0.7395277697871291,
-      "z": 7.071496510797649,
-      "yaw": 24.034652518081696,
-      "pitch": -12.941735971274758,
-      "roll": 11.092916546806936,
-      "fov": 57.7149651079765,
+      "blend": 0.8569832307676503,
+      "x": 4.027821184607957,
+      "y": 0.6855865846141203,
+      "z": 6.956871492305005,
+      "yaw": 22.281563999958905,
+      "pitch": -11.997765230747104,
+      "roll": 10.283798769211803,
+      "fov": 56.56871492305005,
       "stage11Custom": false,
-      "progress": 0.8315217391304348,
+      "progress": 0.7619565217391304,
       "near3d": true
     }
   ],
   "sharedEnd": {
-    "sceneId": "1240f422-33b4-4e38-87ec-7e1ba6d0a491",
-    "frames": 32,
+    "sceneId": "e4eb323f-6020-4c60-adb2-81ee06db307e",
+    "frames": 34,
     "pixels": 10,
     "contextLost": false,
     "error": null

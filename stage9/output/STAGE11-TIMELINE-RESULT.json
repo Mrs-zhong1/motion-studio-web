@@ -21,7 +21,7 @@
     "x": 1.761275809151786
   },
   "previewBefore": {
-    "uuid": "a50aba58-9df1-4584-a89c-4bb8ad6c35e3",
+    "uuid": "4f3a01d2-83cb-4813-a935-c3290ff99a4f",
     "count": 0,
     "paths": [
       3,
@@ -32,7 +32,7 @@
     "canvas": 1
   },
   "previewAfter": {
-    "uuid": "a50aba58-9df1-4584-a89c-4bb8ad6c35e3",
+    "uuid": "4f3a01d2-83cb-4813-a935-c3290ff99a4f",
     "count": 1,
     "paths": [
       3,
@@ -113,7 +113,7 @@
       "tension": 0
     }
   ],
-  "exportBytes": 909158,
+  "exportBytes": 909175,
   "exportCameraSamples": [
     {
       "focus": 2109,
@@ -176,31 +176,31 @@
       "near3d": true
     },
     {
-      "focus": 2491,
+      "focus": 2459,
       "segment": 0,
-      "blend": 0.9244097122339113,
-      "x": 4.4009450511629815,
-      "y": 0.577133588805786,
-      "z": 6.242028899893153,
-      "yaw": 11.542671776115721,
-      "pitch": -4.946859332621023,
-      "roll": 2.8856679440289303,
-      "fov": 52.718195220678886,
+      "blend": 0.8569832307676503,
+      "x": 4.8242739243445385,
+      "y": 0.8327710343552228,
+      "z": 6.5707056155995724,
+      "yaw": 16.65542068710446,
+      "pitch": -7.138037437330482,
+      "roll": 4.163855171776115,
+      "fov": 57.46574778088271,
       "stage11Custom": true,
-      "progress": 0.8315217391304348,
+      "progress": 0.7619565217391304,
       "near3d": true
     }
   ],
   "exportShared": {
-    "id": "ef830d7a-2069-49c9-95c5-726768521b0b",
+    "id": "25b3866b-4882-4a25-a59e-452bad985be9",
     "webgl": true,
     "models": 2,
     "pathCounts": [
       3,
       0
     ],
-    "frames": 33,
-    "pixels": 5,
+    "frames": 35,
+    "pixels": 6,
     "error": null,
     "canvas": 1
   }
