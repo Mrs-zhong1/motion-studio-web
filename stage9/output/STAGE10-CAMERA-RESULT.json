@@ -59,7 +59,7 @@
         "fov": 59
       }
     ],
-    "sceneId": "e45db8ea-2117-4948-abb6-417c7d299eca",
+    "sceneId": "1240f422-33b4-4e38-87ec-7e1ba6d0a491",
     "loadedModels": 2,
     "context": true,
     "error": null,
@@ -143,8 +143,8 @@
     }
   ],
   "sharedEnd": {
-    "sceneId": "e45db8ea-2117-4948-abb6-417c7d299eca",
-    "frames": 35,
+    "sceneId": "1240f422-33b4-4e38-87ec-7e1ba6d0a491",
+    "frames": 32,
     "pixels": 10,
     "contextLost": false,
     "error": null
