@@ -1,9 +1,256 @@
 {
-  "pass": false,
+  "pass": true,
   "environment": "GitHub Actions Chromium SwiftShader software WebGL",
   "macHardwareTested": false,
   "safariTested": false,
-  "errors": [
-    "Traceback (most recent call last):\n  File \"/home/runner/work/motion-studio-web/motion-studio-web/stage9/tests/test_stage13_bezier.py\", line 15, in <module>\n    page.locator('.comp[data-id=\"offline-glb-scene\"] button').click()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/sync_api/_generated.py\", line 11045, in click\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/_sync_base.py\", line 124, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/locator.py\", line 222, in click\n    return await self._frame.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/frame.py\", line 587, in click\n    return await self._channel.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\nplaywright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\".comp[data-id=\\\"offline-glb-scene\\\"] button\")\n    - locator resolved to <button title=\"添加到画布\" aria-label=\"添加 GLB 离线三维章节\">＋</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n\n"
-  ]
+  "errors": [],
+  "components": 20,
+  "beforeGizmo": {
+    "scene": "2e8b2a65-fe72-4911-bb8a-fb337e0a16a3",
+    "tangents": 4,
+    "handles": 3,
+    "tangentScreen": [
+      {
+        "index": 0,
+        "side": "handleOut",
+        "x": 104.16278554225956,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "side": "handleIn",
+        "x": 130.0269285985906,
+        "y": 169.690361261959
+      },
+      {
+        "index": 1,
+        "side": "handleOut",
+        "x": 160.5936431197091,
+        "y": 169.690361261959
+      },
+      {
+        "index": 2,
+        "side": "handleIn",
+        "x": 148.83721445774046,
+        "y": 169.690361261959
+      }
+    ],
+    "webgl": true
+  },
+  "beforePath": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "afterPath": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0,
+      "handleOut": {
+        "x": 1.7132480627757947
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "tangentDrag": {
+    "count": 7,
+    "scene": "2e8b2a65-fe72-4911-bb8a-fb337e0a16a3",
+    "canvas": 1
+  },
+  "edited": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0,
+      "handleOut": {
+        "x": 1.7132480627757947
+      },
+      "handleIn": {
+        "y": 1.6
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "restored": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 0,
+      "tension": 0
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 50,
+      "tension": 0,
+      "handleIn": {
+        "y": 1.6
+      },
+      "handleOut": {
+        "x": 1.7132480627757947
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "at": 100,
+      "tension": 0
+    }
+  ],
+  "exportBytes": 909212,
+  "cameraSamples": [
+    {
+      "focus": 2224,
+      "segment": 0,
+      "blend": 0.15747459573025396,
+      "x": 1.0060907208021699,
+      "y": 0.602597304183447,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "stage11Custom": true,
+      "progress": 0.2510869565217391,
+      "near3d": true
+    },
+    {
+      "focus": 2339,
+      "segment": 0,
+      "blend": 0.5016304322141859,
+      "x": 2.4163346597902224,
+      "y": 0,
+      "z": 5.499999999999998,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 41.99999999999999,
+      "stage11Custom": true,
+      "progress": 0.5010869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2454,
+      "segment": 0,
+      "blend": 0.8449710513068136,
+      "x": 3.8413941611572047,
+      "y": 0,
+      "z": 5.5,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "fov": 42,
+      "stage11Custom": true,
+      "progress": 0.7510869565217392,
+      "near3d": true
+    }
+  ],
+  "exportScene": {
+    "webgl": true,
+    "models": 2,
+    "scene": "22822f74-e227-475d-9d22-8b8b8df40534",
+    "error": null,
+    "gizmo": false,
+    "canvas": 1
+  }
 }

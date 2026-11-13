@@ -1,10 +1,152 @@
 {
-  "pass": false,
+  "pass": true,
   "source": "Stage10 bundled editor GitHub Actions Chromium SwiftShader",
   "hardwareGpuTested": false,
   "safariTested": false,
-  "errors": [
-    "Traceback (most recent call last):\n  File \"/home/runner/work/motion-studio-web/motion-studio-web/stage9/tests/test_stage10_camera.py\", line 17, in <module>\n    page.locator('.comp[data-id=\"offline-glb-scene\"] button').click()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/sync_api/_generated.py\", line 11045, in click\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/_sync_base.py\", line 124, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/locator.py\", line 222, in click\n    return await self._frame.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/playwright/_impl/frame.py\", line 587, in click\n    return await self._channel.click(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\nplaywright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\".comp[data-id=\\\"offline-glb-scene\\\"] button\")\n    - locator resolved to <button title=\"添加到画布\" aria-label=\"添加 GLB 离线三维章节\">＋</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n\n"
+  "errors": [],
+  "componentCount": 20,
+  "glbCount": 2,
+  "controlsVisible": 7,
+  "edited": {
+    "x": 1.5,
+    "y": 0.8,
+    "z": 7.2,
+    "yaw": 26,
+    "pitch": -14,
+    "roll": 12,
+    "fov": 59
+  },
+  "previewHasSharedMarkup": true,
+  "previewGpuStates": [
+    {
+      "models": 2,
+      "webgl2": true,
+      "error": null,
+      "canvasCount": 1,
+      "frames": 1
+    }
   ],
-  "componentCount": 20
+  "previewGpuLoaded": true,
+  "jsonSaved": true,
+  "reloaded": {
+    "x": 1.5,
+    "y": 0.8,
+    "z": 7.2,
+    "yaw": 26,
+    "pitch": -14,
+    "roll": 12,
+    "fov": 59
+  },
+  "exportBytes": 908927,
+  "sharedStart": {
+    "cameraKeys": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 5.5,
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "fov": 42
+      },
+      {
+        "x": 1.5,
+        "y": 0.8,
+        "z": 7.2,
+        "yaw": 26,
+        "pitch": -14,
+        "roll": 12,
+        "fov": 59
+      }
+    ],
+    "sceneId": "7ff6ee8f-28e0-4b4c-8851-327cc55fa012",
+    "loadedModels": 2,
+    "context": true,
+    "error": null,
+    "canvasCount": 1
+  },
+  "cameraSamples": [
+    {
+      "focus": 2109,
+      "segment": 0,
+      "blend": 3.5418550176707494e-06,
+      "x": 1.664671858305252e-05,
+      "y": 2.8334840141365996e-06,
+      "z": 5.50000602115353,
+      "yaw": 9.208823045943949e-05,
+      "pitch": -4.9585970247390494e-05,
+      "roll": 4.250226021204899e-05,
+      "fov": 42.0000602115353,
+      "stage11Custom": false,
+      "progress": 0.0010869565217391304,
+      "near3d": true
+    },
+    {
+      "focus": 2224,
+      "segment": 0,
+      "blend": 0.15747459573025396,
+      "x": 0.7401305999321937,
+      "y": 0.12597967658420317,
+      "z": 5.767706812741432,
+      "yaw": 4.094339488986603,
+      "pitch": -2.2046443402235556,
+      "roll": 1.8896951487630476,
+      "fov": 44.677068127414316,
+      "stage11Custom": false,
+      "progress": 0.2510869565217391,
+      "near3d": true
+    },
+    {
+      "focus": 2339,
+      "segment": 0,
+      "blend": 0.5016304322141859,
+      "x": 2.357663031406674,
+      "y": 0.40130434577134877,
+      "z": 6.352771734764116,
+      "yaw": 13.042391237568834,
+      "pitch": -7.022826050998603,
+      "roll": 6.019565186570231,
+      "fov": 50.52771734764116,
+      "stage11Custom": false,
+      "progress": 0.5010869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2454,
+      "segment": 0,
+      "blend": 0.8449710513068136,
+      "x": 3.971363941142024,
+      "y": 0.675976841045451,
+      "z": 6.936450787221583,
+      "yaw": 21.969247333977155,
+      "pitch": -11.82959471829539,
+      "roll": 10.139652615681763,
+      "fov": 56.36450787221583,
+      "stage11Custom": false,
+      "progress": 0.7510869565217392,
+      "near3d": true
+    },
+    {
+      "focus": 2491,
+      "segment": 0,
+      "blend": 0.9244097122339113,
+      "x": 4.344725647499383,
+      "y": 0.7395277697871291,
+      "z": 7.071496510797649,
+      "yaw": 24.034652518081696,
+      "pitch": -12.941735971274758,
+      "roll": 11.092916546806936,
+      "fov": 57.7149651079765,
+      "stage11Custom": false,
+      "progress": 0.8315217391304348,
+      "near3d": true
+    }
+  ],
+  "sharedEnd": {
+    "sceneId": "7ff6ee8f-28e0-4b4c-8851-327cc55fa012",
+    "frames": 31,
+    "pixels": 10,
+    "contextLost": false,
+    "error": null
+  }
 }
