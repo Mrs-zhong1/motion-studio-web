@@ -59,6 +59,7 @@ def test_product_restructure():
             frame = page.locator("#templatePreviewFrame").content_frame
             frame.locator("section.section").first.wait_for()
             assert frame.locator("section.section").count() >= 4
+            assert not frame.locator("section.section .badge").first.is_visible()
             assert frame.locator("html").evaluate("el => el.scrollHeight > innerHeight")
             capture(page, "immersive-preview")
             frame.locator(".page-head").hover()
@@ -92,6 +93,7 @@ def test_product_restructure():
             assert page.locator("#chapterList [data-chapter-id]").count() == page.evaluate(
                 "project.sections.length"
             )
+            assert not page.locator("#sections .section .badge").first.is_visible()
             capture(page, "visual-editor")
             assert page.locator("#chapterList .chapter-thumb[data-effect]").count() == 5
             before_order = page.evaluate("project.sections.map(s => s.uid)")
