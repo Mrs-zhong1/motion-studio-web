@@ -3,12 +3,11 @@ from pathlib import Path
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from playwright.sync_api import sync_playwright
-import base64
 import threading
 
 ROOT = Path(__file__).resolve().parents[1]
 EDITOR = ROOT / "Motion-Studio-Unified-Editor.html"
-TINY_PNG = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==")
+DEMO_JPEG = (ROOT / 'template-thumbnails' / 'editorial.jpg').read_bytes()
 
 def test_u1_u4_regression():
     server = ThreadingHTTPServer(("127.0.0.1",0),partial(SimpleHTTPRequestHandler,directory=str(ROOT)))
@@ -20,7 +19,7 @@ def test_u1_u4_regression():
             page = browser.new_page(viewport={"width":1440,"height":900})
             errors = []
             page.on("pageerror",lambda e:errors.append(str(e)))
-            page.route("https://images.unsplash.com/**",lambda route: route.fulfill(status=200,body=TINY_PNG,content_type="image/png",headers={"access-control-allow-origin":"*"}))
+            page.route("https://images.unsplash.com/**",lambda route: route.fulfill(status=200,body=DEMO_JPEG,content_type="image/jpeg",headers={"access-control-allow-origin":"*"}))
             page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
             assert page.locator("#discoveryView").is_visible()
             assert page.locator("[data-template-card]").count()==8
@@ -29,7 +28,7 @@ def test_u1_u4_regression():
             page.locator("#templatePreviewFrame").wait_for(state="attached")
             page.locator("#previewUse").click()
             page.wait_for_function("() => project.templateId==='editorial'")
-            assert page.evaluate("project.sections[0].image.startsWith('data:image/jpeg;base64,')")
+            assert page.evaluate("project.sections[0].image.startsWith('data:image/jpeg;base64,')"), page.evaluate("({has:templatePhotoCache.has('editorial'),sizes:templatePhotoCache.get('editorial')?.map(x=>x.length)})")
             assert page.evaluate("registry.length")==20
             assert page.locator("#editorTimeline").evaluate("(e)=>e.classList.contains('collapsed')")
             page.locator("#backToLibrary").click()
