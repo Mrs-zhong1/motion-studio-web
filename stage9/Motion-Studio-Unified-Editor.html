@@ -307,39 +307,53 @@ function templateLayers(index,entry,templateId='editorial'){
  if(index===1&&['editorial','architecture','fashion','gallery'].includes(templateId))return [{kind:'caption',text:String(entry.text||'').split('/')[0].trim(),x:templateId==='fashion'?74:22,y:22,scale:72,color:entry.accent||'#d9ff67',fromY:46,toY:0,start:8,end:70,fromOpacity:0,toOpacity:95}];
  return [];
 }
+// Demo photography is fetched only when previewing/using a template, then stored
+// as inline JPEG. Online assets are provisional; licensing and local bundling remain release gates.
 const templatePhotoCache=new Map();
 const templatePhotoPending=new Map();
+const templateExtraPhotos={
+ 'editorial':['photo-1524504388940-b1c1722653e1','photo-1508214751196-bcfd4ca60f91'],
+ 'product-3d':['photo-1546435770-a3e426bf472b','photo-1484704849700-f032a568e944'],
+ 'cinematic':['photo-1464822759023-fed622ff2c3b','photo-1500534623283-312aade485b7'],
+ 'architecture':['photo-1600566753190-17f0baa2a6c3','photo-1600585154340-be6161a56a0c'],
+ 'agency':['photo-1561070791-2526d30994b5','photo-1503602642458-232111445657'],
+ 'fashion':['photo-1490481651871-ab68de25d43d','photo-1515886657613-9f3515b0c78f'],
+ 'gallery':['photo-1561214115-f2f134cc4912','photo-1549490349-8643362247b5'],
+ 'saas':['photo-1460925895917-afdab827c52f','photo-1556761175-b413da4baf72']
+};
+async function photoToInline(url){
+ try{
+   const response=await fetch(url,{mode:'cors',cache:'force-cache'});
+   if(!response.ok)throw Error('image HTTP '+response.status);
+   const blob=await response.blob();
+   if(!blob.type.startsWith('image/'))throw Error('invalid image');
+   const image=await createImageBitmap(blob);
+   const factor=Math.min(1,840/Math.max(image.width,image.height));
+   const canvas=document.createElement('canvas');
+   canvas.width=Math.max(1,Math.round(image.width*factor));
+   canvas.height=Math.max(1,Math.round(image.height*factor));
+   canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+   image.close?.();
+   const data=canvas.toDataURL('image/jpeg',.64);
+   return data.length<1500000?data:'';
+ }catch(err){console.warn('Demo asset unavailable:',url,err);return ''}
+}
 async function ensureTemplatePhoto(id){
  if(templatePhotoCache.has(id))return templatePhotoCache.get(id);
  if(templatePhotoPending.has(id))return templatePhotoPending.get(id);
- const url=templateThumbnailImages[id];if(!url)return '';
- const task=(async()=>{
-   try{
-     const response=await fetch(url,{mode:'cors',cache:'force-cache'});
-     if(!response.ok)throw Error('photo '+response.status);
-     const blob=await response.blob();
-     if(!blob.type.startsWith('image/'))throw Error('invalid photo');
-     const image=await createImageBitmap(blob);
-     const factor=Math.min(1,900/Math.max(image.width,image.height));
-     const canvas=document.createElement('canvas');
-     canvas.width=Math.round(image.width*factor);
-     canvas.height=Math.round(image.height*factor);
-     canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
-     image.close?.();
-     const data=canvas.toDataURL('image/jpeg',.68);
-     const result=data.length<1500000?data:'';
-     templatePhotoCache.set(id,result);
-     return result;
-   }catch(err){console.warn('Template photo unavailable:',id,err);templatePhotoCache.set(id,'');return ''}
- })();
- templatePhotoPending.set(id,task);
- try{return await task}finally{templatePhotoPending.delete(id)}
+ const primary=templateThumbnailImages[id];
+ const extras=(templateExtraPhotos[id]||[]).map(photo=>`https://images.unsplash.com/${photo}?w=1000&q=75`);
+ const job=Promise.all([primary,...extras].map(url=>url?photoToInline(url):Promise.resolve('')))
+   .then(photos=>{templatePhotoCache.set(id,photos);return photos});
+ templatePhotoPending.set(id,job);
+ try{return await job}finally{templatePhotoPending.delete(id)}
 }
 function createProjectFromTemplate(id){
  const tpl=templateSets[id]||templateCatalog[0];
+ const photos=templatePhotoCache.get(id)||[];
  return {schema:'motion-studio-composition-v1',templateId:tpl.id,title:tpl.name,transition:tpl.id==='cinematic'?'veil':'fade',
  sections:tpl.sections.map((entry,index)=>normSection({...entry,
- image:index===0?(templatePhotoCache.get(tpl.id)||entry.image||''):entry.image,
+ image:photos[index]||entry.image||'',
  layers:Array.isArray(entry.layers)?entry.layers:templateLayers(index,entry,tpl.id)}))};
 }
 function currentLayer(){const s=project.sections.find(x=>x.uid===active);return s?.layers.find(x=>x.id===activeLayer)||null}
