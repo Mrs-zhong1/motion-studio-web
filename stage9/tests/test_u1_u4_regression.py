@@ -81,6 +81,54 @@ def test_u1_u4_regression():
             exported = page.evaluate("exportDocument()")
             assert exported.count("data:image/jpeg;base64,")>=3
 
+            # R4: a newly created Product template must contain a real binary glTF
+            # model, not merely the fallback cube or an empty iframe.
+            binary_model = page.evaluate("""() => {
+                const doc = createProjectFromTemplate('product-3d');
+                const scene = doc.sections.find(s=>s.id==='offline-glb-scene');
+                const b = atob(scene.glb || '');
+                const header = Array.from(b.slice(0,12),x=>x.charCodeAt(0));
+                return {bytes:b.length,magic:header.slice(0,4),version:header.slice(4,8),
+                    embedded:exportDocument().includes('data:image/jpeg;base64,')};
+            }""")
+            assert binary_model["bytes"] > 600
+            assert binary_model["magic"] == [103,108,84,70], binary_model
+            assert binary_model["version"] == [2,0,0,0], binary_model
+            page.locator("#backToLibrary").click()
+            page.locator("[data-template-card='product-3d']").click()
+            page.wait_for_function("() => templatePhotoCache.has('product-3d')")
+            scene_frame = page.frame_locator("#templatePreviewFrame").frame_locator('section[data-index="1"] iframe')
+            scene_frame.locator("#view").wait_for(timeout=30000)
+            scene_frame.locator("#status").wait_for(timeout=30000)
+            scene_frame.locator("#stats").wait_for(timeout=30000)
+            page.wait_for_function("""() => {
+                const frame=document.querySelector('#templatePreviewFrame')?.contentDocument
+                  ?.querySelector('section[data-index="1"] iframe')?.contentWindow;
+                return frame?.MotionStudio3DLab?.getStatus()?.vertices >= 100;
+            }""",timeout=30000)
+            before_drag = scene_frame.evaluate("() => window.MotionStudio3DLab.getStatus()")
+            assert before_drag["triangles"] >= 50, before_drag
+            assert before_drag["vertices"] >= 100, before_drag
+            assert before_drag["frames"] > 0, before_drag
+            scene_frame.locator("#view").dispatch_event("pointerdown",{
+                "pointerId":1,"pointerType":"mouse","clientX":150,"clientY":160,
+                "buttons":1,"bubbles":True
+            })
+            scene_frame.locator("#view").dispatch_event("pointermove",{
+                "pointerId":1,"pointerType":"mouse","clientX":260,"clientY":190,
+                "buttons":1,"bubbles":True
+            })
+            scene_frame.locator("#view").dispatch_event("pointerup",{
+                "pointerId":1,"pointerType":"mouse","clientX":260,"clientY":190,
+                "buttons":0,"bubbles":True
+            })
+            # A running renderer is required; software canvas2d fallback is disclosed
+            # separately from WebGL2 and is not counted as hardware GPU validation.
+            after_drag = scene_frame.evaluate("() => window.MotionStudio3DLab.getStatus()")
+            assert after_drag["frames"] >= before_drag["frames"]
+            assert after_drag["engine"] in ("WebGL2","Canvas2D","webgl2","canvas2d"), after_drag
+            page.locator("#previewClose").click()
+
             assert page.evaluate("registry.length")==20
             assert page.locator("#editorTimeline").evaluate("(e)=>e.classList.contains('collapsed')")
             page.locator("#backToLibrary").click()
