@@ -59,7 +59,7 @@ try:
         page.locator("[data-asset-tier-button='l3']").click()
         check("all_components_in_library",page.locator("#componentList .comp").count()==20)
         first_id=page.evaluate("registry[0].id")
-        page.locator("#componentList .comp").first.locator("button").click()
+        page.locator("#componentList .comp").first.locator(".component-add-trigger").click()
         check("component_add_via_ui",page.evaluate("(id)=>project.sections.length===1 && project.sections[0].id===id",first_id))
         # A newly added section initially has no .section-art node. Image upload must create it.
         import base64
