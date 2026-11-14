@@ -99,8 +99,8 @@ def test_u1_u4_regression():
             page.wait_for_function("() => templatePhotoCache.has('product-3d')")
             scene_frame = page.frame_locator("#templatePreviewFrame").frame_locator('section[data-index="1"] iframe')
             scene_frame.locator("#view").wait_for(timeout=30000)
-            scene_frame.locator("#status").wait_for(timeout=30000)
-            scene_frame.locator("#stats").wait_for(timeout=30000)
+            scene_frame.locator("#status").wait_for(state="attached",timeout=30000)
+            scene_frame.locator("#stats").wait_for(state="attached",timeout=30000)
             for attempt in range(50):
                 scene_status = scene_frame.locator("#view").evaluate(
                     "el => window.MotionStudio3DLab?.getStatus() || null")
