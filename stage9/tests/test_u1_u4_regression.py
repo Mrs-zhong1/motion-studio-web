@@ -56,6 +56,28 @@ def test_u1_u4_regression():
             page.wait_for_function("() => document.querySelector('#projectAssetList .asset-entry img')?.getAttribute('src')===project.sections[0].image")
             assert page.evaluate("project.sections[0].imageFocusX")==72
 
+            # Each preconfigured template must have image content for every section;
+            # do not mutate the user's active project while checking other templates.
+            completeness = page.evaluate("""async () => {
+                const before = JSON.stringify(project);
+                const checks = [];
+                for (const t of templateCatalog) {
+                    await ensureTemplatePhoto(t.id);
+                    const doc = createProjectFromTemplate(t.id);
+                    checks.push({
+                        id: t.id,
+                        total: doc.sections.length,
+                        images: doc.sections.filter(s=>s.image.startsWith('data:image/jpeg;base64,')).length
+                    });
+                }
+                return {checks,unchanged:before===JSON.stringify(project)};
+            }""")
+            assert completeness["unchanged"], completeness
+            assert len(completeness["checks"])==8
+            assert all(t["total"]>=3 and t["images"]==t["total"] for t in completeness["checks"]), completeness
+            exported = page.evaluate("exportDocument()")
+            assert exported.count("data:image/jpeg;base64,")>=3
+
             assert page.evaluate("registry.length")==20
             assert page.locator("#editorTimeline").evaluate("(e)=>e.classList.contains('collapsed')")
             page.locator("#backToLibrary").click()
