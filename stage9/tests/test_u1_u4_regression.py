@@ -109,10 +109,22 @@ def test_u1_u4_regression():
                 page.wait_for_timeout(300)
             else:
                 raise AssertionError(f"GLB scene did not load: {scene_status}")
-            before_drag = scene_frame.locator("#view").evaluate("el => window.MotionStudio3DLab.getStatus()")
+            # Reveal the real GLB chapter before checking requestAnimationFrame:
+            # background/offscreen iframes are intentionally throttled by browsers.
+            page.frame_locator("#templatePreviewFrame").locator(
+                'section[data-index="1"]').scroll_into_view_if_needed()
+            before_drag = scene_frame.locator("#view").evaluate(
+                "el => window.MotionStudio3DLab.getStatus()")
             assert before_drag["triangles"] >= 50, before_drag
             assert before_drag["vertices"] >= 100, before_drag
-            assert before_drag["frames"] > 0, before_drag
+            assert before_drag["engine"]=="webgl2", before_drag
+            for frame_attempt in range(30):
+                before_drag = scene_frame.locator("#view").evaluate(
+                    "el => window.MotionStudio3DLab.getStatus()")
+                if before_drag["frames"] > 0:break
+                page.wait_for_timeout(250)
+            else:
+                raise AssertionError(f"GLB renderer did not paint after scrolling into view: {before_drag}")
             scene_frame.locator("#view").dispatch_event("pointerdown",{
                 "pointerId":1,"pointerType":"mouse","clientX":150,"clientY":160,
                 "buttons":1,"bubbles":True
