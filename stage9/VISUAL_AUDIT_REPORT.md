@@ -4,6 +4,12 @@
 **GitHub Actions run:** [43599908353](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43599908353)  
 **Outcome:** Chromium PASS · Firefox PASS · WebKit PASS. New desktop/mobile template geometry audit PASS on Chromium.
 
+## Persistent screenshot gallery (new)
+
+The previously ephemeral CI screenshots are now published into the **same review branch**, at [visual-evidence/README.md](visual-evidence/README.md). The full gallery contains **16 actual PNG files**, from 8 templates × desktop/mobile. GitHub Actions run [43600609916](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43600609916) confirmed that image capture, three-browser E2E and the screenshot-persistence step all succeeded.
+
+A separate public static review copy is committed in [motion-studio-web-pages](https://github.com/Mrs-zhong1/motion-studio-web-pages) as `review-preview.html`; its root `index.html` now points to the template gallery. This is a **review build only**, not a production release. The GitHub Pages workflow was added, but external web availability has **not yet been verified**, so the GitHub Pages URL should not be represented as live.
+
 ## Scope and evidence
 The test `tests/test_template_visual_audit.py` opens the actual built offline editor and preview renderer, captures the first section of each template (desktop 1440×900 and mobile 390×844), and checks **all** chapter photos are present; their CSS background is a data URI; image layer rectangles have nonzero size; chapters have adequate geometric size; and page width does not overflow. Hashes refer to PNG screenshots generated in the CI runner. Because repository Actions artifact storage quota is exhausted, these PNGs were **not uploaded**. Inspect workflow logs/step summary for verified metrics.
 
