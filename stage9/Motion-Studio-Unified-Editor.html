@@ -99,8 +99,37 @@
 .page[data-template="saas"] .section:nth-of-type(n+2){width:82%;margin-left:auto;margin-right:auto}
 .page[data-template="saas"] .page-head{font-weight:800;letter-spacing:-.03em}
 @media(max-width:650px){.page[data-template] .section,.page[data-template] .section:nth-of-type(n){width:auto;margin:0 0 16px;border-radius:0;transform:none;outline:0}.page[data-template] .section iframe{min-height:0}}
+
+/* U1–U2 template-first layout repair: preserves the existing interactive editor and 20 components */
+.discover-hero,.discovery-header{max-width:1200px}
+.discovery-nav-note{font-size:12px;line-height:1.8;letter-spacing:0}
+.discovery-quick-actions{display:flex;align-items:center;gap:14px;margin:0 0 24px}
+.discovery-quick-actions button{border-radius:999px;background:#d9ff67;border:1px solid #c2e650;color:#18210e;font-weight:800;padding:12px 19px}
+.discovery-quick-actions span{color:#616b61;font-size:12px}
+.template-grid{gap:20px}
+.template-card,.template-card:nth-child(3n),.template-card:nth-child(3n+1):not(:first-child){grid-column:span 6;min-height:0;border-radius:14px}
+.template-art{height:clamp(240px,25vw,350px);background-size:cover;background-position:center;display:flex;align-items:flex-end}
+.template-art.has-image::after{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(180deg,rgba(5,10,8,.02) 8%,rgba(5,10,8,.77) 100%);pointer-events:none}
+.template-art.has-image .art-type{color:#fff;text-shadow:0 2px 20px #0008;max-width:87%;font-size:clamp(28px,3vw,46px)}
+.template-art.has-image::before{opacity:.1;pointer-events:none}
+.template-card-copy{background:#171b19;color:#f5f5ed}
+.template-card-copy p{color:#b6bfb6}
+.editor-view:not([hidden]){height:100dvh;overflow:hidden}
+.editor-view:not([hidden]) .workspace{height:calc(100dvh - 67px);min-height:0}
+.editor-view:not([hidden]) .left,.editor-view:not([hidden]) .right{overflow-y:auto;max-height:100%}
+.editor-view:not([hidden]) .stage{min-width:0;overflow-y:auto;max-height:100%}
+@media(max-width:900px){
+ .discovery-view{grid-template-columns:1fr;height:100dvh;overflow:auto}
+ .discovery-nav{padding:14px 20px}
+ .discovery-nav nav{display:flex;flex-wrap:wrap;margin-top:12px}
+ .discovery-nav-note{display:none}
+ .discovery-main{overflow:visible;padding:26px 18px}
+ .template-card,.template-card:nth-child(3n),.template-card:nth-child(3n+1):not(:first-child){grid-column:span 12}
+ .discovery-header{display:block}
+ .discovery-quick-actions{flex-wrap:wrap}
+}
 </style></head><body class="simple-mode">
-<section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">8 套完整网站模板<br>6 类章节预设<br>20 个基础动效<br><br>全部可离线编辑与导出</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="template-grid" id="templateGrid"></div></main></section>
+<section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-device" id="previewDevice"><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></section>
 <section class="editor-view" id="editorView" hidden><header class="appbar"><button id="backToLibrary" class="back-library">← 模板库</button><div class="brand">✳ MOTION <em>STUDIO</em></div><input id="projectName" class="project-name" value="My Motion Story" aria-label="工程名称" maxlength="70"><span class="mode-badge" id="modeLabel">简单模式</span><div class="bar-actions"><button id="modeToggle">切换专业模式</button><button id="undoBtn" title="撤销 ⌘/Ctrl+Z" disabled>↶</button><button id="redoBtn" title="重做 ⌘/Ctrl+Shift+Z" disabled>↷</button><label class="global-transition-control advanced-only" for="globalTransition">转场 <select id="globalTransition"><option value="none">关闭</option><option value="fade">渐隐</option><option value="veil">遮罩</option></select></label><button id="newProject">新建</button><button id="saveProject">保存 JSON</button><button id="openProject">导入 JSON</button><button id="exportPage" class="primary">导出 HTML ↗</button><input id="openFile" type="file" accept=".json,application/json" hidden></div></header><div class="workspace"><aside class="left editor-left"><div class="panel-kicker">Project outline</div><h2>章节</h2><div class="chapter-list" id="chapterList"></div><div class="asset-tabs"><button class="active" data-asset-tier-button="l1">L1 模板</button><button data-asset-tier-button="l2">L2 章节</button><button data-asset-tier-button="l3">L3 动效</button></div><section class="asset-panel active" data-asset-tier="l1"><p class="hint">切换完整网站结构。当前工程会被替换。</p><div class="template-quick-list" id="templateQuickList"></div><select id="templateChoice" class="l1-hidden-select" aria-label="完整模板选择"></select><button id="loadTemplate" class="l1-hidden-select">加载所选模板</button></section><section class="asset-panel" data-asset-tier="l2"><p class="hint">添加一个已组合好的章节骨架。</p><div class="section-presets" id="sectionPresets"></div></section><section class="asset-panel" data-asset-tier="l3"><input class="search" id="search" placeholder="搜索 20 个基础动效" aria-label="搜索动效"><div class="filters" id="filters"></div><div class="component-list" id="componentList"></div></section></aside>
 <main class="stage"><div class="stage-top"><div><strong>实时画布</strong><small>直接选择章节或图层，三栏各自滚动</small></div><div class="stage-tools"><button id="togglePanels" title="收起侧栏">收起侧栏</button><button id="zoomOut" title="缩小">−</button><span class="zoom-readout" id="zoomReadout">100%</span><button id="zoomIn" title="放大">＋</button><button id="desktopView" class="active">桌面</button><button id="mobileView">手机</button><button id="playPreview">交互预览</button><button id="fullscreenCanvas">全屏</button></div></div><div class="canvas-viewport" id="canvasViewport"><div class="canvas-wrap" id="canvasWrap"><div class="page" id="page"><div class="page-head"><b>MS / <span id="pageTitle">MY MOTION STORY</span></b><span>LIVE CANVAS</span></div><div id="sections" aria-label="页面章节画布"></div><div class="frame-notice" id="scrollNotice">每个动效在隔离容器内运行，避免组件 CSS/JS 互相污染。</div></div></div></div><div class="timeline" id="editorTimeline"><div class="timeline-head"><b>时间轴</b><span id="timeInfo">00 个章节</span><button class="timeline-toggle" id="timelineToggle">收起</button></div><div id="timelineTrack" class="timeline-track"></div><div class="track-heading advanced-only"><b>多轨关键帧</b><span>点击节点编辑图层与镜头</span></div><div id="multitrack" class="multitrack advanced-only" aria-label="全局多轨关键帧"></div><div class="scrub-box"><label for="timelineScrub">故事进度</label><input id="timelineScrub" class="scrubber" type="range" min="0" max="100" value="0"><output id="timelinePct">0%</output><button id="timelineLive" title="回到实时滚动">跟随滚动</button></div></div></main>
@@ -203,7 +232,18 @@ const templateCatalog=[
  {id:'saas',name:'Modern SaaS',category:'Technology',tag:'现代软件发布页',headline:'One place for moving work',description:'产品 Hero、实时仪表板、能力卡片和明确行动路径。',sections:[{id:'cursor-light',text:'ONE PLACE FOR MOVING WORK',speed:96,depth:76,accent:'#d9ff67',height:520},{id:'glass-dashboard',text:'SEE THE WHOLE SYSTEM',speed:88,depth:68,accent:'#d9ff67',height:560},{id:'stacked-cards',text:'PLAN / BUILD / REVIEW',speed:98,depth:58,accent:'#d9ff67',height:520},{id:'text-morph',text:'FROM IDEA TO RELEASE',speed:112,depth:62,accent:'#d9ff67',height:420},{id:'magnetic',text:'START WITH YOUR FIRST PROJECT',speed:104,depth:54,accent:'#d9ff67',height:390}]}
 ];
 const templateSets=Object.fromEntries(templateCatalog.map(t=>[t.id,t]));
-const templateThumbnailImages={};
+// U2: Online demo photographs for discoverability. The editor/export stays offline-safe;
+ // missing network imagery falls back to the existing CSS art until licensed local assets are bundled.
+const templateThumbnailImages={
+ 'editorial':'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=82',
+ 'product-3d':'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&q=82',
+ 'cinematic':'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1200&q=82',
+ 'architecture':'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=82',
+ 'agency':'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1200&q=82',
+ 'fashion':'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=82',
+ 'gallery':'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?w=1200&q=82',
+ 'saas':'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=82'
+};
 const sectionPresetCatalog=[
  {id:'hero',name:'宣言 Hero',detail:'文字揭示 + 推进镜头',section:{id:'text-reveal',text:'A NEW POINT OF VIEW',height:540,camera:{preset:'push',start:0,end:80,power:44}}},
  {id:'gallery',name:'滚动画廊',detail:'交错列 + 章节图层',section:{id:'image-columns',text:'COLLECTED MOMENTS',height:620}},
@@ -255,7 +295,7 @@ function clamp(x,min,max,def){const n=Number(x);return Number.isFinite(n)?Math.m
 function getItem(s){return registry.find(x=>x.id===s.id)}
 function notify(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>el.classList.remove('show'),2700)}
 let previewTemplateId=null,canvasZoom=1;
-function templateCardMarkup(t){const thumb=templateThumbnailImages[t.id];return `<button class="template-card" data-template-card="${safe(t.id)}" data-category="${safe(t.category)}" aria-label="预览 ${safe(t.name)}"><div class="template-art ${safe(t.id)}${thumb?' has-image':''}"${thumb?` style="background-image:url('${thumb}')"`:''}><span class="art-type">${safe(t.headline)}</span></div><div class="template-card-copy"><div><h2>${safe(t.name)}</h2><p>${safe(t.tag)} · ${t.sections.length} 个章节</p></div><span>↗</span></div></button>`}
+function templateCardMarkup(t){const thumb=templateThumbnailImages[t.id];return `<button class="template-card" data-template-card="${safe(t.id)}" data-category="${safe(t.category)}" aria-label="预览 ${safe(t.name)}"><div class="template-art ${safe(t.id)}${thumb?' has-image':''}"${thumb?` style="background-image:url('${thumb}')"`:''}><span class="art-type">${safe(t.headline)}</span></div><div class="template-card-copy"><div><h2>${safe(t.name)}</h2><p>${safe(t.tag)} · 点击体验交互</p></div><span>↗</span></div></button>`}
 function renderTemplateGrid(category='All'){const list=category==='All'?templateCatalog:templateCatalog.filter(t=>t.category===category);$('templateGrid').innerHTML=list.map(templateCardMarkup).join('');$('templateGrid').querySelectorAll('[data-template-card]').forEach(card=>card.onclick=()=>previewTemplate(card.dataset.templateCard));}
 function buildTemplatePreviewDocument(id){const previous={project,active,activeLayer,selectedLayers};project=createProjectFromTemplate(id);active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);const html=exportDocument();project=previous.project;active=previous.active;activeLayer=previous.activeLayer;selectedLayers=previous.selectedLayers;return html;}
 function previewTemplate(id){const tpl=templateSets[id];if(!tpl)return;previewTemplateId=id;$('previewTitle').textContent=tpl.name;$('previewMeta').textContent=tpl.tag+' · 使用正式导出 renderer';$('templatePreviewFrame').srcdoc=buildTemplatePreviewDocument(id);$('previewDevice').classList.remove('mobile');$('previewDesktop').classList.add('active');$('previewMobile').classList.remove('active');$('templatePreview').hidden=false;}
@@ -401,5 +441,11 @@ $('sections').addEventListener('dragover',e=>e.preventDefault());$('sections').a
 $('timelineScrub').addEventListener('input',e=>{scrubProgress=Number(e.target.value)/100;syncTimeline();refreshOverlays();document.querySelectorAll('#sections .section iframe').forEach(f=>{try{f.contentWindow.postMessage({type:'motion-studio-scroll',progress:scrubProgress},'*')}catch(e){}})});$('timelineLive').onclick=()=>{scrubProgress=null;refreshOverlays();syncTimeline();notify('已恢复跟随页面滚动')};filtersInit();renderLibrary();try{const draft=JSON.parse(localStorage.getItem('motion-studio-draft-v1'));if(draft?.schema==='motion-studio-composition-v1')loadProject(draft);else throw Error('no draft')}catch(e){project={schema:'motion-studio-composition-v1',title:'Motion Story Gallery',transition:'fade',sections:initialSections.map((entry,index)=>normSection({...entry,layers:templateLayers(index,entry)}))};active=project.sections[0].uid;activeLayer=project.sections[0].layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);render()}
 const resumeButton=document.createElement('button');resumeButton.id='resumeProject';resumeButton.textContent='继续当前工程';resumeButton.onclick=showEditor;document.querySelector('.discovery-nav nav').append(resumeButton);
 renderTemplateGrid();renderQuickTemplates();renderSectionPresets();renderChapterList();
+$('discoveryBlank').onclick=()=>{
+  project={schema:'motion-studio-composition-v1',templateId:'custom',title:'未命名项目',transition:'fade',sections:[]};
+  active=null;activeLayer=null;selectedLayers=new Set();historyStack=[];futureStack=[];
+  lastHistoryState=snapshot();persistDraftWithoutHistory();showEditor();
+  notify('已建立空白项目，可从组件库添加第一个章节');
+};
 historyStack=[];futureStack=[];lastHistoryState=snapshot();syncHistoryButtons();window.MotionStudioUnified={undo:()=>restoreHistory('undo'),redo:()=>restoreHistory('redo'),getProject:()=>structuredClone(project),add:addComponent,build:exportDocument,load:loadProject,registry,templates:templateCatalog.map(({sections,...meta})=>meta),createProjectFromTemplate,useTemplate,previewTemplate};
 </script></body></html>
