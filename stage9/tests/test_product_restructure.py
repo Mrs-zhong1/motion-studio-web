@@ -103,7 +103,8 @@ def test_product_restructure():
             after_order = page.evaluate("project.sections.map(s => s.uid)")
             assert after_order[0] == before_order[-1]
 
-            assert page.locator("[data-asset-tier]").count() == 3
+            assert page.locator("[data-asset-tier]").count() == 4
+            assert page.locator("[data-asset-tier-button='l4']").count() == 1
             assert page.locator("[data-asset-tier='l1']").is_visible()
             page.locator("[data-asset-tier-button='l3']").click()
             assert page.locator("#componentList .comp").count() == 20

@@ -1,11 +1,17 @@
 name: Motion Studio Web Product E2E
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/tests/test_u1_u4_regression.py'
+      - '.github/workflows/web-product-e2e.yml'
   push:
     paths:
       - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_web_product_e2e.py'
       - 'stage9/tests/test_product_restructure.py'
+      - 'stage9/tests/test_u1_u4_regression.py'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
 permissions:
@@ -43,6 +49,9 @@ jobs:
         run: python tests/test_web_product_e2e.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: U1-U4 image-led discovery and blank editor regression
+        if: matrix.browser == 'chromium'
+        run: python tests/test_u1_u4_regression.py
       - name: Template discovery, preview and three-pane editor journey
         run: python tests/test_product_restructure.py
         env:
