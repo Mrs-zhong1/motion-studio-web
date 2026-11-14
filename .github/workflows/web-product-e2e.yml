@@ -43,6 +43,9 @@ jobs:
         run: python tests/test_web_product_e2e.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: U1-U4 image-led discovery and blank editor regression
+        if: matrix.browser == 'chromium'
+        run: python tests/test_u1_u4_regression.py
       - name: Template discovery, preview and three-pane editor journey
         run: python tests/test_product_restructure.py
         env:
