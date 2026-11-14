@@ -35,6 +35,17 @@ def test_u1_u4_regression():
             page.locator("#propImage").set_input_files({"name":"replacement.jpg","mimeType":"image/jpeg","buffer":DEMO_JPEG})
             page.wait_for_function("() => project.sections[0].image.startsWith('data:image/jpeg;base64,')")
             page.locator("#imageFocusX").evaluate("(el)=>{el.value='72';el.dispatchEvent(new Event('input',{bubbles:true}))}")
+            assert page.locator("#page").get_attribute("data-template")=="editorial"
+            assert page.locator(".section .section-art").count()>=1
+            assert page.locator(".section .section-art").first.evaluate(
+                "(el) => getComputedStyle(el).backgroundSize"
+            )=="cover"
+            assert page.locator(".section .section-art").first.evaluate(
+                "(el) => getComputedStyle(el).opacity"
+            )=="1"
+            assert "PORTFOLIO / EDITION 26" in page.locator(".section").first.evaluate(
+                "(el)=>getComputedStyle(el,'::before').content"
+            )
             assert page.evaluate("project.sections[0].imageFocusX")==72
             assert page.locator(".section.selected .section-art").evaluate("(el)=>el.style.backgroundPosition.includes('72%')")
             page.locator('[data-asset-tier-button="l4"]').click()
