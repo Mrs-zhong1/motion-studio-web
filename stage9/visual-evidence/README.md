@@ -15,6 +15,13 @@ Screenshots are raw CI evidence, not approved visual design.
 | Interactive Gallery | ![Desktop Interactive Gallery](./gallery-desktop.png) | ![Mobile Interactive Gallery](./gallery-mobile.png) |
 | Modern SaaS | ![Desktop Modern SaaS](./saas-desktop.png) | ![Mobile Modern SaaS](./saas-mobile.png) |
 
+## R3 — complete template preview dialog (not only page hero)
+
+| Template | Desktop preview | Mobile preview |
+|---|---|---|
+| Editorial Portfolio | ![Preview Editorial Portfolio desktop](./editorial-preview-desktop.png) | ![Preview Editorial Portfolio mobile](./editorial-preview-mobile.png) |
+| 3D Product Experience | ![Preview 3D Product Experience desktop](./product-3d-preview-desktop.png) | ![Preview 3D Product Experience mobile](./product-3d-preview-mobile.png) |
+
 ## Review gates
 
 - Typography, photo crop and subject matter
