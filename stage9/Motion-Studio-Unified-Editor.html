@@ -424,11 +424,22 @@ const templateExtraPhotos={
  'gallery':['photo-1561214115-f2f134cc4912','photo-1549490349-8643362247b5'],
  'saas':['photo-1460925895917-afdab827c52f','photo-1556761175-b413da4baf72']
 };
+const imageBlobCache=new Map();
+async function cachedImageBlob(url){
+ if(!imageBlobCache.has(url)){
+   imageBlobCache.set(url,(async()=>{
+     const response=await fetch(url,{mode:'cors',cache:'force-cache'});
+     if(!response.ok)throw Error('image HTTP '+response.status);
+     const blob=await response.blob();
+     if(!blob.type.startsWith('image/'))throw Error('invalid image');
+     return blob;
+   })());
+ }
+ return imageBlobCache.get(url);
+}
 async function photoToInline(url,variant=0){
  try{
-   const response=await fetch(url,{mode:'cors',cache:'force-cache'});
-   if(!response.ok)throw Error('image HTTP '+response.status);
-   const blob=await response.blob();
+   const blob=await cachedImageBlob(url);
    if(!blob.type.startsWith('image/'))throw Error('invalid image');
    const image=await createImageBitmap(blob);
    const factor=Math.min(1,840/Math.max(image.width,image.height));
@@ -438,9 +449,16 @@ async function photoToInline(url,variant=0){
    const ctx=canvas.getContext('2d');
    if(variant===0)ctx.drawImage(image,0,0,canvas.width,canvas.height);
    else{
-     const scale=variant===1?.83:.72;
-     const w=image.width*scale,h=image.height*scale;
-     const x=(image.width-w)*(variant===1?.12:.88),y=(image.height-h)*(variant===1?.12:.72);
+     const crops=[
+       {scale:.83,x:.12,y:.15},
+       {scale:.72,x:.82,y:.72},
+       {scale:.9,x:.62,y:.22},
+       {scale:.76,x:.22,y:.78},
+       {scale:.88,x:.5,y:.5}
+     ];
+     const crop=crops[(variant-1)%crops.length];
+     const w=image.width*crop.scale,h=image.height*crop.scale;
+     const x=(image.width-w)*crop.x,y=(image.height-h)*crop.y;
      ctx.drawImage(image,x,y,w,h,0,0,canvas.width,canvas.height);
    }
    image.close?.();
@@ -453,9 +471,17 @@ async function ensureTemplatePhoto(id){
  if(templatePhotoPending.has(id))return templatePhotoPending.get(id);
  const primary=templateThumbnailImages[id];
  const extras=(templateExtraPhotos[id]||[]).map(photo=>`https://images.unsplash.com/${photo}?w=1000&q=75`);
- const sources=extras.length?[primary,...extras]:[primary,primary,primary];
- const job=Promise.all(sources.map((url,index)=>url?photoToInline(url,extras.length?0:index):Promise.resolve('')))
-   .then(photos=>{templatePhotoCache.set(id,photos);return photos});
+ const count=templateSets[id]?.sections.length||0;
+ // Online version may provide up to 3 different photographs; remaining sections
+ // receive explicit crops of the matching hero photograph. Offline bundles share
+ // one locally stored photo per template, with varied composition per section.
+ const sources=Array.from({length:count},(_,index)=>index===0?primary:(extras[index-1]||primary));
+ const job=Promise.all(sources.map((url,index)=>url?photoToInline(url,index<3&&extras[index-1]?0:index):Promise.resolve('')))
+   .then(photos=>{
+     const fallback=photos.find(Boolean)||'';
+     const complete=photos.map(photo=>photo||fallback);
+     templatePhotoCache.set(id,complete);return complete;
+   });
  templatePhotoPending.set(id,job);
  try{return await job}finally{templatePhotoPending.delete(id)}
 }
