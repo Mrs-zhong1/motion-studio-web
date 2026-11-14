@@ -43,7 +43,7 @@ def test_u1_u4_regression():
             assert page.locator(".section .section-art").first.evaluate(
                 "(el) => getComputedStyle(el).opacity"
             )=="1"
-            assert "PORTFOLIO / EDITION 26" in page.locator(".section").first.evaluate(
+            assert "CREATIVE PRACTICE  /  SELECTED WORK" in page.locator(".section").first.evaluate(
                 "(el)=>getComputedStyle(el,'::before').content"
             )
             assert page.evaluate("project.sections[0].imageFocusX")==72
