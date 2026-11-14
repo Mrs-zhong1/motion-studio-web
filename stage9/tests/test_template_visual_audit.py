@@ -53,6 +53,12 @@ def run_audit():
                 preview = page.locator("#templatePreviewFrame")
                 frame = preview.content_frame
                 frame.locator("section.section").first.wait_for(timeout=30000)
+                assert page.locator("#previewHeroTitle").inner_text().strip()
+                assert page.locator("#previewUsePanel").is_visible()
+                assert page.locator(".preview-product-layout").is_visible()
+                if template_id in ("editorial", "product-3d"):
+                    assert frame.locator(".section.designed-hero").count()==1
+
                 total_sections = page.evaluate(
                     "(id) => templateSets[id].sections.length", template_id)
                 assert frame.locator("section.section").count() == total_sections
@@ -88,6 +94,18 @@ def run_audit():
                          imageWidths: arts.map(e=>Math.round(e.getBoundingClientRect().width))
                        };
                     }""")
+                    if template_id in ("editorial", "product-3d"):
+                        hero = frame.locator(".section.designed-hero").first
+                        sections = hero.evaluate("""section=>{
+                          const text = section.querySelector('iframe').getBoundingClientRect();
+                          const image = section.querySelector('.section-art').getBoundingClientRect();
+                          const overlap = Math.max(0,Math.min(text.right,image.right)-Math.max(text.left,image.left))
+                                        *Math.max(0,Math.min(text.bottom,image.bottom)-Math.max(text.top,image.top));
+                          return {imageWidth:image.width,textWidth:text.width,overlapPx2:Math.round(overlap)}
+                        }""")
+                        geometry["heroGeometry"]=sections
+                        if sections["overlapPx2"]>300:
+                            issues.append(f"{template_id} {device}: title/image zones overlap {sections}")
                     geometry["template"] = template_id
                     geometry["device"] = device
                     shot = frame.locator("section.section").first.screenshot(
