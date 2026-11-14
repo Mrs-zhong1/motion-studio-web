@@ -37,6 +37,14 @@ def test_u1_u4_regression():
             page.locator("#imageFocusX").evaluate("(el)=>{el.value='72';el.dispatchEvent(new Event('input',{bubbles:true}))}")
             assert page.evaluate("project.sections[0].imageFocusX")==72
             assert page.locator(".section.selected .section-art").evaluate("(el)=>el.style.backgroundPosition.includes('72%')")
+            page.locator('[data-asset-tier-button="l4"]').click()
+            assert page.locator('[data-asset-tier="l4"]').is_visible()
+            assert page.locator("#projectAssetList .asset-entry").count()>=1
+            page.locator("#projectAssetList [data-asset-replace]").first.click()
+            page.locator("#propImage").set_input_files({"name":"from-asset-list.jpg","mimeType":"image/jpeg","buffer":DEMO_JPEG})
+            page.wait_for_function("() => document.querySelector('#projectAssetList .asset-entry img')?.getAttribute('src')===project.sections[0].image")
+            assert page.evaluate("project.sections[0].imageFocusX")==72
+
             assert page.evaluate("registry.length")==20
             assert page.locator("#editorTimeline").evaluate("(e)=>e.classList.contains('collapsed')")
             page.locator("#backToLibrary").click()
