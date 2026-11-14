@@ -68,7 +68,7 @@ def test_u1_u4_regression():
             assert page.locator("#componentPreview").is_hidden()
             page.locator("#componentList .comp .component-preview-trigger").first.click()
             page.locator("#componentPreviewAdd").click()
-            page.wait_for_function("(before) => project.sections.length===before+1",count_before)
+            page.wait_for_function("(before) => project.sections.length===before+1",arg=count_before)
             assert page.locator("#componentPreview").is_hidden()
             assert not errors,errors
             browser.close()
