@@ -143,6 +143,12 @@ def test_u1_u4_regression():
             assert after_drag["frames"] >= before_drag["frames"]
             assert after_drag["engine"] in ("WebGL2","Canvas2D","webgl2","canvas2d"), after_drag
             page.locator("#previewClose").click()
+            # Return from product gallery preview to a real editor before
+            # executing the existing back-to-library + blank-project journey.
+            page.locator("[data-template-card='editorial']").click()
+            page.locator("#previewUse").click()
+            page.wait_for_function("() => project.templateId==='editorial'")
+            assert page.locator("#editorView").is_visible()
 
             assert page.evaluate("registry.length")==20
             assert page.locator("#editorTimeline").evaluate("(e)=>e.classList.contains('collapsed')")
