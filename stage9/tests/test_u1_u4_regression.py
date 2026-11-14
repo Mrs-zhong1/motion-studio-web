@@ -141,6 +141,8 @@ def test_u1_u4_regression():
             # separately from WebGL2 and is not counted as hardware GPU validation.
             after_drag = scene_frame.locator("#view").evaluate("el => window.MotionStudio3DLab.getStatus()")
             assert after_drag["frames"] >= before_drag["frames"]
+            assert abs(after_drag["angY"]-before_drag["angY"])>0.2, (before_drag,after_drag)
+            assert abs(after_drag["angX"]-before_drag["angX"])>0.05, (before_drag,after_drag)
             assert after_drag["engine"] in ("WebGL2","Canvas2D","webgl2","canvas2d"), after_drag
             page.locator("#previewClose").click()
             # Return from product gallery preview to a real editor before
