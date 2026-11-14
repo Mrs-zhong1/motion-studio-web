@@ -55,6 +55,21 @@ def test_u1_u4_regression():
             assert page.locator('[data-asset-tier="l2"]').is_visible()
             page.locator("[data-section-preset]").first.click()
             page.wait_for_function("() => project.sections.length===1")
+            # U3: preview is not an add action; it boots the actual component renderer.
+            page.locator('[data-asset-tier-button="l3"]').click()
+            count_before = page.evaluate("project.sections.length")
+            page.locator("#componentList .comp .component-preview-trigger").first.click()
+            assert page.locator("#componentPreview").is_visible()
+            assert page.evaluate("project.sections.length")==count_before
+            assert page.locator("#componentPreviewFrame").get_attribute("srcdoc")
+            page.locator("#componentPreviewReplay").click()
+            assert page.locator("#componentPreviewFrame").get_attribute("srcdoc")
+            page.locator("#componentPreviewClose").click()
+            assert page.locator("#componentPreview").is_hidden()
+            page.locator("#componentList .comp .component-preview-trigger").first.click()
+            page.locator("#componentPreviewAdd").click()
+            page.wait_for_function("(before) => project.sections.length===before+1",count_before)
+            assert page.locator("#componentPreview").is_hidden()
             assert not errors,errors
             browser.close()
     finally:
