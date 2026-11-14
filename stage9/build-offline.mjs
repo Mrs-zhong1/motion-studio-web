@@ -19,11 +19,11 @@ const thumbnailData=JSON.stringify(Object.fromEntries(thumbnailEntries));
 const source=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
 // Accept both the legacy empty marker and U1's populated online preview mapping.
 // Offline releases always replace online covers with the bundled local JPEGs.
-const thumbnailPattern=/const templateThumbnailImages=\\{[\\s\\S]*?\\};/;
+const thumbnailPattern=/const templateThumbnailImages=\{[\s\S]*?\};/;
 if(!thumbnailPattern.test(source))throw Error('Template thumbnail declaration missing');
 let injected=source.replace(thumbnailPattern,'const templateThumbnailImages='+thumbnailData+';');
 // The offline build must not request remote secondary demo photos.
-injected=injected.replace(/const templateExtraPhotos=\\{[\\s\\S]*?\\};/,'const templateExtraPhotos={};');
+injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
 const editor=addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected)));
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
