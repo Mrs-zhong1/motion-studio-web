@@ -125,6 +125,26 @@ def run_audit():
                         screenshot=page.screenshot(animations="disabled",full_page=False)
                         (SCREENSHOTS/f"{template_id}-preview-{device}.png").write_bytes(screenshot)
                         geometry["fullPreviewPngSHA256"]=hashlib.sha256(screenshot).hexdigest()[:16]
+                    # R4: all following chapters in the two pilots must be authored
+                    # as layout sections rather than image-over-effect overlays.
+                    if template_id in ("editorial", "product-3d"):
+                        chapters = frame.locator("section.designed-chapter")
+                        assert chapters.count()==total_sections-1
+                        arrangements = chapters.evaluate_all("""nodes=>nodes.map(n=>{
+                            const a=n.querySelector('.section-art').getBoundingClientRect();
+                            const f=n.querySelector('iframe').getBoundingClientRect();
+                            const x=Math.max(0,Math.min(a.right,f.right)-Math.max(a.left,f.left));
+                            const y=Math.max(0,Math.min(a.bottom,f.bottom)-Math.max(a.top,f.top));
+                            const title=n.querySelector('[data-chapter-title]');
+                            return {hasHeading:!!title&&title.textContent.trim().length>3,
+                              overlap:Math.round(x*y),artW:Math.round(a.width),
+                              frameW:Math.round(f.width),artH:Math.round(a.height),frameH:Math.round(f.height)};
+                        })""")
+                        geometry["authoredChapters"]=arrangements
+                        if any(not x["hasHeading"] or x["overlap"]>300 or
+                               x["artW"]<70 or x["frameW"]<70 or
+                               x["artH"]<200 or x["frameH"]<200 for x in arrangements):
+                            issues.append(f"{template_id} {device}: chapter grid overlap or collapsed media {arrangements}")
                     geometry["template"] = template_id
                     geometry["device"] = device
                     shot = frame.locator("section.section").first.screenshot(
