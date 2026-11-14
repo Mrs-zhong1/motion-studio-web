@@ -23,6 +23,9 @@ def test_u1_u4_regression():
             page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
             assert page.locator("#discoveryView").is_visible()
             assert page.locator("[data-template-card]").count()==8
+            assert page.locator('[data-template-card="editorial"] .designed-card-copy').is_visible()
+            assert page.locator('[data-template-card="product-3d"] .designed-card-photo').is_visible()
+
             page.locator("[data-template-card='editorial']").click()
             page.wait_for_function("() => templatePhotoCache.has('editorial')")
             page.locator("#templatePreviewFrame").wait_for(state="attached")
