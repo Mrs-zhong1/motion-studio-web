@@ -106,6 +106,25 @@ def run_audit():
                         geometry["heroGeometry"]=sections
                         if sections["overlapPx2"]>300:
                             issues.append(f"{template_id} {device}: title/image zones overlap {sections}")
+                    # R3: review the entire preview shell, not only iframe content.
+                    if template_id in ("editorial", "product-3d"):
+                        layout = page.locator(".preview-product-layout").evaluate("""el=>{
+                          const info=el.querySelector('.preview-product-info').getBoundingClientRect();
+                          const stage=el.querySelector('.preview-device').getBoundingClientRect();
+                          const viewport=document.documentElement.getBoundingClientRect();
+                          const horizontal=Math.max(0,Math.min(info.right,stage.right)-Math.max(info.left,stage.left));
+                          const vertical=Math.max(0,Math.min(info.bottom,stage.bottom)-Math.max(info.top,stage.top));
+                          return {infoW:Math.round(info.width),stageW:Math.round(stage.width),
+                            infoH:Math.round(info.height),stageH:Math.round(stage.height),
+                            overlapPx2:Math.round(horizontal*vertical),
+                            overflows:document.documentElement.scrollWidth>viewport.width+32};
+                        }""")
+                        geometry["previewShell"]=layout
+                        if layout["overlapPx2"]>300 or layout["overflows"]:
+                            issues.append(f"{template_id} {device}: broken preview shell {layout}")
+                        screenshot=page.screenshot(animations="disabled",full_page=False)
+                        (SCREENSHOTS/f"{template_id}-preview-{device}.png").write_bytes(screenshot)
+                        geometry["fullPreviewPngSHA256"]=hashlib.sha256(screenshot).hexdigest()[:16]
                     geometry["template"] = template_id
                     geometry["device"] = device
                     shot = frame.locator("section.section").first.screenshot(
