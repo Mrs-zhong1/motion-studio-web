@@ -34,7 +34,7 @@ def test_u1_u4_regression():
             page.locator(".section.selected [data-canvas-image]").click()
             page.locator("#propImage").set_input_files({"name":"replacement.jpg","mimeType":"image/jpeg","buffer":DEMO_JPEG})
             page.wait_for_function("() => project.sections[0].image.startsWith('data:image/jpeg;base64,')")
-            page.locator("#imageFocusX").fill("72")
+            page.locator("#imageFocusX").evaluate("(el)=>{el.value='72';el.dispatchEvent(new Event('input',{bubbles:true}))}")
             assert page.evaluate("project.sections[0].imageFocusX")==72
             assert page.locator(".section.selected .section-art").evaluate("(el)=>el.style.backgroundPosition.includes('72%')")
             assert page.evaluate("registry.length")==20
