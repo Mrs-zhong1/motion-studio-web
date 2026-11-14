@@ -109,7 +109,7 @@ def test_u1_u4_regression():
                 page.wait_for_timeout(300)
             else:
                 raise AssertionError(f"GLB scene did not load: {scene_status}")
-            before_drag = scene_frame.evaluate("() => window.MotionStudio3DLab.getStatus()")
+            before_drag = scene_frame.locator("#view").evaluate("el => window.MotionStudio3DLab.getStatus()")
             assert before_drag["triangles"] >= 50, before_drag
             assert before_drag["vertices"] >= 100, before_drag
             assert before_drag["frames"] > 0, before_drag
@@ -127,7 +127,7 @@ def test_u1_u4_regression():
             })
             # A running renderer is required; software canvas2d fallback is disclosed
             # separately from WebGL2 and is not counted as hardware GPU validation.
-            after_drag = scene_frame.evaluate("() => window.MotionStudio3DLab.getStatus()")
+            after_drag = scene_frame.locator("#view").evaluate("el => window.MotionStudio3DLab.getStatus()")
             assert after_drag["frames"] >= before_drag["frames"]
             assert after_drag["engine"] in ("WebGL2","Canvas2D","webgl2","canvas2d"), after_drag
             page.locator("#previewClose").click()
