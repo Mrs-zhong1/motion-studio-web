@@ -164,8 +164,24 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add stage9/visual-evidence
           if ! git diff --cached --quiet; then
-            git commit -m "test(evidence): publish 16 template visual screenshots"
-            git push origin "HEAD:$REVIEW_BRANCH"
+            git commit -m "test(evidence): publish template visual screenshots"
+            # Other work can land on this same branch while CI is running.
+            # Rebase only our generated evidence commit and retry a normal push.
+            pushed=0
+            for attempt in 1 2 3 4; do
+              git fetch origin "$REVIEW_BRANCH"
+              git rebase "origin/$REVIEW_BRANCH" || {
+                echo "Screenshot publication conflict; refusing to overwrite source changes"
+                git rebase --abort || true
+                exit 1
+              }
+              if git push origin "HEAD:$REVIEW_BRANCH"; then
+                pushed=1
+                break
+              fi
+              sleep 2
+            done
+            test "$pushed" -eq 1
           fi
           echo "### Screenshots available in source branch" >> "$GITHUB_STEP_SUMMARY"
           echo "[Open visual-review gallery](https://github.com/$GITHUB_REPOSITORY/blob/$REVIEW_BRANCH/stage9/visual-evidence/README.md)" >> "$GITHUB_STEP_SUMMARY"
