@@ -29,6 +29,14 @@ def test_u1_u4_regression():
             page.locator("#previewUse").click()
             page.wait_for_function("() => project.templateId==='editorial'")
             assert page.evaluate("project.sections[0].image.startsWith('data:image/jpeg;base64,')"), page.evaluate("({has:templatePhotoCache.has('editorial'),sizes:templatePhotoCache.get('editorial')?.map(x=>x.length)})")
+            assert page.evaluate("project.sections.length")>=3
+            assert page.locator(".section.selected [data-canvas-image]").count()==1
+            page.locator(".section.selected [data-canvas-image]").click()
+            page.locator("#propImage").set_input_files({"name":"replacement.jpg","mimeType":"image/jpeg","buffer":DEMO_JPEG})
+            page.wait_for_function("() => project.sections[0].image.startsWith('data:image/jpeg;base64,')")
+            page.locator("#imageFocusX").fill("72")
+            assert page.evaluate("project.sections[0].imageFocusX")==72
+            assert page.locator(".section.selected .section-art").evaluate("(el)=>el.style.backgroundPosition.includes('72%')")
             assert page.evaluate("registry.length")==20
             assert page.locator("#editorTimeline").evaluate("(e)=>e.classList.contains('collapsed')")
             page.locator("#backToLibrary").click()
