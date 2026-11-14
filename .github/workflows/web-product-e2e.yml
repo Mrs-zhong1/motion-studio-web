@@ -5,6 +5,7 @@ on:
     paths:
       - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_u1_u4_regression.py'
+      - 'stage9/tests/test_template_visual_audit.py'
       - '.github/workflows/web-product-e2e.yml'
   push:
     paths:
@@ -12,6 +13,7 @@ on:
       - 'stage9/tests/test_web_product_e2e.py'
       - 'stage9/tests/test_product_restructure.py'
       - 'stage9/tests/test_u1_u4_regression.py'
+      - 'stage9/tests/test_template_visual_audit.py'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
 permissions:
@@ -52,12 +54,35 @@ jobs:
       - name: U1-U4 image-led discovery and blank editor regression
         if: matrix.browser == 'chromium'
         run: python tests/test_u1_u4_regression.py
+      - name: Audit all 8 full templates at desktop and mobile viewport
+        if: matrix.browser == 'chromium'
+        run: python tests/test_template_visual_audit.py
       - name: Template discovery, preview and three-pane editor journey
         run: python tests/test_product_restructure.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
       # GitHub Actions artifact storage quota is exhausted in this repository.
       # Record the evidence in job logs and GitHub's step summary without uploading large HTML.
+      - name: Publish template visual-audit geometry and hashes
+        if: always() && matrix.browser == 'chromium'
+        shell: bash
+        run: |
+          echo "### Template visual audit: 8 templates × 2 viewports" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f TEMPLATE_VISUAL_AUDIT.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          doc=json.load(open("TEMPLATE_VISUAL_AUDIT.json"))
+          print("Status:",doc["status"])
+          print("| Template | Viewport | Photos | Overflow | SHA256 prefix |")
+          print("|---|---|---|---|---|")
+          for row in doc["templates"]:
+              overflow=max(0,row["documentWidth"]-row["viewportWidth"])
+              print(f'| {row["template"]} | {row["device"]} | {row["visiblyRenderedPhotos"]}/{row["sectionCount"]} | {overflow}px | {row["firstSectionPngSHA256"]} |')
+          if doc.get("error"): print("\\nFailure:",doc["error"])
+          PY
+          else
+            echo "Audit result unavailable" >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Publish browser result in job summary (zero artifact storage)
         if: always()
         shell: bash
