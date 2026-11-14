@@ -100,6 +100,64 @@
 .page[data-template="saas"] .page-head{font-weight:800;letter-spacing:-.03em}
 @media(max-width:650px){.page[data-template] .section,.page[data-template] .section:nth-of-type(n){width:auto;margin:0 0 16px;border-radius:0;transform:none;outline:0}.page[data-template] .section iframe{min-height:0}}
 
+
+/* U2 / art direction: template-specific photographic composition across preview/editor/export.
+   Decorative layers are pointer-transparent so selected-section actions remain usable. */
+.page[data-template] .section{isolation:isolate}
+.page[data-template] .section-art{inset:0;opacity:1;mix-blend-mode:normal;background-size:cover;background-repeat:no-repeat;filter:none;z-index:2;pointer-events:none;transform:translateZ(0)}
+.page[data-template] .section-art::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0b1019df 0%,#0b10199b 36%,transparent 80%);pointer-events:none}
+.page[data-template] .section:has(.section-art) .motion-layer{z-index:7}
+.page[data-template] .section:has(.section-art) .motion-layer.kind-caption{background:#0c15188a;backdrop-filter:blur(5px);border-radius:2px;padding:8px 12px;letter-spacing:.09em;text-transform:uppercase}
+.page[data-template] .section:has(.section-art)::before{content:attr(data-editorial-label);position:absolute;inset:auto 16px 18px auto;z-index:5;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#fff;text-shadow:0 2px 9px #000c;pointer-events:none}
+/* Editorial — alternation between full-bleed hero and side-mounted picture plates */
+.page[data-template="editorial"] .section-art{inset:4% 2% 5% 46%;border-radius:1px;box-shadow:-18px 17px 0 #c1bfb6}
+.page[data-template="editorial"] .section:nth-of-type(even) .section-art{inset:3% 45% 4% 4%;box-shadow:18px 17px 0 #c1bfb6}
+.page[data-template="editorial"] .section-art::after{background:linear-gradient(90deg,#e6e3d927,transparent 50%)}
+.page[data-template="editorial"] .section:has(.section-art) .motion-layer.kind-caption{background:#242623af;color:#f9f6ec!important}
+.page[data-template="editorial"] .section:has(.section-art)::before{content:"PORTFOLIO / EDITION 26"}
+/* Product — immersive central hero, keeping genuine GLB renderer unobscured */
+.page[data-template="product-3d"] .section-art{inset:4% 3% 5% 38%;border-radius:18px;box-shadow:0 0 60px #b5ff8640}
+.page[data-template="product-3d"] .section-art::after{background:linear-gradient(90deg,#0b1512b3,transparent)}
+.page[data-template="product-3d"] .section:nth-of-type(2) .section-art{opacity:.18}
+.page[data-template="product-3d"] .section:has(.section-art)::before{content:"OBJECT / MATERIAL / LIGHT"}
+/* Cinema — full bleed with film frame, strong legible gradient */
+.page[data-template="cinematic"] .section-art{inset:0;filter:saturate(.84) contrast(1.08)}
+.page[data-template="cinematic"] .section-art::after{background:linear-gradient(180deg,#09090b60,#0b0a1070 48%,#08080cdd)}
+.page[data-template="cinematic"] .section:has(.section-art)::before{content:"SCENE  /  MOTION STORY"}
+.page[data-template="cinematic"] .section:has(.section-art){border-block:14px solid #070609}
+/* Architecture — curated wide architectural photography and surveying details */
+.page[data-template="architecture"] .section-art{inset:6% 4% 9% 29%;filter:saturate(.7);outline:1px solid #f1f1ed}
+.page[data-template="architecture"] .section-art::after{background:linear-gradient(90deg,#0b15122a,transparent 75%)}
+.page[data-template="architecture"] .section:has(.section-art)::before{content:"SPACE / FORM / LIGHT";color:#f2f2ec}
+.page[data-template="architecture"] .section:has(.section-art) .motion-layer.kind-caption{background:#122118a6}
+/* Agency — playful offset posters and large color framing */
+.page[data-template="agency"] .section-art{inset:10% 8% 12% 38%;transform:rotate(3deg);border:11px solid #f1ecdf;box-shadow:-13px 15px 0 #121613}
+.page[data-template="agency"] .section:nth-of-type(even) .section-art{transform:rotate(-3deg);inset:7% 39% 9% 6%}
+.page[data-template="agency"] .section-art::after{background:#0d14191f}
+.page[data-template="agency"] .section:has(.section-art)::before{content:"MAKE THE STRANGE USEFUL"}
+/* Fashion — elongated photographic plates */
+.page[data-template="fashion"] .section-art{inset:3% 20% 3% 29%;filter:saturate(.69);box-shadow:16px 16px 0 #c5b9ab}
+.page[data-template="fashion"] .section:nth-of-type(even) .section-art{inset:3% 35% 3% 15%;box-shadow:-16px 16px 0 #c5b9ab}
+.page[data-template="fashion"] .section-art::after{background:linear-gradient(90deg,#1f18162d,transparent 80%)}
+.page[data-template="fashion"] .section:has(.section-art)::before{content:"LOOKBOOK / SERIES 01";font-family:Georgia,serif}
+/* Gallery — white-framed exhibition walls */
+.page[data-template="gallery"] .section-art{inset:8% 18% 9% 18%;outline:14px solid #f2f0e8;box-shadow:0 14px 55px #0008}
+.page[data-template="gallery"] .section:nth-of-type(even) .section-art{inset:6% 26% 8% 10%}
+.page[data-template="gallery"] .section-art::after{background:linear-gradient(0deg,#0e142660,transparent 42%)}
+.page[data-template="gallery"] .section:has(.section-art)::before{content:"EXHIBITION / ROOM 01"}
+/* SaaS — image presented as product UI behind hero content */
+.page[data-template="saas"] .section-art{inset:15% 5% 15% 36%;border-radius:14px;outline:6px solid #dce4dc;box-shadow:0 20px 45px #0d271e30}
+.page[data-template="saas"] .section-art::after{background:linear-gradient(90deg,#14251d2b,transparent 65%)}
+.page[data-template="saas"] .section:has(.section-art)::before{content:"WORKFLOW / PRODUCT TOUR";color:#f7faf4}
+/* Compact screens: keep the image readable without swallowing every caption */
+@media(max-width:650px){
+ .page[data-template] .section-art,.page[data-template] .section:nth-of-type(even) .section-art{inset:18% 3% 6% 15%;transform:none;box-shadow:none;outline:0;border:0;border-radius:5px}
+ .page[data-template="cinematic"] .section-art{inset:0}
+ .page[data-template] .section-art::after{background:linear-gradient(180deg,#06090d99,#06090d18 65%,#06090d88)}
+ .page[data-template] .section:has(.section-art)::before{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.page[data-template] .section-art{transform:none!important}}
+
 /* U1–U2 template-first layout repair: preserves the existing interactive editor and 20 components */
 .discover-hero,.discovery-header{max-width:1200px}
 .discovery-nav-note{font-size:12px;line-height:1.8;letter-spacing:0}
