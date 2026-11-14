@@ -101,11 +101,14 @@ def test_u1_u4_regression():
             scene_frame.locator("#view").wait_for(timeout=30000)
             scene_frame.locator("#status").wait_for(timeout=30000)
             scene_frame.locator("#stats").wait_for(timeout=30000)
-            page.wait_for_function("""() => {
-                const frame=document.querySelector('#templatePreviewFrame')?.contentDocument
-                  ?.querySelector('section[data-index="1"] iframe')?.contentWindow;
-                return frame?.MotionStudio3DLab?.getStatus()?.vertices >= 100;
-            }""",timeout=30000)
+            for attempt in range(50):
+                scene_status = scene_frame.locator("#view").evaluate(
+                    "el => window.MotionStudio3DLab?.getStatus() || null")
+                if scene_status and scene_status.get("vertices",0) >= 100:
+                    break
+                page.wait_for_timeout(300)
+            else:
+                raise AssertionError(f"GLB scene did not load: {scene_status}")
             before_drag = scene_frame.evaluate("() => window.MotionStudio3DLab.getStatus()")
             assert before_drag["triangles"] >= 50, before_drag
             assert before_drag["vertices"] >= 100, before_drag
