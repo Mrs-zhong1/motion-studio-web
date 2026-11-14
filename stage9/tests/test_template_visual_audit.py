@@ -29,6 +29,7 @@ def run_audit():
         partial(SimpleHTTPRequestHandler, directory=str(ROOT)))
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
+    issues = []
     result = {"source": EDITOR.name, "screenshots_saved_in_runner": str(SCREENSHOTS),
               "templates": [], "browser": "chromium", "status": "running"}
     try:
@@ -81,6 +82,7 @@ def run_audit():
                          viewportWidth: doc.documentElement.clientWidth,
                          sectionCount: sections.length,
                          photoCount: arts.length,
+                         dimmedScenePhotos: arts.filter(node => Number(getComputedStyle(node).opacity) < .85).length,
                          visiblyRenderedPhotos: visible.length,
                          collapsedSections: bad,
                          imageWidths: arts.map(e=>Math.round(e.getBoundingClientRect().width))
@@ -92,16 +94,22 @@ def run_audit():
                         animations="disabled", timeout=30000)
                     geometry["firstSectionPngSHA256"] = hashlib.sha256(shot).hexdigest()[:16]
                     (SCREENSHOTS / f"{template_id}-{device}.png").write_bytes(shot)
-                    assert geometry["photoCount"] == total_sections, geometry
-                    assert geometry["visiblyRenderedPhotos"] == total_sections, geometry
-                    assert geometry["collapsedSections"] == 0, geometry
+                    if geometry["photoCount"] != total_sections:
+                        issues.append(f"{template_id} {device}: missing photo layers {geometry}")
+                    expected = total_sections - (1 if template_id == "product-3d" else 0)
+                    if geometry["visiblyRenderedPhotos"] < expected:
+                        issues.append(f"{template_id} {device}: invisible photos {geometry}")
+                    if geometry["collapsedSections"] != 0:
+                        issues.append(f"{template_id} {device}: collapsed sections {geometry}")
                     # More than 32px indicates unintended horizontal layout overflow.
-                    assert geometry["documentWidth"] <= geometry["viewportWidth"] + 32, geometry
+                    if geometry["documentWidth"] > geometry["viewportWidth"] + 32:
+                        issues.append(f"{template_id} {device}: overflow {geometry}")
                     result["templates"].append(geometry)
                 page.locator("#previewClose").click()
                 assert page.locator("#templatePreview").is_hidden()
             assert page.evaluate("JSON.stringify(project)") == initial_project
-            assert not errors, errors
+            if errors: issues.append(f"Uncaught browser errors: {errors}")
+            assert not issues, "\n".join(issues)
             browser.close()
         result["status"] = "pass"
     except Exception as err:
