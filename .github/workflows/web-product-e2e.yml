@@ -101,7 +101,7 @@ jobs:
       # The repository's Actions artifact quota is exhausted. Store reviewable
       # screenshots in the same PR branch, only for internal/same-repo PRs.
       # This does not modify main and screenshots alone do not retrigger E2E.
-      - name: Persist 36 image screenshots in review branch
+      - name: Persist 52 opening/chapter/ending/preview screenshots in review branch
         if: ${{ success() && matrix.browser == 'chromium' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
         env:
           REVIEW_BRANCH: ${{ github.head_ref }}
@@ -120,6 +120,8 @@ jobs:
               assert target.is_file() and target.stat().st_size>1000, target
               middle=base/f'{row["template"]}-chapter3-{row["device"]}.png'
               assert middle.is_file() and middle.stat().st_size>1000, middle
+              ending=base/f'{row["template"]}-ending-{row["device"]}.png'
+              assert ending.is_file() and ending.stat().st_size>1000, ending
           for tid in ("editorial","product-3d"):
               for device in ("desktop","mobile"):
                   target=base/f"{tid}-preview-{device}.png"
@@ -153,6 +155,13 @@ jobs:
                   "|---|---|---|"]
           for tid,name in zip(ids,names):
               out.append(f"| {name} | ![Chapter 3 {name} desktop](./{tid}-chapter3-desktop.png) | ![Chapter 3 {name} mobile](./{tid}-chapter3-mobile.png) |")
+          out += ["", "## R8 — designed ending of every template", "",
+                  "Last-section screenshots show the editorial ending, not a static cover.",
+                  "",
+                  "| Template | Desktop closing | Mobile closing |",
+                  "|---|---|---|"]
+          for tid,name in zip(ids,names):
+              out.append(f"| {name} | ![Closing {name} desktop](./{tid}-ending-desktop.png) | ![Closing {name} mobile](./{tid}-ending-mobile.png) |")
           out += ["", "## R3 — complete template preview dialog (not only page hero)", "",
                   "| Template | Desktop preview | Mobile preview |",
                   "|---|---|---|"]
