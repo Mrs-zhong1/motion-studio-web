@@ -14,6 +14,7 @@ on:
       - 'stage9/tests/test_r15_asset_batch.py'
       - 'stage9/tests/test_r15_media_quality.py'
       - 'stage9/three-scene-entry.js'
+      - 'stage9/bundle-chapter-photos.mjs'
       - '.github/workflows/web-product-e2e.yml'
   push:
     paths:
@@ -30,6 +31,7 @@ on:
       - 'stage9/tests/test_r15_asset_batch.py'
       - 'stage9/tests/test_r15_media_quality.py'
       - 'stage9/three-scene-entry.js'
+      - 'stage9/bundle-chapter-photos.mjs'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
 permissions:
