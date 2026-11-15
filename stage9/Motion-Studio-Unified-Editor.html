@@ -917,6 +917,43 @@
  .page[data-template] .section.designed-chapter .section-art{background-position:center!important}
  .page[data-template] .section.designed-chapter .designed-chapter-heading::before{scale:1!important}
 }
+
+/* R13-04: actual atmosphere inside each photo frame; chapter-aware,
+   editorially distinct for all eight templates and never blocks controls. */
+.page[data-template] .section.designed-chapter .section-art{isolation:isolate;overflow:hidden}
+.page[data-template] .section.designed-chapter .motion-atmosphere{
+ position:absolute;inset:0;display:block;pointer-events:none;z-index:1;
+ opacity:calc(.22 + var(--chapter-enter,1)*.38 - var(--chapter-exit,0)*.12);
+ transition:opacity .12s linear;mix-blend-mode:screen;
+ background:linear-gradient(135deg,#d9ff6718 0%,transparent 55%,#ffffff13 100%);
+}
+.page[data-template="editorial"] .section.designed-chapter .motion-atmosphere{
+ background:linear-gradient(115deg,#c1bead46,transparent 45%,#eef1d030);mix-blend-mode:multiply;
+}
+.page[data-template="product-3d"] .section.designed-chapter .motion-atmosphere{
+ background:radial-gradient(circle at 67% 44%,#d4ffd04a,transparent 48%);mix-blend-mode:screen;
+}
+.page[data-template="cinematic"] .section.designed-chapter .motion-atmosphere{
+ background:linear-gradient(0deg,#09070888,transparent 46%,#dba27c2e 100%);mix-blend-mode:multiply;
+}
+.page[data-template="architecture"] .section.designed-chapter .motion-atmosphere{
+ background:linear-gradient(100deg,#e9ece263,transparent 54%,#495d3b32);mix-blend-mode:soft-light;
+}
+.page[data-template="agency"] .section.designed-chapter .motion-atmosphere{
+ background:linear-gradient(135deg,transparent 0 35%,#eafe6c6b 36% 43%,transparent 44% 100%);mix-blend-mode:screen;
+}
+.page[data-template="fashion"] .section.designed-chapter .motion-atmosphere{
+ background:linear-gradient(120deg,#dcbba348,transparent 46%,#20181727);mix-blend-mode:soft-light;
+}
+.page[data-template="gallery"] .section.designed-chapter .motion-atmosphere{
+ background:radial-gradient(ellipse at 54% 38%,#f5f5eb3b 0%,transparent 56%);mix-blend-mode:screen;
+}
+.page[data-template="saas"] .section.designed-chapter .motion-atmosphere{
+ background:linear-gradient(120deg,#b9f9dd29,transparent 45%,#74a3e429);mix-blend-mode:screen;
+}
+@media(prefers-reduced-motion:reduce){
+ .page[data-template] .section.designed-chapter .motion-atmosphere{opacity:.25!important;transition:none!important}
+}
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="library-section-heading"><div><span class="library-eyebrow">CURATED INTERACTIVE WEBSITES</span><h2>可探索的作品 <span id="templateResultCount">08</span></h2></div><p>打开任意模板体验完整的多章节网页，而非静态封面。</p></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewImmersive" aria-pressed="false" title="切换为整页沉浸式预览">沉浸预览</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><div class="preview-live-badge" aria-hidden="true"><i></i> LIVE INTERACTIVE PREVIEW · 滚动探索</div><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
@@ -1516,7 +1553,7 @@ const isTemplateFinal=(authoredSix||['editorial','product-3d'].includes(project.
 const chapterStep=`${String(i+1).padStart(2,'0')} / ${String(project.sections.length).padStart(2,'0')}`;
 const chapterHeader=designedChapter?`<div class="designed-chapter-heading"><span class="chapter-index">${chapterPrefix} / ${chapterNumber}</span><span class="chapter-step" aria-label="章节进度">${chapterStep}</span><h2 data-chapter-title>${safe(s.text)}</h2><p>${safe(chapterDescription)}</p></div>`:'';
 const openingMark=isTemplateOpening?`<div class="template-opening-mark" aria-hidden="true"><span>${safe(visualFrame.eyebrow)}</span><span>${safe(visualFrame.signature)}</span></div>`:'';
-const closingMark=isTemplateFinal?`<div class="template-closing-mark"><span class="closing-kicker">END OF THIS STORY / ${chapterStep}</span><div class="closing-body"><strong>${safe(visualFrame.outro)}</strong><p>${safe(visualFrame.note)}</p></div><span class="closing-signature">MOTION STUDIO · ${safe(project.templateId.toUpperCase())}</span></div>`:'';let art=s.image?`<div class="section-art" style="background-image:url('${s.image}');background-position:${s.imageFocusX}% ${s.imageFocusY}%"></div>`:'';let raw=(forExport&&s.id==='offline-glb-scene'&&project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb).length>=2)
+const closingMark=isTemplateFinal?`<div class="template-closing-mark"><span class="closing-kicker">END OF THIS STORY / ${chapterStep}</span><div class="closing-body"><strong>${safe(visualFrame.outro)}</strong><p>${safe(visualFrame.note)}</p></div><span class="closing-signature">MOTION STUDIO · ${safe(project.templateId.toUpperCase())}</span></div>`:'';let art=s.image?`<div class="section-art" style="background-image:url('${s.image}');background-position:${s.imageFocusX}% ${s.imageFocusY}%">${designedChapter?'<span class="motion-atmosphere" aria-hidden="true"></span>':''}</div>`:'';let raw=(forExport&&s.id==='offline-glb-scene'&&project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb).length>=2)
  ?'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>共享 Three.js 场景章节</title></head><body style="background:transparent;margin:0;font:15px system-ui;color:#e9f2e7"><div style="display:grid;place-items:center;min-height:400px;text-align:center;opacity:.7">共享 3D 场景正在加载。若 WebGL 不可用，请检查浏览器图形加速设置。</div></body></html>'
  :frameMarkup(getItem(s),s);const bridge=`<script>window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio-scroll')return;const p=Math.max(0,Math.min(1,Number(e.data.progress)||0)),max=Math.max(0,document.documentElement.scrollHeight-innerHeight);window.scrollTo(0,p*max);window.dispatchEvent(new Event('scroll'));});<\/script>`;raw=raw.replace('</body>',bridge+'</body>');if(templateHero){const editorial=project.templateId==='editorial';const heroCSS=editorial
  ?'body{background:#f0ede6!important;color:#22221e!important}.stage{padding:36px 28px!important}.center{width:100%!important;text-align:left!important}h1{font-family:Georgia,serif!important;font-size:clamp(32px,5vw,70px)!important;letter-spacing:-.065em!important;line-height:1.02!important;max-width:100%!important;overflow-wrap:break-word!important}.muted{color:#66685e!important}.eyebrow{color:#52644e!important}.stage:before{opacity:.035!important}.scrollnote{color:#6f7069!important}'
