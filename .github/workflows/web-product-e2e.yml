@@ -110,11 +110,12 @@ jobs:
           import json
           doc=json.load(open("TEMPLATE_VISUAL_AUDIT.json"))
           print("Status:",doc["status"])
-          print("| Template | Viewport | Photos | Overflow | SHA256 prefix |")
-          print("|---|---|---|---|---|")
+          print("| Template | Viewport | Image layers | Loaded photos | Generated fallbacks | Overflow | SHA256 prefix |")
+          print("|---|---|---|---|---|---|---|")
           for row in doc["templates"]:
               overflow=max(0,row["documentWidth"]-row["viewportWidth"])
-              print(f'| {row["template"]} | {row["device"]} | {row["visiblyRenderedPhotos"]}/{row["sectionCount"]} | {overflow}px | {row["firstSectionPngSHA256"]} |')
+              print(f'| {row["template"]} | {row["device"]} | {row["visiblyRenderedPhotos"]}/{row["sectionCount"]} | {row.get("realPhotoCount","?")} | {row.get("originalFallbackCount","?")} | {overflow}px | {row["firstSectionPngSHA256"]} |')
+          print("\\n**Photos are CDN-loaded demo images, not commercially cleared artwork.**")
           if doc.get("error"): print("\\nFailure:",doc["error"])
           PY
           else
@@ -191,6 +192,20 @@ jobs:
                "|---|---|---|"]
           for tid,name in zip(ids,names):
               out.append(f"| {name} | ![Desktop {name}](./{tid}-desktop.png) | ![Mobile {name}](./{tid}-mobile.png) |")
+          # The rendered screenshot gallery must not confuse image layers
+          # with actual CDN-loaded photography; record both source counts.
+          source=Path("stage9/TEMPLATE_VISUAL_AUDIT.json")
+          if source.is_file():
+              visual=json.loads(source.read_text())
+              out += ["", "## R15-04 — actual photography / fallback audit", "",
+                      "The counts below were observed by the browser at screenshot time.",
+                      "Photos are provisional demonstration media, not legally cleared assets.",
+                      "",
+                      "| Template | Real photos loaded | Program-generated fallbacks | Total chapters |",
+                      "|---|---:|---:|---:|"]
+              for row in visual.get("templates",[]):
+                  if row.get("device")=="desktop":
+                      out.append(f'| {row["template"]} | {row.get("realPhotoCount","?")} | {row.get("originalFallbackCount","?")} | {row["sectionCount"]} |')
           out += ["", "## R5 — real third chapter of every template", "",
                   "Images below show actual exported-page sections, not the home-card covers.",
                   "",
