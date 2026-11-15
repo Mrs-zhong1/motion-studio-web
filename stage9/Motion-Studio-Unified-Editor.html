@@ -1060,10 +1060,18 @@
   bottom:12px;left:18px;gap:10px;font-size:8px;z-index:9;
  }
 }
+
+/* R15-02: project-wide photo editing instead of one-by-one asset replacement. */
+.r15-media-batch{margin:11px 0 14px;padding:14px;border:1px solid #526355;background:#172320;border-radius:10px;display:grid;gap:8px}
+.r15-media-batch strong{font-size:13px;color:#eaf2dc}
+.r15-media-batch p,.r15-media-batch span{font-size:11px;line-height:1.5;color:#adbcb1;margin:0}
+.r15-media-batch button{background:#d9ff67;color:#142017;border:0;border-radius:7px;padding:10px;font-weight:750;cursor:pointer}
+.r15-media-batch button:disabled{opacity:.5;cursor:wait}
+.r15-media-batch button:focus-visible{outline:2px solid #fff;outline-offset:3px}
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="library-section-heading"><div><span class="library-eyebrow">CURATED INTERACTIVE WEBSITES</span><h2>可探索的作品 <span id="templateResultCount">08</span></h2></div><p>打开任意模板体验完整的多章节网页，而非静态封面。</p></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewImmersive" aria-pressed="false" title="切换为整页沉浸式预览">沉浸预览</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><div class="preview-live-badge" aria-hidden="true"><i></i> LIVE INTERACTIVE PREVIEW · 滚动探索</div><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
-<section class="editor-view" id="editorView" hidden><header class="appbar"><button id="backToLibrary" class="back-library">← 模板库</button><div class="brand">✳ MOTION <em>STUDIO</em></div><input id="projectName" class="project-name" value="My Motion Story" aria-label="工程名称" maxlength="70"><span class="mode-badge" id="modeLabel">简单模式</span><div class="bar-actions"><button id="modeToggle">切换专业模式</button><button id="undoBtn" title="撤销 ⌘/Ctrl+Z" disabled>↶</button><button id="redoBtn" title="重做 ⌘/Ctrl+Shift+Z" disabled>↷</button><label class="global-transition-control advanced-only" for="globalTransition">转场 <select id="globalTransition"><option value="none">关闭</option><option value="fade">渐隐</option><option value="veil">遮罩</option></select></label><button id="newProject">新建</button><button id="saveProject">保存 JSON</button><button id="openProject">导入 JSON</button><button id="exportPage" class="primary">导出 HTML ↗</button><input id="openFile" type="file" accept=".json,application/json" hidden></div></header><div class="workspace"><aside class="left editor-left"><div class="panel-kicker">Project outline</div><h2>章节</h2><div class="chapter-list" id="chapterList"></div><div class="asset-tabs"><button class="active" data-asset-tier-button="l1">整站模板</button><button data-asset-tier-button="l2">页面区块</button><button data-asset-tier-button="l3">动效组件</button><button data-asset-tier-button="l4">项目素材</button></div><section class="asset-panel active" data-asset-tier="l1"><p class="hint">切换完整网站结构。当前工程会被替换。</p><div class="template-quick-list" id="templateQuickList"></div><select id="templateChoice" class="l1-hidden-select" aria-label="完整模板选择"></select><button id="loadTemplate" class="l1-hidden-select">加载所选模板</button></section><section class="asset-panel" data-asset-tier="l2"><p class="hint">添加一个已组合好的章节骨架。</p><div class="section-presets" id="sectionPresets"></div></section><section class="asset-panel" data-asset-tier="l3"><input class="search" id="search" placeholder="搜索 20 个基础动效" aria-label="搜索动效"><div class="filters" id="filters"></div><div class="component-list" id="componentList"></div><p class="hint">点击「预览」可运行实际动效；点击「添加」才会修改画布。</p></section><section class="asset-panel" data-asset-tier="l4"><p class="asset-library-hint">这里显示当前网页已使用的图片。选择素材即可定位到对应章节并替换。</p><div id="projectAssetList" class="project-asset-list"></div></section></aside>
+<section class="editor-view" id="editorView" hidden><header class="appbar"><button id="backToLibrary" class="back-library">← 模板库</button><div class="brand">✳ MOTION <em>STUDIO</em></div><input id="projectName" class="project-name" value="My Motion Story" aria-label="工程名称" maxlength="70"><span class="mode-badge" id="modeLabel">简单模式</span><div class="bar-actions"><button id="modeToggle">切换专业模式</button><button id="undoBtn" title="撤销 ⌘/Ctrl+Z" disabled>↶</button><button id="redoBtn" title="重做 ⌘/Ctrl+Shift+Z" disabled>↷</button><label class="global-transition-control advanced-only" for="globalTransition">转场 <select id="globalTransition"><option value="none">关闭</option><option value="fade">渐隐</option><option value="veil">遮罩</option></select></label><button id="newProject">新建</button><button id="saveProject">保存 JSON</button><button id="openProject">导入 JSON</button><button id="exportPage" class="primary">导出 HTML ↗</button><input id="openFile" type="file" accept=".json,application/json" hidden></div></header><div class="workspace"><aside class="left editor-left"><div class="panel-kicker">Project outline</div><h2>章节</h2><div class="chapter-list" id="chapterList"></div><div class="asset-tabs"><button class="active" data-asset-tier-button="l1">整站模板</button><button data-asset-tier-button="l2">页面区块</button><button data-asset-tier-button="l3">动效组件</button><button data-asset-tier-button="l4">项目素材</button></div><section class="asset-panel active" data-asset-tier="l1"><p class="hint">切换完整网站结构。当前工程会被替换。</p><div class="template-quick-list" id="templateQuickList"></div><select id="templateChoice" class="l1-hidden-select" aria-label="完整模板选择"></select><button id="loadTemplate" class="l1-hidden-select">加载所选模板</button></section><section class="asset-panel" data-asset-tier="l2"><p class="hint">添加一个已组合好的章节骨架。</p><div class="section-presets" id="sectionPresets"></div></section><section class="asset-panel" data-asset-tier="l3"><input class="search" id="search" placeholder="搜索 20 个基础动效" aria-label="搜索动效"><div class="filters" id="filters"></div><div class="component-list" id="componentList"></div><p class="hint">点击「预览」可运行实际动效；点击「添加」才会修改画布。</p></section><section class="asset-panel" data-asset-tier="l4"><p class="asset-library-hint">这里显示当前网页已使用的图片。选择素材即可定位到对应章节并替换。</p><div class="r15-media-batch"><strong>一次替换整个故事的图片</strong><p>按所选文件顺序对应第 1、2、3… 章；保留所有原有交互、镜头与文字。仅上传自己拥有使用权的图片。</p><button id="r15BulkImageButton" type="button">批量导入章节图片</button><input id="r15BulkImageInput" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden><span id="r15BulkImageResult" role="status" aria-live="polite">单张源文件最大 15 MB，自动压缩并嵌入 HTML。</span></div><div id="projectAssetList" class="project-asset-list"></div></section></aside>
 <main class="stage"><div class="stage-top"><div><strong>实时画布</strong><small>直接选择章节或图层，三栏各自滚动</small></div><div class="stage-tools"><button id="togglePanels" title="收起侧栏">收起侧栏</button><button id="zoomOut" title="缩小">−</button><span class="zoom-readout" id="zoomReadout">100%</span><button id="zoomIn" title="放大">＋</button><button id="desktopView" class="active">桌面</button><button id="mobileView">手机</button><button id="playPreview">交互预览</button><button id="fullscreenCanvas">全屏</button></div></div><div class="canvas-viewport" id="canvasViewport"><div class="canvas-wrap" id="canvasWrap"><div class="page" id="page"><div class="page-head"><b>MS / <span id="pageTitle">MY MOTION STORY</span></b><span>LIVE CANVAS</span></div><div id="sections" aria-label="页面章节画布"></div><div class="frame-notice" id="scrollNotice">每个动效在隔离容器内运行，避免组件 CSS/JS 互相污染。</div></div></div></div><div class="timeline" id="editorTimeline"><div class="timeline-head"><b>时间轴</b><span id="timeInfo">00 个章节</span><button class="timeline-toggle" id="timelineToggle">收起</button></div><div id="timelineTrack" class="timeline-track"></div><div class="track-heading advanced-only"><b>多轨关键帧</b><span>点击节点编辑图层与镜头</span></div><div id="multitrack" class="multitrack advanced-only" aria-label="全局多轨关键帧"></div><div class="scrub-box"><label for="timelineScrub">故事进度</label><input id="timelineScrub" class="scrubber" type="range" min="0" max="100" value="0"><output id="timelinePct">0%</output><button id="timelineLive" title="回到实时滚动">跟随滚动</button></div></div></main>
 <aside class="right editor-right"><div class="panel-kicker">Context inspector</div><h2>所选内容</h2><div id="props"></div><div class="legal">组件均为原创适配。离线导出保留图层、镜头、3D 与交互；WebKit 自动化不等于原生 Safari 实机验收。</div></aside></div></section>
 <section id="componentPreview" class="component-preview-modal" hidden role="dialog" aria-modal="true" aria-labelledby="componentPreviewTitle">
@@ -1944,6 +1952,48 @@ $('discoveryBlank').onclick=()=>{
   active=null;activeLayer=null;selectedLayers=new Set();historyStack=[];futureStack=[];
   lastHistoryState=snapshot();persistDraftWithoutHistory();showEditor();
   notify('已建立空白项目，可从组件库添加第一个章节');
+};
+
+/* R15-02: user-owned batch chapter photography, compressed for standalone exports.
+   Keep the existing template motion/3D sections intact. Atomic update on success. */
+async function r15CompressPhoto(file){
+ if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>15000000||file.size<=0)throw Error('图片类型不支持或超过15MB：'+file.name);
+ const bitmap=await createImageBitmap(file);
+ try{
+  const scale=Math.min(1,1400/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+  canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+  const ctx=canvas.getContext('2d');
+  if(!ctx)throw Error('浏览器图像处理不可用');
+  ctx.fillStyle='#f9f9f7';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+  for(const quality of [.84,.72,.6,.48]){
+   const jpeg=canvas.toDataURL('image/jpeg',quality);
+   if(jpeg.length<2300000)return jpeg;
+  }
+  throw Error('图片压缩后仍超过导出限制：'+file.name);
+ }finally{bitmap.close?.()}
+}
+async function r15ApplyChapterPhotos(files){
+ const list=Array.from(files||[]);
+ if(!project.sections.length)throw Error('请先使用模板或添加章节');
+ if(!list.length)throw Error('未选择图片');
+ if(list.length>project.sections.length)throw Error('图片数量超过当前 '+project.sections.length+' 个章节');
+ const output=[];
+ for(const file of list)output.push(await r15CompressPhoto(file));
+ // Commit all at once, or make no changes if any file failed.
+ output.forEach((image,i)=>{project.sections[i].image=image;project.sections[i].imageFocusX=50;project.sections[i].imageFocusY=50});
+ render();return output.length;
+}
+$('r15BulkImageButton').onclick=()=>$('r15BulkImageInput').click();
+$('r15BulkImageInput').onchange=async e=>{
+ const input=e.target,button=$('r15BulkImageButton'),status=$('r15BulkImageResult');
+ const files=Array.from(input.files||[]);if(!files.length)return;
+ button.disabled=true;status.textContent='正在处理 '+files.length+' 张图片…';
+ try{const count=await r15ApplyChapterPhotos(files);status.textContent='已更新 '+count+' 个章节。可在画布查看并导出。';notify('已更新 '+count+' 个章节图片');}
+ catch(err){status.textContent='导入失败：'+err.message;notify('批量导入失败：'+err.message);}
+ finally{input.value='';button.disabled=false}
 };
 historyStack=[];futureStack=[];lastHistoryState=snapshot();syncHistoryButtons();window.MotionStudioUnified={undo:()=>restoreHistory('undo'),redo:()=>restoreHistory('redo'),getProject:()=>structuredClone(project),add:addComponent,build:exportDocument,load:loadProject,registry,templates:templateCatalog.map(({sections,...meta})=>meta),createProjectFromTemplate,useTemplate,previewTemplate};
 </script></body></html>
