@@ -1,4 +1,59 @@
-086,14);
+   const x=side*(cx+rx*Math.cos(theta)),
+             y=cy+ry*Math.sin(theta)*Math.cos(phi),
+             z=cz+rz*Math.sin(theta)*Math.sin(phi);
+       const normal=normalize(side*Math.cos(theta)/rx,Math.sin(theta)*Math.cos(phi)/ry,Math.sin(theta)*Math.sin(phi)/rz);
+       ring.push(push(mat,[x,y,z],normal));
+     }
+     if(prev)grid(mat,side===1?prev:ring,side===1?ring:prev,true);
+     prev=ring;
+   }
+ }
+ // A swept tubular curve, used for headband and yokes with smoothed normals.
+ function tube(mat,path,radius,segments=12){
+   let prior=null;
+   for(let i=0;i<path.length;i++){
+     const p=path[i],before=path[Math.max(0,i-1)],after=path[Math.min(path.length-1,i+1)];
+     const tangent=normalize(after[0]-before[0],after[1]-before[1],after[2]-before[2]);
+     let up=[0,0,1];
+     if(Math.abs(tangent[2])>.89)up=[0,1,0];
+     const u=normalize(up[1]*tangent[2]-up[2]*tangent[1],up[2]*tangent[0]-up[0]*tangent[2],up[0]*tangent[1]-up[1]*tangent[0]);
+     const v=normalize(tangent[1]*u[2]-tangent[2]*u[1],tangent[2]*u[0]-tangent[0]*u[2],tangent[0]*u[1]-tangent[1]*u[0]);
+     const ring=[];
+     for(let j=0;j<segments;j++){
+       const angle=j*Math.PI*2/segments;const nx=u[0]*Math.cos(angle)+v[0]*Math.sin(angle),ny=u[1]*Math.cos(angle)+v[1]*Math.sin(angle),nz=u[2]*Math.cos(angle)+v[2]*Math.sin(angle);
+       ring.push(push(mat,[p[0]+nx*radius,p[1]+ny*radius,p[2]+nz*radius],[nx,ny,nz]));
+     }
+     if(prior)grid(mat,prior,ring,true);
+     prior=ring;
+   }
+ }
+ // Closed over-ear housing, inset cushions and centre speaker mesh.
+ for(const side of [-1,1]){
+   cup(side,0,.78,-.35,0,.25,.55,.37);
+   cup(side,1,.57,-.35,0,.125,.48,.32);
+   cup(side,3,.46,-.35,0,.029,.37,.245,64,12);
+   const hinge=[];
+   for(let j=0;j<=12;j++){
+     const t=j/12;hinge.push([side*(.80-.08*t),.12+.43*t,0]);
+   }
+   tube(2,hinge,.065);
+   // A subtle metallic cup gasket/outer ring.
+   const rim=[];
+   for(let j=0;j<=72;j++){
+     const t=2*Math.PI*j/72;
+     rim.push([side*1.018,-.35+Math.cos(t)*.46,Math.sin(t)*.32]);
+   }
+   tube(2,rim,.018,8);
+ }
+ // True curved headband with a wider, compliant inner padding.
+ const headband=[],inside=[];
+ for(let k=0;k<=88;k++){
+   const a=Math.PI-.08-(Math.PI-.16)*k/88;
+   headband.push([.79*Math.cos(a),.55+1.05*Math.sin(a),0]);
+   if(k>=9&&k<=79)inside.push([.79*Math.cos(a),.49+1.01*Math.sin(a),0]);
+ }
+ tube(2,headband,.065,14);
+ tube(1,inside,.086,14);
  const bin=[],views=[],accessors=[],primitives=[];
  const align4=()=>{while(bin.length%4)bin.push(0)};
  const viewFor=(bytes,target)=>{
