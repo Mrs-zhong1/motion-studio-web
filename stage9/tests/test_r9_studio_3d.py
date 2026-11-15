@@ -50,7 +50,16 @@ def run():
             assert status["webgl2"] and status["frames"]>=2,status
             assert status["pbr"] and status["materialCount"]>=2,status
             assert status["studioLighting"] and status["shadowEnabled"],status
-            assert status["studioMeshes"]==3 and status["modelTriangles"]>=50,status
+            assert status["studioMeshes"]==3 and status["modelTriangles"]>=10000,status
+            assert status["environmentReady"] and status["proceduralTextureCount"]>=2,status
+            assert status["materialCount"]>=4,status
+            controls=frame.locator("#motion-r9-controls")
+            controls.locator("button",has_text="Cool").click()
+            controls.locator("button",has_text="Graphite").click()
+            controls.locator("button",has_text="Angle").click()
+            selected=view.evaluate("el=>window.__motionThreeStatus")
+            assert selected["lightPreset"]=="cool" and selected["materialPreset"]=="graphite",selected
+            assert selected["cameraPreset"]=="angle" and selected["controlClicks"]>=3,selected
             bounds=view.bounding_box()
             assert bounds and bounds["width"]>150 and bounds["height"]>150,bounds
             x=bounds["x"]+bounds["width"]*.48
