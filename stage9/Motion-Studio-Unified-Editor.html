@@ -653,6 +653,14 @@
 .page[data-template="saas"] .section.designed-chapter .section-art{
  translate:0 calc((1 - var(--chapter-enter,1))*13px - var(--chapter-exit,0)*15px);
 }
+@media(max-width:720px){
+ /* Mobile chapters stack media vertically. Keep the scroll-driven image
+    reveal, but cancel translations that push it across the iframe. */
+ .page[data-template] .section.designed-chapter .section-art,
+ .page[data-template] .section.designed-chapter .designed-chapter-heading{
+  translate:none!important;rotate:none!important;scale:1!important;
+ }
+}
 @media(prefers-reduced-motion:reduce){
  .page[data-template] .section.designed-chapter .section-art,
  .page[data-template] .section.designed-chapter .designed-chapter-heading{
