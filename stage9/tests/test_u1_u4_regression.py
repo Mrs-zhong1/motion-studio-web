@@ -39,6 +39,24 @@ def test_u1_u4_regression():
             page.wait_for_function("() => project.templateId==='editorial'")
             assert page.evaluate("project.sections[0].image.startsWith('data:image/jpeg;base64,')"), page.evaluate("({has:templatePhotoCache.has('editorial'),sizes:templatePhotoCache.get('editorial')?.map(x=>x.length)})")
             assert page.evaluate("project.sections.length")>=3
+            # R5: editor canvas scroll progress must use its own scroll viewport.
+            # Verify real CSS story progress increases as the final chapter is revealed.
+            last = page.locator("#sections .section.designed-chapter").last
+            page.locator("#canvasViewport").evaluate(
+                "el => {el.scrollTop=0;el.dispatchEvent(new Event('scroll'))}")
+            before = last.evaluate("el=>Number(el.style.getPropertyValue('--story-reveal')||0)")
+            page.locator("#canvasViewport").evaluate(
+                "el => {el.scrollTop=el.scrollHeight;el.dispatchEvent(new Event('scroll'))}")
+            after = last.evaluate("el=>Number(el.style.getPropertyValue('--story-reveal')||0)")
+            assert after > before+.1,(before,after)
+            page.emulate_media(reduced_motion="reduce")
+            page.evaluate("refreshOverlays()")
+            assert last.locator(".section-art").evaluate(
+                "el=>getComputedStyle(el).clipPath") == "none"
+            page.emulate_media(reduced_motion="no-preference")
+            page.evaluate("refreshOverlays()")
+            page.locator("#canvasViewport").evaluate(
+                "el => {el.scrollTop=0;el.dispatchEvent(new Event('scroll'))}")
             assert page.locator(".section.selected [data-canvas-image]").count()==1
             page.locator(".section.selected [data-canvas-image]").click()
             page.locator("#propImage").set_input_files({"name":"replacement.jpg","mimeType":"image/jpeg","buffer":DEMO_JPEG})
