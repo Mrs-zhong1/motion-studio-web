@@ -30,8 +30,10 @@ def test_r15_media_quality():
             all_sources=page.evaluate("""() => {
                 const result={};
                 for(const t of templateCatalog){
-                    const urls=[templateThumbnailImages[t.id],...(templateExtraPhotos[t.id]||[])];
-                    result[t.id]={chapters:t.sections.length,urls};
+                    const assets=templateOfflinePhotoBundles[t.id]||[];
+                    result[t.id]={chapters:t.sections.length,
+                        urls:assets.map(a=>a.source),
+                        bundled:assets.filter(a=>a.media).length};
                 }
                 return result;
             }""")
@@ -42,10 +44,11 @@ def test_r15_media_quality():
 
             fixture=["data:image/png;base64,"+base64.b64encode(
                 make_png(40+i*37,90+i*21,120+i*13)).decode("ascii") for i in range(5)]
+            # Replace any unavailable CDN responses with fixture media in the
+            # page's in-memory bundle. Exercise the real photoToInline() path.
             page.evaluate("""images=>{
-               const urls=[templateThumbnailImages.cinematic,...templateExtraPhotos.cinematic];
-               const mapped=new Map(urls.map((url,i)=>[url,images[i]]));
-               photoToInline=async url=>mapped.get(url)||'';
+               templateOfflinePhotoBundles.cinematic=
+                 templateOfflinePhotoBundles.cinematic.map((asset,i)=>({...asset,media:images[i]}));
             }""",fixture)
             page.evaluate("async()=>{templatePhotoCache.delete('cinematic');await ensureTemplatePhoto('cinematic')}")
             audit=page.evaluate("()=>templateAssetAuditCache.get('cinematic')")
