@@ -496,6 +496,68 @@
  .page[data-template] .section.authored-six .motion-layer{max-width:78%!important}
 }
 
+
+/* Six gallery cards: a different composition per template, not one photo overlay. */
+.template-card .template-art.art-directed-card{
+  display:grid;grid-template-columns:53% 47%;align-items:stretch;
+  height:clamp(270px,26vw,370px);padding:0;overflow:hidden;
+  isolation:isolate;position:relative;
+}
+.template-card .template-art.art-directed-card::after,
+.template-card .template-art.art-directed-card::before{display:none!important}
+.art-directed-word{position:relative;min-width:0;display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:center;text-align:left;padding:clamp(13px,2vw,34px);
+  gap:clamp(8px,1vw,16px);z-index:2}
+.art-directed-word small{font-size:10px;letter-spacing:.13em;text-transform:uppercase}
+.art-directed-word strong{display:block;font-weight:800;line-height:1.03;
+  font-size:clamp(24px,3vw,49px);letter-spacing:-.06em;overflow-wrap:anywhere}
+.art-directed-word span{font-size:9px;letter-spacing:.11em;text-transform:uppercase}
+.art-directed-photo{position:relative;z-index:1;min-height:100%;min-width:0;
+  display:block;background-size:cover;background-position:center}
+.art-directed-edge{position:absolute;bottom:15px;right:15px;z-index:3;
+  padding:6px 9px;font-size:9px;letter-spacing:.12em;color:#fff;background:#151a1cb8}
+.template-card .art-directed-card.cinematic{background:#14131a;color:#f9ede2;
+  grid-template-columns:44% 56%}
+.art-directed-card.cinematic .art-directed-word strong{font-family:Georgia,serif;
+  font-size:clamp(28px,3.2vw,55px);font-weight:400;font-style:italic}
+.art-directed-card.cinematic .art-directed-photo{filter:saturate(.7)}
+.template-card .art-directed-card.architecture{background:#e5eae2;color:#213229;
+  grid-template-columns:47% 53%}
+.art-directed-card.architecture .art-directed-word strong{font-family:Georgia,serif;
+  font-weight:500;text-transform:uppercase;font-size:clamp(20px,2.7vw,43px)}
+.art-directed-card.architecture .art-directed-photo{filter:saturate(.7);margin:12px;
+  border:8px solid #fff}
+.template-card .art-directed-card.agency{background:#dbff65;color:#141b1b;
+  grid-template-columns:58% 42%}
+.art-directed-card.agency .art-directed-word strong{font-weight:900;
+  font-size:clamp(26px,3.3vw,60px);text-transform:uppercase;line-height:.95}
+.art-directed-card.agency .art-directed-photo{transform:rotate(-5deg) scale(1.04);
+  border:10px solid #fff8e7;box-shadow:-10px 15px 0 #171c1b}
+.template-card .art-directed-card.fashion{background:#e9d7c8;color:#43312f;
+  grid-template-columns:48% 52%}
+.art-directed-card.fashion .art-directed-word{align-items:center;text-align:center}
+.art-directed-card.fashion .art-directed-word strong{font-family:Georgia,serif;
+  text-transform:uppercase;font-weight:400;letter-spacing:.045em}
+.art-directed-card.fashion .art-directed-photo{margin:12px 18px;filter:saturate(.72)}
+.template-card .art-directed-card.gallery{background:#e5e9f2;color:#272d47;
+  grid-template-columns:52% 48%}
+.art-directed-card.gallery .art-directed-word strong{font-family:Georgia,serif;font-weight:500}
+.art-directed-card.gallery .art-directed-photo{margin:26px 19px;border:10px solid white;
+  box-shadow:0 9px 20px #15192828}
+.template-card .art-directed-card.saas{background:#d5f5de;color:#1e392a;
+  grid-template-columns:49% 51%}
+.art-directed-card.saas .art-directed-word strong{font-family:system-ui,sans-serif;
+  font-weight:850;letter-spacing:-.067em}
+.art-directed-card.saas .art-directed-photo{margin:20px 14px 20px 0;
+  border:8px solid white;border-radius:12px;box-shadow:0 14px 28px #24473324}
+@media(max-width:650px){
+ .template-card .template-art.art-directed-card{height:295px}
+ .art-directed-word{padding:12px;gap:11px}
+ .art-directed-word strong{font-size:clamp(21px,6vw,37px)!important}
+ .art-directed-word small,.art-directed-word span{font-size:8px}
+ .art-directed-card .art-directed-photo{margin:6px!important}
+}
+
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
@@ -820,7 +882,7 @@ let previewTemplateId=null,canvasZoom=1;
 function templateCardMarkup(t){const thumb=templateThumbnailImages[t.id];const curated=t.id==='editorial'||t.id==='product-3d';
  const art=curated?
  `<div class="template-art designed-card ${safe(t.id)}"><div class="designed-card-copy"><span>${t.id==='editorial'?'INDEPENDENT CREATIVE PRACTICE':'OBJECTS / MATERIAL / MOTION'}</span><strong>${t.id==='editorial'?'Ideas set<br>in motion.':'Form becomes<br>experience.'}</strong><em>${t.id==='editorial'?'PORTFOLIO / 2026':'PRODUCT / 3D'}</em></div><div class="designed-card-photo"${thumb?` style="background-image:url('${thumb}')"`:''}></div></div>`:
- `<div class="template-art ${safe(t.id)}${thumb?' has-image':''}"${thumb?` style="background-image:url('${thumb}')"`:''}><span class="art-type">${safe(t.headline)}</span></div>`;
+ `<div class="template-art art-directed-card ${safe(t.id)}"><div class="art-directed-word"><small>${safe(t.tag)}</small><strong>${safe(t.headline)}</strong><span>${safe(t.category)} — MOTION TEMPLATE</span></div><div class="art-directed-photo"${thumb?` style="background-image:url('${thumb}')"`:''}></div><div class="art-directed-edge">MS / ${safe(t.id.toUpperCase())}</div></div>`;
  return `<button class="template-card" data-template-card="${safe(t.id)}" data-category="${safe(t.category)}" aria-label="预览 ${safe(t.name)}">${art}<div class="template-card-copy"><div><h2>${safe(t.name)}</h2><p>${safe(t.tag)} · 点击体验交互</p></div><span>↗</span></div></button>`}
 function renderTemplateGrid(category='All'){const list=category==='All'?templateCatalog:templateCatalog.filter(t=>t.category===category);$('templateGrid').innerHTML=list.map(templateCardMarkup).join('');$('templateGrid').querySelectorAll('[data-template-card]').forEach(card=>card.onclick=()=>previewTemplate(card.dataset.templateCard));}
 function buildTemplatePreviewDocument(id){const previous={project,active,activeLayer,selectedLayers};project=createProjectFromTemplate(id);active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);const html=exportDocument();project=previous.project;active=previous.active;activeLayer=previous.activeLayer;selectedLayers=previous.selectedLayers;return html;}
