@@ -66,6 +66,12 @@ def run():
             assert abs(after["dragYaw"])>.3 and abs(after["dragPitch"])>.1,after
             assert after["frames"]>status["frames"],(status,after)
             assert not remote,remote
+            shot_dir=Path("/tmp/motion-studio-visual-audit")
+            shot_dir.mkdir(parents=True,exist_ok=True)
+            view.screenshot(path=str(shot_dir/"r9-studio-model.png"),animations="disabled")
+            document.screenshot(path=str(shot_dir/"r9-studio-page.png"),
+                                animations="disabled",full_page=False)
+            data["screenshots"]=["r9-studio-model.png","r9-studio-page.png"]
             data["pass"]=True
             document.close();page.close();browser.close()
     finally:
