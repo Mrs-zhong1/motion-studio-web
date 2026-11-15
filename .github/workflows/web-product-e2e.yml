@@ -101,7 +101,7 @@ jobs:
       # The repository's Actions artifact quota is exhausted. Store reviewable
       # screenshots in the same PR branch, only for internal/same-repo PRs.
       # This does not modify main and screenshots alone do not retrigger E2E.
-      - name: Persist 16 screenshot previews in review branch
+      - name: Persist 36 image screenshots in review branch
         if: ${{ success() && matrix.browser == 'chromium' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
         env:
           REVIEW_BRANCH: ${{ github.head_ref }}
@@ -118,6 +118,8 @@ jobs:
           for row in report["templates"]:
               target=base/f'{row["template"]}-{row["device"]}.png'
               assert target.is_file() and target.stat().st_size>1000, target
+              middle=base/f'{row["template"]}-chapter3-{row["device"]}.png'
+              assert middle.is_file() and middle.stat().st_size>1000, middle
           for tid in ("editorial","product-3d"):
               for device in ("desktop","mobile"):
                   target=base/f"{tid}-preview-{device}.png"
@@ -144,6 +146,13 @@ jobs:
                "|---|---|---|"]
           for tid,name in zip(ids,names):
               out.append(f"| {name} | ![Desktop {name}](./{tid}-desktop.png) | ![Mobile {name}](./{tid}-mobile.png) |")
+          out += ["", "## R5 — real third chapter of every template", "",
+                  "Images below show actual exported-page sections, not the home-card covers.",
+                  "",
+                  "| Template | Desktop chapter 3 | Mobile chapter 3 |",
+                  "|---|---|---|"]
+          for tid,name in zip(ids,names):
+              out.append(f"| {name} | ![Chapter 3 {name} desktop](./{tid}-chapter3-desktop.png) | ![Chapter 3 {name} mobile](./{tid}-chapter3-mobile.png) |")
           out += ["", "## R3 — complete template preview dialog (not only page hero)", "",
                   "| Template | Desktop preview | Mobile preview |",
                   "|---|---|---|"]
