@@ -27,7 +27,9 @@ def test_r13_motion():
                 assert f'data-template="{template}"' in exported, template
                 assert f'.page[data-template="{template}"] .section.designed-chapter .designed-chapter-heading::before' in exported, template
                 assert f'.page[data-template="{template}"] .section.designed-chapter .motion-atmosphere' in exported, template
-            # Execute the exported document, not just inspect the source string.
+            # Execute the export after photo hydration, mirroring actual preview flow.
+            # Bare template definitions have not loaded artwork yet.
+            page.evaluate("async () => await ensureTemplatePhoto('cinematic')")
             exported = page.evaluate("(id) => buildTemplatePreviewDocument(id)", "cinematic")
             output = browser.new_page(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
             output_errors = []
