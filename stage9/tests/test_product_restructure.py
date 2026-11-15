@@ -229,7 +229,13 @@ def test_product_restructure():
                     standalone.on("pageerror",lambda err:export_errors.append(str(err)))
                     standalone.set_content(exported_html,wait_until="domcontentloaded")
                     assert standalone.locator("section.section").count() == len(saved_project["sections"])
-                    assert standalone.locator('section.section[data-index="1"] [data-chapter-title]').inner_text() == chapter_text
+                    # Text fidelity is a DOM-content check; inner_text() depends on
+                    # transient layout/visibility during first paint on Firefox/WebKit.
+                    # Geometry/visibility are independently covered by visual audit.
+                    heading = standalone.locator('section.section[data-index="1"] [data-chapter-title]')
+                    assert heading.text_content().strip() == chapter_text, (
+                        template_id, heading.text_content(), chapter_text
+                    )
                     rendered = standalone.locator("section.section").nth(1)
                     rendered.scroll_into_view_if_needed()
                     standalone.wait_for_function("""() => {
