@@ -149,18 +149,21 @@ def test_u1_u4_regression():
                 page.wait_for_timeout(250)
             else:
                 raise AssertionError(f"GLB renderer did not paint after scrolling into view: {before_drag}")
-            scene_frame.locator("#view").dispatch_event("pointerdown",{
-                "pointerId":1,"pointerType":"mouse","clientX":150,"clientY":160,
-                "buttons":1,"bubbles":True
-            })
-            scene_frame.locator("#view").dispatch_event("pointermove",{
-                "pointerId":1,"pointerType":"mouse","clientX":260,"clientY":190,
-                "buttons":1,"bubbles":True
-            })
-            scene_frame.locator("#view").dispatch_event("pointerup",{
-                "pointerId":1,"pointerType":"mouse","clientX":260,"clientY":190,
-                "buttons":0,"bubbles":True
-            })
+            # Freeze autorotation so movement can be attributed to the user.
+            scene_frame.locator("#speed").evaluate(
+                "el => {el.value='0';el.dispatchEvent(new Event('input',{bubbles:true}))}")
+            page.wait_for_timeout(350)
+            before_drag=scene_frame.locator("#view").evaluate(
+                "el => window.MotionStudio3DLab.getStatus()")
+            bounds=scene_frame.locator("#view").bounding_box()
+            assert bounds and bounds["width"]>100 and bounds["height"]>100,bounds
+            x=bounds["x"]+bounds["width"]*.42
+            y=bounds["y"]+bounds["height"]*.48
+            page.mouse.move(x,y)
+            page.mouse.down()
+            page.mouse.move(x+75,y+45,steps=12)
+            page.mouse.up()
+            page.wait_for_timeout(90)
             # A running renderer is required; software canvas2d fallback is disclosed
             # separately from WebGL2 and is not counted as hardware GPU validation.
             after_drag = scene_frame.locator("#view").evaluate("el => window.MotionStudio3DLab.getStatus()")
