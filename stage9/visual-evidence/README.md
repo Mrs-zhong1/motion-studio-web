@@ -15,6 +15,22 @@ Screenshots are raw CI evidence, not approved visual design.
 | Interactive Gallery | ![Desktop Interactive Gallery](./gallery-desktop.png) | ![Mobile Interactive Gallery](./gallery-mobile.png) |
 | Modern SaaS | ![Desktop Modern SaaS](./saas-desktop.png) | ![Mobile Modern SaaS](./saas-mobile.png) |
 
+## R15-04 — actual photography / fallback audit
+
+The counts below were observed by the browser at screenshot time.
+Photos are provisional demonstration media, not legally cleared assets.
+
+| Template | Real photos loaded | Program-generated fallbacks | Total chapters |
+|---|---:|---:|---:|
+| editorial | 4 | 0 | 4 |
+| product-3d | 5 | 0 | 5 |
+| cinematic | 5 | 0 | 5 |
+| architecture | 5 | 0 | 5 |
+| agency | 5 | 0 | 5 |
+| fashion | 5 | 0 | 5 |
+| gallery | 5 | 0 | 5 |
+| saas | 5 | 0 | 5 |
+
 ## R5 — real third chapter of every template
 
 Images below show actual exported-page sections, not the home-card covers.
