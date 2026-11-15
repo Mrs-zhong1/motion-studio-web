@@ -578,7 +578,40 @@
  clip-path:inset(0 calc((1 - var(--story-reveal,1))*15%) 0 0);
 }
 .page[data-template="gallery"] .section.designed-chapter .section-art{
- clip-path:inset(calc((1 - var(--story-reveal,1))*10%) 0 0 0);
+ clip-path:inset(calc((1 - var(--story-reveal,1))*18%) 0 0 0);
+}
+/* Each template uses the same scroll progress, but its own editorial reveal grammar.
+   No sticky full-screen overlay: the original interactive iframe remains visible. */
+.page[data-template] .section.authored-six{
+ --story-reveal:1;
+}
+.page[data-template] .section.authored-six .section-art{
+ will-change:clip-path;
+ transition:clip-path .08s linear;
+}
+.page[data-template] .section.authored-six .designed-chapter-heading{
+ translate:0 calc((1 - var(--story-reveal,1))*26px);
+ opacity:calc(.62 + var(--story-reveal,1)*.38);
+}
+.page[data-template="architecture"] .section.authored-six .section-art{
+ clip-path:inset(0 0 calc((1 - var(--story-reveal,1))*25%) 0);
+}
+.page[data-template="agency"] .section.authored-six .section-art{
+ clip-path:polygon(0 calc((1 - var(--story-reveal,1))*14%),100% 0,100% 100%,0 100%);
+}
+.page[data-template="fashion"] .section.authored-six .section-art{
+ clip-path:inset(0 calc((1 - var(--story-reveal,1))*24%) 0 0);
+}
+.page[data-template="saas"] .section.authored-six .section-art{
+ clip-path:inset(calc((1 - var(--story-reveal,1))*10%) 0 calc((1 - var(--story-reveal,1))*10%) 0 round 12px);
+}
+.page[data-template] .section.authored-six .designed-chapter-heading::after{
+ content:"";display:block;margin-top:22px;height:2px;width:clamp(48px,30%,240px);
+ background:currentColor;opacity:.48;transform-origin:left center;
+ scale:var(--story-reveal,1) 1;
+}
+@media(prefers-reduced-motion:reduce){
+ .page[data-template] .section.authored-six .designed-chapter-heading::after{scale:1!important}
 }
 @media(prefers-reduced-motion:reduce){
  .page[data-template] .section.designed-chapter .section-art,
