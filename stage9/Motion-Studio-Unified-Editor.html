@@ -991,6 +991,17 @@ async function ensureTemplatePhoto(id){
       kind:photo?'unsplash-photo':'original-generated-art',
       source:photo?source:null,rightsReviewed:false};
    })).then(entries=>{
+     // Duplicate content can arrive from different URLs (or a flaky CDN).
+     // Source URLs are not a valid uniqueness test; compare decoded output.
+     const used=new Set();
+     entries.forEach((entry,index)=>{
+       if(!entry.image||used.has(entry.image)){
+         entry.image=authoredChapterArtwork(id,index);
+         entry.kind='original-generated-art';
+         entry.source=null;
+       }
+       used.add(entry.image);
+     });
      templatePhotoCache.set(id,entries.map(entry=>entry.image));
      templateAssetAuditCache.set(id,entries.map(({kind,source,rightsReviewed},index)=>({
         chapter:index+1,kind,source,rightsReviewed
