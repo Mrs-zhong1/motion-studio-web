@@ -1,0 +1,29 @@
+{
+  "schema": "motion-studio-online-preview-v1",
+  "title": "R9 bundled Three.js web editor",
+  "source": "Stage15 OFFLINE HTML — real Three.js included; no external 3D engine",
+  "page": "review-preview.html",
+  "parts": [
+    "part-000.txt",
+    "part-001.txt",
+    "part-002.txt",
+    "part-003.txt",
+    "part-004.txt",
+    "part-005.txt",
+    "part-006.txt",
+    "part-007.txt",
+    "part-008.txt",
+    "part-009.txt",
+    "part-010.txt",
+    "part-011.txt",
+    "part-012.txt",
+    "part-013.txt",
+    "part-014.txt",
+    "part-015.txt",
+    "part-016.txt"
+  ],
+  "characters": 2329585,
+  "utf8Bytes": 2336512,
+  "sha256": "3cc8d26698ce0514cd1d88d12cf25dfdae3bd1d1cbe886dd82557a69b1dc203f",
+  "buildMethod": "node stage9/build-offline.mjs then node stage9/prepare-online-preview.mjs"
+}
