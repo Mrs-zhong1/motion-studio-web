@@ -91,10 +91,15 @@ def test_u1_u4_regression():
                 for (const t of templateCatalog) {
                     await ensureTemplatePhoto(t.id);
                     const doc = createProjectFromTemplate(t.id);
+                    const entries=templateAssetAuditCache.get(t.id)||[];
                     checks.push({
                         id: t.id,
                         total: doc.sections.length,
-                        images: doc.sections.filter(s=>s.image.startsWith('data:image/jpeg;base64,')).length
+                        images: doc.sections.filter(s=>s.image.startsWith('data:image/jpeg;base64,')).length,
+                        distinct:new Set(doc.sections.map(s=>s.image)).size,
+                        kinds:entries.map(x=>x.kind),
+                        sources:entries.filter(x=>x.source).length,
+                        cleared:entries.filter(x=>x.rightsReviewed).length
                     });
                 }
                 return {checks,unchanged:before===JSON.stringify(project)};
@@ -102,6 +107,12 @@ def test_u1_u4_regression():
             assert completeness["unchanged"], completeness
             assert len(completeness["checks"])==8
             assert all(t["total"]>=3 and t["images"]==t["total"] for t in completeness["checks"]), completeness
+            # R8/R10: no more duplicated crop of the same hero JPEG.
+            # Each section has distinct bytes; missing photos use original
+            # canvas artwork with an explicit provenance status.
+            assert all(t["distinct"]==t["total"] for t in completeness["checks"]), completeness
+            assert all(t["kinds"][-1]=="original-generated-art" and
+                       t["cleared"]==0 for t in completeness["checks"]),completeness
             exported = page.evaluate("exportDocument()")
             assert exported.count("data:image/jpeg;base64,")>=3
 
