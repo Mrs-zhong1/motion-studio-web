@@ -1,4 +1,13 @@
-{lastHistoryState=now;return}if(now===lastHistoryState)return;historyStack.push(lastHistoryState);if(historyStack.length>65)historyStack.shift();futureStack=[];lastHistoryState=now;syncHistoryButtons()}
+tail:'交错列 + 章节图层',section:{id:'image-columns',text:'COLLECTED MOMENTS',height:620}},
+ {id:'spatial',name:'空间产品',detail:'3D 倾斜 + 材质叙事',section:{id:'tilt',text:'OBJECTS IN SPACE',height:560,camera:{preset:'tilt',start:0,end:90,power:28}}},
+ {id:'story',name:'电影分镜',detail:'固定滚动 + 遮罩转场',section:{id:'pinned-story',text:'THE STORY UNFOLDS',height:680}},
+ {id:'dashboard',name:'产品界面',detail:'玻璃仪表板 + 数据层',section:{id:'glass-dashboard',text:'EVERYTHING IN VIEW',height:540}},
+ {id:'cta',name:'互动收束',detail:'磁吸行动按钮',section:{id:'magnetic',text:'BEGIN THE NEXT CHAPTER',height:390}}
+];
+let project={schema:'motion-studio-composition-v1',templateId:'editorial',title:'My Motion Story',transition:'fade',sections:[]};
+let historyStack=[],futureStack=[],lastHistoryState="",historyBusy=false;
+function snapshot(){return JSON.stringify(project)}
+function recordHistory(){if(historyBusy)return;const now=snapshot();if(!lastHistoryState){lastHistoryState=now;return}if(now===lastHistoryState)return;historyStack.push(lastHistoryState);if(historyStack.length>65)historyStack.shift();futureStack=[];lastHistoryState=now;syncHistoryButtons()}
 function syncHistoryButtons(){const u=document.getElementById("undoBtn"),r=document.getElementById("redoBtn");if(u)u.disabled=!historyStack.length;if(r)r.disabled=!futureStack.length}
 function restoreHistory(direction){const source=direction==='undo'?historyStack:futureStack,target=direction==='undo'?futureStack:historyStack;if(!source.length)return;target.push(snapshot());historyBusy=true;const data=JSON.parse(source.pop());loadProject(data);historyBusy=false;lastHistoryState=snapshot();syncHistoryButtons();notify(direction==='undo'?'已撤销':'已重做')}
 let active=null,showInteractive=false,uid=0,filterCategory='全部',viewport='desktop',scrubProgress=null,activeLayer=null,selectedLayers=new Set(),snapEnabled=true;
@@ -390,25 +399,62 @@ function showDiscovery(){$('editorView').hidden=true;$('discoveryView').hidden=f
 async function useTemplate(id){await ensureTemplatePhoto(id);const next=createProjectFromTemplate(id);project=next;active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);historyStack=[];futureStack=[];lastHistoryState=snapshot();showEditor();persistDraftWithoutHistory();notify('已使用模板：'+templateSets[id].name);}
 function renderQuickTemplates(){$('templateQuickList').innerHTML=templateCatalog.map(t=>`<button class="template-quick" data-template-use="${safe(t.id)}"><strong>${safe(t.name)}</strong><small>${safe(t.tag)}</small></button>`).join('');$('templateQuickList').querySelectorAll('[data-template-use]').forEach(b=>b.onclick=()=>useTemplate(b.dataset.templateUse));$('templateChoice').innerHTML=templateCatalog.map(t=>`<option value="${safe(t.id)}">${safe(t.name)}</option>`).join('');}
 function renderSectionPresets(){$('sectionPresets').innerHTML=sectionPresetCatalog.map(p=>`<button class="section-preset" data-section-preset="${safe(p.id)}"><strong>${safe(p.name)}</strong><small>${safe(p.detail)}</small></button>`).join('');$('sectionPresets').querySelectorAll('[data-section-preset]').forEach(b=>b.onclick=()=>{const preset=sectionPresetCatalog.find(x=>x.id===b.dataset.sectionPreset);if(!preset)return;const s=normSection({...preset.section,layers:templateLayers(project.sections.length,preset.section,project.templateId)});project.sections.push(s);active=s.uid;activeLayer=s.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);render();notify('已添加章节模板：'+preset.name);});}
+function r15MediaAudit(){
+ const chapters=project.sections.map((section,index)=>({
+  chapter:index+1,title:section.text,
+  imagePresent:!!section.image,
+  sourceKind:section.image?(section.imageMeta?.kind||'unknown'):'missing',
+  sourceUrl:section.imageMeta?.source||null,
+  rightsReviewed:false,
+  fingerprint:section.image?String(section.image.length)+'-'+section.image.slice(-32):null
+ }));
+ const counts={total:chapters.length,photography:0,originalArtwork:0,userUploads:0,missing:0,unknown:0,duplicates:0};
+ const seen=new Set();
+ for(let i=0;i<chapters.length;i++){
+  const item=chapters[i],raw=project.sections[i].image;
+  if(!raw){counts.missing++;continue}
+  if(seen.has(raw))counts.duplicates++;else seen.add(raw);
+  if(item.sourceKind==='unsplash-photo')counts.photography++;
+  else if(item.sourceKind==='original-generated-art')counts.originalArtwork++;
+  else if(item.sourceKind==='user-upload')counts.userUploads++;
+  else counts.unknown++;
+ }
+ const qualityHold=counts.originalArtwork>0||counts.missing>0||counts.unknown>0||counts.duplicates>0;
+ return {schema:'motion-studio-media-audit-v1',templateId:project.templateId,
+  title:project.title,counts,chapters,
+  photoQualityStatus:qualityHold?'HOLD':'REVIEW_REQUIRED',
+  commercialReleaseStatus:'HOLD',
+  caveat:'Demo image licensing, recognizable people, brands and depicted works must be checked individually before commercial distribution. Imported files have not been independently rights-verified.'};
+}
 function renderAssetOverview(){
  const host=$('projectAssetList');if(!host)return;
+ const audit=r15MediaAudit(),total=audit.counts;
+ const coverage=$('r15MediaCoverage');
+ if(coverage){
+  coverage.innerHTML='<strong>素材覆盖率：'+(total.total-total.missing)+' / '+total.total+' 章</strong>'+
+   '真实摄影 '+total.photography+' · 原创插画占位 '+total.originalArtwork+
+   ' · 用户导入 '+total.userUploads+' · 来源未知 '+total.unknown+
+   ' · 内容重复 '+total.duplicates+
+   '<div class="r15-hold">商业素材验收：HOLD。照片来源和画面中的人物、品牌、艺术作品仍需逐张检查。</div>';
+  coverage.dataset.photoQuality=audit.photoQualityStatus;
+ }
  const entries=[];
  project.sections.forEach((section,sectionIndex)=>{
    if(section.image){
-     const templateImages=templatePhotoCache.get(project.templateId)||[];
-     const entry=templateAssetAuditCache.get(project.templateId)?.[sectionIndex];
-     const matches=section.image===templateImages[sectionIndex];
-     const provenance=matches&&entry
-      ?entry.kind==='original-generated-art'?'原创生成插画 · 可替换':'Unsplash 示范摄影 · 权利待核查'
-      :'用户/项目图片 · 权利待核查';
-     entries.push({uid:section.uid,src:section.image,sectionIndex,kind:'section',label:'章节背景',title:section.text,provenance});
+     const kind=section.imageMeta?.kind||'unknown';
+     const provenance=kind==='original-generated-art'?'原创程序插画 · 非摄影素材'
+      :kind==='unsplash-photo'?'Unsplash 示范摄影 · 权利待核查'
+      :kind==='user-upload'?'用户上传 · 使用权待自行确认'
+      :'来源未知 · 需要核查';
+     entries.push({uid:section.uid,src:section.image,sectionIndex,kind:'section',
+       label:'章节背景',title:section.text,provenance,sourceUrl:section.imageMeta?.source||null});
    }
    section.layers.forEach((layer,layerIndex)=>{
      if(layer.kind==='image'&&layer.src)entries.push({uid:section.uid,lid:layer.id,src:layer.src,sectionIndex,kind:'layer',label:'图片图层 '+(layerIndex+1),title:section.text});
    });
  });
  if(!entries.length){host.innerHTML='<div class="asset-empty">这个项目还没有图片。选择一个章节，在右侧上传图片后，这里就会自动显示。</div>';return;}
- host.innerHTML=entries.map((asset,index)=>`<div class="asset-entry"><img alt="素材预览 ${index+1}" src="${asset.src}"><div class="asset-entry-info"><strong>${safe(asset.label)}</strong><small>第 ${asset.sectionIndex+1} 章 · ${safe(asset.title.slice(0,24))}</small><small class="asset-rights-note">${safe(asset.provenance||'图片图层 · 权利待核查')}</small><div class="asset-entry-actions"><button data-asset-locate="${index}">定位</button><button data-asset-replace="${index}">替换</button></div></div></div>`).join('');
+ host.innerHTML=entries.map((asset,index)=>`<div class="asset-entry"><img alt="素材预览 ${index+1}" src="${asset.src}"><div class="asset-entry-info"><strong>${safe(asset.label)}</strong><small>第 ${asset.sectionIndex+1} 章 · ${safe(asset.title.slice(0,24))}</small><small class="asset-rights-note">${safe(asset.provenance||'图片图层 · 权利待核查')}</small>${asset.sourceUrl?`<a class="r15-photo-source" href="${safe(asset.sourceUrl)}" target="_blank" rel="noopener noreferrer">查看示范照片原始 CDN 地址</a>`:''}<div class="asset-entry-actions"><button data-asset-locate="${index}">定位</button><button data-asset-replace="${index}">替换</button></div></div></div>`).join('');
  function locate(entry){
    if(active!==entry.uid)selectSection(entry.uid);
    if(entry.kind==='layer'&&entry.lid!==activeLayer)selectLayer(entry.lid);
@@ -424,6 +470,7 @@ function renderAssetOverview(){
    input.click();
  });
 }
+$('r15MediaAuditExport').onclick=()=>download(JSON.stringify(r15MediaAudit(),null,2),'Motion-Studio-Media-Audit.json','application/json');
 function renderChapterList(){const host=$('chapterList');if(!host)return;host.innerHTML=project.sections.map((s,i)=>`<button class="chapter-item ${s.uid===active?'active':''}" draggable="true" data-chapter-id="${safe(s.uid)}"><span class="chapter-thumb" data-effect="${safe(s.id)}" style="--thumb:${safe(s.accent)}"></span><span><b>${safe(s.text.slice(0,44)||getItem(s).title)}</b><small>${safe(getItem(s).title)}</small></span><em>${String(i+1).padStart(2,'0')}</em></button>`).join('')||'<p class="hint">尚未添加页面内容。选择「页面区块」即可开始创作。</p>';host.querySelectorAll('[data-chapter-id]').forEach(item=>{item.onclick=()=>{selectSection(item.dataset.chapterId);document.querySelector(`.section[data-uid="${item.dataset.chapterId}"]`)?.scrollIntoView({behavior:'smooth',block:'center'})};item.ondragstart=e=>{e.dataTransfer.setData('text/motion-section',item.dataset.chapterId);e.dataTransfer.effectAllowed='move'};item.ondragover=e=>e.preventDefault();item.ondrop=e=>{e.preventDefault();const from=e.dataTransfer.getData('text/motion-section');if(from)moveTo(from,project.sections.findIndex(s=>s.uid===item.dataset.chapterId));};});}
 function addComponent(id,idx){const meta=registry.find(x=>x.id===id);if(!meta)return;if(project.sections.length>=40){notify('每个工程最多添加 40 个章节');return;}const s=normSection({id,text:meta.defaultText});if(Number.isInteger(idx))project.sections.splice(idx,0,s);else project.sections.push(s);active=s.uid;activeLayer=s.layers[0]?.id||null;render();notify('已添加 '+meta.title)}
 function selectSection(key){active=key;activeLayer=project.sections.find(x=>x.uid===key)?.layers[0]?.id||null;selectedLayers.clear();if(activeLayer)selectedLayers.add(activeLayer);render();}
