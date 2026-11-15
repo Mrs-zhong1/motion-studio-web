@@ -181,6 +181,7 @@ jobs:
           cp /tmp/motion-studio-visual-audit/*.png stage9/visual-evidence/
           python - <<'PY'
           from pathlib import Path
+          import json
           target=Path("stage9/visual-evidence")
           ids=["editorial","product-3d","cinematic","architecture","agency","fashion","gallery","saas"]
           names=["Editorial Portfolio","3D Product Experience","Cinematic Journey","Architecture Studio","Creative Agency","Fashion Lookbook","Interactive Gallery","Modern SaaS"]
