@@ -881,6 +881,42 @@
  .template-closing-mark .closing-signature{margin-top:10px;width:100%}
  .page[data-template] .section .chapter-step{float:none;display:block;margin:5px 0 0}
 }
+
+/* R13-02/03 — eight distinctive visual signatures, no external assets. */
+.page[data-template] .section.designed-chapter{--motion-pointer-x:0px;--motion-pointer-y:0px;--motion-photo-depth:0px;--motion-light-x:50%;--motion-light-y:45%}
+.page[data-template] .section.designed-chapter .section-art{
+  background-position:calc(50% + var(--motion-pointer-x,0px)) calc(50% + var(--motion-photo-depth,0px) + var(--motion-pointer-y,0px));
+}
+.page[data-template] .section.designed-chapter .designed-chapter-heading::before{
+  content:"";display:block;width:clamp(46px,9vw,132px);height:5px;margin:0 0 22px;
+  background:currentColor;opacity:.76;transform-origin:left center;
+  scale:calc(.35 + var(--story-reveal,1)*.65) 1;
+}
+.page[data-template="editorial"] .section.designed-chapter .designed-chapter-heading::before{height:2px;width:54%;background:#6d843f}
+.page[data-template="editorial"] .section.designed-chapter .designed-chapter-heading h2{font-style:italic;letter-spacing:-.065em}
+.page[data-template="product-3d"] .section.designed-chapter .designed-chapter-heading::before{width:42px;height:42px;border:7px solid #d5ef9d;border-radius:50%;background:transparent;opacity:.9}
+.page[data-template="product-3d"] .section.designed-chapter .designed-chapter-heading h2{font-weight:770;letter-spacing:-.085em}
+.page[data-template="cinematic"] .section.designed-chapter .designed-chapter-heading::before{width:100%;height:1px;background:#e9c3a2;box-shadow:0 9px 0 #e9c3a255}
+.page[data-template="cinematic"] .section.designed-chapter .designed-chapter-heading h2{text-transform:uppercase;letter-spacing:-.085em;font-family:Georgia,'Times New Roman',serif}
+.page[data-template="architecture"] .section.designed-chapter .designed-chapter-heading::before{width:55px;height:55px;background:linear-gradient(90deg,#455d4c 1px,transparent 1px),linear-gradient(#455d4c 1px,transparent 1px);background-size:13px 13px;border:1px solid #455d4c}
+.page[data-template="architecture"] .section.designed-chapter .designed-chapter-heading h2{font-family:Georgia,serif;font-weight:400;letter-spacing:-.06em}
+.page[data-template="agency"] .section.designed-chapter .designed-chapter-heading::before{width:80px;height:16px;background:repeating-linear-gradient(110deg,#161d14 0 8px,#0000 8px 17px)}
+.page[data-template="agency"] .section.designed-chapter .designed-chapter-heading h2{font-weight:900;text-transform:uppercase;letter-spacing:-.075em}
+.page[data-template="fashion"] .section.designed-chapter .designed-chapter-heading::before{width:100%;height:1px;background:currentColor}
+.page[data-template="fashion"] .section.designed-chapter .designed-chapter-heading h2{font-family:Georgia,serif;font-weight:400;font-style:italic;letter-spacing:-.055em}
+.page[data-template="gallery"] .section.designed-chapter .designed-chapter-heading::before{width:38px;height:38px;border:4px double currentColor;transform:rotate(45deg);background:transparent}
+.page[data-template="gallery"] .section.designed-chapter .designed-chapter-heading h2{font-family:Georgia,serif;font-weight:500;letter-spacing:-.055em}
+.page[data-template="saas"] .section.designed-chapter .designed-chapter-heading::before{width:130px;height:8px;border-radius:8px;background:linear-gradient(90deg,#588c5d 0 32%,#adcab0 32% 65%,#e1eae2 65%)}
+.page[data-template="saas"] .section.designed-chapter .designed-chapter-heading h2{font-family:system-ui,sans-serif;letter-spacing:-.07em;font-weight:850}
+.page[data-template] .section.designed-chapter .chapter-step{font-variant-numeric:tabular-nums}
+@media(max-width:720px){
+ .page[data-template] .section.designed-chapter .section-art{background-position:center!important}
+ .page[data-template] .section.designed-chapter .designed-chapter-heading::before{max-width:70px}
+}
+@media(prefers-reduced-motion:reduce){
+ .page[data-template] .section.designed-chapter .section-art{background-position:center!important}
+ .page[data-template] .section.designed-chapter .designed-chapter-heading::before{scale:1!important}
+}
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="library-section-heading"><div><span class="library-eyebrow">CURATED INTERACTIVE WEBSITES</span><h2>可探索的作品 <span id="templateResultCount">08</span></h2></div><p>打开任意模板体验完整的多章节网页，而非静态封面。</p></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewImmersive" aria-pressed="false" title="切换为整页沉浸式预览">沉浸预览</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><div class="preview-live-badge" aria-hidden="true"><i></i> LIVE INTERACTIVE PREVIEW · 滚动探索</div><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
@@ -1617,6 +1653,38 @@ if(sec.classList.contains('designed-chapter')||sec.classList.contains('designed-
  sec.style.setProperty('--chapter-enter',enter.toFixed(4));sec.style.setProperty('--chapter-exit',exit.toFixed(4));
  sec.dataset.chapterEnter=enter.toFixed(3);sec.dataset.chapterExit=exit.toFixed(3);}
 const cam=chapterCameras[i]||{preset:'none',start:0,end:100,power:0};sec.dataset.transition=globalTransition;const mask=globalTransition==='veil'?.78:globalTransition==='fade'?.5:0;sec.style.setProperty('--chapter-veil',String(window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:mask*Math.max(0,(p-.79)/.21)));if(sec.classList.contains('designed-chapter')||sec.classList.contains('designed-hero')){const t=window.matchMedia('(prefers-reduced-motion: reduce)').matches?1:Math.max(0,Math.min(1,(p-.04)/.48));sec.style.setProperty('--story-reveal',String(t*t*(3-2*t)));sec.dataset.storyProgress=t.toFixed(3)}const fr=sec.querySelector('iframe');if(fr){let transform='none',opacity=1;if(cam.advanced&&cam.path?.length===3){const ix=p<=.5?0:1,a=cam.path[ix],b=cam.path[ix+1],v=Math.max(0,Math.min(1,(p*100-a.at)/(b.at-a.at))),t=v*v*(3-2*v),mix=k=>a[k]+(b[k]-a[k])*t;transform='perspective(1100px) translate('+mix('x')+'px,'+mix('y')+'px) rotateY('+mix('tilt')+'deg) scale('+(mix('zoom')/100)+')';opacity=mix('opacity')/100;}else{const start=cam.start/100,end=Math.max(start+.01,cam.end/100),raw=Math.max(0,Math.min(1,(p-start)/(end-start))),t=raw*raw*(3-2*raw),amp=cam.power/100;if(cam.preset==='push')transform='scale('+(1+amp*.28*(1-t))+')';if(cam.preset==='rise'){transform='translateY('+((1-t)*amp*120)+'px) scale('+(1+(1-t)*amp*.08)+')';opacity=.5+.5*t;}if(cam.preset==='tilt')transform='perspective(900px) rotateY('+((1-t)*amp*22)+'deg) scale('+(1-(1-t)*amp*.13)+')';}fr.style.transform=transform;fr.style.opacity=window.matchMedia('(prefers-reduced-motion: reduce)').matches?1:opacity;};sec.querySelectorAll('.motion-layer').forEach(el=>{const j=Number(el.dataset.layerIndex),l=chapterLayers[i]?.[j];if(!l)return;const keys=l.keyframes||[],percent=p*100;let ix=0;while(ix<keys.length-2&&percent>keys[ix+1].at)ix++;const a=keys[ix]||{at:l.start,dx:l.fromX,dy:l.fromY,opacity:l.fromOpacity,scale:100,rotation:0,easing:l.easing},b=keys[ix+1]||{at:l.end,dx:l.toX,dy:l.toY,opacity:l.toOpacity,scale:100,rotation:0};let t=Math.max(0,Math.min(1,(percent-a.at)/Math.max(1,b.at-a.at)));t=a.easing==='linear'?t:a.easing==='easeIn'?t*t:a.easing==='easeOut'?1-(1-t)*(1-t):t*t*(3-2*t);const lerp=k=>a[k]+(b[k]-a[k])*t;const dx=lerp('dx'),dy=lerp('dy'),opacity=lerp('opacity')/100,scale=lerp('scale'),rotation=lerp('rotation');el.style.left=l.x+'%';el.style.top=l.y+'%';el.style.zIndex=6+j;el.style.color=l.color;el.style.transform='translate(-50%,-50%) translate('+dx+'px,'+dy+'px) rotate('+(l.rotation+rotation)+'deg) scale('+(l.scale*scale/10000)+')';el.style.opacity=window.matchMedia('(prefers-reduced-motion: reduce)').matches?1:opacity;el.hidden=!l.enabled;});});}
+function installR13StoryMotion(){
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const sections=Array.from(document.querySelectorAll('.section.designed-chapter'));
+ const clear=sec=>{sec.style.setProperty('--motion-pointer-x','0px');sec.style.setProperty('--motion-pointer-y','0px');};
+ sections.forEach(sec=>{
+  sec.addEventListener('pointermove',e=>{
+   if(reduced.matches||e.pointerType==='touch'){clear(sec);return;}
+   const rect=sec.getBoundingClientRect();
+   if(!rect.width||!rect.height)return;
+   const x=Math.max(-1,Math.min(1,(e.clientX-rect.left)/rect.width*2-1));
+   const y=Math.max(-1,Math.min(1,(e.clientY-rect.top)/rect.height*2-1));
+   sec.style.setProperty('--motion-pointer-x',(x*10).toFixed(1)+'px');
+   sec.style.setProperty('--motion-pointer-y',(y*7).toFixed(1)+'px');
+  },{passive:true});
+  sec.addEventListener('pointerleave',()=>clear(sec),{passive:true});
+ });
+ function updateDepth(){
+  const wh=window.innerHeight||800;
+  for(const sec of sections){
+   if(reduced.matches){sec.style.setProperty('--motion-photo-depth','0px');continue;}
+   const rect=sec.getBoundingClientRect();
+   if(rect.bottom<0||rect.top>wh)continue;
+   const p=Math.max(-1,Math.min(1,(wh*.5-(rect.top+rect.height*.5))/wh));
+   sec.style.setProperty('--motion-photo-depth',(p*17).toFixed(1)+'px');
+  }
+ }
+ window.addEventListener('scroll',updateDepth,{passive:true});
+ window.addEventListener('resize',updateDepth,{passive:true});
+ if(reduced.addEventListener)reduced.addEventListener('change',()=>{sections.forEach(clear);updateDepth()});
+ updateDepth();
+}
+installR13StoryMotion();
 window.addEventListener('scroll',updateLayers,{passive:true});window.addEventListener('resize',updateLayers);setTimeout(updateLayers,120);<\/script>`;
  const sharedParts=project.sections.filter(s=>s.id==='offline-glb-scene'&&s.glb);
  const sharedMarkup=sharedParts.length>=2&&typeof stage9SharedEngineURL!=='undefined'
