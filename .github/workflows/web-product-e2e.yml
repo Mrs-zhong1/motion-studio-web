@@ -134,7 +134,7 @@ jobs:
               assert middle.is_file() and middle.stat().st_size>1000, middle
               ending=base/f'{row["template"]}-ending-{row["device"]}.png'
               assert ending.is_file() and ending.stat().st_size>1000, ending
-          for image in ("r9-studio-model.png","r9-studio-page.png"):
+          for image in ("r9-studio-model.png","r9-studio-page.png","r11-mobile-product.png"):
               target=base/image
               assert target.is_file() and target.stat().st_size>1000, target
           for tid in ("editorial","product-3d"):
@@ -190,6 +190,11 @@ jobs:
                   "![Exported 3D product page](./r9-studio-page.png)",
                   "",
                   "Rendered in headless Chromium via software WebGL2. This is neither native hardware GPU approval nor art-direction sign-off.",
+                  "",
+                  "## R11 — simulated mobile WebGL2, reduced motion", "",
+                  "Real WebGL2 screenshot in a 390px simulated viewport. This is NOT real-phone or native Safari performance certification.",
+                  "",
+                  "![Mobile R11 Three.js product](./r11-mobile-product.png)",
                   "",
                   "## Review gates", "",
                   "- Typography, photo crop and subject matter",
