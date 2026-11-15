@@ -1,4 +1,69 @@
-   const x=side*(cx+rx*Math.cos(theta)),
+aPhotos[id]||[]).map(photo=>`https://images.unsplash.com/${photo}?w=1000&q=75`);
+ const count=templateSets[id]?.sections.length||0;
+ const sources=[primary,...extras];
+ const job=Promise.all(Array.from({length:count},async(_,index)=>{
+    const source=index<3?sources[index]:null;
+    const photo=source?await photoToInline(source):'';
+    return {image:photo||authoredChapterArtwork(id,index),
+      kind:photo?'unsplash-photo':'original-generated-art',
+      source:photo?source:null,rightsReviewed:false};
+   })).then(entries=>{
+     // Duplicate content can arrive from different URLs (or a flaky CDN).
+     // Source URLs are not a valid uniqueness test; compare decoded output.
+     const used=new Set();
+     entries.forEach((entry,index)=>{
+       if(!entry.image||used.has(entry.image)){
+         entry.image=authoredChapterArtwork(id,index);
+         entry.kind='original-generated-art';
+         entry.source=null;
+       }
+       used.add(entry.image);
+     });
+     templatePhotoCache.set(id,entries.map(entry=>entry.image));
+     templateAssetAuditCache.set(id,entries.map(({kind,source,rightsReviewed},index)=>({
+        chapter:index+1,kind,source,rightsReviewed
+     })));
+     return entries.map(entry=>entry.image);
+   });
+ templatePhotoPending.set(id,job);
+ try{return await job}finally{templatePhotoPending.delete(id)}
+}
+/* A small original, dependency-free GLB demonstration model.
+   Not a licensed commercial headphone model or complete PBR asset.
+   A valid binary glTF file is generated and embedded as project data. */
+let demoGlbCache='';
+function builtInHeadphoneGlb(){
+ if(demoGlbCache)return demoGlbCache;
+ // R9-03: original, redistributable parametric headphone demonstration.
+ // Smooth closed curved surfaces replace the former five scaled cubes.
+ // Four genuine PBR primitives share a single valid GLB binary buffer.
+ const materials=[
+  {name:'Ceramic shell',pbrMetallicRoughness:{baseColorFactor:[.20,.31,.35,1],metallicFactor:.46,roughnessFactor:.28}},
+  {name:'Soft-touch cushion',pbrMetallicRoughness:{baseColorFactor:[.060,.085,.10,1],metallicFactor:.02,roughnessFactor:.81}},
+  {name:'Brushed metal',pbrMetallicRoughness:{baseColorFactor:[.72,.77,.78,1],metallicFactor:.85,roughnessFactor:.27}},
+  {name:'Acoustic mesh',pbrMetallicRoughness:{baseColorFactor:[.16,.19,.20,1],metallicFactor:.08,roughnessFactor:.66}}
+ ];
+ const sets=materials.map(()=>({p:[],n:[],i:[]}));
+ const push=(mat,point,normal)=>{const a=sets[mat];a.p.push(...point);a.n.push(...normal);return a.p.length/3-1};
+ const triangle=(mat,a,b,c)=>sets[mat].i.push(a,b,c);
+ const grid=(mat,ringA,ringB,closed)=>{
+   const N=ringA.length;
+   for(let j=0;j<(closed?N:N-1);j++){
+     const k=(j+1)%N;
+     triangle(mat,ringA[j],ringA[k],ringB[k]);
+     triangle(mat,ringA[j],ringB[k],ringB[j]);
+   }
+ };
+ const normalize=(x,y,z)=>{const d=Math.hypot(x,y,z)||1;return [x/d,y/d,z/d]};
+ // Smooth elliptic ear cups and soft rim rings: lateral axis = X.
+ function cup(side,mat,cx,cy,cz,rx,ry,rz,segments=64,rings=24){
+   let prev=null;const caps=[];
+   for(let j=0;j<=rings;j++){
+     const theta=.0005+(Math.PI-.001)*j/rings;
+     const ring=[];
+     for(let k=0;k<segments;k++){
+       const phi=2*Math.PI*k/segments;
+       const x=side*(cx+rx*Math.cos(theta)),
              y=cy+ry*Math.sin(theta)*Math.cos(phi),
              z=cz+rz*Math.sin(theta)*Math.sin(phi);
        const normal=normalize(side*Math.cos(theta)/rx,Math.sin(theta)*Math.cos(phi)/ry,Math.sin(theta)*Math.sin(phi)/rz);
@@ -117,10 +182,11 @@ function templateCardMarkup(t){const thumb=templateThumbnailImages[t.id];const c
  `<div class="template-art designed-card ${safe(t.id)}"><div class="designed-card-copy"><span>${t.id==='editorial'?'INDEPENDENT CREATIVE PRACTICE':'OBJECTS / MATERIAL / MOTION'}</span><strong>${t.id==='editorial'?'Ideas set<br>in motion.':'Form becomes<br>experience.'}</strong><em>${t.id==='editorial'?'PORTFOLIO / 2026':'PRODUCT / 3D'}</em></div><div class="designed-card-photo"${thumb?` style="background-image:url('${thumb}')"`:''}></div></div>`:
  `<div class="template-art art-directed-card ${safe(t.id)}"><div class="art-directed-word"><small>${safe(t.tag)}</small><strong>${safe(t.headline)}</strong><span>${safe(t.category)} — MOTION TEMPLATE</span></div><div class="art-directed-photo"${thumb?` style="background-image:url('${thumb}')"`:''}></div><div class="art-directed-edge">MS / ${safe(t.id.toUpperCase())}</div></div>`;
  return `<button class="template-card" data-template-card="${safe(t.id)}" data-category="${safe(t.category)}" aria-label="预览 ${safe(t.name)}">${art}<div class="template-card-copy"><div><h2>${safe(t.name)}</h2><p>${safe(t.tag)} · 点击体验交互</p></div><span>↗</span></div></button>`}
-function renderTemplateGrid(category='All'){const list=category==='All'?templateCatalog:templateCatalog.filter(t=>t.category===category);$('templateGrid').innerHTML=list.map(templateCardMarkup).join('');$('templateGrid').querySelectorAll('[data-template-card]').forEach(card=>card.onclick=()=>previewTemplate(card.dataset.templateCard));}
+function renderTemplateGrid(category='All'){const list=category==='All'?templateCatalog:templateCatalog.filter(t=>t.category===category);$('templateGrid').innerHTML=list.map(templateCardMarkup).join('');$('templateResultCount').textContent=String(list.length).padStart(2,'0');$('templateGrid').querySelectorAll('[data-template-card]').forEach(card=>card.onclick=()=>previewTemplate(card.dataset.templateCard));}
 function buildTemplatePreviewDocument(id){const previous={project,active,activeLayer,selectedLayers};project=createProjectFromTemplate(id);active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);const html=exportDocument();project=previous.project;active=previous.active;activeLayer=previous.activeLayer;selectedLayers=previous.selectedLayers;return html;}
-async function previewTemplate(id){const tpl=templateSets[id];if(!tpl)return;previewTemplateId=id;$('previewTitle').textContent=tpl.name;$('previewHeroTitle').textContent=tpl.name;$('previewDescription').textContent=tpl.description;$('previewCategory').textContent=tpl.category.toUpperCase()+' / '+tpl.tag;$('previewMeta').textContent='正在准备页面预览…';$('templatePreview').hidden=false;await ensureTemplatePhoto(id);if(previewTemplateId!==id)return;$('previewMeta').textContent=tpl.tag+' · 可交互页面';$('templatePreviewFrame').srcdoc=buildTemplatePreviewDocument(id);$('previewDevice').classList.remove('mobile');$('previewDesktop').classList.add('active');$('previewMobile').classList.remove('active');$('templatePreview').hidden=false;}
-function closeTemplatePreview(){$('templatePreview').hidden=true;$('templatePreviewFrame').srcdoc='';previewTemplateId=null;}
+async function previewTemplate(id){const tpl=templateSets[id];if(!tpl)return;setImmersivePreview(false);previewTemplateId=id;$('previewTitle').textContent=tpl.name;$('previewHeroTitle').textContent=tpl.name;$('previewDescription').textContent=tpl.description;$('previewCategory').textContent=tpl.category.toUpperCase()+' / '+tpl.tag;$('previewMeta').textContent='正在准备页面预览…';$('templatePreview').hidden=false;await ensureTemplatePhoto(id);if(previewTemplateId!==id)return;$('previewMeta').textContent=tpl.tag+' · 可交互页面';$('templatePreviewFrame').srcdoc=buildTemplatePreviewDocument(id);$('previewDevice').classList.remove('mobile');$('previewDesktop').classList.add('active');$('previewMobile').classList.remove('active');$('templatePreview').hidden=false;}
+function setImmersivePreview(enabled){const overlay=$('templatePreview');overlay.classList.toggle('immersive-preview',!!enabled);const button=$('previewImmersive');button.setAttribute('aria-pressed',String(!!enabled));button.textContent=enabled?'退出沉浸':'沉浸预览';button.title=enabled?'返回模板说明和网页双栏预览':'整页展示交互网页';}
+function closeTemplatePreview(){$('templatePreview').hidden=true;$('templatePreviewFrame').srcdoc='';previewTemplateId=null;setImmersivePreview(false);}
 function showEditor(){closeTemplatePreview();$('discoveryView').hidden=true;$('editorView').hidden=false;queueMicrotask(()=>{render();$('canvasViewport').scrollTop=0;});}
 function showDiscovery(){$('editorView').hidden=true;$('discoveryView').hidden=false;window.scrollTo(0,0)}
 async function useTemplate(id){await ensureTemplatePhoto(id);const next=createProjectFromTemplate(id);project=next;active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);historyStack=[];futureStack=[];lastHistoryState=snapshot();showEditor();persistDraftWithoutHistory();notify('已使用模板：'+templateSets[id].name);}
@@ -549,7 +615,7 @@ window.addEventListener('scroll',updateLayers,{passive:true});window.addEventLis
 function download(text,name,mime){const blob=new Blob([text],{type:mime}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500)}
 function loadProject(data,{resetHistory=false}={}){if(!data||data.schema!=='motion-studio-composition-v1'||!Array.isArray(data.sections)||data.sections.length>40)throw Error('不兼容或过大的工程');const templateId=templateSets[data.templateId]?data.templateId:'custom';const next={schema:'motion-studio-composition-v1',templateId,title:String(data.title||'Untitled').slice(0,70),transition:['none','fade','veil'].includes(data.transition)?data.transition:'fade',sections:data.sections.map(normSection)};project=next;active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);render();if(resetHistory){historyStack=[];futureStack=[];lastHistoryState=snapshot();syncHistoryButtons()}persistDraftWithoutHistory();notify('工程已载入')}
 $('globalTransition').onchange=e=>{project.transition=e.target.value;refreshOverlays();saveDraft();notify('全局章节转场已更新')};$('undoBtn').onclick=()=>restoreHistory('undo');$('redoBtn').onclick=()=>restoreHistory('redo');document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'){e.preventDefault();restoreHistory(e.shiftKey?'redo':'undo')}else if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='y'){e.preventDefault();restoreHistory('redo')}});$('search').addEventListener('input',renderLibrary);$('projectName').addEventListener('input',e=>{project.title=e.target.value.slice(0,70);$('pageTitle').textContent=project.title.toUpperCase();saveDraft()});$('newProject').onclick=()=>{if(!confirm('新建将清空当前画布，请先保存 JSON 工程。继续吗？'))return;project={schema:'motion-studio-composition-v1',title:'Untitled Project',transition:'fade',sections:[]};active=null;activeLayer=null;selectedLayers=new Set();historyStack=[];futureStack=[];lastHistoryState=snapshot();render();syncHistoryButtons();persistDraftWithoutHistory()};$('saveProject').onclick=()=>download(JSON.stringify(project,null,2),'Motion-Studio-Project.json','application/json');$('openProject').onclick=()=>$('openFile').click();$('openFile').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>16_000_000)throw Error('工程文件过大');loadProject(JSON.parse(await file.text()),{resetHistory:true})}catch(err){notify('打开失败：'+err.message)}e.target.value=''};$('exportPage').onclick=()=>{download(exportDocument(),(project.title||'Motion-Studio').replace(/[^\w\u4e00-\u9fa5-]+/g,'-')+'.html','text/html');notify('已生成完整 HTML')};$('loadTemplate').onclick=()=>{const tpl=templateSets[$('templateChoice').value]||templateSets.story;project={schema:'motion-studio-composition-v1',title:tpl.title,transition:'fade',sections:tpl.sections.map((entry,index)=>normSection({...entry,layers:templateLayers(index,entry)}))};active=project.sections[0].uid;activeLayer=project.sections[0].layers[0]?.id||null;render();saveDraft();notify('模板已加载：'+tpl.title)};$('desktopView').onclick=()=>{viewport='desktop';$('canvasWrap').classList.remove('mobile');$('desktopView').classList.add('active');$('mobileView').classList.remove('active')};$('mobileView').onclick=()=>{viewport='mobile';$('canvasWrap').classList.add('mobile');$('mobileView').classList.add('active');$('desktopView').classList.remove('active')};$('playPreview').onclick=()=>{showInteractive=!showInteractive;$('playPreview').classList.toggle('active',showInteractive);$('playPreview').textContent=showInteractive?'退出交互预览':'交互预览';$('sections').querySelectorAll('iframe').forEach(f=>f.style.pointerEvents=showInteractive?'auto':'none');notify(showInteractive?'可以在画布操作动效':'已切回编辑模式')};
-$('previewClose').onclick=closeTemplatePreview;$('previewDesktop').onclick=()=>{$('previewDevice').classList.remove('mobile');$('previewDesktop').classList.add('active');$('previewMobile').classList.remove('active')};$('previewMobile').onclick=()=>{$('previewDevice').classList.add('mobile');$('previewMobile').classList.add('active');$('previewDesktop').classList.remove('active')};$('previewReplay').onclick=()=>{if(!previewTemplateId)return;const frame=$('templatePreviewFrame'),src=buildTemplatePreviewDocument(previewTemplateId);frame.srcdoc='';requestAnimationFrame(()=>frame.srcdoc=src)};$('previewUse').onclick=()=>{if(previewTemplateId)useTemplate(previewTemplateId)};$('previewUsePanel').onclick=()=>{if(previewTemplateId)useTemplate(previewTemplateId)};$('backToLibrary').onclick=showDiscovery;
+$('previewClose').onclick=closeTemplatePreview;$('previewImmersive').onclick=()=>setImmersivePreview(!$('templatePreview').classList.contains('immersive-preview'));document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('templatePreview').hidden){event.preventDefault();if($('templatePreview').classList.contains('immersive-preview'))setImmersivePreview(false);else closeTemplatePreview();}});$('previewDesktop').onclick=()=>{$('previewDevice').classList.remove('mobile');$('previewDesktop').classList.add('active');$('previewMobile').classList.remove('active')};$('previewMobile').onclick=()=>{$('previewDevice').classList.add('mobile');$('previewMobile').classList.add('active');$('previewDesktop').classList.remove('active')};$('previewReplay').onclick=()=>{if(!previewTemplateId)return;const frame=$('templatePreviewFrame'),src=buildTemplatePreviewDocument(previewTemplateId);frame.srcdoc='';requestAnimationFrame(()=>frame.srcdoc=src)};$('previewUse').onclick=()=>{if(previewTemplateId)useTemplate(previewTemplateId)};$('previewUsePanel').onclick=()=>{if(previewTemplateId)useTemplate(previewTemplateId)};$('backToLibrary').onclick=showDiscovery;
 $('discoveryCategories').querySelectorAll('[data-category]').forEach(button=>button.onclick=()=>{$('discoveryCategories').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===button));renderTemplateGrid(button.dataset.category)});document.querySelectorAll('[data-discovery-category]').forEach(button=>button.onclick=()=>{const category=button.dataset.discoveryCategory;document.querySelectorAll('.discovery-nav nav button').forEach(x=>x.classList.toggle('active',x===button));renderTemplateGrid(category)});
 document.querySelectorAll('[data-asset-tier-button]').forEach(button=>button.onclick=()=>{document.querySelectorAll('[data-asset-tier-button]').forEach(x=>x.classList.toggle('active',x===button));document.querySelectorAll('[data-asset-tier]').forEach(x=>x.classList.toggle('active',x.dataset.assetTier===button.dataset.assetTierButton))});
 $('modeToggle').onclick=()=>{document.body.classList.toggle('simple-mode');const simple=document.body.classList.contains('simple-mode');$('modeLabel').textContent=simple?'简易编辑':'专业编辑';$('modeToggle').textContent=simple?'进入专业模式':'返回简易模式';$('editorTimeline').classList.toggle('collapsed',simple);$('timelineToggle').textContent=simple?'展开':'收起'};$('timelineToggle').onclick=()=>{const collapsed=$('editorTimeline').classList.toggle('collapsed');$('timelineToggle').textContent=collapsed?'展开':'收起'};$('togglePanels').onclick=()=>{const hidden=document.body.classList.toggle('panels-hidden');$('togglePanels').textContent=hidden?'展开侧栏':'收起侧栏'};function applyCanvasZoom(next){canvasZoom=Math.max(.6,Math.min(1.4,next));$('canvasWrap').style.setProperty('--canvas-zoom',canvasZoom);$('zoomReadout').textContent=Math.round(canvasZoom*100)+'%'}$('zoomOut').onclick=()=>applyCanvasZoom(canvasZoom-.1);$('zoomIn').onclick=()=>applyCanvasZoom(canvasZoom+.1);$('fullscreenCanvas').onclick=()=>{const el=$('canvasViewport');if(document.fullscreenElement)document.exitFullscreen?.();else el.requestFullscreen?.().catch(()=>notify('浏览器未允许全屏'))};$('loadTemplate').onclick=()=>useTemplate($('templateChoice').value||templateCatalog[0].id);
