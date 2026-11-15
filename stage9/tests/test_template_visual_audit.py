@@ -125,11 +125,16 @@ def run_audit():
                         screenshot=page.screenshot(animations="disabled",full_page=False)
                         (SCREENSHOTS/f"{template_id}-preview-{device}.png").write_bytes(screenshot)
                         geometry["fullPreviewPngSHA256"]=hashlib.sha256(screenshot).hexdigest()[:16]
-                    # R4: all following chapters in the two pilots must be authored
-                    # as layout sections rather than image-over-effect overlays.
-                    if template_id in ("editorial", "product-3d"):
+                    # R4: all six newly authored templates must have complete,
+                    # nonoverlapping image/renderer zones in every chapter.
+                    # Previously rebuilt pilots retain their original first-page hero.
+                    if template_id in ("editorial", "product-3d","cinematic",
+                                       "architecture","agency","fashion","gallery","saas"):
                         chapters = frame.locator("section.designed-chapter")
-                        assert chapters.count()==total_sections-1
+                        expected_chapters=total_sections-1 if template_id in ("editorial","product-3d") else total_sections
+                        assert chapters.count()==expected_chapters, (template_id, chapters.count(),expected_chapters)
+                        if template_id not in ("editorial","product-3d"):
+                            assert frame.locator("section.authored-six").count()==total_sections
                         arrangements = chapters.evaluate_all("""nodes=>nodes.map(n=>{
                             const a=n.querySelector('.section-art').getBoundingClientRect();
                             const f=n.querySelector('iframe').getBoundingClientRect();
