@@ -39,6 +39,12 @@ def test_u1_u4_regression():
             page.wait_for_function("() => project.templateId==='editorial'")
             assert page.evaluate("project.sections[0].image.startsWith('data:image/jpeg;base64,')"), page.evaluate("({has:templatePhotoCache.has('editorial'),sizes:templatePhotoCache.get('editorial')?.map(x=>x.length)})")
             assert page.evaluate("project.sections.length")>=3
+            # R10: show provenance and review status rather than implying
+            # third-party demo photography is cleared for resale.
+            rights=page.locator("#projectAssetList .asset-rights-note")
+            assert rights.count()==page.evaluate("project.sections.length")
+            assert any("原创生成插画" in txt for txt in rights.all_text_contents())
+            assert all("待核查" in txt or "可替换" in txt for txt in rights.all_text_contents())
             # R5: editor canvas scroll progress must use its own scroll viewport.
             # Verify real CSS story progress increases as the final chapter is revealed.
             last = page.locator("#sections .section.designed-chapter").last
