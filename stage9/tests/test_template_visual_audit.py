@@ -235,9 +235,19 @@ def run_audit():
                     middle_png = middle.screenshot(animations="disabled", timeout=30000)
                     (SCREENSHOTS / f"{template_id}-chapter3-{device}.png").write_bytes(middle_png)
                     geometry["chapter3PngSHA256"] = hashlib.sha256(middle_png).hexdigest()[:16]
-                    final_png = closing.screenshot(animations="disabled",timeout=30000)
+                    # Capture the closing editorial CONTENT, not its giant
+                    # off-screen chapter. Screenshotting the whole section may
+                    # show the top of an iframe or preview shell instead.
+                    end_mark = closing.locator(".template-closing-mark")
+                    end_mark.scroll_into_view_if_needed(timeout=30000)
+                    page.wait_for_timeout(120)
+                    end_rect = end_mark.bounding_box()
+                    assert end_rect and end_rect["width"]>120 and end_rect["height"]>100, (template_id,device,end_rect)
+                    final_png = end_mark.screenshot(animations="disabled",timeout=30000)
                     (SCREENSHOTS/f"{template_id}-ending-{device}.png").write_bytes(final_png)
                     geometry["designedEndingPngSHA256"]=hashlib.sha256(final_png).hexdigest()[:16]
+                    geometry["closingScreenshotRegion"]={"width":round(end_rect["width"]),
+                                                       "height":round(end_rect["height"])}
                     result["templates"].append(geometry)
                 page.locator("#previewClose").click()
                 assert page.locator("#templatePreview").is_hidden()
