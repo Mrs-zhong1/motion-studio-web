@@ -6,6 +6,8 @@ on:
       - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_u1_u4_regression.py'
       - 'stage9/tests/test_template_visual_audit.py'
+      - 'stage9/tests/test_r9_studio_3d.py'
+      - 'stage9/three-scene-entry.js'
       - '.github/workflows/web-product-e2e.yml'
   push:
     paths:
@@ -14,6 +16,8 @@ on:
       - 'stage9/tests/test_product_restructure.py'
       - 'stage9/tests/test_u1_u4_regression.py'
       - 'stage9/tests/test_template_visual_audit.py'
+      - 'stage9/tests/test_r9_studio_3d.py'
+      - 'stage9/three-scene-entry.js'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
 permissions:
@@ -51,6 +55,9 @@ jobs:
         run: python tests/test_web_product_e2e.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: R9 real offline Three.js PBR studio and pointer orbit validation
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r9_studio_3d.py
       - name: U1-U4 image-led discovery and blank editor regression
         if: matrix.browser == 'chromium'
         run: python tests/test_u1_u4_regression.py
