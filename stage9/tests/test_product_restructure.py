@@ -187,7 +187,7 @@ def test_product_restructure():
                 chapter_text = f"R7 edited chapter {template_id}"
                 page.evaluate("(t) => {project.sections[1].text=t;render()}", chapter_text)
                 assert page.locator('#sections section.section[data-index="1"] [data-chapter-title]').count() == 1
-                assert chapter_text in page.locator("#sections").inner_text()
+                assert page.locator('#sections section.section[data-index="1"] [data-chapter-title]').text_content() == chapter_text, template_id
                 with page.expect_download() as saved:
                     page.locator("#saveProject").click()
                 saved_project = json.loads(saved.value.path().read_text(encoding="utf8"))
