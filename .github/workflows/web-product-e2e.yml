@@ -10,6 +10,7 @@ on:
       - 'stage9/tests/test_r11_mobile_acceptance.py'
       - 'stage9/tests/test_r13_story_motion.py'
       - 'stage9/tests/test_r14_chapter_navigation.py'
+      - 'stage9/tests/test_r15_scene_composition.py'
       - 'stage9/three-scene-entry.js'
       - '.github/workflows/web-product-e2e.yml'
   push:
@@ -23,6 +24,7 @@ on:
       - 'stage9/tests/test_r11_mobile_acceptance.py'
       - 'stage9/tests/test_r13_story_motion.py'
       - 'stage9/tests/test_r14_chapter_navigation.py'
+      - 'stage9/tests/test_r15_scene_composition.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
@@ -73,6 +75,9 @@ jobs:
       - name: R14 chapter navigator and full-page scroll quality regression
         if: matrix.browser == 'chromium'
         run: python tests/test_r14_chapter_navigation.py
+      - name: R15 multi-act visual composition and mobile layouts
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r15_scene_composition.py
       - name: U1-U4 image-led discovery and blank editor regression
         if: matrix.browser == 'chromium'
         run: python tests/test_u1_u4_regression.py
