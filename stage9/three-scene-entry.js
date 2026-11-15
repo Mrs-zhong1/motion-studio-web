@@ -156,8 +156,7 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
     const studioHalo=new THREE.Mesh(new THREE.RingGeometry(1.9,3.0,96),
       new THREE.MeshBasicMaterial({color:0xa0c0ce,transparent:true,opacity:.045,depthWrite:false,side:THREE.DoubleSide}));
     studioHalo.rotation.x=-Math.PI/2;studioHalo.position.y=-1.702;
-    studioSweep.add(studioHalo);
-    scene.add(studioSweep);
+    scene.add(studioSweep,studioHalo);
 
     floor.rotation.x=-Math.PI/2;floor.position.y=-1.72;floor.receiveShadow=true;
     scene.add(plinth,accent,floor);status.studioMeshes=3;
