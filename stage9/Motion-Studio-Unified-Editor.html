@@ -668,6 +668,7 @@
   transition:none!important;
  }
 }
+.asset-rights-note{display:block;margin-top:4px;font-size:10px;line-height:1.45;color:#c4b998;opacity:.9}
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
@@ -1105,13 +1106,21 @@ function renderAssetOverview(){
  const host=$('projectAssetList');if(!host)return;
  const entries=[];
  project.sections.forEach((section,sectionIndex)=>{
-   if(section.image)entries.push({uid:section.uid,src:section.image,sectionIndex,kind:'section',label:'章节背景',title:section.text});
+   if(section.image){
+     const templateImages=templatePhotoCache.get(project.templateId)||[];
+     const entry=templateAssetAuditCache.get(project.templateId)?.[sectionIndex];
+     const matches=section.image===templateImages[sectionIndex];
+     const provenance=matches&&entry
+      ?entry.kind==='original-generated-art'?'原创生成插画 · 可替换':'Unsplash 示范摄影 · 权利待核查'
+      :'用户/项目图片 · 权利待核查';
+     entries.push({uid:section.uid,src:section.image,sectionIndex,kind:'section',label:'章节背景',title:section.text,provenance});
+   }
    section.layers.forEach((layer,layerIndex)=>{
      if(layer.kind==='image'&&layer.src)entries.push({uid:section.uid,lid:layer.id,src:layer.src,sectionIndex,kind:'layer',label:'图片图层 '+(layerIndex+1),title:section.text});
    });
  });
  if(!entries.length){host.innerHTML='<div class="asset-empty">这个项目还没有图片。选择一个章节，在右侧上传图片后，这里就会自动显示。</div>';return;}
- host.innerHTML=entries.map((asset,index)=>`<div class="asset-entry"><img alt="素材预览 ${index+1}" src="${asset.src}"><div class="asset-entry-info"><strong>${safe(asset.label)}</strong><small>第 ${asset.sectionIndex+1} 章 · ${safe(asset.title.slice(0,24))}</small><div class="asset-entry-actions"><button data-asset-locate="${index}">定位</button><button data-asset-replace="${index}">替换</button></div></div></div>`).join('');
+ host.innerHTML=entries.map((asset,index)=>`<div class="asset-entry"><img alt="素材预览 ${index+1}" src="${asset.src}"><div class="asset-entry-info"><strong>${safe(asset.label)}</strong><small>第 ${asset.sectionIndex+1} 章 · ${safe(asset.title.slice(0,24))}</small><small class="asset-rights-note">${safe(asset.provenance||'图片图层 · 权利待核查')}</small><div class="asset-entry-actions"><button data-asset-locate="${index}">定位</button><button data-asset-replace="${index}">替换</button></div></div></div>`).join('');
  function locate(entry){
    if(active!==entry.uid)selectSection(entry.uid);
    if(entry.kind==='layer'&&entry.lid!==activeLayer)selectLayer(entry.lid);
