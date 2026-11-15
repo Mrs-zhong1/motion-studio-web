@@ -26,3 +26,12 @@ The checker **fails closed** for absent/unverified gates, missing reviewer/evide
 
 ## Decision
 Keep PR #1 in draft and keep the hosted site designated **public review**, not production. Do not merge until all seven evidence categories are independently approved and their source commit matches. If visual signoff fails, return to visual refinements instead of marking it complete.
+
+
+## R12 second-batch actual verification (2026-11-15)
+- [R12 release guard run 43709516728](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43709516728) **PASS**: fail-closed logic tested for missing evidence and mismatched SHA. This is *not* a production-release pass.
+- [Source Web Product E2E run 43709516618](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43709516618) **PASS**: Chromium, Firefox and WebKit. Chromium also exercised R9 PBR, R11 mobile emulation and eight-template geometric screenshot audit.
+- [Eight-template review ledger](R12_VISUAL_REVIEW_LEDGER.md): screenshot coverage mapped, **visual approvals not obtained**.
+- [Media/rights ledger](R12_ASSET_RIGHTS_LEDGER.md): explicit unknown-ownership blockers; **commercial license clearance not obtained**.
+- [Real-device QA runbook](R12_REAL_DEVICE_QA.md): actionable native Mac/iPhone/Android matrix, **not run on physical hardware**.
+- The current source branch contains changes after the cited runs. Re-run the exact-sha gate and publish exact candidate hash before release.
