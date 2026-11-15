@@ -61,6 +61,13 @@ def run_audit():
 
                 total_sections = page.evaluate(
                     "(id) => templateSets[id].sections.length", template_id)
+                # Source-based evidence: an image layer is NOT proof of a photo.
+                # Actual network failures must remain visible as fallback counts.
+                manifest = page.evaluate("(id)=>templateAssetAuditCache.get(id)||[]",template_id)
+                real_photo_count = sum(entry["kind"]=="unsplash-photo" for entry in manifest)
+                fallback_count = sum(entry["kind"]=="original-generated-art" for entry in manifest)
+                assert len(manifest)==total_sections, (template_id,len(manifest),total_sections)
+                assert real_photo_count+fallback_count==total_sections, (template_id,manifest)
                 assert frame.locator("section.section").count() == total_sections
                 for device, width, height in (("desktop", 1440, 900), ("mobile", 390, 844)):
                     page.set_viewport_size({"width": width, "height": height})
@@ -187,6 +194,13 @@ def run_audit():
                     if template_id not in ("editorial","product-3d"):
                         assert frame.locator("section.template-opening .template-opening-mark").count() == 1,template_id
                         assert frame.locator("section.template-opening .chapter-step").inner_text().strip().startswith("01 /"),template_id
+                    geometry["photoSourcesAudited"]=len(manifest)
+                    geometry["realPhotoCount"]=real_photo_count
+                    geometry["originalFallbackCount"]=fallback_count
+                    geometry["mediaRightsApproved"]=False
+                    geometry["sourceManifest"]=[{"chapter":entry["chapter"],
+                        "kind":entry["kind"],"source":entry.get("source")}
+                        for entry in manifest]
                     geometry["template"] = template_id
                     geometry["device"] = device
                     shot = frame.locator("section.section").first.screenshot(
