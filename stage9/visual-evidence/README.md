@@ -15,6 +15,21 @@ Screenshots are raw CI evidence, not approved visual design.
 | Interactive Gallery | ![Desktop Interactive Gallery](./gallery-desktop.png) | ![Mobile Interactive Gallery](./gallery-mobile.png) |
 | Modern SaaS | ![Desktop Modern SaaS](./saas-desktop.png) | ![Mobile Modern SaaS](./saas-mobile.png) |
 
+## R5 — real third chapter of every template
+
+Images below show actual exported-page sections, not the home-card covers.
+
+| Template | Desktop chapter 3 | Mobile chapter 3 |
+|---|---|---|
+| Editorial Portfolio | ![Chapter 3 Editorial Portfolio desktop](./editorial-chapter3-desktop.png) | ![Chapter 3 Editorial Portfolio mobile](./editorial-chapter3-mobile.png) |
+| 3D Product Experience | ![Chapter 3 3D Product Experience desktop](./product-3d-chapter3-desktop.png) | ![Chapter 3 3D Product Experience mobile](./product-3d-chapter3-mobile.png) |
+| Cinematic Journey | ![Chapter 3 Cinematic Journey desktop](./cinematic-chapter3-desktop.png) | ![Chapter 3 Cinematic Journey mobile](./cinematic-chapter3-mobile.png) |
+| Architecture Studio | ![Chapter 3 Architecture Studio desktop](./architecture-chapter3-desktop.png) | ![Chapter 3 Architecture Studio mobile](./architecture-chapter3-mobile.png) |
+| Creative Agency | ![Chapter 3 Creative Agency desktop](./agency-chapter3-desktop.png) | ![Chapter 3 Creative Agency mobile](./agency-chapter3-mobile.png) |
+| Fashion Lookbook | ![Chapter 3 Fashion Lookbook desktop](./fashion-chapter3-desktop.png) | ![Chapter 3 Fashion Lookbook mobile](./fashion-chapter3-mobile.png) |
+| Interactive Gallery | ![Chapter 3 Interactive Gallery desktop](./gallery-chapter3-desktop.png) | ![Chapter 3 Interactive Gallery mobile](./gallery-chapter3-mobile.png) |
+| Modern SaaS | ![Chapter 3 Modern SaaS desktop](./saas-chapter3-desktop.png) | ![Chapter 3 Modern SaaS mobile](./saas-chapter3-mobile.png) |
+
 ## R3 — complete template preview dialog (not only page hero)
 
 | Template | Desktop preview | Mobile preview |
