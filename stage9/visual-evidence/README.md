@@ -52,6 +52,16 @@ Last-section screenshots show the editorial ending, not a static cover.
 | Editorial Portfolio | ![Preview Editorial Portfolio desktop](./editorial-preview-desktop.png) | ![Preview Editorial Portfolio mobile](./editorial-preview-mobile.png) |
 | 3D Product Experience | ![Preview 3D Product Experience desktop](./product-3d-preview-desktop.png) | ![Preview 3D Product Experience mobile](./product-3d-preview-mobile.png) |
 
+## R9 — Real offline Three.js studio scene
+
+These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.
+
+![Three.js PBR headphone showcase](./r9-studio-model.png)
+
+![Exported 3D product page](./r9-studio-page.png)
+
+Rendered in headless Chromium via software WebGL2. This is neither native hardware GPU approval nor art-direction sign-off.
+
 ## Review gates
 
 - Typography, photo crop and subject matter
