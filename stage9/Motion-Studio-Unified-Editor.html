@@ -954,6 +954,105 @@
 @media(prefers-reduced-motion:reduce){
  .page[data-template] .section.designed-chapter .motion-atmosphere{opacity:.25!important;transition:none!important}
 }
+
+/* R15 composition sequencing — chapter geometry and scene labels share the same
+   DOM in editor, immersive preview and exported standalone HTML. No mock cover. */
+.page[data-template] .section.designed-chapter{--r15-art-w:1fr;--r15-motion-w:1fr}
+.page[data-template] .section.designed-chapter .r15-scene-mark{
+ position:absolute;z-index:5;bottom:clamp(14px,3vw,40px);left:clamp(20px,4vw,72px);
+ display:flex;align-items:center;gap:20px;pointer-events:none;
+ font:700 10px/1.35 ui-monospace,SFMono-Regular,monospace;letter-spacing:.11em;
+ text-transform:uppercase;mix-blend-mode:normal;opacity:.88;
+ color:var(--template-ink,#e9ebe4);
+}
+.page[data-template] .section.designed-chapter .r15-scene-mark span:last-child{
+ font-weight:500;opacity:.65;letter-spacing:.04em
+}
+.page[data-template] .section.authored-six[data-index="1"]{
+ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);min-height:660px!important;
+}
+.page[data-template] .section.authored-six[data-index="2"]{
+ grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);min-height:730px!important;
+}
+.page[data-template] .section.authored-six[data-index="3"]{
+ grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);min-height:700px!important;
+}
+.page[data-template] .section.authored-six[data-index="2"] .section-art{
+ grid-column:2!important;grid-row:2!important;
+}
+.page[data-template] .section.authored-six[data-index="2"] > iframe{
+ grid-column:1!important;grid-row:2!important;
+}
+.page[data-template] .section.authored-six[data-index="3"] .section-art{
+ grid-column:1!important;grid-row:2!important;
+}
+.page[data-template] .section.authored-six[data-index="3"] > iframe{
+ grid-column:2!important;grid-row:2!important;
+}
+.page[data-template="cinematic"] .section.authored-six[data-index="2"]{
+ background:#19151a!important;border-block:20px solid #070609!important;
+}
+.page[data-template="cinematic"] .section.authored-six[data-index="2"] .designed-chapter-heading h2{
+ font-style:normal;text-transform:uppercase;font-size:clamp(43px,6.6vw,110px);max-width:85%;
+}
+.page[data-template="architecture"] .section.authored-six[data-index="2"]{
+ background:#d8dfd5!important;padding-inline:clamp(26px,7vw,120px)!important;
+}
+.page[data-template="architecture"] .section.authored-six[data-index="3"]{
+ background:#f7f7f0!important;
+}
+.page[data-template="agency"] .section.authored-six[data-index="2"]{
+ background:#161f23!important;color:#e7f7db!important;
+}
+.page[data-template="agency"] .section.authored-six[data-index="2"] .designed-chapter-heading h2{
+ color:#dfff62!important;max-width:100%;font-size:clamp(42px,7.5vw,116px)!important;
+}
+.page[data-template="agency"] .section.authored-six[data-index="3"]{
+ background:#cfbafd!important;color:#151719!important;
+}
+.page[data-template="fashion"] .section.authored-six[data-index="2"]{
+ background:#d1c7bb!important;
+}
+.page[data-template="fashion"] .section.authored-six[data-index="2"] .designed-chapter-heading{
+ text-align:right!important;justify-self:end!important;
+}
+.page[data-template="gallery"] .section.authored-six[data-index="2"]{
+ background:#252c46!important;color:#f6f5ed!important;
+}
+.page[data-template="gallery"] .section.authored-six[data-index="2"] .designed-chapter-heading h2{
+ font-style:italic;font-size:clamp(45px,6vw,98px)!important;
+}
+.page[data-template="gallery"] .section.authored-six[data-index="3"]{
+ background:#e5e5d8!important;
+}
+.page[data-template="saas"] .section.authored-six[data-index="2"]{
+ background:#1f463a!important;color:#e8faed!important;
+}
+.page[data-template="saas"] .section.authored-six[data-index="2"] .designed-chapter-heading h2{
+ color:#d6ff91!important;font-weight:850;
+}
+.page[data-template="saas"] .section.authored-six[data-index="3"]{
+ background:#dceadf!important;
+}
+.page[data-template="editorial"] .section.designed-chapter[data-index="2"]{
+ background:#dbe4d5!important;color:#182d23!important;
+}
+.page[data-template="product-3d"] .section.designed-chapter[data-index="3"]{
+ background:#192b34!important;color:#e8f0e9!important;
+}
+@media(max-width:720px){
+ .page[data-template] .section.authored-six[data-index="1"],
+ .page[data-template] .section.authored-six[data-index="2"],
+ .page[data-template] .section.authored-six[data-index="3"]{
+  min-height:0!important;padding:26px 16px 54px!important;
+ }
+ .page[data-template] .section.authored-six[data-index="2"] .designed-chapter-heading{
+  text-align:left!important;justify-self:start!important;
+ }
+ .page[data-template] .section.designed-chapter .r15-scene-mark{
+  bottom:12px;left:18px;gap:10px;font-size:8px;z-index:9;
+ }
+}
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="library-section-heading"><div><span class="library-eyebrow">CURATED INTERACTIVE WEBSITES</span><h2>可探索的作品 <span id="templateResultCount">08</span></h2></div><p>打开任意模板体验完整的多章节网页，而非静态封面。</p></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewImmersive" aria-pressed="false" title="切换为整页沉浸式预览">沉浸预览</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><div class="preview-live-badge" aria-hidden="true"><i></i> LIVE INTERACTIVE PREVIEW · 滚动探索</div><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
@@ -1551,6 +1650,19 @@ const visualFrame=templateEditorialFrame[project.templateId]||templateEditorialF
 const isTemplateOpening=authoredSix&&i===0;
 const isTemplateFinal=(authoredSix||['editorial','product-3d'].includes(project.templateId))&&i===project.sections.length-1;
 const chapterStep=`${String(i+1).padStart(2,'0')} / ${String(project.sections.length).padStart(2,'0')}`;
+ const r15Scenes={
+ editorial:['THE OPENING','SELECTED WORK','DESIGN STUDIES','NOTES & OBJECTS'],
+ 'product-3d':['FORM','THE OBJECT','MATERIAL STUDY','IN MOTION','THE COLLECTION'],
+ cinematic:['PROLOGUE','THE LANDSCAPE','IN THE FRAME','THE MOMENT','EPILOGUE'],
+ architecture:['MANIFESTO','THE RESIDENCE','STRUCTURES','LANDSCAPES','NEXT SPACE'],
+ agency:['A CREATIVE LAB','STRATEGY','SOMETHING NEW','MAKE IT REAL','THE FUTURE'],
+ fashion:['THE COLLECTION','LOOK 01','THE SILHOUETTE','FABRIC & FORM','FINALE'],
+ gallery:['EXHIBITION','ROOM ONE','ROOM TWO','THE ARTISTS','LAST ROOM'],
+ saas:['THE PLATFORM','DASHBOARD','ONE WORKFLOW','THE TEAM','NEXT STEP']
+ };
+ const sceneLabel=safe((r15Scenes[project.templateId]||[])[i]||'A NEW CHAPTER');
+ const sceneMark=designedChapter?`<div class="r15-scene-mark" aria-hidden="true"><span>${sceneLabel}</span><span>${chapterStep}</span></div>`:'';
+
 const chapterHeader=designedChapter?`<div class="designed-chapter-heading"><span class="chapter-index">${chapterPrefix} / ${chapterNumber}</span><span class="chapter-step" aria-label="章节进度">${chapterStep}</span><h2 data-chapter-title>${safe(s.text)}</h2><p>${safe(chapterDescription)}</p></div>`:'';
 const openingMark=isTemplateOpening?`<div class="template-opening-mark" aria-hidden="true"><span>${safe(visualFrame.eyebrow)}</span><span>${safe(visualFrame.signature)}</span></div>`:'';
 const closingMark=isTemplateFinal?`<div class="template-closing-mark"><span class="closing-kicker">END OF THIS STORY / ${chapterStep}</span><div class="closing-body"><strong>${safe(visualFrame.outro)}</strong><p>${safe(visualFrame.note)}</p></div><span class="closing-signature">MOTION STUDIO · ${safe(project.templateId.toUpperCase())}</span></div>`:'';let art=s.image?`<div class="section-art" style="background-image:url('${s.image}');background-position:${s.imageFocusX}% ${s.imageFocusY}%">${designedChapter?'<span class="motion-atmosphere" aria-hidden="true"></span>':''}</div>`:'';let raw=(forExport&&s.id==='offline-glb-scene'&&project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb).length>=2)
@@ -1558,7 +1670,7 @@ const closingMark=isTemplateFinal?`<div class="template-closing-mark"><span clas
  :frameMarkup(getItem(s),s);const bridge=`<script>window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio-scroll')return;const p=Math.max(0,Math.min(1,Number(e.data.progress)||0)),max=Math.max(0,document.documentElement.scrollHeight-innerHeight);window.scrollTo(0,p*max);window.dispatchEvent(new Event('scroll'));});<\/script>`;raw=raw.replace('</body>',bridge+'</body>');if(templateHero){const editorial=project.templateId==='editorial';const heroCSS=editorial
  ?'body{background:#f0ede6!important;color:#22221e!important}.stage{padding:36px 28px!important}.center{width:100%!important;text-align:left!important}h1{font-family:Georgia,serif!important;font-size:clamp(32px,5vw,70px)!important;letter-spacing:-.065em!important;line-height:1.02!important;max-width:100%!important;overflow-wrap:break-word!important}.muted{color:#66685e!important}.eyebrow{color:#52644e!important}.stage:before{opacity:.035!important}.scrollnote{color:#6f7069!important}'
  :'body{background:#0d1519!important}.stage{padding:34px 28px!important}.center{width:100%!important;text-align:left!important}h1{font-size:clamp(34px,5.2vw,69px)!important;line-height:1.04!important;max-width:100%!important;overflow-wrap:break-word!important}.stage:before{opacity:.045!important}.muted{color:#a5b5ae!important}.eyebrow{color:#c8f379!important}';
- raw=raw.replace('</head>','<style>'+heroCSS+'</style></head>');}let doc=safe(raw);return `<section class="section${!forExport&&active===s.uid?' selected':''}${templateHero?' designed-hero':''}${designedChapter?' designed-chapter':''}${authoredSix?' authored-six':''}${isTemplateOpening?' template-opening':''}${isTemplateFinal?' template-final':''}" data-uid="${safe(s.uid)}" data-index="${i}" ${forExport?'':`draggable="true" tabindex="0" role="button" aria-label="编辑章节 ${i+1}"`}><div class="badge">${String(i+1).padStart(2,'0')} / ${safeTitle}</div>${openingMark}${chapterHeader}${art}${s.layers.map((l,n)=>layerMarkup(l,s,n,forExport)).join('')}<iframe title="${safeTitle}" sandbox="allow-scripts" loading="eager" style="height:${s.height}px" srcdoc="${doc}"></iframe>${closingMark}${!forExport&&active===s.uid?`<div class="canvas-image-actions"><button type="button" data-canvas-image="${safe(s.uid)}">${s.image?'替换图片':'添加图片'}</button></div>`:''}<div class="caption">${forExport?'SCROLL TO EXPLORE':'点击此章编辑 ↗'}</div></section>`}
+ raw=raw.replace('</head>','<style>'+heroCSS+'</style></head>');}let doc=safe(raw);return `<section class="section${!forExport&&active===s.uid?' selected':''}${templateHero?' designed-hero':''}${designedChapter?' designed-chapter':''}${authoredSix?' authored-six':''}${isTemplateOpening?' template-opening':''}${isTemplateFinal?' template-final':''}" data-uid="${safe(s.uid)}" data-index="${i}" ${forExport?'':`draggable="true" tabindex="0" role="button" aria-label="编辑章节 ${i+1}"`}><div class="badge">${String(i+1).padStart(2,'0')} / ${safeTitle}</div>${openingMark}${chapterHeader}${art}${sceneMark}${s.layers.map((l,n)=>layerMarkup(l,s,n,forExport)).join('')}<iframe title="${safeTitle}" sandbox="allow-scripts" loading="eager" style="height:${s.height}px" srcdoc="${doc}"></iframe>${closingMark}${!forExport&&active===s.uid?`<div class="canvas-image-actions"><button type="button" data-canvas-image="${safe(s.uid)}">${s.image?'替换图片':'添加图片'}</button></div>`:''}<div class="caption">${forExport?'SCROLL TO EXPLORE':'点击此章编辑 ↗'}</div></section>`}
 function renderMultitrack(){const el=$('multitrack');if(!el)return;const rows=[];project.sections.forEach((s,sectionIndex)=>{const selected=s.uid===active;rows.push(`<div class="mt-row mt-camera ${selected?'selected':''}"><button class="mt-label" data-track-section="${safe(s.uid)}">${sectionIndex+1}. 镜头 ${safe(getItem(s).title)}</button><div class="mt-rail">${(s.camera.advanced?s.camera.path:[{at:s.camera.start},{at:s.camera.end}]).map((f,j)=>`<button class="mt-key" style="left:${f.at}%" data-track-section="${safe(s.uid)}" title="镜头关键点 ${f.at}%"></button>`).join('')}</div></div>`);s.layers.forEach((l,j)=>rows.push(`<div class="mt-row ${selected&&l.id===activeLayer?'selected':''}"><button class="mt-label" data-track-layer="${safe(l.id)}" data-track-section="${safe(s.uid)}">↳ ${j+1}. ${safe((l.text||l.kind).slice(0,20))}</button><div class="mt-rail">${l.keyframes.map((f,k)=>`<button class="mt-key ${selected&&l.id===activeLayer&&k===l._selectedFrame?'selected':''}" style="left:${f.at}%" data-track-kf="${k}" data-track-layer="${safe(l.id)}" data-track-section="${safe(s.uid)}" title="${f.at}%"></button>`).join('')}</div></div>`))});el.innerHTML=rows.join('')||'<div class="mt-empty">添加组件后显示轨道</div>';el.querySelectorAll('[data-track-section]').forEach(btn=>btn.onclick=e=>{e.stopPropagation();const sec=project.sections.find(x=>x.uid===btn.dataset.trackSection);if(!sec)return;active=sec.uid;if(btn.dataset.trackLayer){activeLayer=btn.dataset.trackLayer;selectedLayers=new Set([activeLayer]);const layer=sec.layers.find(x=>x.id===activeLayer);if(layer&&btn.dataset.trackKf!==undefined)layer._selectedFrame=Number(btn.dataset.trackKf)}else{activeLayer=sec.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[])}renderProps();renderMultitrack();document.querySelectorAll('#sections .section').forEach(node=>node.classList.toggle('selected',node.dataset.uid===active));refreshOverlays()});}
 function render(){ $('globalTransition').value=project.transition||'fade';$('projectName').value=project.title;$('pageTitle').textContent=project.title.toUpperCase();$('sections').innerHTML=project.sections.length?project.sections.map((s,i)=>buildSection(s,i)).join(''):'<div class="empty"><div class="empty-start"><strong>从这里，开始你的网页。</strong><p>添加页面区块，或从左侧选择一个动效组件。</p><button id="emptyStartAdd" type="button">＋ 添加第一个区块</button></div></div>';$('timelineTrack').innerHTML=project.sections.map((s,i)=>`<button class="timeline-node ${s.uid===active?'active':''}" data-uid="${safe(s.uid)}" title="第 ${i+1} 章：${safe(s.text)}">${safe(s.text.slice(0,26)||getItem(s).title)}</button>`).join('');$('timeInfo').textContent=String(project.sections.length).padStart(2,'0')+' 个章节';$('emptyStartAdd')?.addEventListener('click',()=>{document.querySelector('[data-asset-tier-button="l2"]')?.click();});$('sections').querySelectorAll('.section').forEach(sec=>{sec.addEventListener('click',e=>{if(!showInteractive)selectSection(sec.dataset.uid)});sec.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectSection(sec.dataset.uid)}});sec.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/motion-section',sec.dataset.uid);e.dataTransfer.effectAllowed='move'});sec.addEventListener('dragover',e=>{e.preventDefault();sec.classList.add('dragover')});sec.addEventListener('dragleave',()=>sec.classList.remove('dragover'));sec.addEventListener('drop',e=>{e.preventDefault();sec.classList.remove('dragover');const component=e.dataTransfer.getData('text/motion-component'),from=e.dataTransfer.getData('text/motion-section');const idx=Number(sec.dataset.index);if(component)addComponent(component,idx);else if(from)moveTo(from,idx)})});$('timelineTrack').querySelectorAll('button').forEach(el=>el.onclick=()=>{selectSection(el.dataset.uid);document.querySelector(`.section[data-uid="${el.dataset.uid}"]`)?.scrollIntoView({behavior:'smooth',block:'center'})});$('sections').querySelectorAll('[data-canvas-image]').forEach(button=>button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();$('propImage')?.click()}));$('sections').querySelectorAll('iframe').forEach(f=>f.style.pointerEvents=showInteractive?'auto':'none');$('sections').querySelectorAll('.motion-layer').forEach(bindLayerDrag);renderProps();renderAssetOverview();renderMultitrack();refreshOverlays();syncTimeline();saveDraft();}
 function moveTo(key,idx){let from=project.sections.findIndex(s=>s.uid===key);if(from<0)return;const [s]=project.sections.splice(from,1);const target=from<idx?idx-1:idx;project.sections.splice(target,0,s);render();notify('章节顺序已更新')}
