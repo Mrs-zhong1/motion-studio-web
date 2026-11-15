@@ -166,6 +166,24 @@ def run_audit():
                     # More than 32px indicates unintended horizontal layout overflow.
                     if geometry["documentWidth"] > geometry["viewportWidth"] + 32:
                         issues.append(f"{template_id} {device}: overflow {geometry}")
+                    # R5: the exported preview must change actual story motion
+                    # on scroll. Not enough to merely contain the CSS declaration.
+                    if template_id == "cinematic" and device == "desktop":
+                        target = frame.locator("section.designed-chapter").nth(2)
+                        before_motion = target.evaluate("""node=>({
+                          progress:Number(node.style.getPropertyValue('--story-reveal')||1),
+                          clip:getComputedStyle(node.querySelector('.section-art')).clipPath
+                        })""")
+                        target.scroll_into_view_if_needed()
+                        page.wait_for_timeout(180)
+                        after_motion = target.evaluate("""node=>({
+                          progress:Number(node.style.getPropertyValue('--story-reveal')||0),
+                          clip:getComputedStyle(node.querySelector('.section-art')).clipPath
+                        })""")
+                        geometry["scrollMotion"]={"before":before_motion,"after":after_motion}
+                        if (after_motion["progress"] <= before_motion["progress"] + .1
+                                or after_motion["clip"] == before_motion["clip"]):
+                            issues.append(f"cinematic desktop: scroll reveal did not progress {geometry['scrollMotion']}")
                     result["templates"].append(geometry)
                 page.locator("#previewClose").click()
                 assert page.locator("#templatePreview").is_hidden()
