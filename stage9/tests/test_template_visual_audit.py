@@ -184,6 +184,14 @@ def run_audit():
                         if (after_motion["progress"] <= before_motion["progress"] + .1
                                 or after_motion["clip"] == before_motion["clip"]):
                             issues.append(f"cinematic desktop: scroll reveal did not progress {geometry['scrollMotion']}")
+                    # Screenshots of an actual middle chapter: card/hero screenshots
+                    # alone cannot show whether a template has a real page narrative.
+                    middle = frame.locator("section.section").nth(2)
+                    middle.scroll_into_view_if_needed()
+                    page.wait_for_timeout(130)
+                    middle_png = middle.screenshot(animations="disabled", timeout=30000)
+                    (SCREENSHOTS / f"{template_id}-chapter3-{device}.png").write_bytes(middle_png)
+                    geometry["chapter3PngSHA256"] = hashlib.sha256(middle_png).hexdigest()[:16]
                     result["templates"].append(geometry)
                 page.locator("#previewClose").click()
                 assert page.locator("#templatePreview").is_hidden()
