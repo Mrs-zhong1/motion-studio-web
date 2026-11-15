@@ -125,6 +125,24 @@ def run_audit():
                         screenshot=page.screenshot(animations="disabled",full_page=False)
                         (SCREENSHOTS/f"{template_id}-preview-{device}.png").write_bytes(screenshot)
                         geometry["fullPreviewPngSHA256"]=hashlib.sha256(screenshot).hexdigest()[:16]
+                    # R14: capture actual immersive website experience for ALL
+                    # eight templates at both viewport sizes, not just two
+                    # preview dialog screenshots.
+                    immersive = page.locator("#previewImmersive")
+                    immersive.click()
+                    assert page.locator("#templatePreview").evaluate(
+                        "el => el.classList.contains('immersive-preview')"
+                    )
+                    assert page.locator(".preview-product-info").is_hidden()
+                    stage_width = page.locator("#previewDevice").evaluate(
+                        "el => el.getBoundingClientRect().width"
+                    )
+                    assert stage_width >= width * .88, (template_id, device, stage_width, width)
+                    immersive_shot = page.screenshot(animations="disabled", full_page=False)
+                    (SCREENSHOTS / f"{template_id}-immersive-{device}.png").write_bytes(immersive_shot)
+                    geometry["immersivePngSHA256"] = hashlib.sha256(immersive_shot).hexdigest()[:16]
+                    immersive.click()
+                    assert page.locator(".preview-product-info").is_visible()
                     # R4: all six newly authored templates must have complete,
                     # nonoverlapping image/renderer zones in every chapter.
                     # Previously rebuilt pilots retain their original first-page hero.
