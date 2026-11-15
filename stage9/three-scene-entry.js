@@ -6,15 +6,31 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 (async function bootMotionThree(){
   const host=document.querySelector('.viewport')||document.body;
   const source=document.getElementById('embedded-model')?.textContent?.trim()||'';
-  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],skinnedMeshCount:0,morphMeshCount:0,boneCount:0,morphInfluenceSamples:[],boneRotationSamples:[],animationClipNames:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0,studioLighting:false,shadowEnabled:false,dragMoves:0,dragYaw:0,dragPitch:0,studioMeshes:0,modelTriangles:0,zoom:5.8,environmentReady:false,proceduralTextureCount:0,lightPreset:'warm',materialPreset:'original',cameraPreset:'hero',controlClicks:0};
+  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],skinnedMeshCount:0,morphMeshCount:0,boneCount:0,morphInfluenceSamples:[],boneRotationSamples:[],animationClipNames:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0,studioLighting:false,shadowEnabled:false,dragMoves:0,dragYaw:0,dragPitch:0,studioMeshes:0,modelTriangles:0,zoom:5.8,environmentReady:false,proceduralTextureCount:0,lightPreset:'warm',materialPreset:'original',cameraPreset:'hero',controlClicks:0,renderMsAvg:0,renderMsMax:0,estimatedFps:0,pausedFrames:0,visible:true,contextLost:false,reducedMotion:false,quality:'desktop',pixelRatio:1,frameBudgetMs:33.3,renderSamples:0};
   window.__motionThreeStatus=status;
-  let gl;
-  try {gl=document.createElement('canvas').getContext('webgl2');}catch(e){}
-  if(!gl){status.error='WebGL2 unavailable: Canvas fallback remains active';return;}
+  // Avoid allocating a throwaway WebGL2 context during feature detection.
+  if(typeof WebGL2RenderingContext==='undefined'){
+    status.error='WebGL2 unavailable: Canvas fallback remains active';return;
+  }
   let renderer;
   const canvas=document.createElement('canvas');canvas.id='motion-three-webgl2';
   canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:auto;touch-action:pan-y;cursor:grab;opacity:0;transition:opacity .25s;';
   host.style.position='relative';host.appendChild(canvas);
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+  status.reducedMotion=reducedMotion.matches;
+  const isMobile=()=>Math.min(window.innerWidth||1200,host.clientWidth||1200)<600||
+    (window.matchMedia('(pointer: coarse)').matches&&window.innerWidth<900);
+  let running=true,visible=true,lastFrame=0;
+  const visibility=new IntersectionObserver(items=>{
+    visible=!!items[0]?.isIntersecting;status.visible=visible;
+  },{threshold:0.01});
+  visibility.observe(canvas);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)lastFrame=0});
+  canvas.addEventListener('webglcontextlost',e=>{
+    e.preventDefault();status.contextLost=true;status.error='WebGL context lost: Canvas fallback remains active';
+    running=false;canvas.style.opacity='0';
+    document.documentElement.dataset.motion3dRenderer='fallback';
+  });
   try{
     renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
     const ctx=renderer.getContext();
@@ -25,7 +41,14 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
     renderer.toneMappingExposure=1.05;
     renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     status.shadowEnabled=true;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    const applyQuality=()=>{
+      const mobile=isMobile();status.quality=mobile?'mobile':'desktop';
+      const ratio=Math.min(window.devicePixelRatio||1,mobile?1:1.5);
+      renderer.setPixelRatio(ratio);status.pixelRatio=ratio;
+      key.shadow.mapSize.set(mobile?512:1024,mobile?512:1024);
+      status.frameBudgetMs=mobile?50:33.3; // target, not a hardware FPS claim
+    };
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
     const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.05,100);
     camera.position.set(0,0,5.8);
     // Original studio-light rig: large softboxes, warm key, cool rim and
@@ -175,11 +198,18 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
     preset('Detail',()=>{zoom=4.3;camera.position.z=zoom;status.zoom=zoom;status.cameraPreset='detail'});
 
     let progress=0;
+    const mobileHint=document.createElement('p');
+    mobileHint.id='motion-r11-hint';
+    mobileHint.textContent='Drag to rotate · Double click to reset · Ctrl/⌘ + wheel to zoom';
+    mobileHint.style.cssText='position:absolute;z-index:8;bottom:8px;left:12px;right:12px;margin:0;color:#e9f3f4;font:500 11px system-ui;pointer-events:none;text-shadow:0 1px 5px #07121a';
+    host.appendChild(mobileHint);
     function recordDraw(start){
       const elapsed=performance.now()-start;
       status.drawSamples++;
       status.drawTotalMs=Number((status.drawTotalMs+elapsed).toFixed(3));
       status.drawMaxMs=Math.max(status.drawMaxMs,Number(elapsed.toFixed(3)));
+      status.renderMsMax=status.drawMaxMs;
+      status.renderMsAvg=Number((status.drawTotalMs/status.drawSamples).toFixed(3));
     }
     function changeProgress(p){
       progress=Math.min(1,Math.max(0,Number(p)||0));status.progress=progress;
@@ -196,13 +226,31 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
       }
     }
     window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll'){changeProgress(event.data.progress);if(renderer){try{orient();const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;}catch(error){status.error=String(error);}}}});
-    const resize=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
+    const resize=()=>{
+      const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);
+      applyQuality();renderer.setSize(w,h,false);
+      camera.aspect=w/h;camera.updateProjectionMatrix();
+    };
     resize();window.addEventListener('resize',resize);
-    function update(){
-      if(!renderer)return;
+    function update(timestamp=performance.now()){
+      if(!renderer||!running)return;
+      if(!visible||document.hidden){
+        status.pausedFrames++;lastFrame=0;
+        requestAnimationFrame(update);return;
+      }
+      const minInterval=reducedMotion.matches?100:status.frameBudgetMs*.5;
+      if(lastFrame&&timestamp-lastFrame<minInterval){
+        requestAnimationFrame(update);return;
+      }
+      if(lastFrame&&timestamp>lastFrame){
+        const instant=1000/(timestamp-lastFrame);
+        status.estimatedFps=Number((status.estimatedFps*.86+instant*.14).toFixed(1));
+      }
+      lastFrame=timestamp;
       orient();
       try{
         const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;
+        status.renderSamples++;
         if(status.frames<=5||status.frames%30===0){
           const g=renderer.getContext(),w=g.drawingBufferWidth,h=g.drawingBufferHeight;
           status.renderWidth=w;status.renderHeight=h;let visible=0,spread=0,last=-1;
@@ -221,5 +269,9 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
       requestAnimationFrame(update);
     }
     update();
-  }catch(error){status.error=String(error?.stack||error);canvas.remove();renderer?.dispose();}
+  }catch(error){
+    status.error=String(error?.stack||error);running=false;
+    visibility.disconnect();canvas.remove();renderer?.dispose();
+    document.documentElement.dataset.motion3dRenderer='fallback';
+  }
 })();
