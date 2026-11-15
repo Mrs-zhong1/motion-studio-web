@@ -894,21 +894,108 @@ async function photoToInline(url,variant=0){
    return data.length<1500000?data:'';
  }catch(err){console.warn('Demo asset unavailable:',url,err);return ''}
 }
+/* R8/R10: each chapter has a distinct image. For demo chapters without a
+   separately curated photograph, draw original editorial art instead of
+   recycling a hero photo with a different crop. This is original canvas
+   artwork, not an AI photograph or a cleared third-party commercial asset. */
+const templateAssetAuditCache=new Map();
+const graphicPalette={
+ editorial:['#e5e3d8','#27362b','#9aaf83','#eebd89'],
+ 'product-3d':['#101c24','#cad7c8','#8ea9b4','#d1aa6c'],
+ cinematic:['#121422','#b7a08b','#e1baa1','#566c8e'],
+ architecture:['#eaece8','#263e36','#97a9a0','#d7c9af'],
+ agency:['#dfff63','#151f23','#ff93bd','#b5baf0'],
+ fashion:['#f0e3d8','#654f53','#9d8d84','#e8b7a9'],
+ gallery:['#e4e7ee','#252e4b','#789fca','#c4a6ba'],
+ saas:['#e4f1e8','#1f4d3b','#91c5aa','#c6dfc9']
+};
+function authoredChapterArtwork(id,index){
+ const palette=graphicPalette[id]||graphicPalette.editorial;
+ const canvas=document.createElement('canvas');canvas.width=960;canvas.height=720;
+ const ctx=canvas.getContext('2d');if(!ctx)return '';
+ const [bg,ink,tone,highlight]=palette,w=canvas.width,h=canvas.height;
+ const seed=id.split('').reduce((a,x)=>a*31+x.charCodeAt(0),19)+index*313;
+ let rng=seed>>>0;const rand=()=>{rng=(rng*1664525+1013904223)>>>0;return rng/4294967296};
+ ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+ ctx.strokeStyle=ink;ctx.lineWidth=1;ctx.globalAlpha=.15;
+ for(let n=0;n<19;n++){let x=50+n*48;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+ for(let n=0;n<14;n++){let y=40+n*49;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ ctx.globalAlpha=1;
+ const shift=index%3;
+ if(id==='architecture'){
+  ctx.strokeStyle=ink;ctx.lineWidth=5;
+  for(let j=0;j<3;j++){const x=100+j*245+(shift*15),y=200+j*22;
+   ctx.strokeRect(x,y,210,320-j*45);ctx.fillStyle=tone;ctx.globalAlpha=.55;
+   ctx.fillRect(x+24,y+60,140,220-j*40);ctx.globalAlpha=1;
+   ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+85,y-95);ctx.lineTo(x+295,y-95);ctx.lineTo(x+210,y);ctx.stroke();
+  }
+ }else if(id==='agency'){
+  for(let j=0;j<5;j++){ctx.save();ctx.translate(170+j*155,340+(j%2)*70);
+   ctx.rotate((rand()-.5)*.65);ctx.fillStyle=j%2?highlight:ink;
+   ctx.fillRect(-93,-145,186,290);ctx.fillStyle=j%2?ink:bg;
+   ctx.font='900 76px sans-serif';ctx.textAlign='center';ctx.fillText(String(j+1),0,28);
+   ctx.restore()}
+ }else if(id==='fashion'){
+  ctx.fillStyle=tone;ctx.beginPath();ctx.ellipse(480,390,280,300,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=ink;ctx.beginPath();ctx.moveTo(470,110);ctx.bezierCurveTo(320,250,370,420,185,610);
+  ctx.lineTo(720,610);ctx.bezierCurveTo(585,430,635,250,470,110);ctx.fill();
+  ctx.fillStyle=highlight;ctx.beginPath();ctx.moveTo(470,125);ctx.lineTo(340,600);ctx.lineTo(595,600);ctx.fill();
+ }else if(id==='product-3d'){
+  const gr=ctx.createRadialGradient(540,330,15,540,330,370);gr.addColorStop(0,tone);gr.addColorStop(1,bg);
+  ctx.fillStyle=gr;ctx.fillRect(0,0,w,h);
+  for(let j=0;j<4;j++){ctx.strokeStyle=j%2?highlight:tone;ctx.lineWidth=18-j*3;
+   ctx.beginPath();ctx.ellipse(500,365,145+j*55,220-j*20,-.28,0,Math.PI*2);ctx.stroke()}
+  ctx.fillStyle=highlight;ctx.fillRect(135,300,140,190);ctx.fillRect(710,300,140,190);
+ }else if(id==='saas'){
+  ctx.fillStyle=ink;ctx.fillRect(110,140,740,450);
+  ctx.fillStyle='#f8fcf8';ctx.fillRect(123,153,714,425);
+  ctx.fillStyle=tone;ctx.fillRect(150,180,135,360);
+  ctx.fillStyle=ink;ctx.font='700 23px sans-serif';ctx.fillText('OVERVIEW',326,220);
+  for(let j=0;j<4;j++){ctx.fillStyle=j%2?highlight:bg;ctx.fillRect(320+(j%2)*235,250+Math.floor(j/2)*135,205,114);
+   ctx.strokeStyle=tone;ctx.lineWidth=4;ctx.strokeRect(320+(j%2)*235,250+Math.floor(j/2)*135,205,114)}
+  for(let j=0;j<4;j++){ctx.fillStyle=bg;ctx.fillRect(168,232+j*58,100,11)}
+ }else if(id==='gallery'){
+  for(let j=0;j<4;j++){const x=95+j*207,y=180+(j%2)*70;
+   ctx.fillStyle='#ffffff';ctx.fillRect(x-17,y-17,186,302);
+   ctx.fillStyle=j%2?highlight:tone;ctx.fillRect(x,y,152,266);
+   ctx.strokeStyle=ink;ctx.lineWidth=8;ctx.beginPath();
+   ctx.arc(x+76,y+128,35+rand()*50,0,Math.PI*2);ctx.stroke()}
+ }else if(id==='cinematic'){
+  const grd=ctx.createLinearGradient(0,100,960,680);grd.addColorStop(0,ink);grd.addColorStop(.5,tone);grd.addColorStop(1,bg);
+  ctx.fillStyle=grd;ctx.fillRect(40,90,880,540);
+  ctx.fillStyle=highlight;ctx.beginPath();ctx.arc(660-shift*80,250+shift*35,130,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=ink;ctx.beginPath();ctx.moveTo(40,590);ctx.lineTo(350,390);ctx.lineTo(530,520);ctx.lineTo(730,330);ctx.lineTo(920,555);ctx.lineTo(920,630);ctx.lineTo(40,630);ctx.fill();
+ }else{
+  ctx.fillStyle=tone;ctx.save();ctx.translate(480,350);ctx.rotate(-.21+shift*.11);
+  ctx.fillRect(-310,-215,620,430);ctx.restore();
+  ctx.fillStyle=highlight;ctx.beginPath();ctx.arc(620,305,170,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=ink;ctx.lineWidth=13;ctx.beginPath();ctx.moveTo(125,595);ctx.lineTo(780,195);ctx.stroke();
+ }
+ ctx.fillStyle=ink;ctx.globalAlpha=.85;ctx.font='700 15px sans-serif';
+ ctx.fillText('MOTION STUDIO / ORIGINAL ARTWORK',54,51);
+ ctx.font='500 15px sans-serif';ctx.fillText(String(index+1).padStart(2,'0')+' / '+id.toUpperCase(),54,677);
+ ctx.globalAlpha=1;
+ return canvas.toDataURL('image/jpeg',.79);
+}
 async function ensureTemplatePhoto(id){
  if(templatePhotoCache.has(id))return templatePhotoCache.get(id);
  if(templatePhotoPending.has(id))return templatePhotoPending.get(id);
  const primary=templateThumbnailImages[id];
  const extras=(templateExtraPhotos[id]||[]).map(photo=>`https://images.unsplash.com/${photo}?w=1000&q=75`);
  const count=templateSets[id]?.sections.length||0;
- // Online version may provide up to 3 different photographs; remaining sections
- // receive explicit crops of the matching hero photograph. Offline bundles share
- // one locally stored photo per template, with varied composition per section.
- const sources=Array.from({length:count},(_,index)=>index===0?primary:(extras[index-1]||primary));
- const job=Promise.all(sources.map((url,index)=>url?photoToInline(url,index<3&&extras[index-1]?0:index):Promise.resolve('')))
-   .then(photos=>{
-     const fallback=photos.find(Boolean)||'';
-     const complete=photos.map(photo=>photo||fallback);
-     templatePhotoCache.set(id,complete);return complete;
+ const sources=[primary,...extras];
+ const job=Promise.all(Array.from({length:count},async(_,index)=>{
+    const source=index<3?sources[index]:null;
+    const photo=source?await photoToInline(source):'';
+    return {image:photo||authoredChapterArtwork(id,index),
+      kind:photo?'unsplash-photo':'original-generated-art',
+      source:photo?source:null,rightsReviewed:false};
+   })).then(entries=>{
+     templatePhotoCache.set(id,entries.map(entry=>entry.image));
+     templateAssetAuditCache.set(id,entries.map(({kind,source,rightsReviewed},index)=>({
+        chapter:index+1,kind,source,rightsReviewed
+     })));
+     return entries.map(entry=>entry.image);
    });
  templatePhotoPending.set(id,job);
  try{return await job}finally{templatePhotoPending.delete(id)}
