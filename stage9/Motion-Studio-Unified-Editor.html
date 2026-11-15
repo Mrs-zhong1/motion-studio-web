@@ -798,6 +798,20 @@
  border:1px solid #1f4d3b3b;border-radius:26px;transform:rotate(-8deg);
  box-shadow:0 18px 35px #1f4d3b15;pointer-events:none;
 }
+/* Protect typography from decorative motifs: reserve the upper-right
+   headline area for copy, and position nonsemantic shapes below it. */
+.page[data-template="fashion"] .section.template-final .template-closing-mark::before{
+ top:61%!important;height:23%!important;right:3%!important;opacity:.52;
+}
+.page[data-template="saas"] .section.template-final .template-closing-mark::before{
+ top:61%!important;height:24%!important;right:0!important;opacity:.40;
+}
+.page[data-template="gallery"] .section.template-final .template-closing-mark::before{
+ top:59%!important;height:26%!important;right:3%!important;opacity:.46;
+}
+.page[data-template="architecture"] .section.template-final .template-closing-mark::before{
+ top:59%!important;height:25%!important;opacity:.46;
+}
 @media(max-width:720px){
  .page[data-template] .section.template-final .template-closing-mark{
   min-height:240px!important;overflow:hidden;
