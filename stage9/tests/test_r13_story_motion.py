@@ -26,6 +26,7 @@ def test_r13_motion():
                 assert "installR13StoryMotion" in exported, template
                 assert f'data-template="{template}"' in exported, template
                 assert f'.page[data-template="{template}"] .section.designed-chapter .designed-chapter-heading::before' in exported, template
+                assert f'.page[data-template="{template}"] .section.designed-chapter .motion-atmosphere' in exported, template
             # Execute the exported document, not just inspect the source string.
             exported = page.evaluate("(id) => buildTemplatePreviewDocument(id)", "cinematic")
             output = browser.new_page(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
@@ -34,6 +35,13 @@ def test_r13_motion():
             output.set_content(exported, wait_until="domcontentloaded")
             section = output.locator("section.designed-chapter").first
             section.wait_for()
+            # R13-04: atmosphere is rendered within the real photo section,
+            # distinctly styled for all eight templates, with no pointer blocking.
+            assert section.locator(".section-art .motion-atmosphere").count() == 1
+            overlay = section.locator(".motion-atmosphere")
+            assert overlay.evaluate("e => getComputedStyle(e).pointerEvents") == "none"
+            assert overlay.evaluate("e => getComputedStyle(e).position") == "absolute"
+            assert overlay.evaluate("e => getComputedStyle(e).backgroundImage") != "none"
             assert section.evaluate("s=>getComputedStyle(s.querySelector('.designed-chapter-heading'),'::before').content") == '""'
             # Script calculates pointer displacement only for mouse/pen, not touch.
             dx = section.evaluate("""s=>{
