@@ -150,6 +150,25 @@ def run_audit():
                                x["artW"]<70 or x["frameW"]<70 or
                                x["artH"]<200 or x["frameH"]<200 for x in arrangements):
                             issues.append(f"{template_id} {device}: chapter grid overlap or collapsed media {arrangements}")
+                    # R8: each template needs a real designed ending, and the
+                    # six non-pilot templates require a distinct opening mark.
+                    closing = frame.locator("section.section.template-final").last
+                    assert closing.count() == 1,template_id
+                    ending = closing.locator(".template-closing-mark").evaluate("""el=>{
+                       const r=el.getBoundingClientRect(),f=el.closest('section').querySelector('iframe').getBoundingClientRect();
+                       const heading=el.querySelector('.closing-body strong').textContent.trim();
+                       return {heading, visible:getComputedStyle(el).display!=='none',
+                         width:Math.round(r.width), height:Math.round(r.height),
+                         overlapped:Math.round(Math.max(0,Math.min(r.right,f.right)-Math.max(r.left,f.left))*
+                                              Math.max(0,Math.min(r.bottom,f.bottom)-Math.max(r.top,f.top)))};
+                    }""")
+                    geometry["designedEnding"]=ending
+                    if (not ending["heading"] or not ending["visible"] or
+                        ending["width"]<120 or ending["height"]<100 or ending["overlapped"]>300):
+                        issues.append(f"{template_id} {device}: designed ending collapsed or overlaps iframe {ending}")
+                    if template_id not in ("editorial","product-3d"):
+                        assert frame.locator("section.template-opening .template-opening-mark").count() == 1,template_id
+                        assert frame.locator("section.template-opening .chapter-step").inner_text().strip().startswith("01 /"),template_id
                     geometry["template"] = template_id
                     geometry["device"] = device
                     shot = frame.locator("section.section").first.screenshot(
@@ -216,6 +235,9 @@ def run_audit():
                     middle_png = middle.screenshot(animations="disabled", timeout=30000)
                     (SCREENSHOTS / f"{template_id}-chapter3-{device}.png").write_bytes(middle_png)
                     geometry["chapter3PngSHA256"] = hashlib.sha256(middle_png).hexdigest()[:16]
+                    final_png = closing.screenshot(animations="disabled",timeout=30000)
+                    (SCREENSHOTS/f"{template_id}-ending-{device}.png").write_bytes(final_png)
+                    geometry["designedEndingPngSHA256"]=hashlib.sha256(final_png).hexdigest()[:16]
                     result["templates"].append(geometry)
                 page.locator("#previewClose").click()
                 assert page.locator("#templatePreview").is_hidden()
