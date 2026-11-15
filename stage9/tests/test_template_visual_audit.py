@@ -184,6 +184,30 @@ def run_audit():
                         if (after_motion["progress"] <= before_motion["progress"] + .1
                                 or after_motion["clip"] == before_motion["clip"]):
                             issues.append(f"cinematic desktop: scroll reveal did not progress {geometry['scrollMotion']}")
+                    # R6: a real cross-chapter transition must update the
+                    # outgoing section AND the incoming section on a scroll,
+                    # not just apply an on-load CSS class.
+                    if template_id == "cinematic" and device == "desktop":
+                        first=frame.locator("section.section").first
+                        third=frame.locator("section.section").nth(2)
+                        first.scroll_into_view_if_needed()
+                        page.wait_for_timeout(180)
+                        outgoing_before=first.evaluate(
+                            "el=>Number(el.style.getPropertyValue('--chapter-exit')||0)")
+                        incoming_before=third.evaluate(
+                            "el=>Number(el.style.getPropertyValue('--chapter-enter')||0)")
+                        third.scroll_into_view_if_needed()
+                        page.wait_for_timeout(180)
+                        outgoing_after=first.evaluate(
+                            "el=>Number(el.style.getPropertyValue('--chapter-exit')||0)")
+                        incoming_after=third.evaluate(
+                            "el=>Number(el.style.getPropertyValue('--chapter-enter')||0)")
+                        geometry["crossChapter"]={
+                            "outBefore":outgoing_before,"outAfter":outgoing_after,
+                            "inBefore":incoming_before,"inAfter":incoming_after}
+                        if (outgoing_after <= outgoing_before+.3 or
+                                incoming_after <= incoming_before+.3):
+                            issues.append(f"R6: cross-chapter continuity stalled: {geometry['crossChapter']}")
                     # Screenshots of an actual middle chapter: card/hero screenshots
                     # alone cannot show whether a template has a real page narrative.
                     middle = frame.locator("section.section").nth(2)
