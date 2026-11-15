@@ -6,7 +6,7 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 (async function bootMotionThree(){
   const host=document.querySelector('.viewport')||document.body;
   const source=document.getElementById('embedded-model')?.textContent?.trim()||'';
-  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],skinnedMeshCount:0,morphMeshCount:0,boneCount:0,morphInfluenceSamples:[],boneRotationSamples:[],animationClipNames:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0,studioLighting:false,shadowEnabled:false,dragMoves:0,dragYaw:0,dragPitch:0,studioMeshes:0,modelTriangles:0,zoom:5.8,environmentReady:false,proceduralTextureCount:0,lightPreset:'warm',materialPreset:'original',cameraPreset:'hero',controlClicks:0,renderMsAvg:0,renderMsMax:0,estimatedFps:0,pausedFrames:0,visible:true,contextLost:false,reducedMotion:false,quality:'desktop',pixelRatio:1,frameBudgetMs:33.3,renderSamples:0};
+  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],skinnedMeshCount:0,morphMeshCount:0,boneCount:0,morphInfluenceSamples:[],boneRotationSamples:[],animationClipNames:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0,studioLighting:false,shadowEnabled:false,dragMoves:0,dragYaw:0,dragPitch:0,studioMeshes:0,modelTriangles:0,zoom:5.8,environmentReady:false,proceduralTextureCount:0,lightPreset:'warm',materialPreset:'original',cameraPreset:'hero',studioBackdrop:'noir',controlClicks:0,renderMsAvg:0,renderMsMax:0,estimatedFps:0,pausedFrames:0,visible:true,contextLost:false,reducedMotion:false,quality:'desktop',pixelRatio:1,frameBudgetMs:33.3,renderSamples:0};
   window.__motionThreeStatus=status;
   // Avoid allocating a throwaway WebGL2 context during feature detection.
   if(typeof WebGL2RenderingContext==='undefined'){
@@ -148,8 +148,39 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
     accent.rotation.x=Math.PI/2;accent.position.y=-1.585;
     const floor=new THREE.Mesh(new THREE.PlaneGeometry(12,12),
       new THREE.MeshStandardMaterial({color:0x101920,metalness:.02,roughness:.85,transparent:true,opacity:.78}));
+    // Real studio sweep with subtly layered concentric highlights.
+    // Geometry is entirely local and can be recolored without network textures.
+    const studioSweep=new THREE.Mesh(new THREE.CircleGeometry(3.8,96),
+      new THREE.MeshBasicMaterial({color:0x526773,transparent:true,opacity:.075,depthWrite:false,side:THREE.DoubleSide}));
+    studioSweep.rotation.x=-Math.PI/2;studioSweep.position.y=-1.711;
+    const studioHalo=new THREE.Mesh(new THREE.RingGeometry(1.9,3.0,96),
+      new THREE.MeshBasicMaterial({color:0xa0c0ce,transparent:true,opacity:.045,depthWrite:false,side:THREE.DoubleSide}));
+    studioHalo.rotation.x=-Math.PI/2;studioHalo.position.y=-1.702;
+    studioSweep.add(studioHalo);
+    scene.add(studioSweep);
+
     floor.rotation.x=-Math.PI/2;floor.position.y=-1.72;floor.receiveShadow=true;
     scene.add(plinth,accent,floor);status.studioMeshes=3;
+    // Art-directed real scene treatments: atmosphere, plinth and reflection tint
+    // change together, rather than merely changing the page's CSS background.
+    const backdropPresets={
+      noir:{bg:0x0b121a,platform:0x253139,floor:0x101920,accent:0xb2cbd2,sweep:0x526773,halo:0xa0c0ce,exposure:1.05},
+      porcelain:{bg:0xdde2da,platform:0x8a968e,floor:0xb9c5bd,accent:0xf8f5e8,sweep:0xe2ece3,halo:0xfafbf1,exposure:.92},
+      cobalt:{bg:0x142843,platform:0x244c66,floor:0x142e49,accent:0x8cdcff,sweep:0x3466a4,halo:0x95d4ff,exposure:1.12}
+    };
+    function setStudioBackdrop(name){
+      const preset=backdropPresets[name];if(!preset)return;
+      scene.background=new THREE.Color(preset.bg);
+      plinth.material.color.setHex(preset.platform);
+      floor.material.color.setHex(preset.floor);
+      accent.material.color.setHex(preset.accent);
+      studioSweep.material.color.setHex(preset.sweep);
+      studioHalo.material.color.setHex(preset.halo);
+      renderer.toneMappingExposure=preset.exposure;
+      status.studioBackdrop=name;
+    }
+    setStudioBackdrop('noir');
+
     let dragYaw=0,dragPitch=0,dragging=false,lastX=0,lastY=0,zoom=5.8;
     canvas.addEventListener('pointerdown',e=>{
       if(e.button!==0)return;
@@ -193,6 +224,10 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
     preset('Original',()=>{pbrMaterials.forEach((mat,i)=>mat.color.copy(originalColors[i]));status.materialPreset='original'});
     preset('Graphite',()=>{pbrMaterials.forEach((mat,i)=>{if(i<2)mat.color.set(0x373f45)});status.materialPreset='graphite'});
     preset('Pearl',()=>{pbrMaterials.forEach((mat,i)=>{if(i<2)mat.color.set(0xd4d7d4)});status.materialPreset='pearl'});
+    // Background controls affect actual Three.js scene geometry/materials.
+    preset('Noir',()=>setStudioBackdrop('noir'));
+    preset('Porcelain',()=>setStudioBackdrop('porcelain'));
+    preset('Cobalt',()=>setStudioBackdrop('cobalt'));
     preset('Front',()=>{dragYaw=-.25;dragPitch=0;status.dragYaw=dragYaw;status.dragPitch=0;status.cameraPreset='front'});
     preset('Angle',()=>{dragYaw=.68;dragPitch=-.16;status.dragYaw=dragYaw;status.dragPitch=dragPitch;status.cameraPreset='angle'});
     preset('Detail',()=>{zoom=4.3;camera.position.z=zoom;status.zoom=zoom;status.cameraPreset='detail'});
