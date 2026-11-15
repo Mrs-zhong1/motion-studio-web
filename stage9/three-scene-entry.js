@@ -5,14 +5,14 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 (async function bootMotionThree(){
   const host=document.querySelector('.viewport')||document.body;
   const source=document.getElementById('embedded-model')?.textContent?.trim()||'';
-  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],skinnedMeshCount:0,morphMeshCount:0,boneCount:0,morphInfluenceSamples:[],boneRotationSamples:[],animationClipNames:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0};
+  const status={engine:'three',threeVersion:THREE.REVISION,webgl2:false,pbr:false,meshCount:0,materialCount:0,textureCount:0,animationClips:0,frames:0,visiblePixels:0,pixelDifference:0,animationMoved:false,animationRotationSamples:[],skinnedMeshCount:0,morphMeshCount:0,boneCount:0,morphInfluenceSamples:[],boneRotationSamples:[],animationClipNames:[],rendererName:null,renderWidth:0,renderHeight:0,drawSamples:0,drawTotalMs:0,drawMaxMs:0,error:null,progress:0,studioLighting:false,shadowEnabled:false,dragMoves:0,dragYaw:0,dragPitch:0,studioMeshes:0,modelTriangles:0,zoom:5.8};
   window.__motionThreeStatus=status;
   let gl;
   try {gl=document.createElement('canvas').getContext('webgl2');}catch(e){}
   if(!gl){status.error='WebGL2 unavailable: Canvas fallback remains active';return;}
   let renderer;
   const canvas=document.createElement('canvas');canvas.id='motion-three-webgl2';
-  canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;opacity:0;transition:opacity .25s;';
+  canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:auto;touch-action:pan-y;cursor:grab;opacity:0;transition:opacity .25s;';
   host.style.position='relative';host.appendChild(canvas);
   try{
     renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
@@ -21,13 +21,25 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
     status.rendererName=String(ctx.getParameter(ctx.RENDERER)||'unknown');
     renderer.outputColorSpace=THREE.SRGBColorSpace;
     renderer.toneMapping=THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure=1.15;
+    renderer.toneMappingExposure=1.05;
+    renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    status.shadowEnabled=true;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
     const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.05,100);
     camera.position.set(0,0,5.8);
-    scene.add(new THREE.AmbientLight(0xffffff,1.25));
-    const key=new THREE.DirectionalLight(0xffebda,3.4);key.position.set(4,5,6);scene.add(key);
-    const fill=new THREE.DirectionalLight(0x9fbaff,2);fill.position.set(-4,1,-3);scene.add(fill);
+    // Original studio-light rig: large softboxes, warm key, cool rim and
+    // a subtle receiving floor. No HDRI assets or external network requests.
+    scene.add(new THREE.HemisphereLight(0xd9edff,0x202632,1.35));
+    const key=new THREE.DirectionalLight(0xffdfc2,3.0);
+    key.position.set(3.5,6,5);key.castShadow=true;
+    key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-4;
+    key.shadow.camera.right=4;key.shadow.camera.top=4;
+    key.shadow.camera.bottom=-4;key.shadow.normalBias=.045;
+    scene.add(key);
+    const fill=new THREE.DirectionalLight(0xa9d9ff,1.65);fill.position.set(-5,1,2.5);scene.add(fill);
+    const rim=new THREE.DirectionalLight(0xfff2da,2.0);rim.position.set(1.5,3,-5);scene.add(rim);
+    const bounce=new THREE.PointLight(0xb3cfef,20,13,2);bounce.position.set(-2,-2,3);scene.add(bounce);
+    status.studioLighting=true;
     let object,mixer=null,duration=0,trackedNode=null,boneNode=null,morphNode=null;
     if(source){
       if(!/^[A-Za-z0-9+/=]+$/.test(source))throw Error('Invalid base64 GLB');
@@ -44,6 +56,12 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
           for(const f of ['map','normalMap','roughnessMap','metalnessMap','emissiveMap','aoMap']) if(mat[f]?.isTexture)status.textureCount++;
         }
       });
+      object.traverse(node=>{
+        if(!node.isMesh)return;
+        node.castShadow=true;node.receiveShadow=true;
+        const index=node.geometry?.index?.count||node.geometry?.getAttribute('position')?.count||0;
+        status.modelTriangles+=Math.floor(index/3);
+      });
       status.animationClips=gltf.animations.length;status.animationClipNames=gltf.animations.map(c=>c.name);
       boneNode=null;morphNode=null;object.traverse(n=>{if(n.isBone)boneNode=n;if(!morphNode&&n.isMesh&&n.morphTargetInfluences?.length)morphNode=n;});
       if(gltf.animations.length){
@@ -59,6 +77,42 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
     const scale=2.6/Math.max(size.x,size.y,size.z,.0001);
     object.position.sub(center).multiplyScalar(scale);object.scale.multiplyScalar(scale);
     scene.add(object);status.pbr=status.materialCount>0;
+    // Shadow-catching circular display platform: intentionally beneath the
+    // model, so it never blocks a user's view or intercepts pointer input.
+    const plinth=new THREE.Mesh(new THREE.CylinderGeometry(1.58,1.66,.10,96),
+      new THREE.MeshStandardMaterial({color:0x253139,metalness:.28,roughness:.53}));
+    plinth.position.y=-1.65;plinth.receiveShadow=true;
+    const accent=new THREE.Mesh(new THREE.TorusGeometry(1.59,.014,10,96),
+      new THREE.MeshBasicMaterial({color:0xb2cbd2}));
+    accent.rotation.x=Math.PI/2;accent.position.y=-1.585;
+    const floor=new THREE.Mesh(new THREE.PlaneGeometry(12,12),
+      new THREE.MeshStandardMaterial({color:0x101920,metalness:.02,roughness:.85,transparent:true,opacity:.78}));
+    floor.rotation.x=-Math.PI/2;floor.position.y=-1.72;floor.receiveShadow=true;
+    scene.add(plinth,accent,floor);status.studioMeshes=3;
+    let dragYaw=0,dragPitch=0,dragging=false,lastX=0,lastY=0,zoom=5.8;
+    canvas.addEventListener('pointerdown',e=>{
+      if(e.button!==0)return;
+      dragging=true;lastX=e.clientX;lastY=e.clientY;
+      canvas.setPointerCapture?.(e.pointerId);canvas.style.cursor='grabbing';
+    });
+    canvas.addEventListener('pointermove',e=>{
+      if(!dragging)return;
+      const dx=e.clientX-lastX,dy=e.clientY-lastY;
+      lastX=e.clientX;lastY=e.clientY;
+      dragYaw+=dx*.009;dragPitch=THREE.MathUtils.clamp(dragPitch+dy*.006,-.65,.65);
+      status.dragMoves++;status.dragYaw=dragYaw;status.dragPitch=dragPitch;
+    });
+    const stopDrag=()=>{dragging=false;canvas.style.cursor='grab'};
+    canvas.addEventListener('pointerup',stopDrag);
+    canvas.addEventListener('pointercancel',stopDrag);
+    canvas.addEventListener('lostpointercapture',stopDrag);
+    canvas.addEventListener('dblclick',()=>{dragYaw=0;dragPitch=0;zoom=5.8;status.dragYaw=0;status.dragPitch=0;status.zoom=zoom});
+    canvas.addEventListener('wheel',e=>{
+      if(!e.ctrlKey&&!e.metaKey)return; // never hijack normal page scroll
+      e.preventDefault();zoom=THREE.MathUtils.clamp(zoom+e.deltaY*.004,4,8);
+      camera.position.z=zoom;status.zoom=zoom;
+    },{passive:false});
+    const orient=()=>{object.rotation.y=progress*Math.PI*2+.25+dragYaw;object.rotation.x=dragPitch};
     let progress=0;
     function recordDraw(start){
       const elapsed=performance.now()-start;
@@ -80,12 +134,12 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
         if(morphNode){const snap=morphNode.morphTargetInfluences.map(v=>Number(v.toFixed(5))).join(',');if(!status.morphInfluenceSamples.includes(snap))status.morphInfluenceSamples.push(snap);}
       }
     }
-    window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll'){changeProgress(event.data.progress);if(renderer){try{object.rotation.y=progress*Math.PI*2+.25;const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;}catch(error){status.error=String(error);}}}});
+    window.addEventListener('message',event=>{if(event.data?.type==='motion-studio-scroll'){changeProgress(event.data.progress);if(renderer){try{orient();const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;}catch(error){status.error=String(error);}}}});
     const resize=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
     resize();window.addEventListener('resize',resize);
     function update(){
       if(!renderer)return;
-      object.rotation.y=progress*Math.PI*2+.25;
+      orient();
       try{
         const drawStarted=performance.now();renderer.render(scene,camera);recordDraw(drawStarted);status.frames++;
         if(status.frames<=5||status.frames%30===0){
