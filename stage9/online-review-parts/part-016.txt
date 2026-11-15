@@ -1,4 +1,4 @@
-istoryState){lastHistoryState=now;return}if(now===lastHistoryState)return;historyStack.push(lastHistoryState);if(historyStack.length>65)historyStack.shift();futureStack=[];lastHistoryState=now;syncHistoryButtons()}
+{lastHistoryState=now;return}if(now===lastHistoryState)return;historyStack.push(lastHistoryState);if(historyStack.length>65)historyStack.shift();futureStack=[];lastHistoryState=now;syncHistoryButtons()}
 function syncHistoryButtons(){const u=document.getElementById("undoBtn"),r=document.getElementById("redoBtn");if(u)u.disabled=!historyStack.length;if(r)r.disabled=!futureStack.length}
 function restoreHistory(direction){const source=direction==='undo'?historyStack:futureStack,target=direction==='undo'?futureStack:historyStack;if(!source.length)return;target.push(snapshot());historyBusy=true;const data=JSON.parse(source.pop());loadProject(data);historyBusy=false;lastHistoryState=snapshot();syncHistoryButtons();notify(direction==='undo'?'已撤销':'已重做')}
 let active=null,showInteractive=false,uid=0,filterCategory='全部',viewport='desktop',scrubProgress=null,activeLayer=null,selectedLayers=new Set(),snapEnabled=true;
@@ -193,7 +193,7 @@ async function ensureTemplatePhoto(id){
  const count=templateSets[id]?.sections.length||0;
  const sources=[primary,...extras];
  const job=Promise.all(Array.from({length:count},async(_,index)=>{
-    const source=index<3?sources[index]:null;
+    const source=sources[index]||null;
     const photo=source?await photoToInline(source):'';
     return {image:photo||authoredChapterArtwork(id,index),
       kind:photo?'unsplash-photo':'original-generated-art',
@@ -212,7 +212,7 @@ async function ensureTemplatePhoto(id){
      });
      templatePhotoCache.set(id,entries.map(entry=>entry.image));
      templateAssetAuditCache.set(id,entries.map(({kind,source,rightsReviewed},index)=>({
-        chapter:index+1,kind,source,rightsReviewed
+        chapter:index+1,kind,source,rightsReviewed,sourceAttempted:!!sources[index]
      })));
      return entries.map(entry=>entry.image);
    });
