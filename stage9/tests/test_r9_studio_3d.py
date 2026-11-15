@@ -57,9 +57,23 @@ def run():
             controls.locator("button",has_text="Cool").click()
             controls.locator("button",has_text="Graphite").click()
             controls.locator("button",has_text="Angle").click()
+            # R15-03 real studio lighting and platform color families.
+            assert status["studioBackdrop"] == "noir",status
+            controls.locator("button",has_text="Porcelain").click()
+            porcelain=view.evaluate("el=>window.__motionThreeStatus")
+            assert porcelain["studioBackdrop"] == "porcelain",porcelain
+            porcelain_png=view.screenshot(animations="disabled")
+            controls.locator("button",has_text="Cobalt").click()
+            cobalt=view.evaluate("el=>window.__motionThreeStatus")
+            assert cobalt["studioBackdrop"] == "cobalt",cobalt
+            document.wait_for_timeout(180)
+            cobalt_png=view.screenshot(animations="disabled")
+            assert porcelain_png != cobalt_png,"Backdrops did not change rendered pixels"
+            controls.locator("button",has_text="Noir").click()
             selected=view.evaluate("el=>window.__motionThreeStatus")
+            assert selected["studioBackdrop"] == "noir",selected
             assert selected["lightPreset"]=="cool" and selected["materialPreset"]=="graphite",selected
-            assert selected["cameraPreset"]=="angle" and selected["controlClicks"]>=3,selected
+            assert selected["cameraPreset"]=="angle" and selected["controlClicks"]>=6,selected
             bounds=view.bounding_box()
             assert bounds and bounds["width"]>150 and bounds["height"]>150,bounds
             x=bounds["x"]+bounds["width"]*.48
