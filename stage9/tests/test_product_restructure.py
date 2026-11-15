@@ -183,6 +183,11 @@ def test_product_restructure():
                 page.locator("#previewUse").click()
                 changed_title = f"Acceptance {template_id}"
                 page.locator("#projectName").fill(changed_title)
+                # R7: user-edited chapter copy must survive edit/save/export.
+                chapter_text = f"R7 edited chapter {template_id}"
+                page.evaluate("(t) => {project.sections[1].text=t;render()}", chapter_text)
+                assert page.locator("#sections .designed-chapter [data-chapter-title]").first.count() == 1
+                assert chapter_text in page.locator("#sections").inner_text()
                 with page.expect_download() as saved:
                     page.locator("#saveProject").click()
                 saved_project = json.loads(saved.value.path().read_text(encoding="utf8"))
@@ -196,6 +201,34 @@ def test_product_restructure():
                 assert exported_html.count('<section class="section') == len(
                     saved_project["sections"]
                 )
+                assert chapter_text in exported_html
+                assert saved_project["sections"][1]["text"] == chapter_text
+                # Loading real standalone HTML in a second browser page catches
+                # export styles or chapter motion silently omitted from output.
+                if template_id in ("editorial", "product-3d", "cinematic"):
+                    standalone = browser.new_page(viewport={"width": 1280,"height": 900})
+                    export_errors = []
+                    standalone.on("pageerror",lambda err:export_errors.append(str(err)))
+                    standalone.set_content(exported_html,wait_until="domcontentloaded")
+                    assert standalone.locator("section.section").count() == len(saved_project["sections"])
+                    assert standalone.locator("[data-chapter-title]").first.inner_text() == chapter_text
+                    rendered = standalone.locator("section.section").nth(1)
+                    rendered.scroll_into_view_if_needed()
+                    standalone.wait_for_function("""() => {
+                        const n=document.querySelectorAll('section.section')[1];
+                        return n && n.style.getPropertyValue('--chapter-enter') !== '';
+                    }""",timeout=12000)
+                    actual = rendered.evaluate("""node=>{
+                        const art=node.querySelector('.section-art'),motion=node.querySelector('iframe');
+                        const a=art.getBoundingClientRect(),b=motion.getBoundingClientRect();
+                        return {enter:Number(node.style.getPropertyValue('--chapter-enter')),
+                           photo:getComputedStyle(art).backgroundImage.startsWith('url("data:image/'),
+                           width:Math.round(a.width),frame:Math.round(b.width)};
+                    }""")
+                    assert actual["photo"] and actual["width"]>70 and actual["frame"]>70,actual
+                    assert 0 <= actual["enter"] <= 1,actual
+                    assert not export_errors,export_errors
+                    standalone.close()
                 page.locator("#openFile").set_input_files(
                     {
                         "name": "roundtrip.json",
