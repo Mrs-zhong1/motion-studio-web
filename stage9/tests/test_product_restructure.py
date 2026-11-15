@@ -56,6 +56,24 @@ def test_product_restructure():
             assert page.locator("#previewMobile").is_visible()
             assert page.locator("#previewReplay").is_visible()
             assert page.locator("#previewUse").is_visible()
+            # R13: switch between editorial panel and genuinely full-width website stage.
+            immersive = page.locator("#previewImmersive")
+            assert immersive.is_visible()
+            assert immersive.get_attribute("aria-pressed") == "false"
+            immersive.click()
+            assert page.locator("#templatePreview").evaluate(
+                "el => el.classList.contains('immersive-preview')"
+            )
+            assert immersive.get_attribute("aria-pressed") == "true"
+            assert page.locator(".preview-product-info").is_hidden()
+            assert page.locator("#previewDevice").evaluate(
+                "el => el.getBoundingClientRect().width >= innerWidth * .90"
+            )
+            page.keyboard.press("Escape")
+            assert immersive.get_attribute("aria-pressed") == "false"
+            assert page.locator(".preview-product-info").is_visible()
+            assert page.locator("#templatePreview").is_visible()
+            assert page.locator("#templateResultCount").inner_text() == "08"
             frame = page.locator("#templatePreviewFrame").content_frame
             frame.locator("section.section").first.wait_for()
             assert frame.locator("section.section").count() >= 4
