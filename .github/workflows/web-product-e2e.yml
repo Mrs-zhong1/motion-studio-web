@@ -123,7 +123,7 @@ jobs:
       # The repository's Actions artifact quota is exhausted. Store reviewable
       # screenshots in the same PR branch, only for internal/same-repo PRs.
       # This does not modify main and screenshots alone do not retrigger E2E.
-      - name: Persist 52 opening/chapter/ending/preview screenshots in review branch
+      - name: Persist 68+ template chapter and immersive screenshots in review branch
         if: ${{ success() && matrix.browser == 'chromium' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
         env:
           REVIEW_BRANCH: ${{ github.head_ref }}
@@ -151,6 +151,9 @@ jobs:
               for device in ("desktop","mobile"):
                   target=base/f"{tid}-preview-{device}.png"
                   assert target.is_file() and target.stat().st_size>1000, target
+          for row in report["templates"]:
+              target=base/f'{row["template"]}-immersive-{row["device"]}.png'
+              assert target.is_file() and target.stat().st_size>1000, target
           PY
           cd "$GITHUB_WORKSPACE"
           # Checkout the latest PR branch tip, never commit generated imagery to main.
@@ -192,6 +195,13 @@ jobs:
                   "|---|---|---|"]
           for tid,name in zip(ids[:2],names[:2]):
               out.append(f"| {name} | ![Preview {name} desktop](./{tid}-preview-desktop.png) | ![Preview {name} mobile](./{tid}-preview-mobile.png) |")
+          out += ["", "## R14 — full-stage immersive preview (all eight templates)", "",
+                  "Click the immersive-preview control to hide the editorial sidebar. These are actual browser captures, not static cover designs.",
+                  "",
+                  "| Template | Desktop immersive | Mobile immersive |",
+                  "|---|---|---|"]
+          for tid,name in zip(ids,names):
+              out.append(f"| {name} | ![Desktop immersive {name}](./{tid}-immersive-desktop.png) | ![Mobile immersive {name}](./{tid}-immersive-mobile.png) |")
           out += ["", "## R9 — Real offline Three.js studio scene", "",
                   "These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.",
                   "",
