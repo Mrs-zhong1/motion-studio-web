@@ -62,6 +62,12 @@ These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** th
 
 Rendered in headless Chromium via software WebGL2. This is neither native hardware GPU approval nor art-direction sign-off.
 
+## R11 — simulated mobile WebGL2, reduced motion
+
+Real WebGL2 screenshot in a 390px simulated viewport. This is NOT real-phone or native Safari performance certification.
+
+![Mobile R11 Three.js product](./r11-mobile-product.png)
+
 ## Review gates
 
 - Typography, photo crop and subject matter
