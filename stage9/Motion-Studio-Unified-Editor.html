@@ -731,6 +731,91 @@
  text-transform:uppercase;font-weight:950;
 }
 .page[data-template="saas"] .template-closing-mark .closing-body strong{font-weight:850}
+
+/* R8.3: designed closing compositions. Real text stays editable; ornaments
+   are noninteractive CSS shapes, with no misleading decorative CTAs. */
+.page[data-template] .section.template-final .template-closing-mark{
+ isolation:isolate;min-height:270px;position:relative;overflow:hidden;
+}
+.page[data-template] .section.template-final .closing-kicker{
+ position:relative;z-index:2;align-self:start;
+}
+.page[data-template] .section.template-final .closing-body{
+ position:relative;z-index:2;padding:0 0 clamp(30px,5vw,75px);
+}
+.page[data-template] .section.template-final .closing-body strong{
+ text-wrap:balance;max-width:900px;
+}
+.page[data-template] .section.template-final .closing-signature{
+ position:relative;z-index:2;
+}
+.page[data-template="editorial"] .section.template-final .template-closing-mark::before{
+ content:"";position:absolute;right:-55px;top:5px;width:clamp(180px,25vw,365px);
+ aspect-ratio:1;border:1px solid #56645380;border-radius:50%;pointer-events:none;
+ box-shadow:inset 0 0 0 26px #f0ede680,inset 0 0 0 27px #56645366;
+}
+.page[data-template="product-3d"] .section.template-final .template-closing-mark::before{
+ content:"";position:absolute;right:2%;top:8%;width:clamp(170px,25vw,355px);
+ aspect-ratio:1;border:23px solid #b6d8b14d;border-radius:50%;
+ box-shadow:0 0 0 1px #d9ff676b,inset 0 0 65px #d9ff6720;pointer-events:none;
+}
+.page[data-template="cinematic"] .section.template-final .template-closing-mark{
+ border-top:2px solid #f0b48b88;
+}
+.page[data-template="cinematic"] .section.template-final .template-closing-mark::before{
+ content:"";position:absolute;right:0;top:17%;width:38%;height:47%;
+ background:linear-gradient(135deg,transparent 10%,#f0b48b3b 60%,#e28c6466);
+ clip-path:polygon(35% 0,100% 0,100% 100%,0 100%);pointer-events:none;
+}
+.page[data-template="architecture"] .section.template-final .template-closing-mark::before{
+ content:"";position:absolute;right:10px;top:5%;width:34%;height:60%;
+ background:repeating-linear-gradient(90deg,#2d493a26 0 1px,transparent 1px 23px),
+ repeating-linear-gradient(0deg,#2d493a24 0 1px,transparent 1px 23px);
+ border:1px solid #2d493a38;transform:skewY(-8deg);pointer-events:none;
+}
+.page[data-template="agency"] .section.template-final .template-closing-mark{
+ border-top:9px solid #192322;min-height:305px;
+}
+.page[data-template="agency"] .section.template-final .template-closing-mark::before{
+ content:"✳";position:absolute;right:0;top:-65px;
+ font:900 clamp(160px,22vw,330px)/1 system-ui,sans-serif;
+ color:#151f23;opacity:.16;transform:rotate(-18deg);pointer-events:none;
+}
+.page[data-template="fashion"] .section.template-final .template-closing-mark::before{
+ content:"";position:absolute;right:3%;top:3%;height:78%;width:clamp(100px,17vw,260px);
+ border-left:1px solid #664e504f;border-right:1px solid #664e504f;
+ background:repeating-linear-gradient(0deg,transparent 0 19px,#664e501a 19px 20px);
+ transform:skewX(-9deg);pointer-events:none;
+}
+.page[data-template="gallery"] .section.template-final .template-closing-mark::before{
+ content:"";position:absolute;right:3%;top:5%;height:72%;width:clamp(130px,22vw,320px);
+ border:15px solid #ffffff8c;outline:1px solid #2b33514d;
+ transform:rotate(7deg);box-shadow:10px 11px 0 #313a5220;pointer-events:none;
+}
+.page[data-template="saas"] .section.template-final .template-closing-mark::before{
+ content:"";position:absolute;right:0;top:10%;height:62%;width:clamp(165px,25vw,390px);
+ background:linear-gradient(140deg,#9cd8b75c,#ffffff8f);
+ border:1px solid #1f4d3b3b;border-radius:26px;transform:rotate(-8deg);
+ box-shadow:0 18px 35px #1f4d3b15;pointer-events:none;
+}
+@media(max-width:720px){
+ .page[data-template] .section.template-final .template-closing-mark{
+  min-height:240px!important;overflow:hidden;
+ }
+ .page[data-template] .section.template-final .template-closing-mark::before{
+  opacity:.25;right:-35px;top:0;transform:scale(.72);
+  transform-origin:top right;
+ }
+ .page[data-template] .section.template-final .closing-body{
+  padding-bottom:25px;
+ }
+ .page[data-template] .section.template-final .closing-body strong{
+  max-width:100%;overflow-wrap:anywhere;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .page[data-template] .section.template-final .template-closing-mark::before{transition:none!important}
+}
 @media(max-width:720px){
  .page[data-template] .section.template-opening .template-opening-mark{
   order:-1;width:100%;flex-wrap:wrap;font-size:9px;gap:7px;
