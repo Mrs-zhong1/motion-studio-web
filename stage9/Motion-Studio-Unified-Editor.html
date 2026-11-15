@@ -1205,60 +1205,133 @@ async function ensureTemplatePhoto(id){
 let demoGlbCache='';
 function builtInHeadphoneGlb(){
  if(demoGlbCache)return demoGlbCache;
- // A 24-vertex cube with face normals, reused as multiple transformed pieces.
- const faces=[
-  {n:[0,0,1],p:[[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]]},
-  {n:[0,0,-1],p:[[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]]},
-  {n:[1,0,0],p:[[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]]},
-  {n:[-1,0,0],p:[[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]]},
-  {n:[0,1,0],p:[[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]]},
-  {n:[0,-1,0],p:[[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]]}
+ // R9-03: original, redistributable parametric headphone demonstration.
+ // Smooth closed curved surfaces replace the former five scaled cubes.
+ // Four genuine PBR primitives share a single valid GLB binary buffer.
+ const materials=[
+  {name:'Ceramic shell',pbrMetallicRoughness:{baseColorFactor:[.20,.31,.35,1],metallicFactor:.46,roughnessFactor:.28}},
+  {name:'Soft-touch cushion',pbrMetallicRoughness:{baseColorFactor:[.060,.085,.10,1],metallicFactor:.02,roughnessFactor:.81}},
+  {name:'Brushed metal',pbrMetallicRoughness:{baseColorFactor:[.72,.77,.78,1],metallicFactor:.85,roughnessFactor:.27}},
+  {name:'Acoustic mesh',pbrMetallicRoughness:{baseColorFactor:[.16,.19,.20,1],metallicFactor:.08,roughnessFactor:.66}}
  ];
- const positions=[],normals=[],indices=[];
- faces.forEach((face,f)=>{
-  face.p.forEach(p=>{positions.push(...p);normals.push(...face.n)});
-  const a=f*4;indices.push(a,a+1,a+2,a,a+2,a+3);
- });
- const rawSize=positions.length*4+normals.length*4+indices.length*2;
- const raw=new Uint8Array(rawSize);const view=new DataView(raw.buffer);
- let offset=0;
- for(const v of positions){view.setFloat32(offset,v,true);offset+=4}
- for(const v of normals){view.setFloat32(offset,v,true);offset+=4}
- for(const v of indices){view.setUint16(offset,v,true);offset+=2}
- const positionsBytes=positions.length*4,normalsBytes=normals.length*4;
- // Headphone-form primitives assembled from authored GLB scene nodes.
- const nodes=[
-  {mesh:0,translation:[-.78,-.32,0],scale:[.3,.72,.35]},
-  {mesh:0,translation:[.78,-.32,0],scale:[.3,.72,.35]},
-  {mesh:1,translation:[0,.78,0],scale:[.78,.16,.24]},
-  {mesh:1,translation:[-.7,.44,0],scale:[.14,.43,.19]},
-  {mesh:1,translation:[.7,.44,0],scale:[.14,.43,.19]}
- ];
- const gltf={asset:{version:'2.0',generator:'Motion Studio original demo headphone geometry'},
-  scene:0,scenes:[{nodes:[0,1,2,3,4]}],nodes,
-  buffers:[{byteLength:rawSize}],
-  bufferViews:[{buffer:0,byteOffset:0,byteLength:positionsBytes,target:34962},
-    {buffer:0,byteOffset:positionsBytes,byteLength:normalsBytes,target:34962},
-    {buffer:0,byteOffset:positionsBytes+normalsBytes,byteLength:indices.length*2,target:34963}],
-  accessors:[{bufferView:0,componentType:5126,count:24,type:'VEC3',min:[-1,-1,-1],max:[1,1,1]},
-    {bufferView:1,componentType:5126,count:24,type:'VEC3'},
-    {bufferView:2,componentType:5123,count:36,type:'SCALAR'}],
-  materials:[{pbrMetallicRoughness:{baseColorFactor:[.24,.36,.42,1],metallicFactor:.6,roughnessFactor:.35}},
-    {pbrMetallicRoughness:{baseColorFactor:[.73,.65,.51,1],metallicFactor:.65,roughnessFactor:.3}}],
-  meshes:[{primitives:[{attributes:{POSITION:0,NORMAL:1},indices:2,material:0,mode:4}]},
-    {primitives:[{attributes:{POSITION:0,NORMAL:1},indices:2,material:1,mode:4}]}]};
+ const sets=materials.map(()=>({p:[],n:[],i:[]}));
+ const push=(mat,point,normal)=>{const a=sets[mat];a.p.push(...point);a.n.push(...normal);return a.p.length/3-1};
+ const triangle=(mat,a,b,c)=>sets[mat].i.push(a,b,c);
+ const grid=(mat,ringA,ringB,closed)=>{
+   const N=ringA.length;
+   for(let j=0;j<(closed?N:N-1);j++){
+     const k=(j+1)%N;
+     triangle(mat,ringA[j],ringA[k],ringB[k]);
+     triangle(mat,ringA[j],ringB[k],ringB[j]);
+   }
+ };
+ const normalize=(x,y,z)=>{const d=Math.hypot(x,y,z)||1;return [x/d,y/d,z/d]};
+ // Smooth elliptic ear cups and soft rim rings: lateral axis = X.
+ function cup(side,mat,cx,cy,cz,rx,ry,rz,segments=64,rings=24){
+   let prev=null;const caps=[];
+   for(let j=0;j<=rings;j++){
+     const theta=.0005+(Math.PI-.001)*j/rings;
+     const ring=[];
+     for(let k=0;k<segments;k++){
+       const phi=2*Math.PI*k/segments;
+       const x=side*(cx+rx*Math.cos(theta)),
+             y=cy+ry*Math.sin(theta)*Math.cos(phi),
+             z=cz+rz*Math.sin(theta)*Math.sin(phi);
+       const normal=normalize(side*Math.cos(theta)/rx,Math.sin(theta)*Math.cos(phi)/ry,Math.sin(theta)*Math.sin(phi)/rz);
+       ring.push(push(mat,[x,y,z],normal));
+     }
+     if(prev)grid(mat,side===1?prev:ring,side===1?ring:prev,true);
+     prev=ring;
+   }
+ }
+ // A swept tubular curve, used for headband and yokes with smoothed normals.
+ function tube(mat,path,radius,segments=12){
+   let prior=null;
+   for(let i=0;i<path.length;i++){
+     const p=path[i],before=path[Math.max(0,i-1)],after=path[Math.min(path.length-1,i+1)];
+     const tangent=normalize(after[0]-before[0],after[1]-before[1],after[2]-before[2]);
+     let up=[0,0,1];
+     if(Math.abs(tangent[2])>.89)up=[0,1,0];
+     const u=normalize(up[1]*tangent[2]-up[2]*tangent[1],up[2]*tangent[0]-up[0]*tangent[2],up[0]*tangent[1]-up[1]*tangent[0]);
+     const v=normalize(tangent[1]*u[2]-tangent[2]*u[1],tangent[2]*u[0]-tangent[0]*u[2],tangent[0]*u[1]-tangent[1]*u[0]);
+     const ring=[];
+     for(let j=0;j<segments;j++){
+       const angle=j*Math.PI*2/segments;const nx=u[0]*Math.cos(angle)+v[0]*Math.sin(angle),ny=u[1]*Math.cos(angle)+v[1]*Math.sin(angle),nz=u[2]*Math.cos(angle)+v[2]*Math.sin(angle);
+       ring.push(push(mat,[p[0]+nx*radius,p[1]+ny*radius,p[2]+nz*radius],[nx,ny,nz]));
+     }
+     if(prior)grid(mat,prior,ring,true);
+     prior=ring;
+   }
+ }
+ // Closed over-ear housing, inset cushions and centre speaker mesh.
+ for(const side of [-1,1]){
+   cup(side,0,.78,-.35,0,.25,.55,.37);
+   cup(side,1,.57,-.35,0,.125,.48,.32);
+   cup(side,3,.46,-.35,0,.029,.37,.245,64,12);
+   const hinge=[];
+   for(let j=0;j<=12;j++){
+     const t=j/12;hinge.push([side*(.80-.08*t),.12+.43*t,0]);
+   }
+   tube(2,hinge,.065);
+   // A subtle metallic cup gasket/outer ring.
+   const rim=[];
+   for(let j=0;j<=72;j++){
+     const t=2*Math.PI*j/72;
+     rim.push([side*1.018,-.35+Math.cos(t)*.46,Math.sin(t)*.32]);
+   }
+   tube(2,rim,.018,8);
+ }
+ // True curved headband with a wider, compliant inner padding.
+ const headband=[],inside=[];
+ for(let k=0;k<=88;k++){
+   const a=Math.PI-.08-(Math.PI-.16)*k/88;
+   headband.push([.79*Math.cos(a),.55+1.05*Math.sin(a),0]);
+   if(k>=9&&k<=79)inside.push([.79*Math.cos(a),.49+1.01*Math.sin(a),0]);
+ }
+ tube(2,headband,.065,14);
+ tube(1,inside,.086,14);
+ const bin=[],views=[],accessors=[],primitives=[];
+ const align4=()=>{while(bin.length%4)bin.push(0)};
+ const viewFor=(bytes,target)=>{
+   align4();const offset=bin.length;for(const b of bytes)bin.push(b);
+   const index=views.length;views.push({buffer:0,byteOffset:offset,byteLength:bytes.length,target});return index;
+ };
+ const toBytes=(arr,kind)=>{
+   const bytes=new Uint8Array(arr.length*(kind==='float'?4:2));
+   const view=new DataView(bytes.buffer);
+   arr.forEach((v,i)=>kind==='float'?view.setFloat32(i*4,v,true):view.setUint16(i*2,v,true));
+   return bytes;
+ };
+ const accessor=(bufferView,componentType,count,type,limits)=>{
+   const x={bufferView,componentType,count,type,...(limits||{})};accessors.push(x);return accessors.length-1;
+ };
+ for(let mat=0;mat<sets.length;mat++){
+   const a=sets[mat];if(!a.i.length)continue;
+   if(a.p.length/3>65535)throw Error('R9 mesh exceeds Uint16 index range');
+   const posView=viewFor(toBytes(a.p,'float'),34962);
+   const normView=viewFor(toBytes(a.n,'float'),34962);
+   const idxView=viewFor(toBytes(a.i,'ushort'),34963);
+   let lo=[Infinity,Infinity,Infinity],hi=[-Infinity,-Infinity,-Infinity];
+   for(let i=0;i<a.p.length;i+=3)for(let j=0;j<3;j++){lo[j]=Math.min(lo[j],a.p[i+j]);hi[j]=Math.max(hi[j],a.p[i+j])}
+   const pos=accessor(posView,5126,a.p.length/3,'VEC3',{min:lo,max:hi});
+   const norm=accessor(normView,5126,a.n.length/3,'VEC3');
+   const indices=accessor(idxView,5123,a.i.length,'SCALAR');
+   primitives.push({attributes:{POSITION:pos,NORMAL:norm},indices,material:mat,mode:4});
+ }
+ align4();
+ const gltf={asset:{version:'2.0',generator:'Motion Studio original procedural R9 curved headphone'},
+  scene:0,scenes:[{nodes:[0]}],nodes:[{mesh:0,name:'Headphone / original parametric study'}],
+  buffers:[{byteLength:bin.length}],bufferViews:views,accessors,materials,
+  meshes:[{name:'Curved headphone PBR parts',primitives}]};
  const json=new TextEncoder().encode(JSON.stringify(gltf));
- const jsonLen=(json.length+3)&~3,binLen=(raw.length+3)&~3;
- const buf=new ArrayBuffer(12+8+jsonLen+8+binLen);
- const data=new DataView(buf);const bytes=new Uint8Array(buf);
- data.setUint32(0,0x46546c67,true);data.setUint32(4,2,true);data.setUint32(8,buf.byteLength,true);
- data.setUint32(12,jsonLen,true);data.setUint32(16,0x4e4f534a,true);
+ const jsonLen=(json.length+3)&~3,binLen=bin.length;
+ const buffer=new ArrayBuffer(12+8+jsonLen+8+binLen),view=new DataView(buffer),bytes=new Uint8Array(buffer);
+ view.setUint32(0,0x46546c67,true);view.setUint32(4,2,true);view.setUint32(8,buffer.byteLength,true);
+ view.setUint32(12,jsonLen,true);view.setUint32(16,0x4e4f534a,true);
  bytes.fill(32,20,20+jsonLen);bytes.set(json,20);
- const at=20+jsonLen;data.setUint32(at,binLen,true);data.setUint32(at+4,0x004e4942,true);
- bytes.set(raw,at+8);
- let binary='';for(let i=0;i<bytes.length;i+=0x4000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x4000));
- demoGlbCache=btoa(binary);
- return demoGlbCache;
+ const offset=20+jsonLen;view.setUint32(offset,binLen,true);view.setUint32(offset+4,0x004e4942,true);bytes.set(bin,offset+8);
+ let raw='';for(let i=0;i<bytes.length;i+=0x4000)raw+=String.fromCharCode(...bytes.subarray(i,i+0x4000));
+ demoGlbCache=btoa(raw);return demoGlbCache;
 }
 function createProjectFromTemplate(id){
  const tpl=templateSets[id]||templateCatalog[0];
