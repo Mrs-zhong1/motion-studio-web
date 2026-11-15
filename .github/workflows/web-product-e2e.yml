@@ -12,6 +12,7 @@ on:
       - 'stage9/tests/test_r14_chapter_navigation.py'
       - 'stage9/tests/test_r15_scene_composition.py'
       - 'stage9/tests/test_r15_asset_batch.py'
+      - 'stage9/tests/test_r15_media_quality.py'
       - 'stage9/three-scene-entry.js'
       - '.github/workflows/web-product-e2e.yml'
   push:
@@ -27,6 +28,7 @@ on:
       - 'stage9/tests/test_r14_chapter_navigation.py'
       - 'stage9/tests/test_r15_scene_composition.py'
       - 'stage9/tests/test_r15_asset_batch.py'
+      - 'stage9/tests/test_r15_media_quality.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
@@ -83,6 +85,9 @@ jobs:
       - name: R15-02 batch photo replacement and export fidelity
         if: matrix.browser == 'chromium'
         run: python tests/test_r15_asset_batch.py
+      - name: R15-04 chapter photo coverage, source and licensing provenance audit
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r15_media_quality.py
       - name: U1-U4 image-led discovery and blank editor regression
         if: matrix.browser == 'chromium'
         run: python tests/test_u1_u4_regression.py
