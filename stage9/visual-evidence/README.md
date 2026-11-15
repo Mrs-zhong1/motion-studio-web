@@ -52,21 +52,6 @@ Last-section screenshots show the editorial ending, not a static cover.
 | Editorial Portfolio | ![Preview Editorial Portfolio desktop](./editorial-preview-desktop.png) | ![Preview Editorial Portfolio mobile](./editorial-preview-mobile.png) |
 | 3D Product Experience | ![Preview 3D Product Experience desktop](./product-3d-preview-desktop.png) | ![Preview 3D Product Experience mobile](./product-3d-preview-mobile.png) |
 
-## R14 — full-stage immersive preview (all eight templates)
-
-Click the immersive-preview control to hide the editorial sidebar. These are actual browser captures, not static cover designs.
-
-| Template | Desktop immersive | Mobile immersive |
-|---|---|---|
-| Editorial Portfolio | ![Desktop immersive Editorial Portfolio](./editorial-immersive-desktop.png) | ![Mobile immersive Editorial Portfolio](./editorial-immersive-mobile.png) |
-| 3D Product Experience | ![Desktop immersive 3D Product Experience](./product-3d-immersive-desktop.png) | ![Mobile immersive 3D Product Experience](./product-3d-immersive-mobile.png) |
-| Cinematic Journey | ![Desktop immersive Cinematic Journey](./cinematic-immersive-desktop.png) | ![Mobile immersive Cinematic Journey](./cinematic-immersive-mobile.png) |
-| Architecture Studio | ![Desktop immersive Architecture Studio](./architecture-immersive-desktop.png) | ![Mobile immersive Architecture Studio](./architecture-immersive-mobile.png) |
-| Creative Agency | ![Desktop immersive Creative Agency](./agency-immersive-desktop.png) | ![Mobile immersive Creative Agency](./agency-immersive-mobile.png) |
-| Fashion Lookbook | ![Desktop immersive Fashion Lookbook](./fashion-immersive-desktop.png) | ![Mobile immersive Fashion Lookbook](./fashion-immersive-mobile.png) |
-| Interactive Gallery | ![Desktop immersive Interactive Gallery](./gallery-immersive-desktop.png) | ![Mobile immersive Interactive Gallery](./gallery-immersive-mobile.png) |
-| Modern SaaS | ![Desktop immersive Modern SaaS](./saas-immersive-desktop.png) | ![Mobile immersive Modern SaaS](./saas-immersive-mobile.png) |
-
 ## R9 — Real offline Three.js studio scene
 
 These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.
