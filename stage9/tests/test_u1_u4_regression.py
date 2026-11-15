@@ -43,8 +43,14 @@ def test_u1_u4_regression():
             # third-party demo photography is cleared for resale.
             rights=page.locator("#projectAssetList .asset-rights-note")
             assert rights.count()==page.evaluate("project.sections.length")
-            assert any("原创生成插画" in txt for txt in rights.all_text_contents())
-            assert all("待核查" in txt or "可替换" in txt for txt in rights.all_text_contents())
+            # R15-04: real offline photos should replace placeholders, not
+            # fail merely because no program-generated placeholder remains.
+            quality=page.evaluate("r15MediaAudit()")
+            counts=quality["counts"]
+            assert counts["photography"]+counts["originalArtwork"]+counts["userUploads"]+counts["unknown"]==counts["total"],counts
+            assert quality["commercialReleaseStatus"]=="HOLD"
+            assert all("待核查" in txt or "非摄影素材" in txt or "自行确认" in txt
+                       for txt in rights.all_text_contents())
             # R5: editor canvas scroll progress must use its own scroll viewport.
             # Verify real CSS story progress increases as the final chapter is revealed.
             last = page.locator("#sections .section.designed-chapter").last
