@@ -977,6 +977,13 @@
 .page[data-template] .section.authored-six[data-index="3"]{
  grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);min-height:700px!important;
 }
+/* Normalize the first middle act against legacy odd/even rules. */
+.page[data-template] .section.authored-six[data-index="1"] .section-art{
+ grid-column:1!important;grid-row:2!important;
+}
+.page[data-template] .section.authored-six[data-index="1"] > iframe{
+ grid-column:2!important;grid-row:2!important;
+}
 .page[data-template] .section.authored-six[data-index="2"] .section-art{
  grid-column:2!important;grid-row:2!important;
 }
