@@ -30,6 +30,21 @@ Images below show actual exported-page sections, not the home-card covers.
 | Interactive Gallery | ![Chapter 3 Interactive Gallery desktop](./gallery-chapter3-desktop.png) | ![Chapter 3 Interactive Gallery mobile](./gallery-chapter3-mobile.png) |
 | Modern SaaS | ![Chapter 3 Modern SaaS desktop](./saas-chapter3-desktop.png) | ![Chapter 3 Modern SaaS mobile](./saas-chapter3-mobile.png) |
 
+## R8 — designed ending of every template
+
+Last-section screenshots show the editorial ending, not a static cover.
+
+| Template | Desktop closing | Mobile closing |
+|---|---|---|
+| Editorial Portfolio | ![Closing Editorial Portfolio desktop](./editorial-ending-desktop.png) | ![Closing Editorial Portfolio mobile](./editorial-ending-mobile.png) |
+| 3D Product Experience | ![Closing 3D Product Experience desktop](./product-3d-ending-desktop.png) | ![Closing 3D Product Experience mobile](./product-3d-ending-mobile.png) |
+| Cinematic Journey | ![Closing Cinematic Journey desktop](./cinematic-ending-desktop.png) | ![Closing Cinematic Journey mobile](./cinematic-ending-mobile.png) |
+| Architecture Studio | ![Closing Architecture Studio desktop](./architecture-ending-desktop.png) | ![Closing Architecture Studio mobile](./architecture-ending-mobile.png) |
+| Creative Agency | ![Closing Creative Agency desktop](./agency-ending-desktop.png) | ![Closing Creative Agency mobile](./agency-ending-mobile.png) |
+| Fashion Lookbook | ![Closing Fashion Lookbook desktop](./fashion-ending-desktop.png) | ![Closing Fashion Lookbook mobile](./fashion-ending-mobile.png) |
+| Interactive Gallery | ![Closing Interactive Gallery desktop](./gallery-ending-desktop.png) | ![Closing Interactive Gallery mobile](./gallery-ending-mobile.png) |
+| Modern SaaS | ![Closing Modern SaaS desktop](./saas-ending-desktop.png) | ![Closing Modern SaaS mobile](./saas-ending-mobile.png) |
+
 ## R3 — complete template preview dialog (not only page hero)
 
 | Template | Desktop preview | Mobile preview |
