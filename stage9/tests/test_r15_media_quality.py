@@ -53,6 +53,7 @@ def test_r15_media_quality():
             assert all(row["kind"]=="unsplash-photo" and row["source"] for row in audit),audit
             result=page.evaluate("()=>createProjectFromTemplate('cinematic')")
             page.evaluate("data=>loadProject(data)",result)
+            page.evaluate("showEditor()")
             page.locator('[data-asset-tier-button="l4"]').click()
             coverage=page.locator("#r15MediaCoverage")
             assert coverage.is_visible()
