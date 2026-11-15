@@ -129,6 +129,9 @@ jobs:
               assert middle.is_file() and middle.stat().st_size>1000, middle
               ending=base/f'{row["template"]}-ending-{row["device"]}.png'
               assert ending.is_file() and ending.stat().st_size>1000, ending
+          for image in ("r9-studio-model.png","r9-studio-page.png"):
+              target=base/image
+              assert target.is_file() and target.stat().st_size>1000, target
           for tid in ("editorial","product-3d"):
               for device in ("desktop","mobile"):
                   target=base/f"{tid}-preview-{device}.png"
@@ -174,7 +177,16 @@ jobs:
                   "|---|---|---|"]
           for tid,name in zip(ids[:2],names[:2]):
               out.append(f"| {name} | ![Preview {name} desktop](./{tid}-preview-desktop.png) | ![Preview {name} mobile](./{tid}-preview-mobile.png) |")
-          out += ["", "## Review gates", "",
+          out += ["", "## R9 — Real offline Three.js studio scene", "",
+                  "These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.",
+                  "",
+                  "![Three.js PBR headphone showcase](./r9-studio-model.png)",
+                  "",
+                  "![Exported 3D product page](./r9-studio-page.png)",
+                  "",
+                  "Rendered in headless Chromium via software WebGL2. This is neither native hardware GPU approval nor art-direction sign-off.",
+                  "",
+                  "## Review gates", "",
                   "- Typography, photo crop and subject matter",
                   "- Content hierarchy and readability",
                   "- Motion quality while scrolling and interacting (not judged by still screenshots)",
