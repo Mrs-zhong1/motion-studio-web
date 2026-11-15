@@ -78,10 +78,8 @@ def run():
 
             # Hardware-unavailable fallback: WebGL2 API deliberately hidden.
             fallback=browser.new_context(viewport={"width":390,"height":780})
-            fallback.add_init_script("""() => {
-                Object.defineProperty(window,'WebGL2RenderingContext',
-                    {value:undefined,configurable:true});
-            }""")
+            fallback.add_init_script("""Object.defineProperty(window,
+                'WebGL2RenderingContext',{value:undefined,configurable:true});""")
             alt=fallback.new_page()
             alt.goto(address,wait_until="domcontentloaded")
             alt.locator("[data-template-card='product-3d']").click()
