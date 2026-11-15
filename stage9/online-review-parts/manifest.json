@@ -22,8 +22,8 @@
     "part-015.txt",
     "part-016.txt"
   ],
-  "characters": 2341608,
-  "utf8Bytes": 2348692,
-  "sha256": "0e77784d3f6543d076ea8a71ef001d3af6fc459070d09302583d90178e121c6c",
+  "characters": 2343886,
+  "utf8Bytes": 2350970,
+  "sha256": "7800a31611633de9cc2587397d6537d7481da331460ac53820910025fd1d10a7",
   "buildMethod": "node stage9/build-offline.mjs then node stage9/prepare-online-preview.mjs"
 }

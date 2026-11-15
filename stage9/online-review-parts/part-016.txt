@@ -1,4 +1,49 @@
-;ctx.lineTo(x,h);ctx.stroke()}
+.round(image.height*factor));
+   const ctx=canvas.getContext('2d');
+   if(variant===0)ctx.drawImage(image,0,0,canvas.width,canvas.height);
+   else{
+     const crops=[
+       {scale:.83,x:.12,y:.15},
+       {scale:.72,x:.82,y:.72},
+       {scale:.9,x:.62,y:.22},
+       {scale:.76,x:.22,y:.78},
+       {scale:.88,x:.5,y:.5}
+     ];
+     const crop=crops[(variant-1)%crops.length];
+     const w=image.width*crop.scale,h=image.height*crop.scale;
+     const x=(image.width-w)*crop.x,y=(image.height-h)*crop.y;
+     ctx.drawImage(image,x,y,w,h,0,0,canvas.width,canvas.height);
+   }
+   image.close?.();
+   const data=canvas.toDataURL('image/jpeg',.64);
+   return data.length<1500000?data:'';
+ }catch(err){console.warn('Demo asset unavailable:',url,err);return ''}
+}
+/* R8/R10: each chapter has a distinct image. For demo chapters without a
+   separately curated photograph, draw original editorial art instead of
+   recycling a hero photo with a different crop. This is original canvas
+   artwork, not an AI photograph or a cleared third-party commercial asset. */
+const templateAssetAuditCache=new Map();
+const graphicPalette={
+ editorial:['#e5e3d8','#27362b','#9aaf83','#eebd89'],
+ 'product-3d':['#101c24','#cad7c8','#8ea9b4','#d1aa6c'],
+ cinematic:['#121422','#b7a08b','#e1baa1','#566c8e'],
+ architecture:['#eaece8','#263e36','#97a9a0','#d7c9af'],
+ agency:['#dfff63','#151f23','#ff93bd','#b5baf0'],
+ fashion:['#f0e3d8','#654f53','#9d8d84','#e8b7a9'],
+ gallery:['#e4e7ee','#252e4b','#789fca','#c4a6ba'],
+ saas:['#e4f1e8','#1f4d3b','#91c5aa','#c6dfc9']
+};
+function authoredChapterArtwork(id,index){
+ const palette=graphicPalette[id]||graphicPalette.editorial;
+ const canvas=document.createElement('canvas');canvas.width=960;canvas.height=720;
+ const ctx=canvas.getContext('2d');if(!ctx)return '';
+ const [bg,ink,tone,highlight]=palette,w=canvas.width,h=canvas.height;
+ const seed=id.split('').reduce((a,x)=>a*31+x.charCodeAt(0),19)+index*313;
+ let rng=seed>>>0;const rand=()=>{rng=(rng*1664525+1013904223)>>>0;return rng/4294967296};
+ ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+ ctx.strokeStyle=ink;ctx.lineWidth=1;ctx.globalAlpha=.15;
+ for(let n=0;n<19;n++){let x=50+n*48;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
  for(let n=0;n<14;n++){let y=40+n*49;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
  ctx.globalAlpha=1;
  const shift=index%3;
@@ -347,7 +392,7 @@ const isTemplateFinal=(authoredSix||['editorial','product-3d'].includes(project.
 const chapterStep=`${String(i+1).padStart(2,'0')} / ${String(project.sections.length).padStart(2,'0')}`;
 const chapterHeader=designedChapter?`<div class="designed-chapter-heading"><span class="chapter-index">${chapterPrefix} / ${chapterNumber}</span><span class="chapter-step" aria-label="章节进度">${chapterStep}</span><h2 data-chapter-title>${safe(s.text)}</h2><p>${safe(chapterDescription)}</p></div>`:'';
 const openingMark=isTemplateOpening?`<div class="template-opening-mark" aria-hidden="true"><span>${safe(visualFrame.eyebrow)}</span><span>${safe(visualFrame.signature)}</span></div>`:'';
-const closingMark=isTemplateFinal?`<div class="template-closing-mark"><span class="closing-kicker">END OF THIS STORY / ${chapterStep}</span><div class="closing-body"><strong>${safe(visualFrame.outro)}</strong><p>${safe(visualFrame.note)}</p></div><span class="closing-signature">MOTION STUDIO · ${safe(project.templateId.toUpperCase())}</span></div>`:'';let art=s.image?`<div class="section-art" style="background-image:url('${s.image}');background-position:${s.imageFocusX}% ${s.imageFocusY}%"></div>`:'';let raw=(forExport&&s.id==='offline-glb-scene'&&project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb).length>=2)
+const closingMark=isTemplateFinal?`<div class="template-closing-mark"><span class="closing-kicker">END OF THIS STORY / ${chapterStep}</span><div class="closing-body"><strong>${safe(visualFrame.outro)}</strong><p>${safe(visualFrame.note)}</p></div><span class="closing-signature">MOTION STUDIO · ${safe(project.templateId.toUpperCase())}</span></div>`:'';let art=s.image?`<div class="section-art" style="background-image:url('${s.image}');background-position:${s.imageFocusX}% ${s.imageFocusY}%">${designedChapter?'<span class="motion-atmosphere" aria-hidden="true"></span>':''}</div>`:'';let raw=(forExport&&s.id==='offline-glb-scene'&&project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb).length>=2)
  ?'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>共享 Three.js 场景章节</title></head><body style="background:transparent;margin:0;font:15px system-ui;color:#e9f2e7"><div style="display:grid;place-items:center;min-height:400px;text-align:center;opacity:.7">共享 3D 场景正在加载。若 WebGL 不可用，请检查浏览器图形加速设置。</div></body></html>'
  :frameMarkup(getItem(s),s);const bridge=`<script>window.addEventListener('message',e=>{if(e.data?.type!=='motion-studio-scroll')return;const p=Math.max(0,Math.min(1,Number(e.data.progress)||0)),max=Math.max(0,document.documentElement.scrollHeight-innerHeight);window.scrollTo(0,p*max);window.dispatchEvent(new Event('scroll'));});<\/script>`;raw=raw.replace('</body>',bridge+'</body>');if(templateHero){const editorial=project.templateId==='editorial';const heroCSS=editorial
  ?'body{background:#f0ede6!important;color:#22221e!important}.stage{padding:36px 28px!important}.center{width:100%!important;text-align:left!important}h1{font-family:Georgia,serif!important;font-size:clamp(32px,5vw,70px)!important;letter-spacing:-.065em!important;line-height:1.02!important;max-width:100%!important;overflow-wrap:break-word!important}.muted{color:#66685e!important}.eyebrow{color:#52644e!important}.stage:before{opacity:.035!important}.scrollnote{color:#6f7069!important}'
