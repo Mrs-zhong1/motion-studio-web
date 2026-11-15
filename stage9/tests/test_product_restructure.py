@@ -186,7 +186,7 @@ def test_product_restructure():
                 # R7: user-edited chapter copy must survive edit/save/export.
                 chapter_text = f"R7 edited chapter {template_id}"
                 page.evaluate("(t) => {project.sections[1].text=t;render()}", chapter_text)
-                assert page.locator("#sections .designed-chapter [data-chapter-title]").first.count() == 1
+                assert page.locator('#sections section.section[data-index="1"] [data-chapter-title]').count() == 1
                 assert chapter_text in page.locator("#sections").inner_text()
                 with page.expect_download() as saved:
                     page.locator("#saveProject").click()
@@ -211,7 +211,7 @@ def test_product_restructure():
                     standalone.on("pageerror",lambda err:export_errors.append(str(err)))
                     standalone.set_content(exported_html,wait_until="domcontentloaded")
                     assert standalone.locator("section.section").count() == len(saved_project["sections"])
-                    assert standalone.locator("[data-chapter-title]").first.inner_text() == chapter_text
+                    assert standalone.locator('section.section[data-index="1"] [data-chapter-title]').inner_text() == chapter_text
                     rendered = standalone.locator("section.section").nth(1)
                     rendered.scroll_into_view_if_needed()
                     standalone.wait_for_function("""() => {
