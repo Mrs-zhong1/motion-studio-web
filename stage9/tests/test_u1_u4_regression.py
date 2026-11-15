@@ -25,6 +25,12 @@ def test_u1_u4_regression():
             assert page.locator("[data-template-card]").count()==8
             assert page.locator('[data-template-card="editorial"] .designed-card-copy').is_visible()
             assert page.locator('[data-template-card="product-3d"] .designed-card-photo').is_visible()
+            for template_id in ("cinematic","architecture","agency","fashion","gallery","saas"):
+                card=page.locator(f'[data-template-card="{template_id}"]')
+                assert card.locator(".art-directed-word strong").is_visible(),template_id
+                assert card.locator(".art-directed-photo").is_visible(),template_id
+                assert card.locator(".art-directed-photo").evaluate(
+                    "el=>getComputedStyle(el).backgroundImage.includes('unsplash.com')"),template_id
 
             page.locator("[data-template-card='editorial']").click()
             page.wait_for_function("() => templatePhotoCache.has('editorial')")
