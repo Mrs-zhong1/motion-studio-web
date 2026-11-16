@@ -253,6 +253,13 @@ def test_product_restructure():
                     assert 0 <= actual["enter"] <= 1,actual
                     assert not export_errors,export_errors
                     standalone.close()
+                # R20: verify file persistence after re-opening the actual Web app,
+                # rather than relying on the same long-lived editing tab.
+                page.goto(
+                    f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",
+                    wait_until="domcontentloaded",
+                )
+                assert page.locator("#openFile").count() == 1, page.url
                 page.locator("#openFile").set_input_files(
                     {
                         "name": "roundtrip.json",
