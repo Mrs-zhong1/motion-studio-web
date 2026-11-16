@@ -1,0 +1,347 @@
+{
+  "sourceCommit": "07970054d2bcaabfff4ac4927eade52e8c0004a4",
+  "screenshots": {
+    "agency-chapter3-desktop": {
+      "image": "agency-chapter3-desktop.webp",
+      "bytes": 29068,
+      "sha256": "1957885fab18a530a29243643a9d6c1b27412f895c42ae5ef2f4779a4c2ae99f"
+    },
+    "agency-chapter3-mobile": {
+      "image": "agency-chapter3-mobile.webp",
+      "bytes": 21296,
+      "sha256": "3a1f41180e21ae04c06184a988a5c59c8ad2169914798fb820dc914ac28d3eb9"
+    },
+    "agency-desktop": {
+      "image": "agency-desktop.webp",
+      "bytes": 35484,
+      "sha256": "df34a9c6a6f671758c6e73174b183781e1cfd9be67648f7962c02e9c1f561c8d"
+    },
+    "agency-ending-desktop": {
+      "image": "agency-ending-desktop.webp",
+      "bytes": 9520,
+      "sha256": "357b481248064f8be267d882543e769d4c925985823dadd90ecd0cd1f00c69b1"
+    },
+    "agency-ending-mobile": {
+      "image": "agency-ending-mobile.webp",
+      "bytes": 7770,
+      "sha256": "8588b0f8a537d0ff2521571503906329e21625af7a54a45b129a4cee3218239e"
+    },
+    "agency-immersive-desktop": {
+      "image": "agency-immersive-desktop.webp",
+      "bytes": 36728,
+      "sha256": "b09d219566e4ca0d1ea4b3bcbf5e236a5c424f5ff5a4495b40f8f16f6572516b"
+    },
+    "agency-immersive-mobile": {
+      "image": "agency-immersive-mobile.webp",
+      "bytes": 18434,
+      "sha256": "fb721c3ca2dabc79c7adde3fb68ad51d209ed74101c50550391ddf93d79959e0"
+    },
+    "agency-mobile": {
+      "image": "agency-mobile.webp",
+      "bytes": 22098,
+      "sha256": "14600aeceb7881677e755daf4d298226bce1c354a76265e221fc7415378684bf"
+    },
+    "architecture-chapter3-desktop": {
+      "image": "architecture-chapter3-desktop.webp",
+      "bytes": 22426,
+      "sha256": "d4be0c8789bbf001c950d630ba4bbb28ac0b7e2382cf98754023e35d45c67e8e"
+    },
+    "architecture-chapter3-mobile": {
+      "image": "architecture-chapter3-mobile.webp",
+      "bytes": 18888,
+      "sha256": "b518c07e34ae18f7aacb22cd3b0cfc69691160012dbec133e153561232271d1f"
+    },
+    "architecture-desktop": {
+      "image": "architecture-desktop.webp",
+      "bytes": 29466,
+      "sha256": "e3bbcf945e257d14eb6a85a527a86b88ae6d8f61e2df1952e982f261b89b6cd5"
+    },
+    "architecture-ending-desktop": {
+      "image": "architecture-ending-desktop.webp",
+      "bytes": 8396,
+      "sha256": "5913de734ec4b9ce0447c525c7c037a6fa2b4f8972013c5455181c22f7d07e55"
+    },
+    "architecture-ending-mobile": {
+      "image": "architecture-ending-mobile.webp",
+      "bytes": 5382,
+      "sha256": "dda35ab03ac9ee7201349d995ddcbb3396cebdd79b21ef4aa91d1c1da4d2290b"
+    },
+    "architecture-immersive-desktop": {
+      "image": "architecture-immersive-desktop.webp",
+      "bytes": 40362,
+      "sha256": "497e1720b7112aa36bb2193e8e183de22b1db5b5fc09e7a3235e32054be4014b"
+    },
+    "architecture-immersive-mobile": {
+      "image": "architecture-immersive-mobile.webp",
+      "bytes": 18164,
+      "sha256": "cacbc27b3be240d0b88a6ee42f230950d37f183a1fd7899ea539c1df1eef3077"
+    },
+    "architecture-mobile": {
+      "image": "architecture-mobile.webp",
+      "bytes": 19722,
+      "sha256": "c74d8768ecb8bb4005216badac2859706a93a4fa2dbf15a2576b05a8164e0b9a"
+    },
+    "cinematic-chapter3-desktop": {
+      "image": "cinematic-chapter3-desktop.webp",
+      "bytes": 31762,
+      "sha256": "9067882abc8f285c96d9055962126391226d4b7576a06c153f097c3cbf731605"
+    },
+    "cinematic-chapter3-mobile": {
+      "image": "cinematic-chapter3-mobile.webp",
+      "bytes": 16710,
+      "sha256": "fa77330daf2d022dce3edc5660b03aa026c7761854914ad2640acf0df04ef517"
+    },
+    "cinematic-desktop": {
+      "image": "cinematic-desktop.webp",
+      "bytes": 35020,
+      "sha256": "a87f1f1a73cee679737613893a1db69c4ec6ef0bef145f7c3be417adae654003"
+    },
+    "cinematic-ending-desktop": {
+      "image": "cinematic-ending-desktop.webp",
+      "bytes": 11534,
+      "sha256": "dcd03e10713021bd8cb6e493cc27710c7ca83084c75cfb871c7469696b474c0b"
+    },
+    "cinematic-ending-mobile": {
+      "image": "cinematic-ending-mobile.webp",
+      "bytes": 6768,
+      "sha256": "ee622320da8dfaacb46d4447590c362efd728e1aa23e698512e424606801f93f"
+    },
+    "cinematic-immersive-desktop": {
+      "image": "cinematic-immersive-desktop.webp",
+      "bytes": 46062,
+      "sha256": "5bbc445065e7d161091c9fdac90ddd4f2db3a1bcea7d44c8b0e7dcfc8a72bdcd"
+    },
+    "cinematic-immersive-mobile": {
+      "image": "cinematic-immersive-mobile.webp",
+      "bytes": 14612,
+      "sha256": "9c27561dfde69de7975489eb75af11bbeeb2109c64518c74712ad161196f2e2a"
+    },
+    "cinematic-mobile": {
+      "image": "cinematic-mobile.webp",
+      "bytes": 21602,
+      "sha256": "47108fea0f1358904a90606d07fb4088cc0f352b1b8d8dd69088f53e8a1a07e9"
+    },
+    "editorial-chapter3-desktop": {
+      "image": "editorial-chapter3-desktop.webp",
+      "bytes": 27226,
+      "sha256": "3d65a198ae35fa32e751b0a10ca009c214d14d801b26fa6e2bf64fb672885d54"
+    },
+    "editorial-chapter3-mobile": {
+      "image": "editorial-chapter3-mobile.webp",
+      "bytes": 17258,
+      "sha256": "ace28389f73c9d230207e0257989a0894c1586b5205537d7bf23ab79736970ba"
+    },
+    "editorial-desktop": {
+      "image": "editorial-desktop.webp",
+      "bytes": 20604,
+      "sha256": "2301cc3ca41fe0e720f79973dd186ce950dbb6149e309e1a5deb067db2446ca3"
+    },
+    "editorial-ending-desktop": {
+      "image": "editorial-ending-desktop.webp",
+      "bytes": 9414,
+      "sha256": "a4946742b02d723a80d0cdf23584bac77e53c0d63ea1eca21e55a70ed564bfcc"
+    },
+    "editorial-ending-mobile": {
+      "image": "editorial-ending-mobile.webp",
+      "bytes": 6726,
+      "sha256": "cbc25985ec2618c42fd6a40d692ac37d8db76abcef0587c8c26234edb3f34372"
+    },
+    "editorial-immersive-desktop": {
+      "image": "editorial-immersive-desktop.webp",
+      "bytes": 41858,
+      "sha256": "06922d1d32a090073248c01ebfde57ac8ab1b4552c9e02eaf2efcf567c5b9fef"
+    },
+    "editorial-immersive-mobile": {
+      "image": "editorial-immersive-mobile.webp",
+      "bytes": 18442,
+      "sha256": "81066203816f7a73a3ea29e0cd79a89064f740b35f935ac021816f95b90276d5"
+    },
+    "editorial-mobile": {
+      "image": "editorial-mobile.webp",
+      "bytes": 12966,
+      "sha256": "de72094bbe1315db5fefbff5b4459847d812fc8dc76e0c0608b6f48137121a71"
+    },
+    "editorial-preview-desktop": {
+      "image": "editorial-preview-desktop.webp",
+      "bytes": 48370,
+      "sha256": "f32a06a12ee0ed040470e2e1bde58524c2f6aec2165c01578896c6fcf63fbd5b"
+    },
+    "editorial-preview-mobile": {
+      "image": "editorial-preview-mobile.webp",
+      "bytes": 25436,
+      "sha256": "f2298b87b5a8be9e1749e4f6bd1ee3d1787f44ce9f1e84577910d6650f5984f8"
+    },
+    "fashion-chapter3-desktop": {
+      "image": "fashion-chapter3-desktop.webp",
+      "bytes": 16370,
+      "sha256": "9b3ad086f3143241014043279624ec1cdf3a54ec5aced00ed941c22491788c62"
+    },
+    "fashion-chapter3-mobile": {
+      "image": "fashion-chapter3-mobile.webp",
+      "bytes": 17250,
+      "sha256": "9ba7cc71f64c05cfd3130cf117e5b9425d9bc1bd679fb6a67705149d039c9118"
+    },
+    "fashion-desktop": {
+      "image": "fashion-desktop.webp",
+      "bytes": 24694,
+      "sha256": "97d32dbf8cbf92b354793f6101272a643d053403e76b5fcd83db4695dc27bde0"
+    },
+    "fashion-ending-desktop": {
+      "image": "fashion-ending-desktop.webp",
+      "bytes": 7636,
+      "sha256": "c7f86310b113917c2e688693e037fb7b4c0141991a3c088cca08ae5f3f03e610"
+    },
+    "fashion-ending-mobile": {
+      "image": "fashion-ending-mobile.webp",
+      "bytes": 6846,
+      "sha256": "090893fd6603d7fe7a4b2ec1c03c31abc6a4be18c87530975f4db26313e7c96a"
+    },
+    "fashion-immersive-desktop": {
+      "image": "fashion-immersive-desktop.webp",
+      "bytes": 38310,
+      "sha256": "0c32a5765ef93e9b1c17e6ecd56743db3f467279f5b029970c1bc0cfa06b1bfa"
+    },
+    "fashion-immersive-mobile": {
+      "image": "fashion-immersive-mobile.webp",
+      "bytes": 15926,
+      "sha256": "8dba6e7b4dfa3581c2ca7a519225905d44911064bd742b4f7a9cea665ca343f9"
+    },
+    "fashion-mobile": {
+      "image": "fashion-mobile.webp",
+      "bytes": 19700,
+      "sha256": "8c3c9965b634c6543c7f0a6acde62c7f057206a25f9784bab7343667e3df9157"
+    },
+    "gallery-chapter3-desktop": {
+      "image": "gallery-chapter3-desktop.webp",
+      "bytes": 23494,
+      "sha256": "125723021faa22d4fdf4f09d8e11ffcd7e85d2adaab77acac200b9e59b0745a2"
+    },
+    "gallery-chapter3-mobile": {
+      "image": "gallery-chapter3-mobile.webp",
+      "bytes": 19962,
+      "sha256": "55f3926a200345533762055d60afd89064b0f96fc3792c445c6cb7cee99f256e"
+    },
+    "gallery-desktop": {
+      "image": "gallery-desktop.webp",
+      "bytes": 30586,
+      "sha256": "f6275a339cd0dbef7ca74e5a3e1c33a29b7c71652518013c4503ba08d7a6e4d8"
+    },
+    "gallery-ending-desktop": {
+      "image": "gallery-ending-desktop.webp",
+      "bytes": 8402,
+      "sha256": "3bb8980533cdd5316e928f8230389b1b14757bb439f8da0a0f73f10f19abb329"
+    },
+    "gallery-ending-mobile": {
+      "image": "gallery-ending-mobile.webp",
+      "bytes": 6682,
+      "sha256": "4452857e649423a51b556356c75be651a4858bd27e93568dd9cf2d6f4a5681fd"
+    },
+    "gallery-immersive-desktop": {
+      "image": "gallery-immersive-desktop.webp",
+      "bytes": 41958,
+      "sha256": "d6701188248085e87d302480a6be13fe6c3a7416fb45a6ca157e0d8ae63cc0e4"
+    },
+    "gallery-immersive-mobile": {
+      "image": "gallery-immersive-mobile.webp",
+      "bytes": 16694,
+      "sha256": "ed0a44e3e83d26c789f65ee9e45bfddff82295b2ea889380beb1844c2f82153f"
+    },
+    "gallery-mobile": {
+      "image": "gallery-mobile.webp",
+      "bytes": 24522,
+      "sha256": "3627b645ea1d1baa30de62e36331c2dc30431ccc5c18cbed43faba86a4853916"
+    },
+    "product-3d-chapter3-desktop": {
+      "image": "product-3d-chapter3-desktop.webp",
+      "bytes": 26304,
+      "sha256": "44edd19bd65a4be0f636b57acca46d68b62e1c81c13d3a959a35c46809adbfda"
+    },
+    "product-3d-chapter3-mobile": {
+      "image": "product-3d-chapter3-mobile.webp",
+      "bytes": 17760,
+      "sha256": "d7c5788ed19b4c9ed1c62218f1daaf12b841b3af1ec85062bdec907453dc5184"
+    },
+    "product-3d-desktop": {
+      "image": "product-3d-desktop.webp",
+      "bytes": 26648,
+      "sha256": "7ea53d6b9eea1a9460f73c00b3a518c45a91d6632f158bb9fdc8183cc9dcce82"
+    },
+    "product-3d-ending-desktop": {
+      "image": "product-3d-ending-desktop.webp",
+      "bytes": 10700,
+      "sha256": "0b0504b179f6cdcee65cd278fd5ad88648b1d640c8d0b49c7790f43d3351e164"
+    },
+    "product-3d-ending-mobile": {
+      "image": "product-3d-ending-mobile.webp",
+      "bytes": 6276,
+      "sha256": "dd366588fcc155976d085e4aa711832387dc5fb480655b548f67b3f78838b711"
+    },
+    "product-3d-immersive-desktop": {
+      "image": "product-3d-immersive-desktop.webp",
+      "bytes": 47124,
+      "sha256": "475507b7b7f1816fd049f44f9bfae97d5842c68e21cd7138adec824d1039d589"
+    },
+    "product-3d-immersive-mobile": {
+      "image": "product-3d-immersive-mobile.webp",
+      "bytes": 18246,
+      "sha256": "f9ba96962a170448b26517440f00e6eb9af7cb7fd10b63f763af4dae6a8dd1e7"
+    },
+    "product-3d-mobile": {
+      "image": "product-3d-mobile.webp",
+      "bytes": 20650,
+      "sha256": "2c08619f5ceb4fa026bf92dd087b13bf9a822dac08f148bba21fff887e76bf72"
+    },
+    "product-3d-preview-desktop": {
+      "image": "product-3d-preview-desktop.webp",
+      "bytes": 54500,
+      "sha256": "d34072bcfb873ed3929e6bc13a212b14af734f3a88f64cb8274115fc7458c1d8"
+    },
+    "product-3d-preview-mobile": {
+      "image": "product-3d-preview-mobile.webp",
+      "bytes": 26780,
+      "sha256": "ec9d421a53deb54c6219eadb98d7e9b6b549d75c7d5ac186b2563c22b5659583"
+    },
+    "saas-chapter3-desktop": {
+      "image": "saas-chapter3-desktop.webp",
+      "bytes": 18780,
+      "sha256": "c2f5e51b240d2bd8b9a9229813001afbebf26d65f2e4f93018bab2810a051696"
+    },
+    "saas-chapter3-mobile": {
+      "image": "saas-chapter3-mobile.webp",
+      "bytes": 14140,
+      "sha256": "53e68f574c015387c398a3d370be26d3bea9762dded65037ae0d1796bcac8542"
+    },
+    "saas-desktop": {
+      "image": "saas-desktop.webp",
+      "bytes": 29368,
+      "sha256": "4e2369017748a9936679b4e7edfd6abe031584e8eb3f3d89e62028a6bc109f02"
+    },
+    "saas-ending-desktop": {
+      "image": "saas-ending-desktop.webp",
+      "bytes": 7206,
+      "sha256": "ce032c6d4a238164736346d4967839475a9a2b48eea6f32eedf8aced1e43aff2"
+    },
+    "saas-ending-mobile": {
+      "image": "saas-ending-mobile.webp",
+      "bytes": 5612,
+      "sha256": "523dd688961b240cbae662d3d33ab8b95c26a636df2da7314b5b387003b5ec5d"
+    },
+    "saas-immersive-desktop": {
+      "image": "saas-immersive-desktop.webp",
+      "bytes": 39862,
+      "sha256": "d8d1f3428d6f219dac5cb09c6fbf7eec2526dff19d2a51ae0d4f26ef7be2df0a"
+    },
+    "saas-immersive-mobile": {
+      "image": "saas-immersive-mobile.webp",
+      "bytes": 12684,
+      "sha256": "3768675bd1b27a392947fc7245a79b7f7943697e98d4373d7030a7669cf8779b"
+    },
+    "saas-mobile": {
+      "image": "saas-mobile.webp",
+      "bytes": 15956,
+      "sha256": "fa00b25536fd52d25d5470924854297d5025045b4a07f2aa0fe7f7a99cd2d3c3"
+    }
+  },
+  "artDirectionApproved": false,
+  "productionEligible": false
+}
