@@ -25,7 +25,7 @@ def test_r14():
                 assert "installR14Navigator" in exported, template
                 assert "r14-story-rail" in exported, template
                 assert f'data-template="{template}"' in exported, template
-            exported=page.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            exported=page.evaluate("(id)=>buildTemplatePreviewDocument(id)","product-3d")
             standalone=browser.new_page(viewport={"width":1440,"height":900})
             problems=[]
             standalone.on("pageerror",lambda error:problems.append(str(error)))
@@ -53,6 +53,16 @@ def test_r14():
             first.click()
             standalone.wait_for_function("()=>window.scrollY<100",timeout=10000)
             assert not problems,problems
+            # The seven persistent story templates hide their duplicate R14 rail;
+            # preview navigation is delegated to the parent toolbar.
+            story_html=page.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            standalone.set_content(story_html,wait_until="domcontentloaded")
+            assert standalone.locator(".s1-story-stage").count()==1
+            # Persistent stories rely on parent toolbar chapter controls;
+            # an old floating navigation rail is allowed only if hidden.
+            hidden_nav=standalone.locator("nav.r14-story-rail")
+            assert hidden_nav.count()==0 or hidden_nav.evaluate(
+                "n=>getComputedStyle(n).display")=="none"
             standalone.close()
             browser.close()
     finally:

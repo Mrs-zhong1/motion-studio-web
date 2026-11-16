@@ -1,0 +1,58 @@
+button.dataset.category)});document.querySelectorAll('[data-discovery-category]').forEach(button=>button.onclick=()=>{const category=button.dataset.discoveryCategory;document.querySelectorAll('.discovery-nav nav button').forEach(x=>x.classList.toggle('active',x===button));renderTemplateGrid(category)});
+document.querySelectorAll('[data-asset-tier-button]').forEach(button=>button.onclick=()=>{document.querySelectorAll('[data-asset-tier-button]').forEach(x=>x.classList.toggle('active',x===button));document.querySelectorAll('[data-asset-tier]').forEach(x=>x.classList.toggle('active',x.dataset.assetTier===button.dataset.assetTierButton))});
+$('modeToggle').onclick=()=>{document.body.classList.toggle('simple-mode');const simple=document.body.classList.contains('simple-mode');$('modeLabel').textContent=simple?'简易编辑':'专业编辑';$('modeToggle').textContent=simple?'进入专业模式':'返回简易模式';$('editorTimeline').classList.toggle('collapsed',simple);$('timelineToggle').textContent=simple?'展开':'收起'};$('timelineToggle').onclick=()=>{const collapsed=$('editorTimeline').classList.toggle('collapsed');$('timelineToggle').textContent=collapsed?'展开':'收起'};$('togglePanels').onclick=()=>{const hidden=document.body.classList.toggle('panels-hidden');$('togglePanels').textContent=hidden?'展开侧栏':'收起侧栏'};function applyCanvasZoom(next){canvasZoom=Math.max(.6,Math.min(1.4,next));$('canvasWrap').style.setProperty('--canvas-zoom',canvasZoom);$('zoomReadout').textContent=Math.round(canvasZoom*100)+'%'}$('zoomOut').onclick=()=>applyCanvasZoom(canvasZoom-.1);$('zoomIn').onclick=()=>applyCanvasZoom(canvasZoom+.1);$('fullscreenCanvas').onclick=()=>{const el=$('canvasViewport');if(document.fullscreenElement)document.exitFullscreen?.();else el.requestFullscreen?.().catch(()=>notify('浏览器未允许全屏'))};$('loadTemplate').onclick=()=>useTemplate($('templateChoice').value||templateCatalog[0].id);
+function syncEditorScroll(){const wh=window.innerHeight||700;document.querySelectorAll('#sections .section iframe').forEach(f=>{const r=f.closest('.section').getBoundingClientRect(),p=Math.max(0,Math.min(1,(wh-r.top)/(wh+r.height)));try{f.contentWindow.postMessage({type:'motion-studio-scroll',progress:p},'*')}catch(e){}})}window.addEventListener('scroll',syncEditorScroll,{passive:true});$('canvasViewport').addEventListener('scroll',()=>{syncEditorScroll();if(scrubProgress===null){refreshOverlays();syncTimeline()}},{passive:true});window.addEventListener('scroll',()=>{if(scrubProgress===null){refreshOverlays();syncTimeline()}},{passive:true});window.addEventListener('resize',syncEditorScroll);setInterval(syncEditorScroll,800);
+$('sections').addEventListener('dragover',e=>e.preventDefault());$('sections').addEventListener('drop',e=>{if(e.target.closest('.section'))return;e.preventDefault();const id=e.dataTransfer.getData('text/motion-component');if(id)addComponent(id)});
+$('timelineScrub').addEventListener('input',e=>{scrubProgress=Number(e.target.value)/100;syncTimeline();refreshOverlays();document.querySelectorAll('#sections .section iframe').forEach(f=>{try{f.contentWindow.postMessage({type:'motion-studio-scroll',progress:scrubProgress},'*')}catch(e){}})});$('timelineLive').onclick=()=>{scrubProgress=null;refreshOverlays();syncTimeline();notify('已恢复跟随页面滚动')};filtersInit();renderLibrary();try{const draft=JSON.parse(localStorage.getItem('motion-studio-draft-v1'));if(draft?.schema==='motion-studio-composition-v1')loadProject(draft);else throw Error('no draft')}catch(e){project={schema:'motion-studio-composition-v1',title:'Motion Story Gallery',transition:'fade',sections:initialSections.map((entry,index)=>normSection({...entry,layers:templateLayers(index,entry)}))};active=project.sections[0].uid;activeLayer=project.sections[0].layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);render()}
+const resumeButton=document.createElement('button');resumeButton.id='resumeProject';resumeButton.textContent='继续当前工程';resumeButton.onclick=showEditor;document.querySelector('.discovery-nav nav').append(resumeButton);
+renderTemplateGrid();renderQuickTemplates();renderSectionPresets();renderChapterList();$('editorTimeline').classList.add('collapsed');$('timelineToggle').textContent='展开';
+$('discoveryBlank').onclick=()=>{
+  project={schema:'motion-studio-composition-v1',templateId:'custom',title:'未命名项目',transition:'fade',sections:[]};
+  active=null;activeLayer=null;selectedLayers=new Set();historyStack=[];futureStack=[];
+  lastHistoryState=snapshot();persistDraftWithoutHistory();showEditor();
+  notify('已建立空白项目，可从组件库添加第一个章节');
+};
+
+/* R15-02: user-owned batch chapter photography, compressed for standalone exports.
+   Keep the existing template motion/3D sections intact. Atomic update on success. */
+async function r15CompressPhoto(file){
+ if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>15000000||file.size<=0)throw Error('图片类型不支持或超过15MB：'+file.name);
+ const bitmap=await createImageBitmap(file);
+ try{
+  const scale=Math.min(1,1400/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+  canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+  const ctx=canvas.getContext('2d');
+  if(!ctx)throw Error('浏览器图像处理不可用');
+  ctx.fillStyle='#f9f9f7';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+  for(const quality of [.84,.72,.6,.48]){
+   const jpeg=canvas.toDataURL('image/jpeg',quality);
+   if(jpeg.length<2300000)return jpeg;
+  }
+  throw Error('图片压缩后仍超过导出限制：'+file.name);
+ }finally{bitmap.close?.()}
+}
+async function r15ApplyChapterPhotos(files){
+ const list=Array.from(files||[]);
+ if(!project.sections.length)throw Error('请先使用模板或添加章节');
+ if(!list.length)throw Error('未选择图片');
+ if(list.length>project.sections.length)throw Error('图片数量超过当前 '+project.sections.length+' 个章节');
+ const output=[];
+ for(const file of list)output.push(await r15CompressPhoto(file));
+ // Commit all at once, or make no changes if any file failed.
+ output.forEach((image,i)=>{project.sections[i].image=image;project.sections[i].imageMeta={kind:'user-upload',source:null,rightsReviewed:false};project.sections[i].imageFocusX=50;project.sections[i].imageFocusY=50});
+ render();return output.length;
+}
+$('r15BulkImageButton').onclick=()=>$('r15BulkImageInput').click();
+$('r15BulkImageInput').onchange=async e=>{
+ const input=e.target,button=$('r15BulkImageButton'),status=$('r15BulkImageResult');
+ const files=Array.from(input.files||[]);if(!files.length)return;
+ button.disabled=true;status.textContent='正在处理 '+files.length+' 张图片…';
+ try{const count=await r15ApplyChapterPhotos(files);status.textContent='已更新 '+count+' 个章节。可在画布查看并导出。';notify('已更新 '+count+' 个章节图片');}
+ catch(err){status.textContent='导入失败：'+err.message;notify('批量导入失败：'+err.message);}
+ finally{input.value='';button.disabled=false}
+};
+historyStack=[];futureStack=[];lastHistoryState=snapshot();syncHistoryButtons();window.MotionStudioUnified={undo:()=>restoreHistory('undo'),redo:()=>restoreHistory('redo'),getProject:()=>structuredClone(project),add:addComponent,build:exportDocument,load:loadProject,registry,templates:templateCatalog.map(({sections,...meta})=>meta),createProjectFromTemplate,useTemplate,previewTemplate};
+</script></body></html>

@@ -27,9 +27,14 @@ def test_r17_preview():
                 assert modal.is_visible() and modal.get_attribute("role")=="dialog"
                 assert modal.get_attribute("aria-modal")=="true"
                 assert modal.get_attribute("aria-labelledby")=="previewTitle"
+                if name in ("editorial","cinematic","architecture","agency","fashion","gallery","saas"):
+                    # Narrative templates open immersive by design; restore the overview
+                    # to exercise R17 filmstrip and preview device controls.
+                    assert modal.evaluate("n=>n.classList.contains(\'immersive-preview\')")
+                    page.locator("#previewImmersive").click()
                 page.wait_for_function("""()=>!document.querySelector('#templatePreview').hasAttribute('aria-busy')""",timeout=45000)
                 frame=page.frame_locator("#templatePreviewFrame")
-                frame.locator("nav.r14-story-rail").wait_for(timeout=30000)
+                frame.locator("nav.r14-story-rail").wait_for(state="attached",timeout=30000)
                 total=page.evaluate("r17PreviewTotal")
                 assert total==(4 if name=="editorial" else 5),name
                 tiles=page.locator("#r17PreviewFilmstrip button")

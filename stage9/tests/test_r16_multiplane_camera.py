@@ -25,8 +25,8 @@ def test_r16_multiplane():
                 assert f"data-template=\"{name}\"" in out,name
                 assert "--r16-photo-y" in out,name
                 assert "--r16-mist-x" in out,name
-            editor.evaluate("async()=>await ensureTemplatePhoto('cinematic')")
-            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            editor.evaluate("async()=>await ensureTemplatePhoto('product-3d')")
+            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","product-3d")
             page=browser.new_page(viewport={"width":1440,"height":900})
             errors=[];page.on("pageerror",lambda err:errors.append(str(err)))
             page.set_content(html,wait_until="domcontentloaded",timeout=60000)
@@ -57,7 +57,7 @@ def test_r16_multiplane():
             # Keep chapter visible and move it through two camera positions.
             page.evaluate("""()=>{
               const c=document.querySelector('.section.designed-chapter[data-index="2"]');
-              window.scrollTo(0,window.scrollY+c.getBoundingClientRect().top-innerHeight*.76);
+              window.scrollTo({top:window.scrollY+c.getBoundingClientRect().top-innerHeight*.76,behavior:'instant'});
             }""")
             page.wait_for_timeout(180)
             early=measure()
@@ -67,7 +67,7 @@ def test_r16_multiplane():
                 page.screenshot(animations="disabled"))
             page.evaluate("""()=>{
               const c=document.querySelector('.section.designed-chapter[data-index="2"]');
-              window.scrollTo(0,window.scrollY+c.getBoundingClientRect().top-innerHeight*.15);
+              window.scrollTo({top:window.scrollY+c.getBoundingClientRect().top-innerHeight*.15,behavior:'instant'});
             }""")
             page.wait_for_timeout(180)
             late=measure()
@@ -82,7 +82,12 @@ def test_r16_multiplane():
             mobile=measure()
             assert mobile["totalWidth"]<=mobile["width"]+32,mobile
             page.emulate_media(reduced_motion="reduce")
-            page.wait_for_timeout(160)
+            # Chromium's matchMedia change can arrive after the next paint;
+            # request one real frame of the existing scroll renderer.
+            page.evaluate("()=>dispatchEvent(new Event('scroll'))")
+            page.wait_for_function("""()=>
+              document.querySelector('.section.designed-chapter[data-index="2"]')?.dataset.r16Depth==='0.000'
+            """,timeout=10000)
             reduced=measure()
             assert reduced["depth"]==0,reduced
             assert reduced["typeTransform"]=="none",reduced

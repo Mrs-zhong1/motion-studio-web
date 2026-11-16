@@ -21,48 +21,31 @@ def test_r15():
             assert editor.locator("[data-template-card]").count()==8
             assert editor.locator(".r15-scene-mark").count()==0
             for name in TEMPLATES:
-                html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
-                assert 'r15-scene-mark' in html, name
-                assert f'data-template="{name}"' in html, name
-                assert html.count('class="r15-scene-mark"')==(5 if name in AUTHORED_SIX else (3 if name=="editorial" else 4)),name
-            for name in ("cinematic","agency","saas"):
                 await_art=editor.evaluate("(id)=>ensureTemplatePhoto(id)",name)
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
-                page=browser.new_page(viewport={"width":1440,"height":900},reduced_motion="no-preference")
-                errors=[];page.on("pageerror",lambda error:errors.append(str(error)))
-                page.set_content(html,wait_until="domcontentloaded",timeout=60000)
-                sections=page.locator("section.section.authored-six")
-                assert sections.count()==5,(name,sections.count())
-                assert sections.locator(".r15-scene-mark").count()==5,name
-                assert sections.nth(0).locator(".r15-scene-mark").inner_text().strip()
-                first=sections.nth(1)
-                middle=sections.nth(2)
-                dimensions=page.evaluate("""() => {
-                    function measure(i){
-                      const sec=document.querySelector('section.section[data-index="'+i+'"]');
-                      const art=sec.querySelector('.section-art').getBoundingClientRect();
-                      const stage=sec.querySelector('iframe').getBoundingClientRect();
-                      return {artX:art.x,stageX:stage.x,width:art.width,stageWidth:stage.width,
-                              minHeight:Math.min(art.height,stage.height),sectionWidth:sec.getBoundingClientRect().width};
-                    }
-                    return {scene1:measure(1),scene2:measure(2)}
-                }""")
-                assert dimensions["scene1"]["artX"]<dimensions["scene1"]["stageX"],(name,dimensions)
-                assert dimensions["scene2"]["artX"]>dimensions["scene2"]["stageX"],(name,dimensions)
-                assert all(x["minHeight"]>=200 and x["width"]>=70 and x["stageWidth"]>=70
-                           for x in dimensions.values()),(name,dimensions)
-                page.set_viewport_size({"width":390,"height":844})
-                page.wait_for_timeout(150)
-                mobile=middle.evaluate("""sec=>{
-                  const a=sec.querySelector('.section-art').getBoundingClientRect();
-                  const f=sec.querySelector('iframe').getBoundingClientRect();
-                  return {artTop:a.top,frameTop:f.top,bodyWidth:document.documentElement.scrollWidth,
-                          viewport:innerWidth,artW:a.width,frameW:f.width}
-                }""")
-                assert mobile["artTop"]<mobile["frameTop"],(name,mobile)
-                assert mobile["bodyWidth"]<=mobile["viewport"]+32,(name,mobile)
+                assert f'data-template="{name}"' in html,name
+                preview=browser.new_page(viewport={"width":1440,"height":900})
+                errors=[];preview.on("pageerror",lambda e:errors.append(str(e)))
+                preview.set_content(html,wait_until="domcontentloaded",timeout=60000)
+                if name=="product-3d":
+                    assert preview.locator(".section.designed-chapter").count()==4
+                    assert preview.locator(".r15-scene-mark").count()==4
+                    assert preview.locator(".section iframe").count()==5
+                else:
+                    chapters=4 if name=="editorial" else 5
+                    assert preview.locator(".s1-story-stage").count()==1,name
+                    assert preview.locator(".s1-story-anchor").count()==chapters,name
+                    assert preview.locator(".s1-scene-image").count()==chapters,name
+                    assert preview.locator(".section iframe").count()==0,name
+                    assert preview.locator(".r15-scene-mark").count()==0,name
+                    assert preview.locator(".s1-story-stage").get_attribute("data-story-profile")==name
+                    preview.evaluate("""()=>scrollTo(0,document.querySelectorAll('.s1-story-anchor')[2].offsetTop)""")
+                    preview.wait_for_function("""()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='2'""",timeout=12000)
+                    assert preview.locator(".s1-scene-image").nth(2).evaluate("el=>getComputedStyle(el).clipPath")!="none"
+                    preview.set_viewport_size({"width":390,"height":844})
+                    assert preview.evaluate("document.documentElement.scrollWidth<=innerWidth+32"),name
                 assert not errors,(name,errors)
-                page.close()
+                preview.close()
             browser.close()
     finally:
         server.shutdown();server.server_close()

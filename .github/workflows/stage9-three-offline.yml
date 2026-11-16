@@ -94,6 +94,18 @@ jobs:
         id: meshopt
         continue-on-error: true
         run: python tests/test_stage15_meshopt.py
+      - name: Verify persistent product WebGL across five chapters
+        id: product_story
+        continue-on-error: true
+        run: python tests/test_s4_product_persistent_3d.py
+      - name: Upload S4 WebGL product scene evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s4-persistent-product-webgl
+          path: stage9/S4_PRODUCT_EVIDENCE/*
+          if-no-files-found: warn
+          retention-days: 14
       - name: Commit generated HTML, actual browser evidence, and manifests to repository
         if: always() && github.ref == 'refs/heads/main'
         working-directory: .
@@ -145,7 +157,7 @@ jobs:
             fi
           done
       - name: Gate production if software WebGL verification failed
-        if: steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success' || steps.stage13math.outcome != 'success' || steps.stage13.outcome != 'success' || steps.stage14.outcome != 'success' || steps.meshopt_fixture.outcome != 'success' || steps.meshopt.outcome != 'success'
+        if: steps.product_story.outcome != 'success' || steps.gpu.outcome != 'success' || steps.matrix.outcome != 'success' || steps.invalid.outcome != 'success' || steps.shared.outcome != 'success' || steps.stage10.outcome != 'success' || steps.stage11math.outcome != 'success' || steps.stage11.outcome != 'success' || steps.stage12math.outcome != 'success' || steps.stage12.outcome != 'success' || steps.stage13math.outcome != 'success' || steps.stage13.outcome != 'success' || steps.stage14.outcome != 'success' || steps.meshopt_fixture.outcome != 'success' || steps.meshopt.outcome != 'success'
         run: |
           echo "Stage 9 GPU software acceptance failed. Inspect stage9/output/ in repository."
           exit 1

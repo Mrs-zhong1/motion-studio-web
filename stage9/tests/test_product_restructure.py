@@ -230,7 +230,7 @@ def test_product_restructure():
                 assert saved_project["sections"][1]["text"] == chapter_text
                 # Loading real standalone HTML in a second browser page catches
                 # export styles or chapter motion silently omitted from output.
-                if template_id in ("editorial", "product-3d", "cinematic"):
+                if template_id in ("editorial", "product-3d", "cinematic", "architecture", "agency", "fashion", "gallery", "saas"):
                     standalone = browser.new_page(viewport={"width": 1280,"height": 900})
                     export_errors = []
                     standalone.on("pageerror",lambda err:export_errors.append(str(err)))
@@ -239,25 +239,45 @@ def test_product_restructure():
                     # Text fidelity is a DOM-content check; inner_text() depends on
                     # transient layout/visibility during first paint on Firefox/WebKit.
                     # Geometry/visibility are independently covered by visual audit.
-                    heading = standalone.locator('section.section[data-index="1"] [data-chapter-title]')
-                    assert heading.text_content().strip() == chapter_text, (
-                        template_id, heading.text_content(), chapter_text
-                    )
-                    rendered = standalone.locator("section.section").nth(1)
-                    rendered.scroll_into_view_if_needed()
-                    standalone.wait_for_function("""() => {
-                        const n=document.querySelectorAll('section.section')[1];
-                        return n && n.style.getPropertyValue('--chapter-enter') !== '';
-                    }""",timeout=12000)
-                    actual = rendered.evaluate("""node=>{
-                        const art=node.querySelector('.section-art'),motion=node.querySelector('iframe');
-                        const a=art.getBoundingClientRect(),b=motion.getBoundingClientRect();
-                        return {enter:Number(node.style.getPropertyValue('--chapter-enter')),
-                           photo:getComputedStyle(art).backgroundImage.startsWith('url("data:image/'),
-                           width:Math.round(a.width),frame:Math.round(b.width)};
-                    }""")
-                    assert actual["photo"] and actual["width"]>70 and actual["frame"]>70,actual
-                    assert 0 <= actual["enter"] <= 1,actual
+                    if template_id in ("editorial","cinematic","architecture","agency","fashion","gallery","saas"):
+                        # S1/S3: one persistent visual stage and four narrative anchors;
+                        # independent component iframe posters must NOT be visible.
+                        assert standalone.locator(".s1-story-stage").count() == 1
+                        assert standalone.locator(".s1-story-anchor").count() == len(saved_project["sections"])
+                        assert standalone.locator(".s1-scene-image").count() == len(saved_project["sections"])
+                        assert standalone.locator("section.section iframe").count() == 0
+                        heading = standalone.locator(".s1-story-copy article").nth(1).locator("h2")
+                        assert heading.text_content().strip() == chapter_text
+                        assert standalone.locator(".s1-scene-image").nth(1).get_attribute("src").startswith("data:image/")
+                        standalone.evaluate("""() => {
+                            const target=document.querySelectorAll('.s1-story-anchor')[1];
+                            window.scrollTo(0,target.offsetTop);
+                        }""")
+                        standalone.wait_for_function("""() =>
+                            document.querySelector('.s1-story-stage')?.dataset.storyIndex === '1'
+                        """,timeout=12000)
+                        progress=standalone.locator(".s1-story-stage").get_attribute("data-story-progress")
+                        assert 0 < float(progress) < 1,progress
+                    else:
+                        heading = standalone.locator('section.section[data-index="1"] [data-chapter-title]')
+                        assert heading.text_content().strip() == chapter_text, (
+                            template_id, heading.text_content(), chapter_text
+                        )
+                        rendered = standalone.locator("section.section").nth(1)
+                        rendered.scroll_into_view_if_needed()
+                        standalone.wait_for_function("""() => {
+                            const n=document.querySelectorAll('section.section')[1];
+                            return n && n.style.getPropertyValue('--chapter-enter') !== '';
+                        }""",timeout=12000)
+                        actual = rendered.evaluate("""node=>{
+                            const art=node.querySelector('.section-art'),motion=node.querySelector('iframe');
+                            const a=art.getBoundingClientRect(),b=motion.getBoundingClientRect();
+                            return {enter:Number(node.style.getPropertyValue('--chapter-enter')),
+                               photo:getComputedStyle(art).backgroundImage.startsWith('url("data:image/'),
+                               width:Math.round(a.width),frame:Math.round(b.width)};
+                        }""")
+                        assert actual["photo"] and actual["width"]>70 and actual["frame"]>70,actual
+                        assert 0 <= actual["enter"] <= 1,actual
                     assert not export_errors,export_errors
                     standalone.close()
                 # R20: verify file persistence after re-opening the actual Web app,
