@@ -23,9 +23,9 @@ VALID_TYPES={"individual-generation"}
 VALID_EXT={".jpg",".jpeg",".png"}
 
 def native_dimensions(raw):
-    if raw.startswith(b"\\x89PNG\\r\\n\\x1a\\n") and len(raw)>=24:
+    if raw.startswith(bytes.fromhex("89504e470d0a1a0a")) and len(raw)>=24:
         return struct.unpack(">II",raw[16:24])
-    if raw[:2]!=b"\\xff\\xd8":
+    if raw[:2]!=bytes.fromhex("ffd8"):
         raise ValueError("only JPEG/PNG originals are accepted")
     pos=2
     while pos+4<len(raw):
@@ -121,7 +121,7 @@ def apply(folder,backup_dir=None,manifest_path=ASSETS/"manifest.json"):
     try:
         for _,name,raw,_ in items:
             (Path(manifest_path).parent/name).write_bytes(raw)
-        Path(manifest_path).write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\\n",encoding="utf-8")
+        Path(manifest_path).write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+chr(10),encoding="utf-8")
     except Exception:
         for _,name,_,_ in items: shutil.copy2(backup/name,Path(manifest_path).parent/name)
         Path(manifest_path).write_bytes(old_manifest)
