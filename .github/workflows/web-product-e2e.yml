@@ -177,9 +177,9 @@ jobs:
       # screenshots in the same PR branch, only for internal/same-repo PRs.
       # This does not modify main and screenshots alone do not retrigger E2E.
       - name: Persist 68+ template chapter and immersive screenshots in review branch
-        if: ${{ success() && matrix.browser == 'chromium' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+        if: ${{ success() && matrix.browser == 'chromium' && github.event_name == 'workflow_dispatch' && github.ref_name == 'fix/u1-u2-template-first-20261114' }}
         env:
-          REVIEW_BRANCH: ${{ github.head_ref }}
+          REVIEW_BRANCH: ${{ github.ref_name }}
         shell: bash
         run: |
           set -euo pipefail
