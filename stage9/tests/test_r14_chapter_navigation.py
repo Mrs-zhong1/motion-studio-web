@@ -57,10 +57,12 @@ def test_r14():
             # preview navigation is delegated to the parent toolbar.
             story_html=page.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
             standalone.set_content(story_html,wait_until="domcontentloaded")
-            hidden_nav=standalone.locator("nav.r14-story-rail")
-            hidden_nav.wait_for(state="attached")
-            assert hidden_nav.evaluate("n=>getComputedStyle(n).display")=="none"
             assert standalone.locator(".s1-story-stage").count()==1
+            # Persistent stories rely on parent toolbar chapter controls;
+            # an old floating navigation rail is allowed only if hidden.
+            hidden_nav=standalone.locator("nav.r14-story-rail")
+            assert hidden_nav.count()==0 or hidden_nav.evaluate(
+                "n=>getComputedStyle(n).display")=="none"
             standalone.close()
             browser.close()
     finally:
