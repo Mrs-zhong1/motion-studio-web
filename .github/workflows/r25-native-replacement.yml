@@ -1,0 +1,35 @@
+name: R25 Native-Quality Replacement Safety
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/r18-r21-acceptance-gates
+    paths:
+      - 'stage9/replace_ai_chapters_r25.py'
+      - 'stage9/tests/test_r25_replacements.py'
+      - 'release/check_release.py'
+      - 'release/test_release.py'
+      - '.github/workflows/r25-native-replacement.yml'
+permissions:
+  contents: read
+jobs:
+  replace-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image decoder for source integrity checks
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Run safe replacement and anti-collage regression
+        run: python -m unittest discover -s stage9/tests -p 'test_r25_replacements.py' -v
+      - name: Validate release policy cannot bypass native media quality
+        run: python -m unittest discover -s release -p 'test_*.py' -v
+      - name: Verify current R25 production check refuses low-res media
+        run: |
+          if python release/check_release.py --mode production; then
+            echo "ERROR: pre-replacement image pack must not pass production"; exit 1
+          fi
+          echo "Expected production HOLD confirmed"
