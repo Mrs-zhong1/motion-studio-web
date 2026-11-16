@@ -14,7 +14,7 @@ with sync_playwright() as p:
  res['componentCount']=page.evaluate('registry.length')
  page.locator('#resumeProject').click()
  page.locator('[data-asset-tier-button="l3"]').click()
- page.locator('.comp[data-id="offline-glb-scene"] button').click()
+ page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
  page.locator('#stage9GlbInput').set_input_files(str(root.parent/'Sample-Textured-Animated.glb'))
  page.wait_for_timeout(1700)
  res['editorModelBytes']=page.evaluate('project.sections.find(s=>s.id==="offline-glb-scene").glb.length')
