@@ -72,12 +72,12 @@ def run_audit():
                 assert len(manifest)==total_sections, (template_id,len(manifest),total_sections)
                 assert real_photo_count+fallback_count==total_sections, (template_id,manifest)
                 assert frame.locator("section.section").count() == total_sections
-                if template_id == "editorial":
-                    # S1 uses a persistent shared stage, not per-section demo
+                if template_id in ("editorial","cinematic","architecture","agency","fashion","gallery","saas"):
+                    # S1/S3 uses a persistent shared stage, not per-section demo
                     # iframes. Test the same full-page story in both viewports.
                     assert frame.locator(".s1-story-stage").count()==1
-                    assert frame.locator(".s1-story-anchor").count()==4
-                    assert frame.locator(".s1-scene-image").count()==4
+                    assert frame.locator(".s1-story-anchor").count()==total_sections
+                    assert frame.locator(".s1-scene-image").count()==total_sections
                     assert frame.locator(".section iframe").count()==0
                     for device,width,height in (("desktop",1440,900),("mobile",390,844)):
                         page.set_viewport_size({"width":width,"height":height})
@@ -88,7 +88,7 @@ def run_audit():
                         stage=frame.locator(".s1-story-stage")
                         stage.wait_for(state="visible")
                         evidence={"template":template_id,"device":device,
-                                  "chapterCount":4,"photoCount":4,
+                                  "chapterCount":total_sections,"photoCount":total_sections,
                                   "realPhotoCount":real_photo_count,
                                   "originalFallbackCount":fallback_count}
                         evidence["sceneSources"]=frame.locator(".s1-scene-image").evaluate_all(
@@ -110,8 +110,8 @@ def run_audit():
                         opening=stage.screenshot(animations="disabled",timeout=30000)
                         evidence["documentWidth"]=evidence["viewport"]["viewportWidth"]+evidence["viewport"]["overflow"]
                         evidence["viewportWidth"]=evidence["viewport"]["viewportWidth"]
-                        evidence["sectionCount"]=4
-                        evidence["photoCount"]=4
+                        evidence["sectionCount"]=total_sections
+                        evidence["photoCount"]=total_sections
                         evidence["visiblyRenderedPhotos"]=1
                         evidence["firstSectionPngSHA256"]=hashlib.sha256(opening).hexdigest()[:16]
                         evidence["renderer"]="single-persistent-stage"
@@ -127,9 +127,9 @@ def run_audit():
                                                         hashlib.sha256(middle).hexdigest()[:16],
                                                         hashlib.sha256(ending).hexdigest()[:16]]
                         assert len(set(evidence["sceneChangeHashes"]))==3,evidence
-                        (SCREENSHOTS/f"editorial-{device}-opening.png").write_bytes(opening)
-                        (SCREENSHOTS/f"editorial-{device}-chapter3.png").write_bytes(middle)
-                        (SCREENSHOTS/f"editorial-{device}-ending.png").write_bytes(ending)
+                        (SCREENSHOTS/f"{template_id}-{device}-opening.png").write_bytes(opening)
+                        (SCREENSHOTS/f"{template_id}-{device}-chapter3.png").write_bytes(middle)
+                        (SCREENSHOTS/f"{template_id}-{device}-ending.png").write_bytes(ending)
                         result["templates"].append(evidence)
                     page.locator("#previewClose").click()
                     assert page.locator("#templatePreview").is_hidden()
