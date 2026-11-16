@@ -73,5 +73,5 @@ export function applyR31StoryContinuity(html){
 })();
 </script>`;
  return html.replace('</head>',style+'</head>')
-   .replace(/<\\/body><\\/html>$/,script+'</body></html>');
+   .replace(/<\/body><\/html>$/,script+'</body></html>');
 }
