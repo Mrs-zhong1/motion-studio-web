@@ -190,6 +190,11 @@ body.r16-story-ready .page[data-template="agency"] .section.r16-linked-chapter::
 body.r16-story-ready .page[data-template="gallery"] .section.r16-linked-chapter::before{
  background:radial-gradient(ellipse 120% 150% at 50% 130%,var(--r16-bridge-color),transparent 75%);
 }
+/* The real iframe/WebGL layer hands off through a subtle exposure ramp.
+   Never replace its existing inline transform/camera or pointer behavior. */
+body.r16-story-ready .page[data-template] .section.r16-linked-chapter > iframe{
+ filter:brightness(calc(1 - var(--r16-bridge,0)*.2)) saturate(calc(1 - var(--r16-bridge,0)*.1));
+}
 body.r16-story-ready .page[data-template] .section.designed-chapter .designed-chapter-heading{
  opacity:calc(.78 + var(--r16-incoming,1)*.22);
 }
@@ -199,6 +204,9 @@ body.r16-story-ready .page[data-template] .section.r16-linked-chapter .r15-scene
 @media(prefers-reduced-motion:reduce){
  body.r16-story-ready .page[data-template] .section.r16-linked-chapter::before{
   display:none!important;
+ }
+ body.r16-story-ready .page[data-template] .section.r16-linked-chapter > iframe{
+  filter:none!important;
  }
  body.r16-story-ready .page[data-template] .section.designed-chapter .designed-chapter-heading,
  body.r16-story-ready .page[data-template] .section.r16-linked-chapter .r15-scene-mark{
