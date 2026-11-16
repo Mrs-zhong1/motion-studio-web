@@ -15,7 +15,7 @@ The S1 flagship preview instead renders four editorial images and associated tex
 | Template | Central visual object | Continuity & transition contract | Interaction | Status |
 |---|---|---|---|---|
 | Editorial Portfolio | One cloth/material family and four art-directed scenes | fixed stage, crossfade/zoom, matched typography, reversed scroll | mouse depth | **S1 implemented, art quality pending** |
-| 3D Product Experience | Persistent GLB object | camera orbit, material close-up, lighting state and CTA handoff | drag/orbit | **legacy GLB valid; story integration pending** |
+| 3D Product Experience | One real GLB object for the five chapters | fixed overlay WebGL2/Three.js, continuous scroll camera, model orientation and optional source animation | scroll | **S4 runtime implemented; real browser acceptance pending** |
 | Cinematic Journey | Same landscape/time sequence | persistent stage, letterbox masking, filmic scroll zoom | scroll | **S3 first implementation; final art pending** |
 | Architecture Studio | Architecture photography sequence | persistent stage, side-geometry wipe, lower-third typography | scroll | **S3 2D first implementation; 3D camera path pending** |
 | Creative Agency | One graphic visual language | clipped shape transition and oversized type, no per-chapter iframe | pointer parallax | **S3 first implementation; morph pending** |
@@ -51,3 +51,15 @@ S4 adds a **current-project immersive preview** from the editor's '交互预览'
 **Still not equivalent to Pear.no or Grande Charte:** no physical fabric simulation, sophisticated continuous 3D camera choreography, independent high-resolution AI chapters for the 33 collage-derived crops or art-director sign-off. These remain open; production review cannot claim final completion.
 
 **Testing:** latest full GitHub Actions results must be checked per commit. A passing older S1 commit is not proof of the S3/S4 branch. The live review stays in `/s1-story-review/` and production root remains unchanged.
+
+## Product Story WebGL2 implementation (2026-11-16)
+
+- Added `stage9/product-persistent-story.js`, bundled by `stage9/build-offline.mjs` into a separate **offline data URL** (no public CDN).
+- Only `product-3d` with a valid GLB and >=2 sections activates the single-model shared story; others keep existing renderer paths.
+- The original model remains in one real Three.js scene across five chapter camera states, interpolated by scroll position. No per-chapter duplicate GLB loading by the new product renderer.
+- Existing standalone GLB and previously proven two-model shared Three.js engine are **not removed**, preserving backwards compatibility.
+- Browser diagnostic object: `window.__motionProductStory` exposes model load, mesh count, single canvas count, scroll samples and errors.
+- New acceptance: `stage9/tests/test_s4_product_persistent_3d.py` runs real SwiftShader WebGL2 and verifies GLB load, camera change, reversible scroll, mobile width and no errors.
+- The workflow requires this new result in addition to the old Stage9 tests; keep commercial release on HOLD until tests and visual review pass.
+
+This is a functional camera-continuity implementation, not a validated photoreal artistic scene or feature parity with reference sites. Lighting, pointer-drag control, storytelling art, performance on older devices and material-transition creative direction still require dedicated UX acceptance.
