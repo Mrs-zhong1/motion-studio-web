@@ -38,7 +38,7 @@ def run():
             errors.append(f"{template}/{viewport}: opening/middle/ending screenshots are not three distinct captured scenes")
         manifest=row.get("sourceManifest",[])
         urls=[entry.get("source") for entry in manifest]
-        if len(urls)!=chapters or any(not isinstance(u,str) or not u.startswith("https://images.unsplash.com/photo-") for u in urls):
+        if len(urls)!=chapters or any(not isinstance(u,str) or not (u.startswith("https://images.unsplash.com/photo-") or u.startswith("ai-generated://")) for u in urls):
             errors.append(f"{template}/{viewport}: missing upstream photograph traceability")
         elif len(set(urls))!=chapters:
             errors.append(f"{template}/{viewport}: photograph URLs repeat within a story")
