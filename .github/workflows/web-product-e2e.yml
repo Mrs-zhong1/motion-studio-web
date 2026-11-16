@@ -13,6 +13,7 @@ on:
       - 'stage9/tests/test_r15_scene_composition.py'
       - 'stage9/tests/test_r15_asset_batch.py'
       - 'stage9/tests/test_r15_media_quality.py'
+      - 'stage9/tests/test_r16_story_transitions.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - '.github/workflows/web-product-e2e.yml'
@@ -30,6 +31,7 @@ on:
       - 'stage9/tests/test_r15_scene_composition.py'
       - 'stage9/tests/test_r15_asset_batch.py'
       - 'stage9/tests/test_r15_media_quality.py'
+      - 'stage9/tests/test_r16_story_transitions.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - 'stage9/build-offline.mjs'
@@ -90,6 +92,9 @@ jobs:
       - name: R15-04 chapter photo coverage, source and licensing provenance audit
         if: matrix.browser == 'chromium'
         run: python tests/test_r15_media_quality.py
+      - name: R16 eight authored scroll reveals and accessible reduced motion
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r16_story_transitions.py
       - name: U1-U4 image-led discovery and blank editor regression
         if: matrix.browser == 'chromium'
         run: python tests/test_u1_u4_regression.py
