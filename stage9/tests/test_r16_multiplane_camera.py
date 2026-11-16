@@ -61,12 +61,18 @@ def test_r16_multiplane():
             }""")
             page.wait_for_timeout(180)
             early=measure()
+            evidence=Path("/tmp/motion-studio-visual-audit")
+            evidence.mkdir(parents=True,exist_ok=True)
+            (evidence/"r16-cinematic-multiplane-early.png").write_bytes(
+                page.screenshot(animations="disabled"))
             page.evaluate("""()=>{
               const c=document.querySelector('.section.designed-chapter[data-index="2"]');
               window.scrollTo(0,window.scrollY+c.getBoundingClientRect().top-innerHeight*.15);
             }""")
             page.wait_for_timeout(180)
             late=measure()
+            (evidence/"r16-cinematic-multiplane-late.png").write_bytes(
+                page.screenshot(animations="disabled"))
             assert abs(early["depth"]-late["depth"])>.12,(early,late)
             for prop in ("photoY","typeY","mistX","artPosition","typeTransform","hazeTransform"):
                 assert early[prop]!=late[prop],(prop,early,late)
