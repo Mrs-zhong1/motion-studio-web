@@ -316,7 +316,7 @@ function r17RenderFilmstrip(id){
  if(!host||!tpl)return;
  host.innerHTML=tpl.sections.map((section,index)=>{
   const img=photos[index];
-  const image=typeof img==='string'&&/^data:image\\/(jpeg|png|webp);base64,/.test(img)?img:'';
+  const image=typeof img==='string'&&/^data:image\/(jpeg|png|webp);base64,/.test(img)?img:'';
   return '<button type="button" data-r17-chapter="'+index+'" aria-label="查看第'+(index+1)+'章节">'+
    (image?'<img alt="" loading="lazy" decoding="async" src="'+image+'">':'<span class="r17-photo-missing">IMAGE PENDING</span>')+
    '<small>'+String(index+1).padStart(2,'0')+' / '+String(tpl.sections.length).padStart(2,'0')+'</small></button>';
@@ -778,4 +778,4 @@ $('componentPreview').addEventListener('click',e=>{if(e.target===$('componentPre
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('componentPreview').hidden)closeComponentPreview()});
 function renderLibrary(){const q=$('search').value.toLowerCase();$('componentList').replaceChildren();registry.filter(c=>(filterCategory==='全部'||c.category===filterCategory)&&(c.title+' '+c.id).toLowerCase().includes(q)).forEach(c=>{const div=document.createElement('div');div.className='comp';div.draggable=true;div.setAttribute('data-id',c.id);div.innerHTML=`<div class="comp-visual" data-motion-type="${safe(c.category)}" aria-hidden="true"><span>${safe(c.title.slice(0,2))}</span></div><div class="comp-summary"><strong>${safe(c.title)}</strong><small>${safe(c.category)} · 拖拽到画布或先体验</small></div><button type="button" class="component-preview-trigger" title="真实预览 ${safe(c.title)}" aria-label="预览 ${safe(c.title)}">预览</button><button type="button" class="component-add-trigger" title="添加到画布" aria-label="添加 ${safe(c.title)}">＋</button>`;div.querySelector('.component-preview-trigger').onclick=()=>openComponentPreview(c.id);div.querySelector('.component-add-trigger').onclick=()=>addComponent(c.id);div.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/motion-component',c.id);e.dataTransfer.effectAllowed='copy'});$('componentList').append(div)})}
 function filtersInit(){['全部',...new Set(registry.map(r=>r.category))].forEach(cat=>{let b=document.createElement('button');b.textContent=cat;b.className=cat==='全部'?'active':'';b.onclick=()=>{filterCategory=cat;[...$('filters').children].forEach(x=>x.classList.toggle('active',x===b));renderLibrary()};$('filters').append(b)})}
-function addLayer(kind){const s=project.sections.find(x=>x.uid===active);if(!s)return;if(s.layers.length>=12){notify('每章最多 12 个图层');return}const l=normLayer({kind,text:kind==='caption'?'EXPLORE THE DETAILS':kind==='title'?'NEW HEADLINE':'',enabled:true,x:5
+function addLayer(kind){const s=project.sections.find(x=>x.uid===active);if(!s)return;if(s.layers.length>=12){notify('每章最多 12 个图层');return}const l=normLayer({kind,text:kind==='caption'?'EXPLORE THE DETAILS':kind==='title'?'NEW HEADLINE':'',enabled:true,x:50
