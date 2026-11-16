@@ -54,6 +54,14 @@ class ReleasePolicyTests(unittest.TestCase):
             (images/"editorial-1.jpg").write_bytes(b"corrupted")
             self.assertEqual(inspect(VISUAL, x, directory)["result"], "FAIL")
 
+    def test_legacy_glb_test_selectors_are_unambiguous(self):
+        ambiguous = '.comp[data-id="offline-glb-scene"] button'
+        offenders=[]
+        for path in (ROOT / "stage9/tests").glob("test_*.py"):
+            if ambiguous in path.read_text(encoding="utf-8"):
+                offenders.append(path.name)
+        self.assertEqual(offenders, [], offenders)
+
     def test_broken_visual_evidence_fails(self):
         x = copy.deepcopy(VISUAL)
         x["geometryAndImageEvidence"][0]["fallbacks"]=1
