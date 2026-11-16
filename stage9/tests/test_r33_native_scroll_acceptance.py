@@ -35,7 +35,7 @@ def run():
                 frame=page.locator('#templatePreviewFrame').content_frame
                 art=frame.locator('.section.designed-chapter').nth(2)
                 frame.locator('body.r16-story-ready').wait_for(timeout=15000)
-                frame.locator('style#r31-export-story-continuity').wait_for()
+                frame.locator('style#r31-export-story-continuity').wait_for(state='attached')
                 first=art.evaluate("(el)=>({r:el.dataset.r16Progress,opacity:getComputedStyle(el.querySelector('.section-art')).opacity})")
                 observations['checks']['native_image_not_dimmed']=float(first['opacity'])>=.85
                 art.evaluate("(el)=>el.scrollIntoView({block:'center',behavior:'instant'})")
