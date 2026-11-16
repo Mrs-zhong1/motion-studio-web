@@ -1,0 +1,140 @@
+{
+  "schema": "motion-studio-open-source-library-v1",
+  "collectedFromUser": "2026-11-14",
+  "verified": "2026-11-16",
+  "policy": "Registered for study and adapter work; not installed or copied into the bundle",
+  "referenceRepositories": [
+    {
+      "slug": "shadcn-ui",
+      "repo": "shadcn-ui/ui",
+      "license": "MIT",
+      "stack": "React, Radix/Base UI, Tailwind",
+      "tier": "L2",
+      "targets": [
+        "dialog",
+        "popover",
+        "keyboard-focus",
+        "component-token-contract"
+      ],
+      "integration": "PATTERN_ADAPTER_ONLY",
+      "note": "Do not copy React dependencies into the one-file editor; write original accessible DOM/CSS behavior.",
+      "url": "https://github.com/shadcn-ui/ui",
+      "sourceCopied": false,
+      "licenseNoticeRequiredIfCopied": true
+    },
+    {
+      "slug": "creative-tim-ui",
+      "repo": "creativetimofficial/ui",
+      "license": "MIT",
+      "stack": "React, Next.js, shadcn",
+      "tier": "L1+L2",
+      "targets": [
+        "gallery-card-layout",
+        "editor-dashboard-information-hierarchy",
+        "template-grid"
+      ],
+      "integration": "DESIGN_REFERENCE_ONLY",
+      "note": "Original template styling and no bundled third-party images/fonts.",
+      "url": "https://github.com/creativetimofficial/ui",
+      "sourceCopied": false,
+      "licenseNoticeRequiredIfCopied": true
+    },
+    {
+      "slug": "nuxt-ui",
+      "repo": "nuxt/ui",
+      "license": "MIT",
+      "stack": "Vue, Nuxt, Reka UI",
+      "tier": "L2",
+      "targets": [
+        "form-validation",
+        "semantic-component-api",
+        "design-tokens"
+      ],
+      "integration": "PATTERN_ADAPTER_ONLY",
+      "note": "Do not install Vue/Nuxt runtime in vanilla editor.",
+      "url": "https://github.com/nuxt/ui",
+      "sourceCopied": false,
+      "licenseNoticeRequiredIfCopied": true
+    },
+    {
+      "slug": "coss-ui",
+      "repo": "cosscom/ui",
+      "license": "MIT (GitHub repository metadata; verify target-file license before vendor copy)",
+      "stack": "React, Next.js, Tailwind",
+      "tier": "L2",
+      "targets": [
+        "compact-properties-panel",
+        "dense-data-list",
+        "focus-and-layer-controls"
+      ],
+      "integration": "DESIGN_REFERENCE_ONLY",
+      "note": "Repository licensing has varied in third-party indexes; no copied source at this stage.",
+      "url": "https://github.com/cosscom/ui",
+      "sourceCopied": false,
+      "licenseNoticeRequiredIfCopied": true
+    },
+    {
+      "slug": "ant-design",
+      "repo": "ant-design/ant-design",
+      "license": "MIT",
+      "stack": "React",
+      "tier": "L2",
+      "targets": [
+        "property-inspector",
+        "undo-feedback",
+        "asset-library-table",
+        "form-errors"
+      ],
+      "integration": "PATTERN_ADAPTER_ONLY",
+      "note": "Keep current DOM implementation and do not import React into HTML export.",
+      "url": "https://github.com/ant-design/ant-design",
+      "sourceCopied": false,
+      "licenseNoticeRequiredIfCopied": true
+    },
+    {
+      "slug": "svelte",
+      "repo": "sveltejs/svelte",
+      "license": "MIT",
+      "stack": "Svelte compiler",
+      "tier": "L3",
+      "targets": [
+        "reactive-state-architecture",
+        "small-bundle-evaluation"
+      ],
+      "integration": "ARCHITECTURE_EVALUATION_ONLY",
+      "note": "Full migration explicitly deferred; preserve current JSON schema and offline exports.",
+      "url": "https://github.com/sveltejs/svelte",
+      "sourceCopied": false,
+      "licenseNoticeRequiredIfCopied": true
+    },
+    {
+      "slug": "tailwind-css",
+      "repo": "tailwindlabs/tailwindcss",
+      "license": "MIT",
+      "stack": "CSS build tool",
+      "tier": "L1+L2",
+      "targets": [
+        "spacing-scale",
+        "responsive-token-map",
+        "utility-class-composition"
+      ],
+      "integration": "TOKEN_ADAPTER_ONLY",
+      "note": "No Tailwind runtime/CDN required; scoped CSS exports must work offline.",
+      "url": "https://github.com/tailwindlabs/tailwindcss",
+      "sourceCopied": false,
+      "licenseNoticeRequiredIfCopied": true
+    }
+  ],
+  "implementationPolicy": {
+    "editorArchitecture": "vanilla HTML/CSS/JavaScript",
+    "rendering": "three@0.180.0",
+    "rule": "Adapters must not break offline one-file HTML, JSON project roundtrip, 20 existing registry components, or Chromium/Firefox/WebKit tests",
+    "gates": [
+      "license-reviewed",
+      "framework-compatibility",
+      "accessibility",
+      "bundle-size",
+      "editor-export-parity"
+    ]
+  }
+}
