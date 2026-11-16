@@ -1,4 +1,10 @@
-Out').textContent=at+'%';refreshOverlays();saveDraft()};
+结束透明度',0,100]].map(([k,label,min,max])=>`<div class="field"><label>${label} <output id="layerOut_${k}">${l[k]}</output></label><input id="layer_${k}" type="range" min="${min}" max="${max}" value="${l[k]}"></div>`).join('')}</div>`;
+const frames=l.keyframes||[];if(!Number.isInteger(l._selectedFrame)||l._selectedFrame>=frames.length)l._selectedFrame=0;const selected=frames[l._selectedFrame]||frames[0];
+p.insertAdjacentHTML('beforeend',`<div class="kf-panel"><h4>Stage 6 · 多点关键帧（${frames.length}/8）</h4><small>节点为章节滚动进度百分比。当前故事进度可用于添加关键帧。</small><div class="kf-track"><div class="kf-line"></div>${frames.map((f,j)=>`<button type="button" class="kf-dot ${l._selectedFrame===j?'active':''}" data-kf-index="${j}" style="left:${f.at}%" title="关键帧 ${j+1}：${f.at}%"></button>`).join('')}</div><div class="kf-actions"><button id="kfAdd">＋ 当前进度加帧</button><button id="kfRemove" ${frames.length<=2?'disabled':''}>删除选中帧</button></div><div class="field"><label>关键帧进度 <output id="kfAtOut">${selected.at}%</output></label><input id="kf_at" type="range" min="0" max="100" value="${selected.at}"></div><div class="overlay-grid">${[['dx','横向位移',-260,260],['dy','纵向位移',-260,260],['opacity','不透明度',0,100],['scale','动效缩放',20,300],['rotation','动效旋转',-180,180]].map(([k,name,min,max])=>`<div class="field"><label>${name} <output id="kfOut_${k}">${selected[k]}</output></label><input id="kf_${k}" type="range" min="${min}" max="${max}" value="${selected[k]}"></div>`).join('')}</div><div class="field"><label>此帧到下一帧的缓动</label><select id="kf_easing"><option value="smooth">平滑</option><option value="linear">线性</option><option value="easeIn">慢入</option><option value="easeOut">慢出</option></select></div></div>`);
+p.addEventListener('input',()=>requestAnimationFrame(renderMultitrack));p.addEventListener('click',()=>requestAnimationFrame(renderMultitrack));p.querySelectorAll('[data-kf-index]').forEach(b=>b.onclick=()=>{l._selectedFrame=Number(b.dataset.kfIndex);renderLayerProps()});
+$('kfAdd').onclick=()=>{if(frames.length>=8)return notify('每个图层最多八个关键帧');let at=Math.round(chapterProgress(document.querySelector(`.section[data-uid="${s.uid}"]`))*100);if(frames.some(f=>f.at===at)){at=Array.from({length:101},(_,i)=>i).find(n=>!frames.some(f=>f.at===n))??at;}const existing=keyframeState(l,at/100);frames.push({at,dx:Math.round(existing.dx),dy:Math.round(existing.dy),opacity:Math.round(existing.opacity*100),scale:Math.round(existing.scale),rotation:Math.round(existing.rotation),easing:'smooth'});frames.sort((a,b)=>a.at-b.at);l._selectedFrame=frames.findIndex(f=>f.at===at);renderLayerProps();refreshOverlays();saveDraft();};
+$('kfRemove').onclick=()=>{if(frames.length<=2)return;frames.splice(l._selectedFrame,1);l._selectedFrame=Math.max(0,l._selectedFrame-1);renderLayerProps();refreshOverlays();saveDraft()};
+$('kf_at').oninput=e=>{const i=l._selectedFrame,previous=frames[i-1]?.at??-1,next=frames[i+1]?.at??101,at=clamp(+e.target.value,previous+1,next-1,frames[i].at);frames[i].at=at;$('kfAtOut').textContent=at+'%';refreshOverlays();saveDraft()};
 ['dx','dy','opacity','scale','rotation'].forEach(k=>{$('kf_'+k).oninput=e=>{frames[l._selectedFrame][k]=+e.target.value;$('kfOut_'+k).textContent=e.target.value;refreshOverlays();saveDraft()}});
 $('kf_easing').value=selected.easing;$('kf_easing').onchange=e=>{frames[l._selectedFrame].easing=e.target.value;refreshOverlays();saveDraft()};
 $('layerLocked').onchange=e=>{l.locked=e.target.checked;refreshOverlays();saveDraft();renderLayerProps()};$('layerEasing').value=l.easing;$('layerEasing').onchange=e=>updateLayer('easing',e.target.value);$('layerVisible').onchange=e=>updateLayer('enabled',e.target.checked);if($('layerText'))$('layerText').oninput=e=>updateLayer('text',e.target.value);if($('layerColor'))$('layerColor').oninput=e=>updateLayer('color',e.target.value);
@@ -275,7 +281,19 @@ function installR14Navigator(){
    list.append(btn);return btn;
  });
  nav.append(track,list);document.body.append(nav);
- let queued=false;
+ const embedded=window.parent!==window;
+ if(embedded){
+  window.addEventListener('message',event=>{
+   if(event.source!==window.parent||!event.data||event.data.type!=='motion-studio-preview-goto')return;
+   const index=event.data.chapter;
+   if(Number.isInteger(index)&&index>=0&&index<sections.length)
+     sections[index].scrollIntoView({block:'start',behavior:'instant'});
+  });
+  window.addEventListener('keydown',event=>{
+   if(event.key==='Escape')window.parent.postMessage({type:'motion-studio-preview-close'},'*');
+  });
+ }
+ let lastAnnounced=-1,queued=false;
  const update=()=>{
    queued=false;const top=window.scrollY||document.documentElement.scrollTop;
    const span=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
@@ -284,6 +302,10 @@ function installR14Navigator(){
    sections.forEach((sec,i)=>{const d=Math.abs(sec.getBoundingClientRect().top-window.innerHeight*.25);if(d<dist){dist=d;active=i}});
    buttons.forEach((btn,i)=>{if(i===active)btn.setAttribute('aria-current','step');else btn.removeAttribute('aria-current')});
    nav.dataset.activeChapter=String(active+1);
+   if(embedded&&active!==lastAnnounced){
+    lastAnnounced=active;
+    window.parent.postMessage({type:'motion-studio-preview-state',chapter:active,total:sections.length},'*');
+   }
  };
  const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(update)};
  window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});
