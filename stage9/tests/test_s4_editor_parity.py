@@ -37,6 +37,9 @@ def run():
                               {at:100,x:0,y:-30,zoom:100,tilt:0,opacity:100}];
                     render();
                 }""",copy)
+                assert page.locator("#sections").get_attribute("data-story-edit")=="true"
+                assert page.locator("#sections .section iframe").first.evaluate(
+                    "n=>getComputedStyle(n).visibility")=="hidden"
                 page.locator("#playPreview").click()
                 assert page.locator("#templatePreview").is_visible()
                 assert page.locator("#templatePreview").get_attribute("data-project-preview")=="true"
