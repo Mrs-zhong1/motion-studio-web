@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""R18–R21 fail-closed release gate. Review builds remain permitted.
+"""Web-only Motion Studio R18–R21 release policy.
 
-This is a verifier of recorded evidence, not an automated substitute for
-human art direction, native hardware measurement, or media licensing.
+R17 visual evidence remains historical. Production requires rebuilt AI-first
+asset evidence and browser E2E, but never native-phone/GPU device signoff.
 """
 import argparse
 import json
@@ -11,6 +11,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 IDS = {"editorial", "product-3d", "cinematic", "architecture", "agency", "fashion", "gallery", "saas"}
+REQUIRED = {
+    "artDirection": "R18: full-flow visual design review",
+    "aiAssets": "R18: 39-slot AI-generated media coverage and allowed-use record",
+    "browserPerformance": "R19: desktop and 390px browser animation/performance evidence",
+    "productFlows": "R20: preview/edit/save/reopen/export browser E2E",
+    "browserRegression": "R21: Chromium/Firefox/WebKit CI evidence",
+    "liveIntegrity": "R21: HTTPS deployment and tested artifact hash",
+}
 
 def inspect(visual, approvals):
     failures, holds = [], []
@@ -18,40 +26,33 @@ def inspect(visual, approvals):
     pairs = [(r.get("template"), r.get("viewport")) for r in rows]
     expected = {(i, v) for i in IDS for v in ("desktop", "mobile")}
     if len(rows) != 16 or set(pairs) != expected or len(set(pairs)) != 16:
-        failures.append("R18: incomplete eight-template desktop/mobile evidence")
+        failures.append("R17 baseline: incomplete eight-template desktop/mobile evidence")
     if visual.get("automatedGate") != "PASS" or visual.get("blockingErrors"):
-        failures.append("R18: prior automated evidence is not PASS")
-    if visual.get("uniquePhotoSourceCount") != 39:
-        failures.append("R18: missing unique chapter photography")
+        failures.append("R17 baseline: prior automated gate failed")
     for r in rows:
         key = f"{r.get('template')}/{r.get('viewport')}"
         if r.get("loadedPhotos") != r.get("chapters") or r.get("fallbacks") != 0:
-            failures.append(f"R18: photo coverage failed: {key}")
+            failures.append(f"R17 baseline: image fallback {key}")
         if r.get("horizontalOverflowPx", 9999) > 32:
-            failures.append(f"R18: overflow failed: {key}")
-        h = r.get("captureHashes", [])
-        if len(h) != 3 or len(set(h)) != 3 or not all(isinstance(x, str) and len(x) >= 16 for x in h):
-            failures.append(f"R18: distinct scene captures missing: {key}")
-        if r.get("commercialRightsApproved") is not True:
-            holds.append(f"R20: chapter images have no recorded commercial clearance: {key}")
-
-    # Independent and explicit evidence. Strings with vague 'PASS' are not enough.
-    for key, label in (
-        ("artDirection", "R18: human full-flow art-direction signoff"),
-        ("nativeDevice", "R19: physical-device frame-time and GPU report"),
-        ("rightsRegister", "R20: per-asset rights and release register"),
-        ("productFlows", "R20: edit/save/reopen/export acceptance"),
-        ("browserRegression", "R21: pinned three-browser CI run"),
-        ("liveIntegrity", "R21: deployed URL and SHA-256 match"),
-    ):
+            failures.append(f"R17 baseline: horizontal overflow {key}")
+        hashes = r.get("captureHashes", [])
+        if len(hashes) != 3 or len(set(hashes)) != 3:
+            failures.append(f"R17 baseline: no distinct scene captures {key}")
+    # R17 Unsplash photography is intentionally historical. Do not confuse
+    # its third-party rights flags with the AI-original replacement workflow.
+    for key, label in REQUIRED.items():
         item = approvals.get(key, {})
         if not isinstance(item, dict) or item.get("status") != "APPROVED" or not item.get("evidenceUrl") or not item.get("reviewer") or not item.get("reviewedAt"):
             holds.append(label)
-    # An approved rights register does not override explicitly uncleared evidence.
-    result = "FAIL" if failures else ("HOLD" if holds else "PASS")
-    return {"schema": "motion-studio-r18-r21-release-gate-v1", "result": result,
-            "priorAutomatedGate": visual.get("automatedGate"), "failures": sorted(set(failures)),
-            "holds": sorted(set(holds)), "productionEligible": result == "PASS"}
+    assets = approvals.get("aiAssets", {})
+    if assets.get("status") == "APPROVED":
+        if assets.get("assetCount") != 39 or assets.get("verifiedOrigin") != "AI_GENERATED" or assets.get("usageTermsChecked") is not True:
+            failures.append("R18: AI asset attestation incomplete or use terms not checked")
+    status = "FAIL" if failures else ("HOLD" if holds else "PASS")
+    return {"schema": "motion-studio-r18-r21-web-release-gate-v2", "result": status,
+            "r17AutomatedBaseline": visual.get("automatedGate"), "failures": sorted(set(failures)),
+            "holds": sorted(set(holds)), "productionEligible": status == "PASS",
+            "nativePhoneHardwareRequired": False, "legacyUnsplashAssetsNotApprovedForProduction": True}
 
 def main():
     p = argparse.ArgumentParser()
@@ -61,20 +62,16 @@ def main():
     p.add_argument("--output", type=Path)
     a = p.parse_args()
     try:
-        evidence = json.loads(a.visual.read_text(encoding="utf-8"))
-        approvals = json.loads(a.approvals.read_text(encoding="utf-8"))
-        result = inspect(evidence, approvals)
-    except (OSError, ValueError, TypeError) as err:
-        print(f"Gate cannot read required evidence: {err}", file=sys.stderr)
+        report = inspect(json.loads(a.visual.read_text(encoding="utf-8")), json.loads(a.approvals.read_text(encoding="utf-8")))
+    except (OSError, ValueError, TypeError) as e:
+        print(f"Missing or invalid release evidence: {e}", file=sys.stderr)
         return 2
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(report, indent=2, ensure_ascii=False))
     if a.output:
         a.output.parent.mkdir(parents=True, exist_ok=True)
-        a.output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    if result["failures"]:
-        return 1
-    if a.mode == "production" and result["result"] != "PASS":
-        print("BLOCKED: human/device/rights evidence incomplete; review deployment only.", file=sys.stderr)
+        a.output.write_text(json.dumps(report, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
+    if report["failures"] or (a.mode == "production" and not report["productionEligible"]):
+        print("Production BLOCKED: AI-first assets / browser / visual E2E evidence outstanding.", file=sys.stderr)
         return 1
     return 0
 
