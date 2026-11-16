@@ -1,4 +1,17 @@
-
++(1+(1-t)*amp*.08)+')';opacity=.5+.5*t;}if(cam.preset==='tilt')transform='perspective(900px) rotateY('+((1-t)*amp*22)+'deg) scale('+(1-(1-t)*amp*.13)+')';}fr.style.transform=transform;fr.style.opacity=window.matchMedia('(prefers-reduced-motion: reduce)').matches?1:opacity;};sec.querySelectorAll('.motion-layer').forEach(el=>{const j=Number(el.dataset.layerIndex),l=chapterLayers[i]?.[j];if(!l)return;const keys=l.keyframes||[],percent=p*100;let ix=0;while(ix<keys.length-2&&percent>keys[ix+1].at)ix++;const a=keys[ix]||{at:l.start,dx:l.fromX,dy:l.fromY,opacity:l.fromOpacity,scale:100,rotation:0,easing:l.easing},b=keys[ix+1]||{at:l.end,dx:l.toX,dy:l.toY,opacity:l.toOpacity,scale:100,rotation:0};let t=Math.max(0,Math.min(1,(percent-a.at)/Math.max(1,b.at-a.at)));t=a.easing==='linear'?t:a.easing==='easeIn'?t*t:a.easing==='easeOut'?1-(1-t)*(1-t):t*t*(3-2*t);const lerp=k=>a[k]+(b[k]-a[k])*t;const dx=lerp('dx'),dy=lerp('dy'),opacity=lerp('opacity')/100,scale=lerp('scale'),rotation=lerp('rotation');el.style.left=l.x+'%';el.style.top=l.y+'%';el.style.zIndex=6+j;el.style.color=l.color;el.style.transform='translate(-50%,-50%) translate('+dx+'px,'+dy+'px) rotate('+(l.rotation+rotation)+'deg) scale('+(l.scale*scale/10000)+')';el.style.opacity=window.matchMedia('(prefers-reduced-motion: reduce)').matches?1:opacity;el.hidden=!l.enabled;});});}
+function installR13StoryMotion(){
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const sections=Array.from(document.querySelectorAll('.section.designed-chapter'));
+ const clear=sec=>{sec.style.setProperty('--motion-pointer-x','0px');sec.style.setProperty('--motion-pointer-y','0px');};
+ sections.forEach(sec=>{
+  sec.addEventListener('pointermove',e=>{
+   if(reduced.matches||e.pointerType==='touch'){clear(sec);return;}
+   const rect=sec.getBoundingClientRect();
+   if(!rect.width||!rect.height)return;
+   const x=Math.max(-1,Math.min(1,(e.clientX-rect.left)/rect.width*2-1));
+   const y=Math.max(-1,Math.min(1,(e.clientY-rect.top)/rect.height*2-1));
+   sec.style.setProperty('--motion-pointer-x',(x*10).toFixed(1)+'px');
+   sec.style.setProperty('--motion-pointer-y',(y*7).toFixed(1)+'px');
   },{passive:true});
   sec.addEventListener('pointerleave',()=>clear(sec),{passive:true});
  });
