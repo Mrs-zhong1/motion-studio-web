@@ -23,6 +23,11 @@ jobs:
           python-version: '3.12'
       - name: Test release gate failure modes
         run: python -m unittest discover -s release -p 'test_*.py' -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original AI media pack contract
+        run: node stage9/test_ai_chapter_assets.mjs
       - name: Generate evidence-based HOLD/PASS report
         run: python release/check_release.py --mode review --output release-status.json
       - name: Production guard MUST reject uncleared demo assets
