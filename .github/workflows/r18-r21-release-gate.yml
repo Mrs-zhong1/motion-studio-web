@@ -1,0 +1,39 @@
+name: R18-R21 Release Acceptance (review only until explicit signoffs)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/r18-r21-acceptance-gates
+    paths:
+      - 'release/**'
+      - '.github/workflows/r18-r21-release-gate.yml'
+  pull_request:
+    paths:
+      - 'release/**'
+      - '.github/workflows/r18-r21-release-gate.yml'
+permissions:
+  contents: read
+jobs:
+  review-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test release gate failure modes
+        run: python -m unittest discover -s release -p 'test_*.py' -v
+      - name: Generate evidence-based HOLD/PASS report
+        run: python release/check_release.py --mode review --output release-status.json
+      - name: Production guard MUST reject uncleared demo assets
+        run: |
+          if python release/check_release.py --mode production; then
+            echo 'Unexpected production release eligibility: manual check required'
+            exit 1
+          fi
+      - name: Upload review evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: r18-r21-release-status
+          path: release-status.json
+          retention-days: 14
