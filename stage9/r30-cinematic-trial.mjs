@@ -102,7 +102,7 @@ window.MotionStudioR30={importTwo,originalImage:imageOriginal,getState:()=>({
 })};
 })();
 </script>`;
- return html.replace('id="previewUsePanel"',previewButton+'<button id="previewUsePanel"')
+ return html.replace('<button id="previewUsePanel"',previewButton+'<button id="previewUsePanel"')
   .replace('<button id="importAIAssets"',editorButton+'<button id="importAIAssets"')
   .replace(/<\/body>\s*<\/html>\s*$/,style+'<input id="r30TrialFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>'+script+'</body></html>');
 }
