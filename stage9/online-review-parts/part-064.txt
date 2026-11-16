@@ -1,4 +1,75 @@
-(document.querySelectorAll('.page[data-template] .section.designed-chapter'));
+
+  },{passive:true});
+  sec.addEventListener('pointerleave',()=>clear(sec),{passive:true});
+ });
+ function updateDepth(){
+  const wh=window.innerHeight||800;
+  for(const sec of sections){
+   if(reduced.matches){sec.style.setProperty('--motion-photo-depth','0px');continue;}
+   const rect=sec.getBoundingClientRect();
+   if(rect.bottom<0||rect.top>wh)continue;
+   const p=Math.max(-1,Math.min(1,(wh*.5-(rect.top+rect.height*.5))/wh));
+   sec.style.setProperty('--motion-photo-depth',(p*17).toFixed(1)+'px');
+  }
+ }
+ window.addEventListener('scroll',updateDepth,{passive:true});
+ window.addEventListener('resize',updateDepth,{passive:true});
+ if(reduced.addEventListener)reduced.addEventListener('change',()=>{sections.forEach(clear);updateDepth()});
+ updateDepth();
+}
+installR13StoryMotion();
+function installR14Navigator(){
+ const root=document.querySelector('.page[data-template]'),sections=[...document.querySelectorAll('.page > section.section')];
+ if(!root||!['editorial','product-3d','cinematic','architecture','agency','fashion','gallery','saas'].includes(root.dataset.template)||sections.length<2)return;
+ document.body.dataset.motionTemplate=root.dataset.template;
+ const nav=document.createElement('nav');nav.className='r14-story-rail';nav.setAttribute('aria-label','Story chapters');
+ const track=document.createElement('div');track.className='r14-rail-track';track.setAttribute('aria-hidden','true');
+ const fill=document.createElement('div');fill.className='r14-rail-fill';track.append(fill);
+ const list=document.createElement('div');list.className='r14-rail-chapters';
+ const buttons=sections.map((sec,index)=>{
+   const btn=document.createElement('button');btn.type='button';
+   const num=document.createElement('span');num.className='r14-rail-num';num.textContent=String(index+1).padStart(2,'0');
+   const text=document.createElement('span');text.className='r14-rail-label';
+   const title=sec.querySelector('[data-chapter-title]')?.textContent?.trim()||((index===0?'Opening':'Chapter '+(index+1)));
+   text.textContent=title;btn.setAttribute('aria-label','Go to chapter '+(index+1)+': '+title);
+   btn.append(num,text);
+   btn.addEventListener('click',()=>sec.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));
+   list.append(btn);return btn;
+ });
+ nav.append(track,list);document.body.append(nav);
+ const embedded=window.parent!==window;
+ if(embedded){
+  window.addEventListener('message',event=>{
+   if(event.source!==window.parent||!event.data||event.data.type!=='motion-studio-preview-goto')return;
+   const index=event.data.chapter;
+   if(Number.isInteger(index)&&index>=0&&index<sections.length)
+     sections[index].scrollIntoView({block:'start',behavior:'instant'});
+  });
+  window.addEventListener('keydown',event=>{
+   if(event.key==='Escape')window.parent.postMessage({type:'motion-studio-preview-close'},'*');
+  });
+ }
+ let lastAnnounced=-1,queued=false;
+ const update=()=>{
+   queued=false;const top=window.scrollY||document.documentElement.scrollTop;
+   const span=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+   fill.style.height=(Math.max(0,Math.min(100,top/span*100))).toFixed(2)+'%';
+   let active=0,dist=Infinity;
+   sections.forEach((sec,i)=>{const d=Math.abs(sec.getBoundingClientRect().top-window.innerHeight*.25);if(d<dist){dist=d;active=i}});
+   buttons.forEach((btn,i)=>{if(i===active)btn.setAttribute('aria-current','step');else btn.removeAttribute('aria-current')});
+   nav.dataset.activeChapter=String(active+1);
+   if(embedded&&active!==lastAnnounced){
+    lastAnnounced=active;
+    window.parent.postMessage({type:'motion-studio-preview-state',chapter:active,total:sections.length},'*');
+   }
+ };
+ const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(update)};
+ window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});
+ update();
+}
+installR14Navigator();
+function installR16StoryTransitions(){
+ const sections=Array.from(document.querySelectorAll('.page[data-template] .section.designed-chapter'));
  if(!sections.length)return;
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  const clamp=x=>Math.max(0,Math.min(1,x));
