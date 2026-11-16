@@ -102,6 +102,9 @@ def run_audit():
                         frame.locator("body").evaluate("body=>body.ownerDocument.defaultView.scrollTo(0,body.querySelectorAll('.s1-story-anchor')[2].offsetTop)")
                         frame.locator('.s1-story-stage[data-story-index="2"]').wait_for(timeout=12000)
                         middle=stage.screenshot(animations="disabled",timeout=30000)
+                        frame.locator("body").evaluate("body=>body.ownerDocument.defaultView.scrollTo(0,body.querySelectorAll('.s1-story-anchor')[3].offsetTop)")
+                        frame.locator('.s1-story-stage[data-story-index="3"]').wait_for(timeout=12000)
+                        ending=stage.screenshot(animations="disabled",timeout=30000)
                         frame.locator("body").evaluate("body=>body.ownerDocument.defaultView.scrollTo(0,0)")
                         frame.locator('.s1-story-stage[data-story-index="0"]').wait_for(timeout=12000)
                         opening=stage.screenshot(animations="disabled",timeout=30000)
@@ -112,11 +115,21 @@ def run_audit():
                         evidence["visiblyRenderedPhotos"]=1
                         evidence["firstSectionPngSHA256"]=hashlib.sha256(opening).hexdigest()[:16]
                         evidence["renderer"]="single-persistent-stage"
+                        evidence["collapsedSections"]=frame.locator(".s1-story-anchor").evaluate_all("""nodes=>nodes.filter(n=>{
+                            const r=n.getBoundingClientRect();return r.width<160||r.height<220
+                        }).length""")
+                        evidence["sourceManifest"]=[{"chapter":e["chapter"],"kind":e["kind"],
+                                                    "source":e.get("source")} for e in manifest]
+                        evidence["photoSourcesAudited"]=len(manifest)
+                        evidence["chapter3PngSHA256"]=hashlib.sha256(middle).hexdigest()[:16]
+                        evidence["designedEndingPngSHA256"]=hashlib.sha256(ending).hexdigest()[:16]
                         evidence["sceneChangeHashes"]=[hashlib.sha256(opening).hexdigest()[:16],
-                                                        hashlib.sha256(middle).hexdigest()[:16]]
-                        assert len(set(evidence["sceneChangeHashes"]))==2,evidence
+                                                        hashlib.sha256(middle).hexdigest()[:16],
+                                                        hashlib.sha256(ending).hexdigest()[:16]]
+                        assert len(set(evidence["sceneChangeHashes"]))==3,evidence
                         (SCREENSHOTS/f"editorial-{device}-opening.png").write_bytes(opening)
                         (SCREENSHOTS/f"editorial-{device}-chapter3.png").write_bytes(middle)
+                        (SCREENSHOTS/f"editorial-{device}-ending.png").write_bytes(ending)
                         result["templates"].append(evidence)
                     page.locator("#previewClose").click()
                     assert page.locator("#templatePreview").is_hidden()
