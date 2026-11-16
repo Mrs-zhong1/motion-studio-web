@@ -1,6 +1,8 @@
 """Web-only release gate must never require native phone hardware."""
 import copy
+import hashlib
 import json
+import tempfile
 import unittest
 from pathlib import Path
 from check_release import inspect
@@ -34,7 +36,23 @@ class ReleasePolicyTests(unittest.TestCase):
             x[key] = {"status":"APPROVED", "evidenceUrl":"https://example.com/proof",
               "reviewer":"test", "reviewedAt":"2026-11-16"}
         x["aiAssets"].update(assetCount=39, verifiedOrigin="AI_GENERATED", usageTermsChecked=True)
-        self.assertEqual(inspect(VISUAL, x)["result"], "PASS")
+        self.assertEqual(inspect(VISUAL, x)["result"], "FAIL")
+        with tempfile.TemporaryDirectory() as directory:
+            images=Path(directory)/"stage9"/"ai-assets"
+            images.mkdir(parents=True)
+            manifest=[]
+            for name in sorted({"editorial", "product-3d", "cinematic", "architecture", "agency", "fashion", "gallery", "saas"}):
+                for chapter in range(1, 5 if name=="editorial" else 6):
+                    filename=f"{name}-{chapter}.jpg"
+                    raw=(filename.encode()*240)[:1600]
+                    (images/filename).write_bytes(raw)
+                    manifest.append({"template":name,"chapter":chapter,"file":filename,
+                        "source":"AI_GENERATED","commercialUseTermsChecked":True,
+                        "sha256":hashlib.sha256(raw).hexdigest()})
+            (images/"manifest.json").write_text(json.dumps({"assets":manifest}))
+            self.assertEqual(inspect(VISUAL, x, directory)["result"], "PASS")
+            (images/"editorial-1.jpg").write_bytes(b"corrupted")
+            self.assertEqual(inspect(VISUAL, x, directory)["result"], "FAIL")
 
     def test_broken_visual_evidence_fails(self):
         x = copy.deepcopy(VISUAL)
