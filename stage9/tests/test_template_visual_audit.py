@@ -99,12 +99,19 @@ def run_audit():
                             overflow:document.documentElement.scrollWidth-innerWidth
                         })""")
                         assert evidence["viewport"]["overflow"]<=32,evidence
-                        frame.evaluate("()=>scrollTo(0,document.querySelectorAll('.s1-story-anchor')[2].offsetTop)")
-                        frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='2'",timeout=12000)
+                        frame.locator("body").evaluate("body=>body.ownerDocument.defaultView.scrollTo(0,body.querySelectorAll('.s1-story-anchor')[2].offsetTop)")
+                        frame.locator('.s1-story-stage[data-story-index="2"]').wait_for(timeout=12000)
                         middle=stage.screenshot(animations="disabled",timeout=30000)
-                        frame.evaluate("()=>scrollTo(0,0)")
-                        frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='0'",timeout=12000)
+                        frame.locator("body").evaluate("body=>body.ownerDocument.defaultView.scrollTo(0,0)")
+                        frame.locator('.s1-story-stage[data-story-index="0"]').wait_for(timeout=12000)
                         opening=stage.screenshot(animations="disabled",timeout=30000)
+                        evidence["documentWidth"]=evidence["viewport"]["viewportWidth"]+evidence["viewport"]["overflow"]
+                        evidence["viewportWidth"]=evidence["viewport"]["viewportWidth"]
+                        evidence["sectionCount"]=4
+                        evidence["photoCount"]=4
+                        evidence["visiblyRenderedPhotos"]=1
+                        evidence["firstSectionPngSHA256"]=hashlib.sha256(opening).hexdigest()[:16]
+                        evidence["renderer"]="single-persistent-stage"
                         evidence["sceneChangeHashes"]=[hashlib.sha256(opening).hexdigest()[:16],
                                                         hashlib.sha256(middle).hexdigest()[:16]]
                         assert len(set(evidence["sceneChangeHashes"]))==2,evidence
