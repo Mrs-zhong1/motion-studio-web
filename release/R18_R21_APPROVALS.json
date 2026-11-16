@@ -1,26 +1,47 @@
 {
   "schema": "motion-studio-r18-r21-web-approvals-v2",
-  "sourceCommit": "e7a90381ab7a421188082f895bbe85b2f5f0c0db",
-  "releaseChannel": "review-only",
+  "sourceCommit": "230035f33fa69829cc70e6b389b1a5fa034eef5f",
+  "releaseChannel": "public-review-only",
   "artDirection": {
-    "status": "HOLD"
+    "status": "HOLD",
+    "reason": "33 AI collage crops require visual approval against the full scroll story; no professional signoff yet"
   },
   "aiAssets": {
-    "status": "HOLD",
-    "assetCount": 0,
-    "verifiedOrigin": "PENDING_AI_GENERATION",
-    "usageTermsChecked": false
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43820018261",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-16",
+    "scope": "39 SHA256-verified committed originals or AI-derived scenes, 8 bundled templates, no demo fallback",
+    "assetCount": 39,
+    "verifiedOrigin": "AI_GENERATED",
+    "usageTermsChecked": true,
+    "artDirectionApproved": false
   },
   "browserPerformance": {
-    "status": "HOLD"
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43817157227",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-16",
+    "scope": "Chromium browser frame pacing desktop/mobile emulation, overflow and regression; not native phone GPU"
   },
   "productFlows": {
-    "status": "HOLD"
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43820018261",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-16",
+    "scope": "Public HTTPS AI preview: 8 templates, 39 AI assets, interactive preview, JSON save, HTML export"
   },
   "browserRegression": {
-    "status": "HOLD"
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43817157227",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-16",
+    "scope": "Chromium, Firefox, WebKit automated Web Product E2E PASS"
   },
   "liveIntegrity": {
-    "status": "HOLD"
+    "status": "HOLD",
+    "reviewPreviewVerified": true,
+    "reviewEvidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43820018261",
+    "reason": "Production root has not been replaced; preview URL passed exact source SHA and live HTML hash, final production deployment smoke remains"
   }
 }
