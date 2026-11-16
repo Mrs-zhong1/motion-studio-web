@@ -126,6 +126,14 @@ jobs:
         run: python tests/test_s3_multi_story.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: Upload S3 genre visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s3-genre-stories-${{ matrix.browser }}
+          path: stage9/S3_STORY_EVIDENCE/*.png
+          if-no-files-found: warn
+          retention-days: 14
       - name: S4 current-project editing and narrative preview parity
         run: python tests/test_s4_editor_parity.py
         env:
