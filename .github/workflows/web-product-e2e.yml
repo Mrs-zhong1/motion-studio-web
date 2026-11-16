@@ -19,6 +19,7 @@ on:
       - 'stage9/tests/test_r17_preview_storyboard.py'
       - 'stage9/tests/test_r17_quality_gate.py'
       - 'stage9/tests/test_r18_ai_provenance.py'
+      - 'stage9/tests/test_r18_ai_folder_import.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
@@ -43,6 +44,7 @@ on:
       - 'stage9/tests/test_r17_preview_storyboard.py'
       - 'stage9/tests/test_r17_quality_gate.py'
       - 'stage9/tests/test_r18_ai_provenance.py'
+      - 'stage9/tests/test_r18_ai_folder_import.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
@@ -107,6 +109,9 @@ jobs:
       - name: R18 AI-generated image metadata save/reload acceptance
         if: matrix.browser == 'chromium'
         run: python tests/test_r18_ai_provenance.py
+      - name: R18 complete original AI folder import and SHA rejection
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r18_ai_folder_import.py
       - name: R19 Web browser frame pacing and mobile viewport geometry
         if: matrix.browser == 'chromium'
         run: python tests/test_r19_browser_perf.py
