@@ -40,13 +40,17 @@ jobs:
               print(f"| {row['template']} | {row['individualOriginals']} | {','.join(map(str,row['flaggedChapters'])) or 'none'} |")
           print('No image is automatically approved by this audit; human art direction remains HOLD.')
           PY
-      - name: Assert current image library is correctly blocked, never silently approved
+      - name: Verify evidence consistency, support future real replacement acceptance
         run: |
           python - <<'PY'
           import json
           s=json.load(open('r32_media_result.json'))['summary']
           assert s['decodedAndCheckedImages']==39,s
-          assert s['flaggedImages']==33,s
-          assert s['productionMediaEligible'] is False
-          print('EXPECTED HOLD: production is blocked by 33 original-media gaps')
+          assert not s['structuralErrors'],s['structuralErrors']
+          assert s['flaggedImages']>=s['collageOrOtherSources'],s
+          if s['productionMediaEligible']:
+              assert s['flaggedImages']==0
+              print('Native-origin media technically eligible; human art-direction still required')
+          else:
+              print(f"EXPECTED HOLD: {s['flaggedImages']} image source risks; no production approval")
           PY
