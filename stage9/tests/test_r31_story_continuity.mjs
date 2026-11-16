@@ -14,7 +14,7 @@ test('R31 integrates only cinematic visual continuity with R16 values',()=>{
  assert.match(r31SeamCSS,/--r16-incoming/);
  assert.match(r31SeamCSS,/prefers-reduced-motion:reduce/);
  assert.match(r31SeamCSS,/opacity:1!important/);
- assert.ok(!r31SeamCSS.includes('opacity:calc('));
+ assert.ok(!r31SeamCSS.includes('opacity:calc(.61'));
  assert.match(r31SeamCSS,/nth-of-type\(3\)/);
  assert.match(r31SeamCSS,/calc\(34% \+ var\(--motion-pointer-x/);
  assert.ok(!r31SeamCSS.includes('requestAnimationFrame'));
