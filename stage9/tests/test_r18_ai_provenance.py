@@ -33,7 +33,7 @@ def test_ai_provenance():
             assert len(rows)==5 and all(r["kind"]=="ai-generated-image" for r in rows),rows
             project=page.evaluate("()=>createProjectFromTemplate('cinematic')")
             page.evaluate("(x)=>loadProject(x)",project)
-            saved=page.evaluate("()=>JSON.parse(JSON.stringify(window.project))")
+            saved=page.evaluate("()=>JSON.parse(JSON.stringify(project))")
             assert all(s["imageMeta"]["kind"]=="ai-generated-image" for s in saved["sections"])
             assert all(s["imageMeta"]["source"].startswith("ai-generated://") for s in saved["sections"])
             page.evaluate("(x)=>loadProject(x)",saved)
