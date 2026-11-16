@@ -1,4 +1,23 @@
-le.setProperty('--r16-type-x',number(depth*typeAmplitude*.3));
+as:[8,16,11,0]
+ };
+ const template=document.querySelector('.page[data-template]')?.dataset.template||'editorial';
+ const [xAmplitude,yAmplitude,typeAmplitude,tiltAmplitude]=signatures[template]||signatures.editorial;
+ // Transition bridge is computed from each *real* adjacent section's
+ // background. Respect authors' per-chapter palettes, including overrides.
+ const allChapters=[...document.querySelectorAll('.page > section.section')];
+ allChapters.forEach((sec,i)=>{
+   sec.classList.add('r16-linked-chapter');
+   const next=allChapters[i+1];
+   if(next)sec.style.setProperty('--r16-bridge-color',getComputedStyle(next).backgroundColor);
+ });
+ const setDepth=(sec,position)=>{
+  const reducedMotion=reduced.matches;
+  const depth=reducedMotion?0:Math.max(-1,Math.min(1,position));
+  const number=(v)=>v.toFixed(2)+'px';
+  sec.style.setProperty('--r16-photo-x',number(depth*xAmplitude));
+  sec.style.setProperty('--r16-photo-y',number(depth*yAmplitude));
+  sec.style.setProperty('--r16-type-y',number(depth*-typeAmplitude));
+  sec.style.setProperty('--r16-type-x',number(depth*typeAmplitude*.3));
   sec.style.setProperty('--r16-label-y',number(depth*-typeAmplitude*.5));
   sec.style.setProperty('--r16-mist-x',number(depth*-xAmplitude*1.9));
   sec.style.setProperty('--r16-mist-y',number(depth*yAmplitude*.7));
