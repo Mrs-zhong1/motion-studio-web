@@ -15,6 +15,7 @@ on:
       - 'stage9/tests/test_r15_media_quality.py'
       - 'stage9/tests/test_r16_story_transitions.py'
       - 'stage9/tests/test_r16_multiplane_camera.py'
+      - 'stage9/tests/test_r16_cross_chapter.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - '.github/workflows/web-product-e2e.yml'
@@ -34,6 +35,7 @@ on:
       - 'stage9/tests/test_r15_media_quality.py'
       - 'stage9/tests/test_r16_story_transitions.py'
       - 'stage9/tests/test_r16_multiplane_camera.py'
+      - 'stage9/tests/test_r16_cross_chapter.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - 'stage9/build-offline.mjs'
@@ -100,6 +102,9 @@ jobs:
       - name: R16-02 multi-plane photographic camera and accessible layers
         if: matrix.browser == 'chromium'
         run: python tests/test_r16_multiplane_camera.py
+      - name: R16-03..06 real adjacent chapter bridges and mobile accessibility
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r16_cross_chapter.py
       - name: U1-U4 image-led discovery and blank editor regression
         if: matrix.browser == 'chromium'
         run: python tests/test_u1_u4_regression.py
