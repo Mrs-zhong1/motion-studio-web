@@ -1,4 +1,4 @@
-name: R24 Fresh Full-Story Screenshot Evidence
+name: R33 Fresh Full-Story Screenshot Evidence
 on:
   workflow_dispatch:
   push:
@@ -6,6 +6,10 @@ on:
       - release/r18-r21-acceptance-gates
     paths:
       - 'stage9/story-art-direction-r23.mjs'
+      - 'stage9/r30-cinematic-trial.mjs'
+      - 'stage9/r31-cinematic-continuity.mjs'
+      - 'stage9/ai-assets/**'
+      - 'stage9/tests/test_r33_native_scroll_acceptance.py'
       - 'stage9/visual-refinement-r22.mjs'
       - 'stage9/tests/test_template_visual_audit.py'
       - '.github/workflows/r24-fresh-visual-evidence.yml'
@@ -28,7 +32,7 @@ jobs:
           python-version: '3.12'
       - name: Install pinned browser editor packages
         run: npm install --no-audit --no-fund
-      - name: Generate exact R23/R24 offline HTML from original AI media
+      - name: Generate strict original-AI current R33 offline HTML from original AI media
         run: npm run build
         env:
           MOTION_REQUIRE_AI_ASSETS: '1'
@@ -39,7 +43,7 @@ jobs:
       - name: Capture all template opening, middle, ending and immersive previews
         run: python tests/test_template_visual_audit.py
         env:
-          MOTION_SCREENSHOT_DIR: ${{ runner.temp }}/r24-actual-screenshots
+          MOTION_SCREENSHOT_DIR: ${{ runner.temp }}/r33-actual-screenshots
       - name: Publish generated screenshot run metadata
         shell: bash
         run: |
@@ -49,7 +53,7 @@ jobs:
           j=json.loads(p.read_text())
           folder=pathlib.Path(os.environ["RUNNER_TEMP"])/"r24-actual-screenshots"
           images=sorted(folder.glob("*.png"))
-          print("# R24 — freshly rendered template screenshots")
+          print("# R33 — freshly rendered 8-template story screenshots")
           print("Source commit: ${{ github.sha }}")
           print("Audit status:",j["status"])
           print("Template × viewport records:",len(j["templates"]))
@@ -61,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: r24-story-screenshots-${{ github.sha }}
+          name: r33-story-screenshots-${{ github.sha }}
           path: ${{ runner.temp }}/r24-actual-screenshots/*.png
           retention-days: 14
       - name: Upload structured geometry and story evidence
@@ -69,6 +73,6 @@ jobs:
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: r24-story-geometry-${{ github.sha }}
+          name: r33-story-geometry-${{ github.sha }}
           path: stage9/TEMPLATE_VISUAL_AUDIT.json
           retention-days: 14
