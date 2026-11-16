@@ -43,6 +43,14 @@ body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter 
   max-width:91%;
   text-shadow:0 2px 24px rgba(0,5,12,.95);
  }
+ /* R29 train-window continuation imported into Cinematic chapter 03:
+    preserve the carriage/window edge alongside mountains on portrait screens.
+    Keep original R16 camera offsets instead of replacing the motion engine. */
+ body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter:nth-of-type(3) .section-art {
+  background-position:
+    calc(34% + var(--motion-pointer-x,0px) + var(--r16-photo-x,0px))
+    calc(50% + var(--motion-pointer-y,0px) + var(--r16-photo-y,0px)) !important;
+ }
 }
 @media(prefers-reduced-motion:reduce){
  body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter .section-art {
