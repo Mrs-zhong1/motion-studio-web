@@ -1,0 +1,95 @@
+name: R26 Import Reviewed AI Media as Draft PR
+on:
+  workflow_dispatch:
+    inputs:
+      generation_run_id:
+        description: 'Successful R26 generator Actions run ID with 33 staged images'
+        type: string
+        required: true
+      visual_reviewed:
+        description: 'I have inspected all 33 original scene images and approve importing them into a DRAFT PR (not production)'
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+jobs:
+  import-reviewed-media:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require explicit review approval
+        env:
+          APPROVED: ${{ inputs.visual_reviewed }}
+          RUN_ID: ${{ inputs.generation_run_id }}
+        run: |
+          test "$APPROVED" = true || { echo 'Visual review approval required'; exit 1; }
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]] || { echo 'Invalid generator run ID'; exit 1; }
+      - name: Fetch exact generated artifacts from same repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.generation_run_id }}
+        shell: bash
+        run: |
+          repo="${{ github.repository }}"
+          sha="$(gh api "repos/$repo/actions/runs/$RUN_ID" --jq '.head_sha')"
+          event="$(gh api "repos/$repo/actions/runs/$RUN_ID" --jq '.event')"
+          conclusion="$(gh api "repos/$repo/actions/runs/$RUN_ID" --jq '.conclusion')"
+          workflow="$(gh api "repos/$repo/actions/runs/$RUN_ID" --jq '.name')"
+          test "$event" = "workflow_dispatch" && test "$conclusion" = "success"
+          test "$workflow" = "R26 Original 2K Scene Production (review artifacts only)"
+          mkdir -p stage9/r26-staging
+          gh run download "$RUN_ID" --repo "$repo" --name "r26-original-scenes-$sha" --dir stage9/r26-staging
+      - name: Verify exact 33 individual original scenes before modifying repository
+        run: |
+          python -m pip install 'Pillow==11.3.0'
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage9/r26-staging/replacement.json')
+          rows=json.loads(p.read_text())
+          assert len(rows)==33, f'Expected 33 reviewed originals, got {len(rows)}'
+          assert len({(r['template'],r['chapter']) for r in rows})==33
+          assert all(r['sourceType']=='individual-generation' for r in rows)
+          print('Verified 33 independently generated staged records')
+          PY
+          python stage9/replace_ai_chapters_r25.py stage9/r26-staging
+      - name: Apply audited replacements with rollback backup
+        run: |
+          python stage9/replace_ai_chapters_r25.py stage9/r26-staging --apply
+          python stage9/tests/audit_r24_source_quality.py --enforce
+      - name: Strict-AI offline HTML rebuild
+        working-directory: stage9
+        env:
+          MOTION_REQUIRE_AI_ASSETS: '1'
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          python tests/check_build.py
+      - name: Push reviewed media to isolated branch and open DRAFT PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.generation_run_id }}
+        run: |
+          set -euo pipefail
+          branch="review/r26-original-scenes-$RUN_ID"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add stage9/ai-assets/
+          git commit -m "assets(r26): replace 33 collage-derived images with individually generated originals"
+          git push origin "$branch"
+          gh pr create --draft \
+            --base "release/r18-r21-acceptance-gates" \
+            --head "$branch" \
+            --title "R26: review 33 independent native-2K AI scene assets" \
+            --body "Generated from R26 Actions run $RUN_ID; full 33 media records, strict-AI build, and native-resolution quality gate passed. IMPORTANT: This is a DRAFT for visual comparison and browser regression. It is NOT final art-direction approval or a production deployment."
