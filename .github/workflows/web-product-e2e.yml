@@ -18,6 +18,7 @@ on:
       - 'stage9/tests/test_r16_cross_chapter.py'
       - 'stage9/tests/test_r17_preview_storyboard.py'
       - 'stage9/tests/test_r17_quality_gate.py'
+      - 'stage9/tests/test_r18_ai_provenance.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - '.github/workflows/web-product-e2e.yml'
@@ -40,6 +41,7 @@ on:
       - 'stage9/tests/test_r16_cross_chapter.py'
       - 'stage9/tests/test_r17_preview_storyboard.py'
       - 'stage9/tests/test_r17_quality_gate.py'
+      - 'stage9/tests/test_r18_ai_provenance.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - 'stage9/build-offline.mjs'
@@ -100,6 +102,9 @@ jobs:
       - name: R15-04 chapter photo coverage, source and licensing provenance audit
         if: matrix.browser == 'chromium'
         run: python tests/test_r15_media_quality.py
+      - name: R18 AI-generated image metadata save/reload acceptance
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r18_ai_provenance.py
       - name: R16 eight authored scroll reveals and accessible reduced motion
         if: matrix.browser == 'chromium'
         run: python tests/test_r16_story_transitions.py
