@@ -63,12 +63,16 @@ def test_r16_bridges():
             }""")
             page.wait_for_timeout(180)
             early=measure()
+            evidence=Path("/tmp/motion-studio-visual-audit")
+            evidence.mkdir(parents=True,exist_ok=True)
+            (evidence/"r16-cross-chapter-early.png").write_bytes(page.screenshot(animations="disabled"))
             page.evaluate("""()=>{
               const s=document.querySelectorAll('.page > section.section')[1];
               scrollTo(0,scrollY+s.getBoundingClientRect().bottom-innerHeight*.15);
             }""")
             page.wait_for_timeout(180)
             late=measure()
+            (evidence/"r16-cross-chapter-late.png").write_bytes(page.screenshot(animations="disabled"))
             assert late["bridge"]>early["bridge"]+.12,(early,late)
             assert late["visualOpacity"]!=early["visualOpacity"],(early,late)
             assert late["redraw"]>early["redraw"]
