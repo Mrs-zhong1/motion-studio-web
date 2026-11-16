@@ -1,0 +1,22 @@
+name: R23 Story Art Direction Contract
+on:
+  push:
+    branches:
+      - release/r18-r21-acceptance-gates
+    paths:
+      - 'stage9/story-art-direction-r23.mjs'
+      - 'stage9/build-offline.mjs'
+      - 'stage9/tests/test_r23_story_art_direction.mjs'
+      - '.github/workflows/r23-story-art-direction.yml'
+  workflow_dispatch:
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify eight visual story contracts and preview/export parity
+        run: node --test stage9/tests/test_r23_story_art_direction.mjs
