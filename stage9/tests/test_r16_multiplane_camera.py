@@ -82,7 +82,12 @@ def test_r16_multiplane():
             mobile=measure()
             assert mobile["totalWidth"]<=mobile["width"]+32,mobile
             page.emulate_media(reduced_motion="reduce")
-            page.wait_for_timeout(160)
+            # Chromium's matchMedia change can arrive after the next paint;
+            # request one real frame of the existing scroll renderer.
+            page.evaluate("()=>dispatchEvent(new Event('scroll'))")
+            page.wait_for_function("""()=>
+              document.querySelector('.section.designed-chapter[data-index="2"]')?.dataset.r16Depth==='0.000'
+            """,timeout=10000)
             reduced=measure()
             assert reduced["depth"]==0,reduced
             assert reduced["typeTransform"]=="none",reduced
