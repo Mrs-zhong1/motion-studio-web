@@ -207,7 +207,7 @@ jobs:
           git checkout -B "visual-evidence-publish" "origin/$REVIEW_BRANCH"
           mkdir -p stage9/visual-evidence
           cp /tmp/motion-studio-visual-audit/*.png stage9/visual-evidence/
-          cp R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
+          cp stage9/R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
           python - <<'PY'
           from pathlib import Path
           import json
@@ -322,7 +322,7 @@ jobs:
             git checkout -B visual-evidence-publish "origin/$REVIEW_BRANCH"
             mkdir -p stage9/visual-evidence
             cp /tmp/motion-studio-visual-audit/*.png stage9/visual-evidence/
-          cp R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
+          cp stage9/R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
             cp /tmp/motion-studio-visual-audit/GALLERY_README.md stage9/visual-evidence/README.md
             git add stage9/visual-evidence
             if git diff --cached --quiet; then
