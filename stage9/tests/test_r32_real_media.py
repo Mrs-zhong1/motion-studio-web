@@ -12,7 +12,7 @@ class R32MediaAuditTests(unittest.TestCase):
             for template_index,template in enumerate(TEMPLATES):
                 for chapter in range(1,5 if template=='editorial' else 6):
                     name=f'{template}-{chapter}.jpg'
-                    Image.new('RGB',(1280,720),(10+chapter,12+template_index,16)).save(root/name,'JPEG',quality=85)
+                    Image.new('RGB',(1280,720),(15+template_index*24,chapter*31,20+template_index*9)).save(root/name,'JPEG',quality=85)
                     raw=(root/name).read_bytes()
                     records.append({'template':template,'chapter':chapter,'file':name,
                        'source':'AI_GENERATED','sourceType':'individual-generation',
