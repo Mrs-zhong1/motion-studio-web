@@ -23,3 +23,9 @@ Branch: `release/r18-r21-acceptance-gates`
 - Gemini pricing: https://ai.google.dev/gemini-api/docs/pricing/
 
 This release remains Web-only. No Mac app or hardware GPU certification is part of the acceptance.
+
+## R26 automated post-generation handoff (added)
+- `.github/workflows/r26-reviewed-media-pr.yml`: explicit human-review confirmation plus a successful full-33 generation Actions run ID downloads the exact artifact, validates all 33 sources, applies them with R25 backup, runs native-origin quality checks, and rebuilds offline HTML with `MOTION_REQUIRE_AI_ASSETS=1`. The resulting media change is pushed to an isolated `review/r26-original-scenes-<run_id>` branch and opened as a **draft pull request**, not production.
+- `.github/workflows/web-product-e2e.yml` now detects `stage9/ai-assets/**` changes so 3-engine browser regression is triggered by the actual new JPEG files, not just code edits.
+- Creation of the draft PR depends on GitHub repository Actions permissions; it cannot be claimed verified until a successful full-generation run exists.
+- No provider credentials were available during this R26 commit batch, so no 33-image paid generation run, staged artifact or draft PR has been created yet.
