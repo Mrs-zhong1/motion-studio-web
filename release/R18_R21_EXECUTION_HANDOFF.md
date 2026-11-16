@@ -1,35 +1,32 @@
-# Motion Studio Web — R18 to R21 release handoff
+# Motion Studio Web — R18–R21 delivery record (2026-11-16)
 
-**Scope:** browser-only Web app, eight complete scroll templates, 20 pre-existing motion components. No macOS DMG or physical iOS/Android GPU acceptance.
+## Product and public review
+- Browser-only Web product, eight templates, 20 interactive components.
+- **Live isolated R18 AI review:** https://mrs-zhong1.github.io/motion-studio-web/r18-ai-review/
+- **Source branch:** `release/r18-r21-acceptance-gates`, draft PR #2.
+- The review does **not** replace the existing production root or imply professional art-direction approval.
 
-## Verified automated results
+## Verified engineering delivery
+- All 39 original AI-derived JPEG chapter files and `stage9/ai-assets/manifest.json` now **exist in the GitHub repository** (previous missing-assets blocker fixed).
+- `MOTION_REQUIRE_AI_ASSETS=1` build is strict: cannot fall back to Unsplash, refuses missing/wrong hash files, embeds all 39 chapters and eight AI preview covers.
+- Original source allocation: six stand-alone generated images and 33 crops from AI collage generations, adapted to 1600×900. The 33 adapted scenes have **not** gained native source detail from resampling. Do not call them 33 individually generated full-resolution photographs.
+- `stage9/ai-assets/manifest.json` records source, 39 SHA256 hashes, commercial-use terms flags and image presentation metadata.
+- `stage9/tests/test_r18_ai_folder_import.py` tests the browser folder import and corruption rollback.
+- R19 Stage9 strict WebGL / Meshopt / PBR / 20-components regression: https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43812402815 (PASS).
+- Latest source integrated 3-engine product E2E: https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43817157227 (PASS).
+- Review build and public site SHA256: https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43819113666 (PASS).
+- R21 public review editor login-free Chromium smoke (8 template assets/39 chapters, save JSON, export HTML, no page errors): https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43819473799 (PASS).
+- Release policy tests: https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43819480325 (PASS).
 
-- R18–R21 release unit gate: PASS at [run 43813022364](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43813022364).
-- R19 full Stage9 Three.js / GLB / WebGL: PASS at [run 43812402815](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43812402815), commit `d5a02590f9efade8bd74a9ca70989297cb515865`.
-- R20 Chromium / Firefox / WebKit Web Product E2E: PASS at [run 43812405742](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43812405742), same commit.
-- Screenshot self-commit on PR CI was disabled in `6b18cff21f22cdc93da070e3bc15f1e7c02baad1` to prevent build SHA drift; review evidence publishing is now restricted to explicitly dispatched runs from the legacy review branch.
+## Remaining final commercial release criteria
+1. **Visual/art-direction gate stays HOLD.** Inspect the actual full-story motion, type hierarchy, image sharpness, contrast and diversity. Rework cropped chapters that look soft or repetitive. Do not infer high-end creative quality from hash or browser CI.
+2. Draft PR is deliberately unmerged and main release URL untouched. The source current production gate must return PASS only after independently checking visual quality and any open defects.
+3. Once approval is recorded, run production release workflow against exact tested source and verify its deployed HTTPS SHA256 and user-facing editor functions; do not silently overwrite the review or production root beforehand.
 
-## R18 media package — full-screen *presentation*, not native detail
+## Exactly how to test
+1. Open https://mrs-zhong1.github.io/motion-studio-web/r18-ai-review/
+2. Choose each of the eight template covers, preview the scroll interactions, click Use.
+3. Edit text/images, Save JSON, re-import JSON, Export HTML, open exported page.
+4. For audit proofs inspect the GitHub Actions logs and `release/R18_R21_APPROVALS.json`.
 
-A locally assembled ZIP `MotionStudio_R18_Fullscreen_39_Integration.zip` exists on the conversation surface, containing `stage9/ai-assets/manifest.json`, 39 JPEG files, and `release/R18_ASSET_TECHNICAL_AUDIT.json`.
-All JPEGs were decoded successfully, are 1600×900, and match their manifest SHA-256. Of the 39, 6 came from separate higher-resolution originals; the remaining 33 were AI collage crops adapted with upscaling and cinematic blurred framing. This is **not** 33 native high-resolution AI generations and does not establish a professional art-direction pass.
-
-**Important blocker:** the source repository's `stage9/ai-assets` directory is still absent as of this handoff. Do not mark AI media integrated in GitHub or publish a final release from the demo-photo fallback.
-
-## Once the package reaches the source checkout
-
-1. Run `python release/install_ai_pack.py /path/to/MotionStudio_R18_Fullscreen_39_Integration.zip --checkout .` (or unpack the `stage9/ai-assets` directory directly).
-2. Commit **all** 39 media files plus `stage9/ai-assets/manifest.json` onto a review branch. Do not commit unrelated secrets.
-3. Run `node stage9/test_ai_chapter_assets.mjs`, `MOTION_REQUIRE_AI_ASSETS=1 node stage9/build-offline.mjs`, `python -m unittest discover -s release -p 'test_*.py'`, and the browser regression workflows.
-4. Review actual **eight complete page sequences** for typography, photographic sharpness, composition, camera transitions and 3D fidelity. Reject the crops if softness is visible; replace with independent full-resolution original AI scenes.
-5. Attach immutable CI and preview URL evidence to `release/R18_R21_APPROVALS.json` only after checking all facts. Set the AI media `assetCount` to 39 and `verifiedOrigin` to `AI_GENERATED` only with actual file hashes.
-6. Require `python release/check_release.py --mode production` to return 0 and confirm the public HTTPS export's SHA-256 equals the tested build. Only then merge/release.
-
-## Active status
-
-- **R18:** media package verified *outside* GitHub; source integration and visual signoff **HOLD**
-- **R19:** Stage9 full browser 3D acceptance **PASS** on pinned commit, final AI build performance pending
-- **R20:** three-browser E2E **PASS** on pinned commit; final AI build regression pending
-- **R21:** production deployment **HOLD**, pending integrated media and full release gate
-
-No native phone hardware test or unrelated third-party demo-photo license approval is a release condition. Commercial-use policy and disallowed branded/person likeness remain relevant for the AI source media themselves.
+No native smartphone hardware/GPU check or old Unsplash third-party license gate is required.
