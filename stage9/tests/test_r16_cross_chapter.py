@@ -23,8 +23,8 @@ def test_r16_bridges():
                 assert "r16BridgeCss" not in html, "Raw variable name must be interpolated away"
                 assert "r16-linked-chapter" in html
                 assert f'.page[data-template="{template}"]' in html
-            editor.evaluate("async()=>await ensureTemplatePhoto('cinematic')")
-            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            editor.evaluate("async()=>await ensureTemplatePhoto('product-3d')")
+            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","product-3d")
             page=browser.new_page(viewport={"width":1440,"height":900})
             errors=[];page.on("pageerror",lambda e:errors.append(str(e)))
             page.set_content(html,wait_until="domcontentloaded",timeout=60000)
