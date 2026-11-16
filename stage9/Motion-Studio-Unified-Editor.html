@@ -1259,8 +1259,8 @@ function normCamPath(raw){const defaults=[{at:0,x:0,y:42,zoom:115,tilt:-5,opacit
 function shotPathState(camera,p){const frames=camera.path;let idx=p<=.5?0:1,from=frames[idx],to=frames[idx+1],t=ease(Math.max(0,Math.min(1,(p*100-from.at)/(to.at-from.at))));const lerp=k=>from[k]+(to[k]-from[k])*t;return {transform:`perspective(1100px) translate(${lerp('x')}px,${lerp('y')}px) rotateY(${lerp('tilt')}deg) scale(${lerp('zoom')/100})`,opacity:lerp('opacity')/100}}
 function normalizeImageMeta(input){
  const meta=input&&typeof input==='object'?input:{};
- const kind=['unsplash-photo','original-generated-art','user-upload','unknown'].includes(meta.kind)?meta.kind:'unknown';
- const source=typeof meta.source==='string'&&/^https:\/\/images\.unsplash\.com\/photo-[A-Za-z0-9-]+(?:\?[^<>"']*)?$/.test(meta.source)&&meta.source.length<300?meta.source:null;
+ const kind=['unsplash-photo','ai-generated-image','original-generated-art','user-upload','unknown'].includes(meta.kind)?meta.kind:'unknown';
+ const source=typeof meta.source==='string'&&(/^(https:\/\/images\.unsplash\.com\/photo-[A-Za-z0-9-]+(?:\?[^<>"']*)?|ai-generated:\/\/[a-z0-9-]+\/[1-5]\/[a-f0-9]{16})$/.test(meta.source))&&meta.source.length<300?meta.source:null;
  return {kind,source,rightsReviewed:false};
 }
 function normSection(s){const c=registry.find(x=>x.id===s.id);if(!c)throw Error('未知组件 '+s.id);const old=s.overlay;const fallback=old?.enabled===true?[{kind:'title',text:old.text||s.text,x:old.x,y:old.y,scale:old.scale,start:old.start,end:old.end,fromY:old.fromY,toY:old.toY,fromOpacity:old.fromOpacity,toOpacity:old.toOpacity}]:[];const base=Array.isArray(s.layers)?s.layers:fallback;return {uid:typeof s.uid==='string'?s.uid:rid(),id:c.id,text:String(s.text??c.defaultText).slice(0,180),speed:clamp(s.speed,20,240,100),depth:clamp(s.depth,0,100,65),accent:validHex(s.accent||'#d9ac7d'),motion:s.motion==='still'?'still':'auto',height:clamp(s.height,260,850,460),glb:typeof s.glb==='string'&&/^[A-Za-z0-9+/=]{0,5700000}$/.test(s.glb)?s.glb:'',image:typeof s.image==='string'&&/^data:image\/(png|jpeg|webp);base64,/.test(s.image)&&s.image.length<2500000?s.image:'',imageMeta:normalizeImageMeta(s.imageMeta),imageFocusX:clamp(s.imageFocusX,0,100,50),imageFocusY:clamp(s.imageFocusY,0,100,50),layers:base.slice(0,12).map(normLayer),camera:{preset:['none','push','rise','tilt'].includes(s.camera?.preset)?s.camera.preset:'none',start:clamp(s.camera?.start,0,95,0),end:clamp(s.camera?.end,5,100,100),power:clamp(s.camera?.power,0,100,55),advanced:s.camera?.advanced===true,path:normCamPath(s.camera?.path)}};}
@@ -1433,7 +1433,7 @@ async function ensureTemplatePhoto(id){
     const candidate=sources[index]||null;
     const photo=candidate?.media?await photoToInline(candidate.media):'';
     return {image:photo||authoredChapterArtwork(id,index),
-      kind:photo?'unsplash-photo':'original-generated-art',
+      kind:photo?(candidate.source?.startsWith('ai-generated://')?'ai-generated-image':'unsplash-photo'):'original-generated-art',
       source:photo?candidate.source:null,rightsReviewed:false};
    })).then(entries=>{
      // Duplicate content can arrive from different URLs (or a flaky CDN).
@@ -1677,13 +1677,14 @@ function r15MediaAudit(){
   rightsReviewed:false,
   fingerprint:section.image?String(section.image.length)+'-'+section.image.slice(-32):null
  }));
- const counts={total:chapters.length,photography:0,originalArtwork:0,userUploads:0,missing:0,unknown:0,duplicates:0};
+ const counts={total:chapters.length,photography:0,aiGenerated:0,originalArtwork:0,userUploads:0,missing:0,unknown:0,duplicates:0};
  const seen=new Set();
  for(let i=0;i<chapters.length;i++){
   const item=chapters[i],raw=project.sections[i].image;
   if(!raw){counts.missing++;continue}
   if(seen.has(raw))counts.duplicates++;else seen.add(raw);
   if(item.sourceKind==='unsplash-photo')counts.photography++;
+  else if(item.sourceKind==='ai-generated-image')counts.aiGenerated++;
   else if(item.sourceKind==='original-generated-art')counts.originalArtwork++;
   else if(item.sourceKind==='user-upload')counts.userUploads++;
   else counts.unknown++;
@@ -1701,7 +1702,7 @@ function renderAssetOverview(){
  const coverage=$('r15MediaCoverage');
  if(coverage){
   coverage.innerHTML='<strong>素材覆盖率：'+(total.total-total.missing)+' / '+total.total+' 章</strong>'+
-   '真实摄影 '+total.photography+' · 原创插画占位 '+total.originalArtwork+
+   '真实摄影 '+total.photography+' · AI 原创 '+total.aiGenerated+' · 原创插画占位 '+total.originalArtwork+
    ' · 用户导入 '+total.userUploads+' · 来源未知 '+total.unknown+
    ' · 内容重复 '+total.duplicates+
    '<div class="r15-hold">商业素材验收：HOLD。照片来源和画面中的人物、品牌、艺术作品仍需逐张检查。</div>';
@@ -1711,7 +1712,8 @@ function renderAssetOverview(){
  project.sections.forEach((section,sectionIndex)=>{
    if(section.image){
      const kind=section.imageMeta?.kind||'unknown';
-     const provenance=kind==='original-generated-art'?'原创程序插画 · 非摄影素材'
+     const provenance=kind==='ai-generated-image'?'AI 原创图像 · 使用条款待确认'
+      :kind==='original-generated-art'?'原创程序插画 · 非摄影素材'
       :kind==='unsplash-photo'?'Unsplash 示范摄影 · 权利待核查'
       :kind==='user-upload'?'用户上传 · 使用权待自行确认'
       :'来源未知 · 需要核查';
@@ -1723,7 +1725,7 @@ function renderAssetOverview(){
    });
  });
  if(!entries.length){host.innerHTML='<div class="asset-empty">这个项目还没有图片。选择一个章节，在右侧上传图片后，这里就会自动显示。</div>';return;}
- host.innerHTML=entries.map((asset,index)=>`<div class="asset-entry"><img alt="素材预览 ${index+1}" src="${asset.src}"><div class="asset-entry-info"><strong>${safe(asset.label)}</strong><small>第 ${asset.sectionIndex+1} 章 · ${safe(asset.title.slice(0,24))}</small><small class="asset-rights-note">${safe(asset.provenance||'图片图层 · 权利待核查')}</small>${asset.sourceUrl?`<a class="r15-photo-source" href="${safe(asset.sourceUrl)}" target="_blank" rel="noopener noreferrer">查看示范照片原始 CDN 地址</a>`:''}<div class="asset-entry-actions"><button data-asset-locate="${index}">定位</button><button data-asset-replace="${index}">替换</button></div></div></div>`).join('');
+ host.innerHTML=entries.map((asset,index)=>`<div class="asset-entry"><img alt="素材预览 ${index+1}" src="${asset.src}"><div class="asset-entry-info"><strong>${safe(asset.label)}</strong><small>第 ${asset.sectionIndex+1} 章 · ${safe(asset.title.slice(0,24))}</small><small class="asset-rights-note">${safe(asset.provenance||'图片图层 · 权利待核查')}</small>${asset.sourceUrl?.startsWith('https://')?`<a class="r15-photo-source" href="${safe(asset.sourceUrl)}" target="_blank" rel="noopener noreferrer">查看示范照片原始 CDN 地址</a>`:''}<div class="asset-entry-actions"><button data-asset-locate="${index}">定位</button><button data-asset-replace="${index}">替换</button></div></div></div>`).join('');
  function locate(entry){
    if(active!==entry.uid)selectSection(entry.uid);
    if(entry.kind==='layer'&&entry.lid!==activeLayer)selectLayer(entry.lid);
