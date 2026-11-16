@@ -17,17 +17,20 @@ const sharedEngine=sharedBuild.outputFiles[0].text;
 if(sharedEngine.length<100000||/\bimport\s*\(/.test(sharedEngine))throw Error('Shared Three.js build is incomplete');
 const thumbnailIds=['editorial','product-3d','cinematic','architecture','agency','fashion','gallery','saas'];
 const thumbnailEntries=await Promise.all(thumbnailIds.map(async id=>[id,'data:image/jpeg;base64,'+await readFile(resolve(root,'template-thumbnails',id+'.jpg'),'base64')]));
-const thumbnailData=JSON.stringify(Object.fromEntries(thumbnailEntries));
+let thumbnailData=JSON.stringify(Object.fromEntries(thumbnailEntries));
 const source=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
 // Accept both the legacy empty marker and U1's populated online preview mapping.
 // Offline releases always replace online covers with the bundled local JPEGs.
 const thumbnailPattern=/const templateThumbnailImages=\{[\s\S]*?\};/;
 if(!thumbnailPattern.test(source))throw Error('Template thumbnail declaration missing');
-let injected=source.replace(thumbnailPattern,'const templateThumbnailImages='+thumbnailData+';');
+let injected=source;
 // R15-04: bundle the secondary demo photographs inside the offline deliverable.
 // Successful downloads become local data URLs, failures stay explicit fallbacks.
 const aiChapterPhotos=await loadAIChapterAssets(root,{required:process.env.MOTION_REQUIRE_AI_ASSETS==='1'});
 const chapterPhotos=aiChapterPhotos || await bundleChapterPhotos(source,root);
+// When the complete AI pack is available, replace ALL eight preview covers too.
+if(aiChapterPhotos)thumbnailData=JSON.stringify(Object.fromEntries(thumbnailIds.map(id=>[id,aiChapterPhotos.data[id][0].media])));
+injected=injected.replace(thumbnailPattern,'const templateThumbnailImages='+thumbnailData+';');
 if(!injected.includes('const templateOfflinePhotoBundles={};'))throw Error('Offline photo bundle injection anchor missing');
 injected=injected.replace('const templateOfflinePhotoBundles={};',
   'const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
