@@ -44,7 +44,9 @@ def run():
                 page.locator('#r30TrialPreviewButton').wait_for()
                 initial=page.evaluate("()=>templatePhotoCache.get('cinematic').slice()")
                 page.locator('#r30TrialFiles').set_input_files(files)
-                page.wait_for_function("()=>document.querySelector('#r30TrialPreviewStatus').textContent.includes('已替换 Cinematic')")
+                page.wait_for_function("()=>/已替换 Cinematic|导入失败/.test(document.querySelector('#r30TrialPreviewStatus').textContent)",timeout=15000)
+                status=page.locator('#r30TrialPreviewStatus').inner_text()
+                assert '已替换 Cinematic' in status, f'R30 status={status}; browserErrors={errors}'
                 cached=page.evaluate("()=>templatePhotoCache.get('cinematic')")
                 assert len(cached)==5
                 assert cached[1]!=initial[1] and cached[2]!=initial[2]
