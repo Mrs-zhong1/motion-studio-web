@@ -12,7 +12,8 @@ body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter 
   background-size:cover!important;
   background-repeat:no-repeat!important;
   mix-blend-mode:normal;
-  opacity:calc(.61 + var(--r16-incoming,1)*.28)!important;
+  /* Do not dim real artwork: R16's clip-path already handles the reveal. */
+  opacity:1!important;
   filter:contrast(1.08) saturate(.91);
   transition:opacity .075s linear,filter .1s linear;
   /* Existing clip-path masks and camera depth are preserved. */
@@ -36,7 +37,7 @@ body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter 
 /* Camera movement + reveal remain motion-safe and readable on mobile. */
 @media(max-width:720px){
  body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter .section-art {
-  opacity:.77!important;
+  opacity:1!important;
   filter:contrast(1.06) saturate(.83);
  }
  body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter .designed-chapter-heading {
@@ -54,7 +55,7 @@ body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter 
 }
 @media(prefers-reduced-motion:reduce){
  body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter .section-art {
-  opacity:.88!important;
+  opacity:1!important;
   clip-path:none!important;
   transition:none!important;
  }
