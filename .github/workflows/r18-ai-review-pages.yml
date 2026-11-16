@@ -8,6 +8,7 @@ on:
       - 'stage9/ai-chapter-assets.mjs'
       - 'stage9/build-offline.mjs'
       - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/tests/test_r21_ai_preview_live.py'
       - '.github/workflows/r18-ai-review-pages.yml'
 permissions:
   contents: write
@@ -112,3 +113,8 @@ jobs:
           done
           test "$matched" -eq 1
           echo "Verified public review HTML SHA256: $expected" >> "$GITHUB_STEP_SUMMARY"
+      - name: Real public HTTPS AI preview + save/export smoke
+        working-directory: .
+        env:
+          MOTION_R18_URL: https://${{ github.repository_owner }}.github.io/motion-studio-web/r18-ai-review/
+        run: python stage9/tests/test_r21_ai_preview_live.py
