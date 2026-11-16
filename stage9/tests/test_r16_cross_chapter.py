@@ -60,7 +60,7 @@ def test_r16_bridges():
             # within a realistic full-page journey.
             page.evaluate("""()=>{
               const s=document.querySelectorAll('.page > section.section')[1];
-              scrollTo(0,scrollY+s.getBoundingClientRect().bottom-innerHeight*.8);
+              scrollTo({top:scrollY+s.getBoundingClientRect().bottom-innerHeight*.8,behavior:'instant'});
             }""")
             page.wait_for_timeout(180)
             early=measure()
@@ -69,7 +69,7 @@ def test_r16_bridges():
             (evidence/"r16-cross-chapter-early.png").write_bytes(page.screenshot(animations="disabled"))
             page.evaluate("""()=>{
               const s=document.querySelectorAll('.page > section.section')[1];
-              scrollTo(0,scrollY+s.getBoundingClientRect().bottom-innerHeight*.15);
+              scrollTo({top:scrollY+s.getBoundingClientRect().bottom-innerHeight*.15,behavior:'instant'});
             }""")
             page.wait_for_timeout(180)
             late=measure()
