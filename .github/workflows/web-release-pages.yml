@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
     paths:
+      - 'stage9/ai-assets/**'
+      - 'release/R18_R21_APPROVALS.json'
+      - 'release/v1_release_preflight.py'
       - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_web_product_e2e.py'
       - 'stage9/tests/test_product_restructure.py'
@@ -19,7 +22,22 @@ concurrency:
 permissions:
   contents: write
 jobs:
+  production-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual image decoder
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Require every V1 native original and SHA-bound approval before ANY production job
+        env:
+          V1_APPROVED_SOURCE_SHA: ${{ vars.V1_APPROVED_SOURCE_SHA }}
+        run: python release/v1_release_preflight.py --phase candidate --source-sha "$GITHUB_SHA"
   build-and-browser-gate:
+    needs: production-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 35
     strategy:
@@ -68,6 +86,7 @@ jobs:
             echo '~~~' >> "$GITHUB_STEP_SUMMARY"
           fi
   three-regression:
+    needs: production-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 35
     defaults:
@@ -172,17 +191,27 @@ jobs:
       - name: Set expected GitHub Pages URL
         id: pages-url
         run: echo "url=https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/" >> "$GITHUB_OUTPUT"
-      - name: Publish exact tested bytes to gh-pages branch
-        working-directory: dist
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish only production-root files and PRESERVE review sites
         run: |
-          git init -b gh-pages
+          set -euo pipefail
+          git fetch origin gh-pages
+          git worktree add --detach "$RUNNER_TEMP/v1-pages-worktree" origin/gh-pages
+          target="$RUNNER_TEMP/v1-pages-worktree"
+          test -f "$target/r18-ai-review/index.html" || {
+            echo "Existing review site missing; refusing to overwrite Pages branch"; exit 1;
+          }
+          for filename in index.html THREE_LICENSE.txt BUILD_MANIFEST.json WEB_RELEASE.json SHA256SUMS.txt .nojekyll; do
+            cp -f "dist/$filename" "$target/$filename"
+          done
+          cd "$target"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Deploy ${GITHUB_SHA}"
-          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:gh-pages
+          git add index.html THREE_LICENSE.txt BUILD_MANIFEST.json WEB_RELEASE.json SHA256SUMS.txt .nojekyll
+          git diff --cached --quiet && { echo "No changed production assets"; exit 0; }
+          git commit -m "Production V1 source ${GITHUB_SHA}"
+          # No history rewrite: the preceding gh-pages commit is a rollback point.
+          git push origin HEAD:gh-pages
+          test -f r18-ai-review/index.html
           cat WEB_RELEASE.json >> "$GITHUB_STEP_SUMMARY"
 
   live-smoke:
