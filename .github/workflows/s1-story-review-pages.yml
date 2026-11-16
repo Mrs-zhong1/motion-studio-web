@@ -11,6 +11,8 @@ on:
       - 'stage9/tests/test_s1_story_engine.py'
       - 'stage9/tests/test_s3_multi_story.py'
       - 'stage9/tests/test_s4_editor_parity.py'
+      - 'stage9/product-persistent-story.js'
+      - 'stage9/tests/test_s4_product_persistent_3d.py'
       - 'stage9/tests/test_r21_ai_preview_live.py'
       - '.github/workflows/s1-story-review-pages.yml'
 permissions:
@@ -70,6 +72,7 @@ jobs:
           python tests/test_s1_story_engine.py
           python tests/test_s3_multi_story.py
           python tests/test_s4_editor_parity.py
+          python tests/test_s4_product_persistent_3d.py
           python tests/test_web_product_e2e.py
       - name: Stage public review page without changing production root
         run: |
