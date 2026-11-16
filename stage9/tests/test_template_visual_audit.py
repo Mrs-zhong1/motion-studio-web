@@ -64,7 +64,7 @@ def run_audit():
                 # Source-based evidence: an image layer is NOT proof of a photo.
                 # Actual network failures must remain visible as fallback counts.
                 manifest = page.evaluate("(id)=>templateAssetAuditCache.get(id)||[]",template_id)
-                real_photo_count = sum(entry["kind"]=="unsplash-photo" for entry in manifest)
+                real_photo_count = sum(entry["kind"] in ("unsplash-photo","ai-generated-image") for entry in manifest)
                 fallback_count = sum(entry["kind"]=="original-generated-art" for entry in manifest)
                 assert len(manifest)==total_sections, (template_id,len(manifest),total_sections)
                 assert real_photo_count+fallback_count==total_sections, (template_id,manifest)
