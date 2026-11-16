@@ -19,7 +19,7 @@ try:
   ed.locator('#resumeProject').click()
   ed.locator('#modeToggle').click()
   ed.locator('[data-asset-tier-button="l3"]').click()
-  ed.locator('.comp[data-id="offline-glb-scene"] button').click()
+  ed.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
   ed.locator('#stage9GlbInput').set_input_files(str(FIX))
   ed.wait_for_timeout(220)
   result['single']['importedBytes']=ed.evaluate("project.sections.filter(s=>s.id==='offline-glb-scene')[0].glb.length")
@@ -43,7 +43,7 @@ try:
   result['single'].update({k:stat.get(k) for k in ['webgl2','meshCount','materialCount','pbr','visiblePixels','pixelDifference','frames','error']})
   page.screenshot(path=str(R/'STAGE15-MESHOPT-CAPTURE.png'))
   # A second GLB must be loaded into the same real shared WebGL scene.
-  ed.locator('.comp[data-id="offline-glb-scene"] button').click()
+  ed.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
   ed.locator('#stage9GlbInput').set_input_files(str(R.parent/'Sample-Dual-Material.glb'))
   ed.wait_for_timeout(260)
   with ed.expect_download() as dl:ed.locator('#exportPage').click()
