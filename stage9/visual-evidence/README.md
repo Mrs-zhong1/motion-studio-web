@@ -83,16 +83,6 @@ Click the immersive-preview control to hide the editorial sidebar. These are act
 | Interactive Gallery | ![Desktop immersive Interactive Gallery](./gallery-immersive-desktop.png) | ![Mobile immersive Interactive Gallery](./gallery-immersive-mobile.png) |
 | Modern SaaS | ![Desktop immersive Modern SaaS](./saas-immersive-desktop.png) | ![Mobile immersive Modern SaaS](./saas-immersive-mobile.png) |
 
-## R16-02 — real scroll-scrub multi-plane camera
-
-These browser screenshots show the same Cinematic chapter at different scroll positions.
-The photograph, title and atmosphere layers change at independent rates.
-Screenshots demonstrate real exported-page rendering, not final art-direction approval.
-
-| Earlier in chapter | Later in chapter |
-|---|---|
-| ![R16 Cinematic camera earlier](./r16-cinematic-multiplane-early.png) | ![R16 Cinematic camera later](./r16-cinematic-multiplane-late.png) |
-
 ## R9 — Real offline Three.js studio scene
 
 These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.
