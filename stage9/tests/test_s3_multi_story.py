@@ -16,6 +16,7 @@ def run():
     threading.Thread(target=server.serve_forever,daemon=True).start()
     browser_id=os.getenv("MOTION_BROWSER","chromium")
     sample={}
+    evidence=ROOT/"S3_STORY_EVIDENCE";evidence.mkdir(parents=True,exist_ok=True)
     try:
         with sync_playwright() as pw:
             browser=getattr(pw,browser_id).launch(headless=True,args=["--no-sandbox"] if browser_id=="chromium" else [])
@@ -49,6 +50,8 @@ def run():
                 middle=stage.screenshot(animations="disabled")
                 assert mask_before!=mask_after,(genre,mask_before,mask_after)
                 assert hashlib.sha256(opening).digest()!=hashlib.sha256(middle).digest(),genre
+                (evidence/f"{genre}-opening-{browser_id}.png").write_bytes(opening)
+                (evidence/f"{genre}-middle-{browser_id}.png").write_bytes(middle)
                 sample[genre]=mask_after
                 page.evaluate("()=>scrollTo(0,0)")
                 page.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='0'",timeout=12000)
