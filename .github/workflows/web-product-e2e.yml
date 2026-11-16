@@ -20,6 +20,7 @@ on:
       - 'stage9/tests/test_r17_quality_gate.py'
       - 'stage9/tests/test_r18_ai_provenance.py'
       - 'stage9/tests/test_r18_ai_folder_import.py'
+      - 'stage9/tests/test_s1_story_engine.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
@@ -45,6 +46,7 @@ on:
       - 'stage9/tests/test_r17_quality_gate.py'
       - 'stage9/tests/test_r18_ai_provenance.py'
       - 'stage9/tests/test_r18_ai_folder_import.py'
+      - 'stage9/tests/test_s1_story_engine.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
@@ -112,6 +114,8 @@ jobs:
       - name: R18 complete original AI folder import and SHA rejection
         if: matrix.browser == 'chromium'
         run: python tests/test_r18_ai_folder_import.py
+      - name: S1/S2 flagship editorial continuous story engine (all browsers)
+        run: python tests/test_s1_story_engine.py
       - name: R19 Web browser frame pacing and mobile viewport geometry
         if: matrix.browser == 'chromium'
         run: python tests/test_r19_browser_perf.py
