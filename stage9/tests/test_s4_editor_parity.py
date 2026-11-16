@@ -28,7 +28,15 @@ def run():
                 title="Live edited story "+name
                 page.locator("#projectName").fill(title)
                 copy="Edited narrative "+name+" chapter two"
-                page.evaluate("(txt)=>{project.sections[1].text=txt;render()}",copy)
+                page.evaluate("""(txt)=>{
+                    project.sections[1].text=txt;
+                    const cam=project.sections[1].camera;
+                    cam.advanced=true;
+                    cam.path=[{at:0,x:-85,y:20,zoom:120,tilt:-18,opacity:100},
+                              {at:50,x:45,y:-10,zoom:140,tilt:22,opacity:100},
+                              {at:100,x:0,y:-30,zoom:100,tilt:0,opacity:100}];
+                    render();
+                }""",copy)
                 page.locator("#playPreview").click()
                 assert page.locator("#templatePreview").is_visible()
                 assert page.locator("#templatePreview").get_attribute("data-project-preview")=="true"
@@ -37,6 +45,10 @@ def run():
                 frame.locator(".s1-story-stage").wait_for()
                 assert frame.locator(".s1-story-copy article").nth(1).locator("h2").text_content()==copy
                 assert frame.locator(".s1-story-stage").get_attribute("data-story-profile")==name
+                frame.evaluate("()=>scrollTo(0,document.querySelectorAll('.s1-story-anchor')[1].offsetTop)")
+                frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='1'")
+                transform=frame.locator(".s1-scene-image").nth(1).evaluate("n=>n.style.transform")
+                assert "rotateY(" in transform and "perspective(" in transform,transform
                 assert page.locator("#previewTitle").text_content()==title
                 page.locator("#r17PreviewNext").click()
                 frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='1'",timeout=12000)
