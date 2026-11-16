@@ -16,12 +16,12 @@ The S1 flagship preview instead renders four editorial images and associated tex
 |---|---|---|---|---|
 | Editorial Portfolio | One cloth/material family and four art-directed scenes | fixed stage, crossfade/zoom, matched typography, reversed scroll | mouse depth | **S1 implemented, art quality pending** |
 | 3D Product Experience | Persistent GLB object | camera orbit, material close-up, lighting state and CTA handoff | drag/orbit | **legacy GLB valid; story integration pending** |
-| Cinematic Journey | Same landscape/time sequence | pin, masked filmic reveals, timeline scrub, no snap jump | scroll | pending |
-| Architecture Studio | One spatial model/project | exterior→interior→detail camera path | guided orbit | pending |
-| Creative Agency | Graphic system of persistent shapes | typographic morph and spatial collage without iframe boundaries | hover/magnet | pending |
-| Fashion Editorial | Textile and silhouette | macro→portrait→runway material transition | pointer parallax | pending |
-| Gallery Exhibition | Curated collection in spatial context | object plane→gallery→detail | gallery navigation | pending |
-| SaaS Product Story | Same interactive UI object | feature transition in place, stateful data walkthrough | controlled UI | pending |
+| Cinematic Journey | Same landscape/time sequence | persistent stage, letterbox masking, filmic scroll zoom | scroll | **S3 first implementation; final art pending** |
+| Architecture Studio | Architecture photography sequence | persistent stage, side-geometry wipe, lower-third typography | scroll | **S3 2D first implementation; 3D camera path pending** |
+| Creative Agency | One graphic visual language | clipped shape transition and oversized type, no per-chapter iframe | pointer parallax | **S3 first implementation; morph pending** |
+| Fashion Editorial | Textile and silhouette photos | ellipse wipe, large fashion typography and material zoom | pointer parallax | **S3 first implementation; material shader pending** |
+| Gallery Exhibition | Curated collection in spatial context | circular aperture reveal over fixed stage | story navigation | **S3 first implementation; spatial scene pending** |
+| SaaS Product Story | Visual sequence and overlay panel | inset-masked scene changes, persistent UI progress panel | scroll | **S3 first implementation; real stateful demo pending** |
 
 ## Shared data contract
 
@@ -41,3 +41,13 @@ One `project.sections` array remains the saved source of truth. `templateId` sel
 3. Text/image edits saved in project JSON must appear in the exported self-contained HTML; other seven templates maintain legacy regression while S3 is incomplete.
 4. Chromium, Firefox, WebKit E2E, Stage9 GLB/PBR, and live HTTPS review commit/hash are required for a review release.
 5. Full artistic acceptance is separate from CI and will not be marked PASS based on image hashes or template count.
+
+## 2026-11-16 resumed execution update
+
+S3 first implementation now exports **seven** (Editorial + six genres) on one persistent 2D narrative stage. Genre-specific scrubbed masks/camera displacement replace unrelated embedded component demonstrations. Editorial uses 4 chapters; other genres use 5 or any edited chapter count ≥2. The original 20-component editor remains available and the GLB product template is deliberately kept on the existing real Three.js path.
+
+S4 adds a **current-project immersive preview** from the editor's '交互预览' control. It renders `exportDocument()` from the actual edited JSON project, not a newly instantiated original template, and restores control state on return. The new S3/S4 browser tests cover scroll reversal, mask changes, desktop/mobile, reduced-motion, edited text, chapter navigation and export.
+
+**Still not equivalent to Pear.no or Grande Charte:** no physical fabric simulation, sophisticated continuous 3D camera choreography, independent high-resolution AI chapters for the 33 collage-derived crops or art-director sign-off. These remain open; production review cannot claim final completion.
+
+**Testing:** latest full GitHub Actions results must be checked per commit. A passing older S1 commit is not proof of the S3/S4 branch. The live review stays in `/s1-story-review/` and production root remains unchanged.
