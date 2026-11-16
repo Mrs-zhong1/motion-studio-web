@@ -1,9 +1,9 @@
 {
   "app": "Motion Studio Web",
   "channel": "S1 persistent narrative preview only - not production",
-  "sourceCommit": "dd786b0491d4f690c4063d15d9f9ab4f2dbfb828",
-  "sha256": "054d9d3bf2c509cd30696784d7b103dc57c9a8604bcefd1ef64f648df15cb90b",
-  "bytes": 8987682,
+  "sourceCommit": "d6636e77a215a72504dd3f83268f67586946b9b1",
+  "sha256": "21956ae458fe9d14374ad00f96d1ae40dad151b16399d7864c8ee3dca8b6a967",
+  "bytes": 8987761,
   "aiAssetCount": 39,
   "aiOriginalMedia": true,
   "artDirectionApproved": false,
