@@ -1,0 +1,125 @@
+name: S1 continuous narrative flagship preview (not production)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/s1-s4-story-engine-oss-library]
+    paths:
+      - 'stage9/ai-assets/**'
+      - 'stage9/ai-chapter-assets.mjs'
+      - 'stage9/build-offline.mjs'
+      - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/tests/test_s1_story_engine.py'
+      - 'stage9/tests/test_r21_ai_preview_live.py'
+      - '.github/workflows/s1-story-review-pages.yml'
+permissions:
+  contents: write
+concurrency:
+  group: motion-studio-s1-story-review-deploy
+  cancel-in-progress: false
+jobs:
+  verified-ai-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact 39-file AI pack, no demonstration fallbacks
+        run: |
+          node test_ai_chapter_assets.mjs
+          python ../release/check_release.py --mode review
+      - name: Build strictly from verified AI originals
+        env:
+          MOTION_REQUIRE_AI_ASSETS: '1'
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          python tests/check_build.py
+          python - <<'PY'
+          import json,hashlib,pathlib
+          root=pathlib.Path('.')
+          obj=json.loads((root/'BUILD_MANIFEST.json').read_text())
+          assert obj.get('aiOriginalMedia') is True
+          data=obj.get('photoBundle') or {}
+          assert len(data)==8 and sum(v['bundledPhotos'] for v in data.values())==39
+          assert all(v['fallbackChapters']==0 and v['origin']=='AI_GENERATED' for v in data.values())
+          raw=(root/'Motion-Studio-Stage15-Meshopt-OFFLINE.html').read_bytes()
+          assert b'ai-generated://' in raw
+          assert b'exportPage' in raw and b'offline-glb-scene' in raw
+          print('AI build:',len(raw),'bytes; sha256=',hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Install Chromium Playwright
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Verify AI media through real editor preview, save, export
+        env:
+          MOTION_BROWSER: chromium
+        run: |
+          python tests/test_r18_ai_provenance.py
+          python tests/test_r18_ai_folder_import.py
+          python tests/test_s1_story_engine.py
+          python tests/test_web_product_e2e.py
+      - name: Stage public review page without changing production root
+        run: |
+          mkdir -p "$RUNNER_TEMP/s1-story-publish"
+          cp Motion-Studio-Stage15-Meshopt-OFFLINE.html "$RUNNER_TEMP/s1-story-publish/index.html"
+          cp THREE_LICENSE.txt "$RUNNER_TEMP/s1-story-publish/THREE_LICENSE.txt"
+          cp BUILD_MANIFEST.json "$RUNNER_TEMP/s1-story-publish/BUILD_MANIFEST.json"
+          python - <<'PY'
+          import json,hashlib,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'s1-story-publish'
+          b=(root/'index.html').read_bytes()
+          report={'app':'Motion Studio Web','channel':'S1 persistent narrative preview only - not production',
+              'sourceCommit':os.environ['GITHUB_SHA'],'sha256':hashlib.sha256(b).hexdigest(),
+              'bytes':len(b),'aiAssetCount':39,'aiOriginalMedia':True,
+              'artDirectionApproved':False,'productReleaseApproved':False}
+          (root/'REVIEW_BUILD.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Publish under /s1-story-review/ only
+        working-directory: .
+        run: |
+          git fetch origin gh-pages
+          git worktree add --detach "$RUNNER_TEMP/gh-pages-worktree" origin/gh-pages
+          mkdir -p "$RUNNER_TEMP/gh-pages-worktree/s1-story-review"
+          cp -f "$RUNNER_TEMP/s1-story-publish/"* "$RUNNER_TEMP/gh-pages-worktree/s1-story-review/"
+          cd "$RUNNER_TEMP/gh-pages-worktree"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add s1-story-review
+          if ! git diff --cached --quiet; then
+            git commit -m "Review R18 AI assets ${GITHUB_SHA}"
+            git push origin HEAD:gh-pages
+          fi
+          echo "Review URL: https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/s1-story-review/" >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify live review HTML SHA-256 after Pages propagation
+        working-directory: .
+        run: |
+          url="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/s1-story-review/"
+          expected=$(python -c 'import json,os,pathlib; print(json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"s1-story-publish/REVIEW_BUILD.json").read_text())["sha256"])')
+          expected_commit="${GITHUB_SHA}"
+          matched=0
+          for attempt in $(seq 1 36); do
+            if curl -fsSL "${url}index.html" -o "$RUNNER_TEMP/live-r18.html"; then
+              actual=$(sha256sum "$RUNNER_TEMP/live-r18.html" | cut -d ' ' -f 1)
+              deployed_commit=$(curl -fsSL "${url}REVIEW_BUILD.json" | python -c 'import json,sys;print(json.load(sys.stdin).get("sourceCommit",""))' 2>/dev/null || true)
+              if [ "$actual" = "$expected" ] && [ "$deployed_commit" = "$expected_commit" ]; then matched=1; break; fi
+            fi
+            sleep 10
+          done
+          test "$matched" -eq 1
+          echo "Verified public review HTML SHA256: $expected" >> "$GITHUB_STEP_SUMMARY"
+      - name: Real public HTTPS AI preview + save/export smoke
+        working-directory: .
+        env:
+          MOTION_R18_URL: https://${{ github.repository_owner }}.github.io/motion-studio-web/s1-story-review/
+          MOTION_R18_EXPECTED_COMMIT: ${{ github.sha }}
+        run: python stage9/tests/test_r21_ai_preview_live.py
