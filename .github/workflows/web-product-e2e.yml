@@ -118,6 +118,14 @@ jobs:
         run: python tests/test_s1_story_engine.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: Upload S1 real browser narrative screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1-editorial-story-${{ matrix.browser }}
+          path: stage9/S1_STORY_EVIDENCE/*.png
+          if-no-files-found: warn
+          retention-days: 14
       - name: R19 Web browser frame pacing and mobile viewport geometry
         if: matrix.browser == 'chromium'
         run: python tests/test_r19_browser_perf.py
