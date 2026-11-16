@@ -31,6 +31,15 @@ Photos are provisional demonstration media, not legally cleared assets.
 | gallery | 5 | 0 | 5 |
 | saas | 5 | 0 | 5 |
 
+## R17 — measurable visual quality and publication holds
+
+Automated visual gate: **PASS**; covered unique chapter photo sources: **39/39**.
+This test validates images, layout, and distinct story scenes; it does not claim artistic signoff.
+Human art direction: **HOLD**; native GPU: **HOLD**; licensing: **HOLD**.
+
+[Inspect full R17 quality evidence](./R17_QUALITY_GATE.json)
+
+
 ## R5 — real third chapter of every template
 
 Images below show actual exported-page sections, not the home-card covers.
