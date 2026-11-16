@@ -1994,6 +1994,49 @@ body.r16-story-ready .page[data-template="agency"] .section.designed-chapter .de
  }
 }
 `;
+ const r16BridgeCss=`
+/* R16-03/04 chapter-to-chapter bridge: the departing chapter paints the
+   next chapter's color into a feathered seam as the reader crosses its end.
+   The incoming chapter reveals its artwork with independent choreography.
+   This is entirely real DOM/CSS, no screenshots or fake iframe captures. */
+body.r16-story-ready .page[data-template] .section.r16-linked-chapter{
+ --r16-bridge:0;--r16-incoming:1;--r16-bridge-color:#111820;
+ isolation:isolate;
+}
+body.r16-story-ready .page[data-template] .section.r16-linked-chapter::before{
+ content:"";display:block;position:absolute;inset:auto 0 0;z-index:7;
+ height:clamp(120px,24vh,300px);pointer-events:none;
+ opacity:calc(var(--r16-bridge)*.72);
+ background:linear-gradient(to bottom,transparent,var(--r16-bridge-color));
+}
+body.r16-story-ready .page[data-template="cinematic"] .section.r16-linked-chapter::before{
+ height:clamp(140px,30vh,350px);background:linear-gradient(to bottom,transparent 10%,var(--r16-bridge-color));
+}
+body.r16-story-ready .page[data-template="architecture"] .section.r16-linked-chapter::before{
+ height:clamp(110px,19vh,260px);background:linear-gradient(to bottom,transparent,var(--r16-bridge-color));
+}
+body.r16-story-ready .page[data-template="agency"] .section.r16-linked-chapter::before{
+ height:clamp(90px,18vh,220px);background:linear-gradient(150deg,transparent,var(--r16-bridge-color));
+}
+body.r16-story-ready .page[data-template="gallery"] .section.r16-linked-chapter::before{
+ background:radial-gradient(ellipse 120% 150% at 50% 130%,var(--r16-bridge-color),transparent 75%);
+}
+body.r16-story-ready .page[data-template] .section.designed-chapter .designed-chapter-heading{
+ opacity:calc(.78 + var(--r16-incoming,1)*.22);
+}
+body.r16-story-ready .page[data-template] .section.r16-linked-chapter .r15-scene-mark{
+ opacity:calc(.54 + var(--r16-incoming,1)*.4);
+}
+@media(prefers-reduced-motion:reduce){
+ body.r16-story-ready .page[data-template] .section.r16-linked-chapter::before{
+  display:none!important;
+ }
+ body.r16-story-ready .page[data-template] .section.designed-chapter .designed-chapter-heading,
+ body.r16-story-ready .page[data-template] .section.r16-linked-chapter .r15-scene-mark{
+  opacity:1!important;
+ }
+}
+`;
  const extraScript=`<script>const frames=[...document.querySelectorAll('.section iframe')];function syncScroll(){const wh=window.innerHeight||700;frames.forEach(f=>{const r=f.closest('section').getBoundingClientRect(),p=Math.max(0,Math.min(1,(wh-r.top)/(wh+r.height)));try{f.contentWindow.postMessage({type:'motion-studio-scroll',progress:p},'*')}catch(e){}})}window.addEventListener('scroll',syncScroll,{passive:true});window.addEventListener('resize',syncScroll);setTimeout(syncScroll,1200);
 const chapterLayers=${JSON.stringify(project.sections.map(s=>s.layers)).replace(/</g,'\\u003c')};const chapterCameras=${JSON.stringify(project.sections.map(s=>s.camera))};const globalTransition=${JSON.stringify(project.transition||'fade')};
 function updateLayers(){const wh=window.innerHeight||700;document.querySelectorAll('.section').forEach((sec,i)=>{const r=sec.getBoundingClientRect(),p=Math.max(0,Math.min(1,(wh-r.top)/(wh+r.height)));
@@ -2086,6 +2129,14 @@ function installR16StoryTransitions(){
  };
  const template=document.querySelector('.page[data-template]')?.dataset.template||'editorial';
  const [xAmplitude,yAmplitude,typeAmplitude,tiltAmplitude]=signatures[template]||signatures.editorial;
+ // Transition bridge is computed from each *real* adjacent section's
+ // background. Respect authors' per-chapter palettes, including overrides.
+ const allChapters=[...document.querySelectorAll('.page > section.section')];
+ allChapters.forEach((sec,i)=>{
+   sec.classList.add('r16-linked-chapter');
+   const next=allChapters[i+1];
+   if(next)sec.style.setProperty('--r16-bridge-color',getComputedStyle(next).backgroundColor);
+ });
  const setDepth=(sec,position)=>{
   const reducedMotion=reduced.matches;
   const depth=reducedMotion?0:Math.max(-1,Math.min(1,position));
@@ -2104,9 +2155,22 @@ function installR16StoryTransitions(){
  const redraw=()=>{
   scheduled=false;updates++;
   const wh=Math.max(1,window.innerHeight||800);
+  allChapters.forEach(sec=>{
+    const r=sec.getBoundingClientRect();
+    const t=reduced.matches?0:ease(clamp((wh*.48-r.bottom)/(wh*.48)));
+    sec.style.setProperty('--r16-bridge',t.toFixed(3));
+    sec.dataset.r16Bridge=t.toFixed(3);
+  });
   sections.forEach(sec=>{
    const art=sec.querySelector('.section-art');if(!art)return;
    const rect=sec.getBoundingClientRect();
+   // Real adjacent-section continuity. The outgoing chapter feathers into
+   // the following chapter's background and avoids a color flash at seams.
+   const leaving=reduced.matches?0:ease(clamp((wh*.48-rect.bottom)/(wh*.48)));
+   const entering=reduced.matches?1:ease(clamp((wh*1.05-rect.top)/(wh*.73)));
+   sec.style.setProperty('--r16-bridge',leaving.toFixed(3));
+   sec.style.setProperty('--r16-incoming',entering.toFixed(3));
+   sec.dataset.r16Bridge=leaving.toFixed(3);
    // Offscreen chapters receive a deterministic state. This prevents an
    // initially hidden chapter from flashing fully visible before its reveal.
    if(rect.bottom < -wh*.2){setDepth(sec,0);art.style.setProperty('--r16-reveal','100%');sec.dataset.r16Progress='1.000';return;}
@@ -2134,7 +2198,7 @@ window.addEventListener('scroll',updateLayers,{passive:true});window.addEventLis
  const sharedMarkup=sharedParts.length>=2&&typeof stage9SharedEngineURL!=='undefined'
   ?'<script type="application/json" id="motion-shared-scene-data">'+JSON.stringify(project.sections.map(s=>({id:s.id,glb:s.id==='offline-glb-scene'?s.glb:''}))).replace(/</g,'\\u003c')+'</'+'script><script src="'+stage9SharedEngineURL+'"></'+'script>'
   :'';
- return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle} · Motion Studio</title><style>${exportCss}${r14NavCss}${r16Css}${r16DepthCss}/* Stage 6 · native keyframe tracks and chapter transitions */
+ return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle} · Motion Studio</title><style>${exportCss}${r14NavCss}${r16Css}${r16DepthCss}${r16BridgeCss}/* Stage 6 · native keyframe tracks and chapter transitions */
 .global-transition-control{display:flex;gap:6px;align-items:center;font-size:11px;color:#d9e2dc;white-space:nowrap}.global-transition-control select{background:#1c2a33;border:1px solid #425564;border-radius:7px;color:#eef2ed;padding:8px 6px;max-width:125px}
 .section::after{content:"";position:absolute;inset:0;background:var(--bg);opacity:var(--chapter-veil,0);pointer-events:none;z-index:8;transition:opacity .06s linear}.section[data-transition="fade"]::after{background:#090f17}.section[data-transition="veil"]::after{background:linear-gradient(120deg,#0a111c,#192d37)}
 .kf-panel{border:1px solid #3e574b;border-radius:11px;padding:10px;margin:13px 0;background:#112029}.kf-panel h4{margin:2px 0 9px;font-size:12px;color:var(--lime)}.kf-actions{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.kf-actions button{font-size:10px;padding:6px 7px}.kf-track{height:26px;background:linear-gradient(90deg,#293d46,#1c2a35);border:1px solid #476052;position:relative;border-radius:5px;margin:12px 0}.kf-dot{position:absolute;top:3px;transform:translateX(-50%);padding:0;width:17px;height:18px;border-radius:50%;background:#9caeb9;border:2px solid #101c27}.kf-dot.active{background:var(--lime);border-color:#192b1a}.kf-line{position:absolute;height:2px;background:#d1f18a;left:0;right:0;top:12px;opacity:.38}.kf-panel .field{margin:7px 0}.kf-panel small{font-size:10px;color:#a4b6c2}
