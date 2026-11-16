@@ -80,7 +80,7 @@ jobs:
           path: stage9/TEMPLATE_VISUAL_AUDIT.json
           retention-days: 14
 
-      - name: Convert 80 actual browser screenshots to compressed review WebP
+      - name: Convert 68 actual browser screenshots to compressed review WebP
         shell: bash
         run: |
           python -m pip install 'Pillow==11.3.0'
@@ -91,7 +91,7 @@ jobs:
           target=pathlib.Path(os.environ['RUNNER_TEMP'])/'r33-visual-gallery'
           target.mkdir(parents=True,exist_ok=True)
           shots=sorted(src.glob('*.png'))
-          assert len(shots)==80,f'Expected full 8 x 2 x 5 screenshots, got {len(shots)}'
+          assert len(shots)==68,f'Expected 8 x 2 x 4 shots, plus 2 pilot x 2 preview shells; got {len(shots)}'
           results={}
           for item in shots:
               with Image.open(item) as im:
@@ -113,13 +113,14 @@ jobs:
                                      ('Opening',f'{template}-{device}'),
                                      ('Middle',f'{template}-chapter3-{device}'),
                                      ('Ending',f'{template}-ending-{device}')]:
+                      if stem not in results and label=='Preview' and template not in ('editorial','product-3d'):continue
                       assert stem in results,stem
                       cards.append(f'<figure><img loading="lazy" src="{results[stem]["image"]}" alt="{template} {device} {label} screenshot" /><figcaption>{device} / {label}</figcaption></figure>')
               cards.append('</div></section>')
           css='body{font:14px system-ui;margin:0 auto;padding:24px;max-width:1500px;background:#101314;color:#f4f2ec}h1{font-size:clamp(28px,5vw,55px);letter-spacing:-.06em}h2{text-transform:uppercase;letter-spacing:.05em;border-top:1px solid #505656;padding-top:22px;margin-top:60px}nav{display:flex;flex-wrap:wrap;gap:12px}a{color:#cceaaa}figure{margin:0;border:1px solid #515653;border-radius:11px;padding:8px;background:#1e2324}img{width:100%;height:auto;display:block;border-radius:6px}figcaption{padding:10px;font-size:12px;color:#c9ccc3}.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}.note{background:#242826;padding:12px;border:1px solid #6c7164;border-radius:8px;color:#f1cfae}'
           links=''.join(f'<a href="#{x}">{x}</a>' for x in templates)
           source=os.environ['GITHUB_SHA']
-          body='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion Studio R33 visual review</title><style>'+css+'</style></head><body><h1>Motion Studio / Visual Review</h1><p class="note">Real Chromium captures from exact source commit '+source[:12]+'. Current AI pack contains 33 collage crops. This gallery is for HUMAN QUALITY REVIEW, not publication approval.</p><p>80 browser screenshots · 8 templates · desktop and mobile · five story views</p><nav>'+links+'</nav>'+''.join(cards)+'</body></html>'
+          body='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion Studio R33 visual review</title><style>'+css+'</style></head><body><h1>Motion Studio / Visual Review</h1><p class="note">Real Chromium captures from exact source commit '+source[:12]+'. Current AI pack contains 33 collage crops. This gallery is for HUMAN QUALITY REVIEW, not publication approval.</p><p>68 browser screenshots · 8 templates · desktop and mobile · four core views plus pilot template preview shell</p><nav>'+links+'</nav>'+''.join(cards)+'</body></html>'
           (target/'index.html').write_text(body,encoding='utf-8')
           (target/'REVIEW_CAPTURE.json').write_text(json.dumps({'sourceCommit':source,'screenshots':results,'artDirectionApproved':False,'productionEligible':False},indent=2)+chr(10))
           print('R33 true-browser WebP review bytes:',sum(x['bytes'] for x in results.values()))
