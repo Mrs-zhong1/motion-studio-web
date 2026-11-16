@@ -5,7 +5,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from check_release import inspect
+from check_release import inspect, verify_native_quality
 
 ROOT = Path(__file__).resolve().parents[1]
 VISUAL = json.loads((ROOT / "stage9/visual-evidence/R17_QUALITY_GATE.json").read_text())
@@ -49,7 +49,20 @@ class ReleasePolicyTests(unittest.TestCase):
                     (images/filename).write_bytes(raw)
                     manifest.append({"template":name,"chapter":chapter,"file":filename,
                         "source":"AI_GENERATED","commercialUseTermsChecked":True,
+                        "sourceType":"individual-generation","trueHighResolutionGenerated":True,
+                        "nativeSourceDimensions":[1600,900],"presentationDimensions":[1600,900],
                         "sha256":hashlib.sha256(raw).hexdigest()})
+            (images/"manifest.json").write_text(json.dumps({"assets":manifest}))
+            self.assertEqual(inspect(VISUAL, x, directory)["result"], "PASS")
+            # A valid SHA cannot certify native visual resolution.
+            manifest[0]["sourceType"]="crop-of-AI-generated-collage"
+            manifest[0]["trueHighResolutionGenerated"]=False
+            manifest[0]["nativeSourceDimensions"]=[828,306]
+            (images/"manifest.json").write_text(json.dumps({"assets":manifest}))
+            self.assertEqual(inspect(VISUAL, x, directory)["result"], "FAIL")
+            self.assertTrue(verify_native_quality(directory))
+            manifest[0].update(sourceType="individual-generation",trueHighResolutionGenerated=True,
+                               nativeSourceDimensions=[1600,900])
             (images/"manifest.json").write_text(json.dumps({"assets":manifest}))
             self.assertEqual(inspect(VISUAL, x, directory)["result"], "PASS")
             (images/"editorial-1.jpg").write_bytes(b"corrupted")
