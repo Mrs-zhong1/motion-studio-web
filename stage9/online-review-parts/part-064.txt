@@ -1,4 +1,6 @@
-as:[8,16,11,0]
+14,0],
+  agency:[24,35,21,1.8], fashion:[9,42,22,0],
+  gallery:[18,24,15,0], saas:[8,16,11,0]
  };
  const template=document.querySelector('.page[data-template]')?.dataset.template||'editorial';
  const [xAmplitude,yAmplitude,typeAmplitude,tiltAmplitude]=signatures[template]||signatures.editorial;

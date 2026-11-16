@@ -70,8 +70,8 @@
     "part-063.txt",
     "part-064.txt"
   ],
-  "characters": 8979617,
-  "utf8Bytes": 8987682,
-  "sha256": "054d9d3bf2c509cd30696784d7b103dc57c9a8604bcefd1ef64f648df15cb90b",
+  "characters": 8979696,
+  "utf8Bytes": 8987761,
+  "sha256": "21956ae458fe9d14374ad00f96d1ae40dad151b16399d7864c8ee3dca8b6a967",
   "buildMethod": "node stage9/build-offline.mjs then node stage9/prepare-online-preview.mjs"
 }
