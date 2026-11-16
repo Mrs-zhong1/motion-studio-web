@@ -6,8 +6,8 @@ from pathlib import Path
 from check_release import inspect
 
 ROOT = Path(__file__).resolve().parents[1]
-VISUAL = json.loads((ROOT.parent / "stage9/visual-evidence/R17_QUALITY_GATE.json").read_text())
-APPROVAL = json.loads((ROOT / "R18_R21_APPROVALS.json").read_text())
+VISUAL = json.loads((ROOT / "stage9/visual-evidence/R17_QUALITY_GATE.json").read_text())
+APPROVAL = json.loads((ROOT / "release/R18_R21_APPROVALS.json").read_text())
 
 class ReleasePolicyTests(unittest.TestCase):
     def test_evidence_is_complete_but_release_held(self):
