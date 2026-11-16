@@ -230,7 +230,7 @@ def test_product_restructure():
                 assert saved_project["sections"][1]["text"] == chapter_text
                 # Loading real standalone HTML in a second browser page catches
                 # export styles or chapter motion silently omitted from output.
-                if template_id in ("editorial", "product-3d", "cinematic"):
+                if template_id in ("editorial", "product-3d", "cinematic", "architecture", "agency", "fashion", "gallery", "saas"):
                     standalone = browser.new_page(viewport={"width": 1280,"height": 900})
                     export_errors = []
                     standalone.on("pageerror",lambda err:export_errors.append(str(err)))
@@ -239,12 +239,12 @@ def test_product_restructure():
                     # Text fidelity is a DOM-content check; inner_text() depends on
                     # transient layout/visibility during first paint on Firefox/WebKit.
                     # Geometry/visibility are independently covered by visual audit.
-                    if template_id == "editorial":
-                        # S1: one persistent visual stage and four narrative anchors;
+                    if template_id in ("editorial","cinematic","architecture","agency","fashion","gallery","saas"):
+                        # S1/S3: one persistent visual stage and four narrative anchors;
                         # independent component iframe posters must NOT be visible.
                         assert standalone.locator(".s1-story-stage").count() == 1
-                        assert standalone.locator(".s1-story-anchor").count() == 4
-                        assert standalone.locator(".s1-scene-image").count() == 4
+                        assert standalone.locator(".s1-story-anchor").count() == len(saved_project["sections"])
+                        assert standalone.locator(".s1-scene-image").count() == len(saved_project["sections"])
                         assert standalone.locator("section.section iframe").count() == 0
                         heading = standalone.locator(".s1-story-copy article").nth(1).locator("h2")
                         assert heading.text_content().strip() == chapter_text
