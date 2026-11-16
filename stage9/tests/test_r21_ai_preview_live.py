@@ -18,6 +18,9 @@ def run():
     meta=json.loads(get("REVIEW_BUILD.json"))
     raw=get("index.html")
     digest=hashlib.sha256(raw).hexdigest()
+    expected_commit=os.environ.get("MOTION_R18_EXPECTED_COMMIT")
+    if expected_commit:
+        assert meta.get("sourceCommit")==expected_commit,(meta.get("sourceCommit"),expected_commit)
     assert digest==meta["sha256"] and meta["aiAssetCount"]==39,meta
     assert meta["aiOriginalMedia"] is True
     evidence={"url":URL,"commit":meta["sourceCommit"],"sha256":digest,
