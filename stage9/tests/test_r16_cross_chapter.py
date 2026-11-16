@@ -49,6 +49,7 @@ def test_r16_bridges():
                     visualOpacity:before.opacity,
                     backdrop:before.backgroundImage,
                     markerOpacity:getComputedStyle(s.querySelector('.r15-scene-mark')).opacity,
+                    iframeFilter:getComputedStyle(s.querySelector('iframe')).filter,
                     redraw:Number(document.documentElement.dataset.r16RedrawCount||0),
                     bodyWidth:document.documentElement.scrollWidth,
                     viewport:window.innerWidth
@@ -75,6 +76,7 @@ def test_r16_bridges():
             (evidence/"r16-cross-chapter-late.png").write_bytes(page.screenshot(animations="disabled"))
             assert late["bridge"]>early["bridge"]+.12,(early,late)
             assert late["visualOpacity"]!=early["visualOpacity"],(early,late)
+            assert late["iframeFilter"]!=early["iframeFilter"],(early,late)
             assert late["redraw"]>early["redraw"]
             assert late["backdrop"]!="none"
             # R16-05: 80 synchronous scroll notifications must coalesce into
@@ -97,6 +99,7 @@ def test_r16_bridges():
             assert reduced["bridge"]==0,reduced
             assert section.evaluate("s=>getComputedStyle(s,'::before').display")=="none"
             assert reduced["markerOpacity"]=="1",reduced
+            assert reduced["iframeFilter"]=="none",reduced
             assert not errors,errors
             browser.close()
     finally:
