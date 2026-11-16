@@ -22,7 +22,7 @@ def large_png(seed):
         for x in range(w):
             row.extend(((x//8+seed+y//9)%256,(y//6+seed*9)%256,(x//9+y//7+seed*17)%256))
         rows.append(bytes(row))
-    raw=b'\\x89PNG\\r\\n\\x1a\\n'+chunk(b'IHDR',struct.pack('!2I5B',w,h,8,2,0,0,0))
+    raw=bytes.fromhex('89504e470d0a1a0a')+chunk(b'IHDR',struct.pack('!2I5B',w,h,8,2,0,0,0))
     return raw+chunk(b'IDAT',zlib.compress(b''.join(rows),6))+chunk(b'IEND',b'')
 
 def run():
