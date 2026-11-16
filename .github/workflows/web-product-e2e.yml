@@ -177,7 +177,7 @@ jobs:
               assert middle.is_file() and middle.stat().st_size>1000, middle
               ending=base/f'{row["template"]}-ending-{row["device"]}.png'
               assert ending.is_file() and ending.stat().st_size>1000, ending
-          for image in ("r9-studio-model.png","r9-studio-page.png","r11-mobile-product.png","r16-cinematic-multiplane-early.png","r16-cinematic-multiplane-late.png"):
+          for image in ("r9-studio-model.png","r9-studio-page.png","r11-mobile-product.png","r16-cinematic-multiplane-early.png","r16-cinematic-multiplane-late.png,"r16-cross-chapter-early.png","r16-cross-chapter-late.png"):
               target=base/image
               assert target.is_file() and target.stat().st_size>1000, target
           for tid in ("editorial","product-3d"):
@@ -258,6 +258,12 @@ jobs:
                   "| Earlier in chapter | Later in chapter |",
                   "|---|---|",
                   "| ![R16 Cinematic camera earlier](./r16-cinematic-multiplane-early.png) | ![R16 Cinematic camera later](./r16-cinematic-multiplane-late.png) |"]
+          out += ["", "## R16-03 — continuous between-chapter transition", "",
+                  "Two actual Chromium screenshots of the same scene seam at different scroll positions; the outgoing chapter feathers into the next chapter's computed background.",
+                  "",
+                  "| Before chapter seam | During chapter handoff |",
+                  "|---|---|",
+                  "| ![R16 first seam](./r16-cross-chapter-early.png) | ![R16 second seam](./r16-cross-chapter-late.png) |"]
           out += ["", "## R9 — Real offline Three.js studio scene", "",
                   "These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.",
                   "",
