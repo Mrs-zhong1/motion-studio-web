@@ -109,7 +109,7 @@ jobs:
       - name: R16-03..06 real adjacent chapter bridges and mobile accessibility
         if: matrix.browser == 'chromium'
         run: python tests/test_r16_cross_chapter.py
-      - name: R17 eight visual storyboards, chapter navigation, modal keyboard and focused preview
+      - name: R17 eight visual storyboards, 390px responsive layout and accessible preview controls
         if: matrix.browser == 'chromium'
         run: python tests/test_r17_preview_storyboard.py
       - name: U1-U4 image-led discovery and blank editor regression
