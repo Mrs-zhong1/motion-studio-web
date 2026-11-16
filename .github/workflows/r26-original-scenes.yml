@@ -90,6 +90,16 @@ jobs:
           print('R26 staged native originals:',len(manifest))
           print('Not merged to source: artDirection HOLD until visual approval')
           PY
+      - name: Build actual 8-template chapter review gallery
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'generate' }}
+        run: python stage9/review_r27_contact_sheet.py r26-review-staging --out r27-review-gallery
+      - name: Upload actual chapter comparison gallery
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'generate' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: r27-image-review-gallery-${{ github.sha }}
+          path: r27-review-gallery/
+          retention-days: 14
       - name: Publish reviewed-only staging images
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'generate' }}
         uses: actions/upload-artifact@v4
