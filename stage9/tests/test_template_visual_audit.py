@@ -55,7 +55,7 @@ def run_audit():
                 frame.locator("section.section").first.wait_for(timeout=30000)
                 assert page.locator("#previewHeroTitle").inner_text().strip()
                 assert page.locator(".preview-product-layout").is_visible()
-                if template_id == "editorial":
+                if template_id in ("editorial","cinematic","architecture","agency","fashion","gallery","saas"):
                     assert page.locator("#templatePreview").evaluate("n=>n.classList.contains('immersive-preview')")
                 else:
                     assert page.locator("#previewUsePanel").is_visible()
