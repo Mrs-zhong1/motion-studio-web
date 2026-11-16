@@ -18,7 +18,7 @@ def make_folder(directory):
     for template in IDS:
         for chapter in range(1,5 if template=="editorial" else 6):
             filename=f"{template}-{chapter}.png"
-            data=make_png((chapter*31+len(template)*7)%256,(chapter*47)%256,(len(template)*19)%256)
+            data=make_png((chapter*31+len(template)*7)%256,(chapter*47)%256,(len(template)*19)%256)+bytes([chapter])*1400
             (directory/filename).write_bytes(data)
             entries.append({"template":template,"chapter":chapter,"file":filename,
                 "source":"AI_GENERATED","commercialUseTermsChecked":True,
