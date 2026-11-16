@@ -53,6 +53,8 @@ def run():
                 transform=frame.locator(".s1-scene-image").nth(1).evaluate("n=>n.style.transform")
                 assert "rotateY(" in transform and "perspective(" in transform,transform
                 assert page.locator("#previewTitle").text_content()==title
+                page.locator("#r17PreviewPrev").click()
+                frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='0'",timeout=12000)
                 page.locator("#r17PreviewNext").click()
                 frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='1'",timeout=12000)
                 page.locator("#previewClose").click()
