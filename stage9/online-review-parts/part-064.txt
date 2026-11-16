@@ -1,4 +1,13 @@
-14,0],
+(document.querySelectorAll('.page[data-template] .section.designed-chapter'));
+ if(!sections.length)return;
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const clamp=x=>Math.max(0,Math.min(1,x));
+ const ease=x=>x*x*(3-2*x);
+ // Each art direction gets an independent camera signature. Values are
+ // intentionally small: readable typography and photo focus remain intact.
+ const signatures={
+  editorial:[5,30,18,0], 'product-3d':[14,27,12,0],
+  cinematic:[3,52,26,2.4], architecture:[12,20,14,0],
   agency:[24,35,21,1.8], fashion:[9,42,22,0],
   gallery:[18,24,15,0], saas:[8,16,11,0]
  };
