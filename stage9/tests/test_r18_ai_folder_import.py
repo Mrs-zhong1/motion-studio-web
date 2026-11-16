@@ -38,7 +38,7 @@ def test_full_folder_import():
         page=browser.new_page()
         page.goto(f"http://127.0.0.1:{server.server_port}/{PAGE.name}",wait_until="domcontentloaded")
         page.locator("#aiAssetFolder").set_input_files(str(directory))
-        page.get_by_text("AI 原创 39 张已加载").wait_for()
+        page.wait_for_function("""() => document.querySelector('#aiAssetImportStatus')?.textContent.includes('AI 原创 39 张已加载')""")
         assert page.evaluate("()=>Object.keys(templateOfflinePhotoBundles).length")==8
         sources=page.evaluate("""async()=>{
           await ensureTemplatePhoto('fashion');
@@ -51,7 +51,7 @@ def test_full_folder_import():
         wrong=directory/"editorial-1.png"
         wrong.write_bytes(wrong.read_bytes()+b"corruption")
         page.locator("#aiAssetFolder").set_input_files(str(directory))
-        page.get_by_text("AI 素材未导入：素材 SHA-256 不匹配").wait_for()
+        page.wait_for_function("""() => document.querySelector('#aiAssetImportStatus')?.textContent.includes('素材 SHA-256 不匹配')""")
         assert page.evaluate("()=>templateOfflinePhotoBundles.editorial[0].source")==before
         assert page.evaluate("()=>registry.length")==20
         browser.close()
