@@ -206,7 +206,10 @@ function installR16StoryTransitions(){
   sections.forEach(sec=>{
    const art=sec.querySelector('.section-art');if(!art)return;
    const rect=sec.getBoundingClientRect();
-   if(rect.bottom < -wh*.2||rect.top>wh*1.2)return;
+   // Offscreen chapters receive a deterministic state. This prevents an
+   // initially hidden chapter from flashing fully visible before its reveal.
+   if(rect.bottom < -wh*.2){art.style.setProperty('--r16-reveal','100%');sec.dataset.r16Progress='1.000';return;}
+   if(rect.top>wh*1.2){art.style.setProperty('--r16-reveal','0%');sec.dataset.r16Progress='0.000';return;}
    // Reveal fully by the moment the chapter reaches the center of view.
    const start=wh*.96,end=wh*.34;
    const progress=reduced.matches?1:ease(clamp((start-rect.top)/(start-end)));
