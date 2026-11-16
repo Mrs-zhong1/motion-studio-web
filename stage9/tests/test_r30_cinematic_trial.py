@@ -43,6 +43,7 @@ def run():
                 assert page.evaluate("()=>typeof window.MotionStudioR30")=='object', f'R30 browser bootstrap missing: {errors}'
                 page.locator('[data-template-card="cinematic"]').click()
                 page.locator('#r30TrialPreviewButton').wait_for()
+                page.wait_for_function("()=>templatePhotoCache.has('cinematic')",timeout=30000)
                 initial=page.evaluate("()=>templatePhotoCache.get('cinematic').slice()")
                 page.locator('#r30TrialFiles').set_input_files(files)
                 page.wait_for_function("()=>/已替换 Cinematic|导入失败/.test(document.querySelector('#r30TrialPreviewStatus').textContent)",timeout=15000)
