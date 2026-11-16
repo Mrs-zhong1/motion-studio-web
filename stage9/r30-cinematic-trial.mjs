@@ -34,7 +34,7 @@ async function imageOriginal(file){
  const w=bitmap.width,h=bitmap.height;bitmap.close?.();
  if(w<1600||h<900||w/h<1.68||w/h>1.88)throw Error('请提供原生不低于 1600×900、接近 16:9 的独立图像');
  const data=await readDataURL(file);
- if(data.length>2450000||!/^data:image\/(jpeg|png|webp);base64,/.test(data))throw Error('原图数据过大或格式不支持');
+ if(data.length>2450000||!(data.startsWith('data:image/')&&data.includes(';base64,')))throw Error('原图数据过大或格式不支持');
  return data;
 }
 async function importTwo(files){
