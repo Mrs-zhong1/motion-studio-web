@@ -21,6 +21,7 @@ on:
       - 'stage9/tests/test_r18_ai_provenance.py'
       - 'stage9/tests/test_r18_ai_folder_import.py'
       - 'stage9/tests/test_s1_story_engine.py'
+      - 'stage9/tests/test_s3_multi_story.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
@@ -47,6 +48,7 @@ on:
       - 'stage9/tests/test_r18_ai_provenance.py'
       - 'stage9/tests/test_r18_ai_folder_import.py'
       - 'stage9/tests/test_s1_story_engine.py'
+      - 'stage9/tests/test_s3_multi_story.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
@@ -116,6 +118,10 @@ jobs:
         run: python tests/test_r18_ai_folder_import.py
       - name: S1/S2 flagship editorial continuous story engine (all browsers)
         run: python tests/test_s1_story_engine.py
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
+      - name: S3 real multi-genre narrative experience (all browsers)
+        run: python tests/test_s3_multi_story.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
       - name: Upload S1 real browser narrative screenshots
