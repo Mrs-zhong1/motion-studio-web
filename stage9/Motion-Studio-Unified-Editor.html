@@ -1637,10 +1637,10 @@ window.addEventListener('message',event=>{
  if(!d||typeof d!=='object')return;
  if(d.type==='motion-studio-preview-state'&&Number.isInteger(d.chapter)&&Number.isInteger(d.total)&&d.total>=1&&d.total<=40&&d.chapter>=0&&d.chapter<d.total){
   r17PreviewChapter=d.chapter;r17PreviewTotal=d.total;r17UpdatePreviewNav();
- }else if(d.type==='motion-studio-preview-close')closeTemplatePreview();
-});
-document.addEventListener('keydown',event=>{
- if(event.key==='Escape'&&!$('templatePreview').hidden){event.preventDefault();closeTemplatePreview();}
+ }else if(d.type==='motion-studio-preview-close'){
+  if($('templatePreview').classList.contains('immersive-preview'))setImmersivePreview(false);
+  else closeTemplatePreview();
+ }
 });
 
 function templateCardMarkup(t){const thumb=templateThumbnailImages[t.id];const curated=t.id==='editorial'||t.id==='product-3d';
