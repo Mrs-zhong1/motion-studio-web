@@ -80,6 +80,21 @@
 #previewImmersive[aria-pressed="true"]{background:#d9ff67;color:#121812;border-color:#d9ff67}
 @media(max-width:900px){.library-section-heading{align-items:start;flex-direction:column;gap:5px}.preview-live-badge{font-size:9px;max-width:65%}.preview-overlay.immersive-preview .preview-product-layout{grid-template-rows:minmax(0,1fr);overflow:hidden}}
 @media(prefers-reduced-motion:reduce){.template-card .art-directed-photo,.template-card .designed-card-photo{transition:none!important}}
+</style><style id="ms-ui-pattern-adapters">
+/* Original UI adapters informed by the seven registered GitHub design systems.
+   No React/Vue/Svelte source is copied or bundled here. */
+:root{--ms-control-radius:12px;--ms-focus-ring:#c3e17e;--ms-control-border:#ccd2d3;--ms-glass-blur:18px}
+.preview-overlay .preview-toolbar{background:rgba(250,249,246,.91);border-bottom:1px solid rgba(26,32,32,.10);
+ -webkit-backdrop-filter:blur(var(--ms-glass-blur));backdrop-filter:blur(var(--ms-glass-blur))}
+.template-card:focus-visible,.preview-overlay button:focus-visible,
+.workspace button:focus-visible,.workspace input:focus-visible,.workspace select:focus-visible{
+ outline:3px solid var(--ms-focus-ring);outline-offset:3px}
+.preview-overlay .preview-actions button,.preview-overlay .preview-device-controls button{
+ border-radius:var(--ms-control-radius)}
+.preview-overlay .preview-device iframe{background:#131517}
+@media (prefers-reduced-motion:reduce){
+ .preview-overlay button,.template-card,.workspace button{transition:none!important}
+}
 </style><style id="motion-template-style">
 .page[data-template]{--template-ink:#f5f4ed;--template-accent:#d9ff67;--template-surface:#10151a;background:var(--template-surface);color:var(--template-ink)}
 .page[data-template] .page-head{background:var(--template-surface);color:var(--template-ink)}
