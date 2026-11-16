@@ -31,6 +31,8 @@ on:
       - 'stage9/generate_r26_ai_scenes.py'
       - 'stage9/r26-storyboard.json'
       - 'stage9/tests/test_r26_generation.py'
+      - 'stage9/review_r27_contact_sheet.py'
+      - 'stage9/tests/test_r27_review_gallery.py'
       - '.github/workflows/r26-original-scenes.yml'
 permissions:
   contents: read
@@ -47,6 +49,8 @@ jobs:
         run: python -m pip install 'Pillow==11.3.0'
       - name: Test storyboard and no-spend safeguards
         run: python -m unittest discover -s stage9/tests -p 'test_r26_generation.py' -v
+      - name: Verify contact-sheet gallery validates actual media dimensions and hashes
+        run: python -m unittest discover -s stage9/tests -p 'test_r27_review_gallery.py' -v
       - name: Validate 33 story prompts without image provider calls
         run: python stage9/generate_r26_ai_scenes.py --limit 33 > r26-dry-run.json
       - name: Verify explicit authorization (before network access)
