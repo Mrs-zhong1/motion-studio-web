@@ -70,6 +70,38 @@ def verify_committed_ai_assets(root):
         errors.append("R18: 39 distinct AI chapter media files not established")
     return sorted(set(errors))
 
+def verify_native_quality(root):
+    """R25 production-only check of native-origin resolution and sourcing.
+
+    Source metadata cannot by itself prove artistic quality. This gate does
+    prevent knowingly approving collage-derived or upscale-only media.
+    """
+    path=Path(root)/"stage9"/"ai-assets"/"manifest.json"
+    try:
+        rows=json.loads(path.read_text(encoding="utf-8")).get("assets", [])
+    except (OSError, ValueError, TypeError):
+        return ["R25: native media quality manifest unavailable"]
+    if len(rows)!=39:
+        return ["R25: quality review requires exactly 39 chapters"]
+    errors=[]
+    for row in rows:
+        name=f"{row.get('template')}/{row.get('chapter')}"
+        native=row.get("nativeSourceDimensions")
+        shown=row.get("presentationDimensions")
+        if not isinstance(native,list) or not isinstance(shown,list) or len(native)!=2 or len(shown)!=2:
+            errors.append(f"R25: unknown dimensions for {name}")
+            continue
+        if any(not isinstance(x,int) or x<=0 for x in native+shown):
+            errors.append(f"R25: invalid source dimensions for {name}")
+            continue
+        nw,nh=native; tw,th=shown
+        if row.get("sourceType")!="individual-generation" or row.get("trueHighResolutionGenerated") is not True:
+            errors.append(f"R25: source-level independent-generation proof missing for {name}")
+        if min(nw,nh)<720 or nw<1280 or (tw/nw)>1.25 or (th/nh)>1.25:
+            errors.append(f"R25: source native resolution below release threshold for {name}")
+    return sorted(set(errors))
+
+
 def inspect(visual, approvals, asset_root=None):
     failures, holds = [], []
     rows = visual.get("geometryAndImageEvidence", [])
@@ -99,11 +131,19 @@ def inspect(visual, approvals, asset_root=None):
         if assets.get("assetCount") != 39 or assets.get("verifiedOrigin") != "AI_GENERATED" or assets.get("usageTermsChecked") is not True:
             failures.append("R18: AI asset attestation incomplete or use terms not checked")
         failures.extend(verify_committed_ai_assets(asset_root or ROOT))
+    # A green technical/visual approval record cannot override known low-res
+    # source images. Keep review-mode reports available as HOLD while blocking
+    # falsely approved production candidates.
+    native_quality_errors=verify_native_quality(asset_root or ROOT)
+    if native_quality_errors:
+        holds.append("R25: native-source quality and independent-generation requirements")
+        if all(approvals.get(key,{}).get("status")=="APPROVED" for key in REQUIRED):
+            failures.extend(native_quality_errors)
     status = "FAIL" if failures else ("HOLD" if holds else "PASS")
     return {"schema": "motion-studio-r18-r21-web-release-gate-v2", "result": status,
             "r17AutomatedBaseline": visual.get("automatedGate"), "failures": sorted(set(failures)),
             "holds": sorted(set(holds)), "productionEligible": status == "PASS",
-            "nativePhoneHardwareRequired": False, "legacyUnsplashAssetsNotApprovedForProduction": True}
+            "nativePhoneHardwareRequired": False, "legacyUnsplashAssetsNotApprovedForProduction": True, "nativeSourceQualityEligible": not bool(native_quality_errors), "nativeSourceQualityIssues": native_quality_errors}
 
 def main():
     p = argparse.ArgumentParser()
