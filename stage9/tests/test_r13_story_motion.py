@@ -29,8 +29,8 @@ def test_r13_motion():
                 assert f'.page[data-template="{template}"] .section.designed-chapter .motion-atmosphere' in exported, template
             # Execute the export after photo hydration, mirroring actual preview flow.
             # Bare template definitions have not loaded artwork yet.
-            page.evaluate("async () => await ensureTemplatePhoto('cinematic')")
-            exported = page.evaluate("(id) => buildTemplatePreviewDocument(id)", "cinematic")
+            page.evaluate("async () => await ensureTemplatePhoto('product-3d')")
+            exported = page.evaluate("(id) => buildTemplatePreviewDocument(id)", "product-3d")
             output = browser.new_page(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
             output_errors = []
             output.on("pageerror", lambda error: output_errors.append(str(error)))
