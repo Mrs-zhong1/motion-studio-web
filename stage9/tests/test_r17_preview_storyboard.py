@@ -54,6 +54,24 @@ def test_r17_preview():
                 assert page.locator(".r17-preview-chapters").is_visible()
                 page.locator("#previewDesktop").click()
                 assert not page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")
+                if name=="cinematic":
+                    page.set_viewport_size({"width":390,"height":844})
+                    page.wait_for_timeout(100)
+                    mobile=page.evaluate("""()=>{
+                        const overlay=document.querySelector('#templatePreview');
+                        const toolbar=overlay.querySelector('.preview-toolbar');
+                        const actions=toolbar.querySelector('.preview-actions');
+                        const devices=toolbar.querySelector('.preview-device-controls');
+                        const box=e=>e.getBoundingClientRect();
+                        return {docWidth:document.documentElement.scrollWidth,viewport:innerWidth,
+                            actionTop:box(actions).top,navBottom:box(devices).bottom,
+                            closeVisible:box(document.querySelector('#previewClose')).width>0,
+                            navVisible:box(document.querySelector('#r17PreviewNext')).width>0};
+                    }""")
+                    assert mobile["docWidth"]<=mobile["viewport"]+16,mobile
+                    assert mobile["actionTop"]>=mobile["navBottom"]-2,mobile
+                    assert mobile["closeVisible"] and mobile["navVisible"],mobile
+                    page.set_viewport_size({"width":1440,"height":900})
                 page.keyboard.press("Escape")
                 assert modal.is_visible()
                 assert not modal.evaluate("el=>el.classList.contains('immersive-preview')")
