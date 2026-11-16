@@ -1,14 +1,17 @@
 {
-  "schema": "motion-studio-r18-r21-approvals-v1",
+  "schema": "motion-studio-r18-r21-web-approvals-v2",
   "sourceCommit": "e7a90381ab7a421188082f895bbe85b2f5f0c0db",
   "releaseChannel": "review-only",
   "artDirection": {
     "status": "HOLD"
   },
-  "nativeDevice": {
-    "status": "HOLD"
+  "aiAssets": {
+    "status": "HOLD",
+    "assetCount": 0,
+    "verifiedOrigin": "PENDING_AI_GENERATION",
+    "usageTermsChecked": false
   },
-  "rightsRegister": {
+  "browserPerformance": {
     "status": "HOLD"
   },
   "productFlows": {
