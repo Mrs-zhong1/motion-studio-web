@@ -12,6 +12,8 @@ import hashlib
 import json
 import shutil
 import struct
+from io import BytesIO
+from PIL import Image, UnidentifiedImageError
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -75,6 +77,15 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
         raw=(folder/name).read_bytes()
         if len(raw)<1000 or len(raw)>5_000_000: raise ValueError("image file size out of bounds "+name)
         dimensions=native_dimensions(raw)
+        try:
+            with Image.open(BytesIO(raw)) as photo:
+                if photo.format not in ("JPEG","PNG"):
+                    raise ValueError("unexpected media encoding "+name)
+                photo.load()
+                if photo.size!=dimensions:
+                    raise ValueError("header/decoded dimensions disagree: "+name)
+        except (UnidentifiedImageError, OSError) as e:
+            raise ValueError("unreadable or corrupted original image: "+name) from e
         if dimensions[0]<1280 or dimensions[1]<720:
             raise ValueError("native image below 1280×720: "+name+" "+str(dimensions))
         if list(dimensions)!=entry.get("nativeSourceDimensions"):
