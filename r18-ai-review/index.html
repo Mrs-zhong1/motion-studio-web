@@ -1104,6 +1104,49 @@
 .r17-preview-filmstrip img{display:block;width:100%;height:74px;object-fit:cover;border-radius:3px;background:#dfded9}
 .r17-preview-filmstrip small{font:750 9px/1.2 ui-monospace,monospace;padding:1px 2px;color:#505e54}
 @media(max-width:800px){.r17-storyboard-heading{margin-top:12px}.r17-preview-filmstrip button{flex-basis:74px;width:74px}.r17-preview-filmstrip img{height:48px}.r17-preview-filmstrip{padding-top:7px}.r17-preview-filmstrip small{font-size:9px}}
+</style><style id="r22-visual-refinement">
+/* R22 — visual refinement tokens; product chrome only, never mutates chapter timelines. */
+:root{--r22-paper:#ecece5;--r22-ink:#171b17;--r22-acid:#d9ff67;--r22-ease:cubic-bezier(.22,1,.36,1)}
+.discover-view,.discovery-view{font-feature-settings:"kern" 1}
+.discovery-main{background:var(--r22-paper)}
+.discovery-header{padding:clamp(12px,2vw,26px) 0 clamp(24px,3vw,46px);border-bottom:1px solid #b9bfb0;margin-bottom:25px}
+.discovery-header h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(54px,6.1vw,104px);line-height:.89;letter-spacing:-.082em;max-width:900px;text-wrap:balance}
+.discovery-header p{font-size:clamp(13px,1.04vw,16px);line-height:1.75;max-width:360px;color:#4c534a}
+.library-section-heading{margin-top:22px}
+.template-grid{gap:clamp(16px,1.8vw,28px)}
+.template-card{border-radius:2px;isolation:isolate;transform:translateZ(0);transition:transform .7s var(--r22-ease),box-shadow .7s var(--r22-ease)}
+.template-art{height:clamp(280px,28vw,460px);background-position:center;background-size:cover}
+.template-art.has-image{background-size:cover!important;background-position:50% 45%;background-repeat:no-repeat;filter:none}
+.template-card .template-art::after{z-index:2;inset:0;background:linear-gradient(180deg,transparent 48%,#0008);pointer-events:none;transform:none}
+.template-card:hover .template-art.has-image{background-size:cover!important}
+.template-card:hover{transform:translate3d(0,-5px,0);box-shadow:0 25px 56px #1720142b}
+.template-card:focus-visible{outline:3px solid #64794c;outline-offset:5px}
+.template-card-copy{min-height:107px;gap:18px;padding:22px 24px 24px}
+.template-card-copy h2{font-size:clamp(19px,1.7vw,27px);line-height:1.05;letter-spacing:-.055em}
+.template-card-copy p{font-size:12px;line-height:1.55;max-width:35ch}
+.template-card-copy span{flex-shrink:0}
+.preview-overlay{background:#0b0e0b}
+.preview-toolbar{min-height:70px;height:auto;gap:12px;background:#131813;border-bottom-color:#30392f}
+.preview-title strong{font-size:14px;letter-spacing:-.02em}
+.preview-title span{font-size:11px;letter-spacing:.04em}
+.preview-device{padding:clamp(9px,1.8vw,30px);background:radial-gradient(ellipse at 50% 0%,#2a362b 0%,#111711 54%,#090d0a)}
+.preview-device iframe{border-radius:2px;box-shadow:0 22px 80px #000b}
+.preview-toolbar button{min-height:38px}
+.editor-view .stage-top,.editor-view .appbar{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.editor-view .canvas-viewport{background-color:#0b1114;background-image:radial-gradient(#35464d 0.7px,transparent .7px);background-size:20px 20px}
+.editor-view .page{box-shadow:0 24px 74px #000a}
+.editor-view .section.selected{border-color:#d9ff67}
+.editor-view .section .caption,.editor-view .section .badge{display:none!important}
+.editor-view .chapter-item{min-height:62px;transition:background .18s,border-color .18s}
+.editor-view .chapter-item:focus-visible{outline:2px solid #d9ff67;outline-offset:2px}
+.editor-view .chapter-thumb{height:48px}
+.editor-view .right .hint,.editor-view .left .hint{line-height:1.6}
+@media(min-width:1500px){.template-grid{gap:28px}.discovery-main{padding-left:clamp(60px,5vw,100px);padding-right:clamp(60px,5vw,100px)}}
+@media(max-width:820px){.discovery-header{padding:18px 0 25px}.discovery-header h1{font-size:clamp(44px,11vw,68px)}.discovery-header p{max-width:50ch}.template-grid{gap:16px}.template-art{height:clamp(230px,64vw,360px)}.template-card-copy{min-height:100px}.preview-device{padding:8px}.preview-toolbar{gap:6px}.preview-toolbar button{min-height:44px}}
+@media(max-width:430px){.discovery-main{padding:20px 14px 50px}.template-card-copy{padding:17px 18px 20px}.template-card-copy h2{font-size:21px}.template-card-copy p{font-size:11px}.preview-device.mobile iframe{width:min(390px,100%);max-width:100%;border-width:5px}}
+@media(hover:none){.template-card:hover{transform:none}.template-card:hover .art-directed-photo,.template-card:hover .designed-card-photo{transform:none}}
+@media(prefers-reduced-motion:reduce){.template-card,.template-art,.template-art *,.template-card .art-directed-photo,.template-card .designed-card-photo{transition:none!important;animation:none!important}.template-card:hover{transform:none}}
+
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="library-section-heading"><div><span class="library-eyebrow">CURATED INTERACTIVE WEBSITES</span><h2>可探索的作品 <span id="templateResultCount">08</span></h2></div><p>打开任意模板体验完整的多章节网页，而非静态封面。</p></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" role="dialog" aria-modal="true" aria-labelledby="previewTitle" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button><div class="r17-preview-chapters" aria-label="章节导航"><button id="r17PreviewPrev" type="button" aria-label="上一章节" disabled>‹</button><span id="r17PreviewPosition" role="status" aria-live="polite">01 / 01</span><button id="r17PreviewNext" type="button" aria-label="下一章节" disabled>›</button></div></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewImmersive" aria-pressed="false" title="切换为整页沉浸式预览">沉浸预览</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="r17-storyboard-heading"><strong>STORYBOARD</strong><span>点击切换真实章节</span></div><div id="r17PreviewFilmstrip" class="r17-preview-filmstrip" aria-label="真实章节照片导航"></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><div class="preview-live-badge" aria-hidden="true"><i></i> LIVE INTERACTIVE PREVIEW · 滚动探索</div><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
