@@ -57,6 +57,13 @@ def run():
                 doc=page.locator('#templatePreviewFrame').content_frame
                 assert doc.locator('.section-art').count()==5
                 assert page.evaluate("()=>document.getElementById('templatePreviewFrame').srcdoc.includes('r30-export-story-parity')")
+                assert page.evaluate("()=>document.getElementById('templatePreviewFrame').srcdoc.includes('r31-export-story-continuity')")
+                doc.locator('body.r16-story-ready').wait_for(timeout=12000)
+                assert doc.locator('.section.designed-chapter').count()==5
+                assert doc.locator('style#r31-export-story-continuity').count()==1
+                assert doc.locator('body').evaluate(
+                  "(el)=>!!el.querySelector('.section.designed-chapter .section-art')?.style.getPropertyValue('--r16-reveal')")
+
                 page.locator('#previewUsePanel').click()
                 page.locator('#editorView').wait_for(state='visible')
                 assert page.evaluate("()=>project.templateId")=='cinematic'
@@ -67,6 +74,8 @@ def run():
                 assert page.evaluate("()=>project.sections[1].imageMeta.kind")=='user-upload'
                 exported=page.evaluate("()=>window.MotionStudioUnified.build()")
                 assert exported.count('id="r30-export-story-parity"')==1
+                assert exported.count('id="r31-export-story-continuity"')==1
+                assert 'var(--r16-incoming' in exported
                 assert 'data-r30-dual-scene="true"' in exported
                 assert page.evaluate("()=>project.sections[1].image") in exported
                 assert page.evaluate("()=>project.sections[2].image") in exported
