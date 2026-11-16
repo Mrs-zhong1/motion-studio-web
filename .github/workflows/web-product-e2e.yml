@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/ai-assets/**'
+      - 'stage9/r26-storyboard.json'
+      - 'stage9/generate_r26_ai_scenes.py'
       - 'stage9/tests/test_u1_u4_regression.py'
       - 'stage9/tests/test_template_visual_audit.py'
       - 'stage9/tests/test_r9_studio_3d.py'
@@ -27,6 +30,9 @@ on:
   push:
     paths:
       - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/ai-assets/**'
+      - 'stage9/r26-storyboard.json'
+      - 'stage9/generate_r26_ai_scenes.py'
       - 'stage9/tests/test_web_product_e2e.py'
       - 'stage9/tests/test_product_restructure.py'
       - 'stage9/tests/test_u1_u4_regression.py'
