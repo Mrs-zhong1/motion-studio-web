@@ -103,11 +103,13 @@ jobs:
         run: |
           url="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/r18-ai-review/"
           expected=$(python -c 'import json,os,pathlib; print(json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"r18-ai-publish/REVIEW_BUILD.json").read_text())["sha256"])')
+          expected_commit="${GITHUB_SHA}"
           matched=0
           for attempt in $(seq 1 36); do
             if curl -fsSL "${url}index.html" -o "$RUNNER_TEMP/live-r18.html"; then
               actual=$(sha256sum "$RUNNER_TEMP/live-r18.html" | cut -d ' ' -f 1)
-              if [ "$actual" = "$expected" ]; then matched=1; break; fi
+              deployed_commit=$(curl -fsSL "${url}REVIEW_BUILD.json" | python -c 'import json,sys;print(json.load(sys.stdin).get("sourceCommit",""))' 2>/dev/null || true)
+              if [ "$actual" = "$expected" ] && [ "$deployed_commit" = "$expected_commit" ]; then matched=1; break; fi
             fi
             sleep 10
           done
@@ -117,4 +119,5 @@ jobs:
         working-directory: .
         env:
           MOTION_R18_URL: https://${{ github.repository_owner }}.github.io/motion-studio-web/r18-ai-review/
+          MOTION_R18_EXPECTED_COMMIT: ${{ github.sha }}
         run: python stage9/tests/test_r21_ai_preview_live.py
