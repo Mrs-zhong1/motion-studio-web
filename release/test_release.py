@@ -36,8 +36,8 @@ class ReleasePolicyTests(unittest.TestCase):
             x[key] = {"status":"APPROVED", "evidenceUrl":"https://example.com/proof",
               "reviewer":"test", "reviewedAt":"2026-11-16"}
         x["aiAssets"].update(assetCount=39, verifiedOrigin="AI_GENERATED", usageTermsChecked=True)
-        self.assertEqual(inspect(VISUAL, x)["result"], "FAIL")
         with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(inspect(VISUAL, x, directory)["result"], "FAIL")
             images=Path(directory)/"stage9"/"ai-assets"
             images.mkdir(parents=True)
             manifest=[]
