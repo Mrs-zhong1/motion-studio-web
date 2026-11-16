@@ -1605,7 +1605,7 @@ function r17RenderFilmstrip(id){
  if(!host||!tpl)return;
  host.innerHTML=tpl.sections.map((section,index)=>{
   const img=photos[index];
-  const image=typeof img==='string'&&/^data:image\\/(jpeg|png|webp);base64,/.test(img)?img:'';
+  const image=typeof img==='string'&&/^data:image\/(jpeg|png|webp);base64,/.test(img)?img:'';
   return '<button type="button" data-r17-chapter="'+index+'" aria-label="查看第'+(index+1)+'章节">'+
    (image?'<img alt="" loading="lazy" decoding="async" src="'+image+'">':'<span class="r17-photo-missing">IMAGE PENDING</span>')+
    '<small>'+String(index+1).padStart(2,'0')+' / '+String(tpl.sections.length).padStart(2,'0')+'</small></button>';
