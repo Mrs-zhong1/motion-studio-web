@@ -32,11 +32,21 @@ def test_r17_preview():
                 frame.locator("nav.r14-story-rail").wait_for(timeout=30000)
                 total=page.evaluate("r17PreviewTotal")
                 assert total==(4 if name=="editorial" else 5),name
+                tiles=page.locator("#r17PreviewFilmstrip button")
+                assert tiles.count()==total,(name,tiles.count(),total)
+                assert page.locator("#r17PreviewFilmstrip img").count()==total,name
+                assert tiles.first.get_attribute("aria-current")=="step"
                 page.wait_for_function("()=>document.querySelector('#r17PreviewPosition').textContent.trim().startsWith('01 /')",timeout=15000)
                 assert page.locator("#r17PreviewPrev").is_disabled()
                 page.locator("#r17PreviewNext").click()
                 page.wait_for_function("()=>r17PreviewChapter===1",timeout=15000)
                 assert "02 / " in page.locator("#r17PreviewPosition").inner_text()
+                assert tiles.nth(1).get_attribute("aria-current")=="step"
+                tiles.last.click()
+                page.wait_for_function("(total)=>r17PreviewChapter===total-1",arg=total,timeout=15000)
+                assert page.locator("#r17PreviewNext").is_disabled()
+                tiles.first.click()
+                page.wait_for_function("()=>r17PreviewChapter===0",timeout=15000)
                 page.locator("#previewMobile").click()
                 assert page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")
                 page.locator("#previewImmersive").click()
