@@ -193,8 +193,15 @@ def test_product_restructure():
             )
             assert legacy_template == "custom"
             for template_id in template_shapes:
-                page.locator("#backToLibrary").click()
+                # Each template must be testable from a clean launch, even after
+                # editing a legacy project and collapsing both side panels.
+                page.goto(
+                    f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",
+                    wait_until="domcontentloaded",
+                )
+                page.locator("#discoveryView").wait_for(state="visible")
                 page.locator(f"[data-template-card='{template_id}']").click()
+                page.locator("#templatePreviewFrame").wait_for(state="attached")
                 page.locator("#templatePreviewFrame").content_frame.locator(
                     "section.section"
                 ).first.wait_for()
