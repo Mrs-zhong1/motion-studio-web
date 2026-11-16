@@ -56,6 +56,7 @@ on:
       - 'stage9/bundle-chapter-photos.mjs'
       - 'stage9/r30-cinematic-trial.mjs'
       - 'stage9/tests/test_r30_cinematic_trial.py'
+      - 'stage9/tests/test_r33_native_scroll_acceptance.py'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
 permissions:
@@ -96,6 +97,9 @@ jobs:
       - name: R30 native 2-scene Cinematic preview, editor and export regression
         if: matrix.browser == 'chromium'
         run: python tests/test_r30_cinematic_trial.py
+      - name: R33 real scroll progress, native photo visibility and export parity
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r33_native_scroll_acceptance.py
       - name: R9 real offline Three.js PBR studio and pointer orbit validation
         if: matrix.browser == 'chromium'
         run: python tests/test_r9_studio_3d.py
