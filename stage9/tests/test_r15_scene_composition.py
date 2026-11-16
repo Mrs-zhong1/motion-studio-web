@@ -22,9 +22,17 @@ def test_r15():
             assert editor.locator(".r15-scene-mark").count()==0
             for name in TEMPLATES:
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
-                assert 'r15-scene-mark' in html, name
                 assert f'data-template="{name}"' in html, name
-                assert html.count('class="r15-scene-mark"')==(5 if name in AUTHORED_SIX else (3 if name=="editorial" else 4)),name
+                if name == "editorial":
+                    # Editorial now has one coherent stage; old independent
+                    # scene labels and nested demos would regress the design.
+                    assert 'class="s1-story-stage"' in html
+                    assert html.count('class="section s1-story-anchor"') == 4
+                    assert html.count('class="s1-scene-image"') == 4
+                    assert html.count('class="r15-scene-mark"') == 0
+                else:
+                    assert 'r15-scene-mark' in html, name
+                    assert html.count('class="r15-scene-mark"')==(5 if name in AUTHORED_SIX else 4),name
             for name in ("cinematic","agency","saas"):
                 await_art=editor.evaluate("(id)=>ensureTemplatePhoto(id)",name)
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
