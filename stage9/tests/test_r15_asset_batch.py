@@ -48,8 +48,9 @@ def test_r15_asset_batch():
                 page.locator("#saveProject").click()
             assert saved.value.path().stat().st_size>3000
             exported=page.evaluate("exportDocument()")
-            assert exported.count('background-image:url(\'data:image/jpeg;base64,')>=3
-            assert 'r15-scene-mark' in exported
+            assert exported.count('class="s1-scene-image"')==5
+            assert exported.count('src="data:image/jpeg;base64,')>=3
+            assert 'class="s1-story-stage"' in exported
             assert 'installR14Navigator' in exported
             assert result["sections"][0]["image"] in exported
             # Batch failure must not silently overwrite even the first section.
