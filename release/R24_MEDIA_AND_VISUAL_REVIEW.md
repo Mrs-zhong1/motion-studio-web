@@ -22,3 +22,8 @@
 4. Do not promote review build or set `artDirection=APPROVED` merely from a green CI run.
 
 Production release remains **HOLD**. This is a Web-only product.
+
+## R24 screenshot workflow outcome
+- Real Chromium strict-AI screenshot workflow: **PASS** — https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43863507102
+- Downloadable GitHub Actions artifacts exist: `r24-story-screenshots-34aeffc6784a9cc39e38ab3f201fbe53544471e6` (actual PNG captures, 11,944,085 bytes) and `r24-story-geometry-34aeffc6784a9cc39e38ab3f201fbe53544471e6` (structured evidence). Artifacts expire according to the workflow's 14-day retention.
+- Screenshots document a real render, not automatic artistic approval. Manually open them in Actions before signing off on composition, softness, typography and chapter-to-chapter rhythm.
