@@ -93,6 +93,14 @@ Screenshots demonstrate real exported-page rendering, not final art-direction ap
 |---|---|
 | ![R16 Cinematic camera earlier](./r16-cinematic-multiplane-early.png) | ![R16 Cinematic camera later](./r16-cinematic-multiplane-late.png) |
 
+## R16-03 — continuous between-chapter transition
+
+Two actual Chromium screenshots of the same scene seam at different scroll positions; the outgoing chapter feathers into the next chapter's computed background.
+
+| Before chapter seam | During chapter handoff |
+|---|---|
+| ![R16 first seam](./r16-cross-chapter-early.png) | ![R16 second seam](./r16-cross-chapter-late.png) |
+
 ## R9 — Real offline Three.js studio scene
 
 These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.
