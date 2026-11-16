@@ -55,6 +55,9 @@ def test_r17_preview():
                 page.locator("#previewDesktop").click()
                 assert not page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")
                 page.keyboard.press("Escape")
+                assert modal.is_visible()
+                assert not modal.evaluate("el=>el.classList.contains('immersive-preview')")
+                page.keyboard.press("Escape")
                 assert modal.is_hidden()
                 assert card.evaluate("el=>el===document.activeElement"),name
                 assert page.locator("#templatePreviewFrame").get_attribute("srcdoc")==""
