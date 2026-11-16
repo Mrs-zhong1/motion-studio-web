@@ -58,32 +58,44 @@ def prompt(row):
        'This must be a genuinely new independently generated image, not a crop, resize, collage or contact sheet.')
 
 def extract_image(response):
+    """Read current Interactions API model_output or output_image convenience field.
+
+    Text-only completions, multiple images, and incomplete interactions are
+    failures; never silently treat them as a successful generated original.
+    """
     if response.get('status') not in (None,'completed'):
         raise ValueError('image interaction did not complete: '+str(response.get('status')))
     outputs=[c for step in response.get('steps',[]) if step.get('type')=='model_output'
              for c in step.get('content',[]) if c.get('type')=='image']
+    if not outputs and isinstance(response.get('output_image'),dict):
+        outputs=[response['output_image']]
     if len(outputs)!=1 or not outputs[0].get('data'):
-        raise ValueError('expected exactly one standalone image in model output steps')
-    if outputs[0].get('mime_type') not in ('image/png','image/jpeg','image/webp'):
+        raise ValueError('expected exactly one standalone generated image')
+    mime=outputs[0].get('mime_type')
+    if mime and mime not in ('image/png','image/jpeg','image/webp'):
         raise ValueError('unexpected generated image MIME')
     return base64.b64decode(outputs[0]['data'],validate=True),response.get('id','')
 
+def request_payload(row,model=MODEL):
+    return {'model':model,'input':[{'type':'text','text':prompt(row)}],
+            'response_format':{'type':'image','mime_type':'image/png','aspect_ratio':'16:9','image_size':'2K'}}
+
 def generate(row,key,model=MODEL):
-    body=json.dumps({'model':model,'input':[{'type':'text','text':prompt(row)}],
-                     'response_format':{'type':'image','aspect_ratio':'16:9','image_size':'2K'}}).encode()
-    req=Request(ENDPOINT,data=body,headers={'x-goog-api-key':key,'Content-Type':'application/json'},method='POST')
-    for attempt in range(3):
-        try:
-            with urlopen(req,timeout=120) as res:
-                return extract_image(json.loads(res.read(12_000_000)))
-        except HTTPError as exc:
-            # Do not print provider response bodies or secret-bearing headers.
-            if exc.code not in (429,500,502,503,504) or attempt==2:
-                raise RuntimeError('Gemini image request failed HTTP '+str(exc.code)) from None
-        except (TimeoutError,URLError):
-            if attempt==2:raise RuntimeError('image provider unavailable') from None
-        time.sleep(2**attempt)
-    raise RuntimeError('image retries exhausted')
+    body=json.dumps(request_payload(row,model)).encode()
+    req=Request(ENDPOINT,data=body,headers={'x-goog-api-key':key,
+        'Content-Type':'application/json'},method='POST')
+    # Image requests may be billed even when the response is lost. Automatic
+    # retries on timeout/429/5xx risk duplicate charges or divergent assets.
+    # A failed request is recorded by the operator; rerun only consciously.
+    try:
+        with urlopen(req,timeout=120) as res:
+            response=json.loads(res.read(24_000_000))
+            return extract_image(response)
+    except HTTPError as exc:
+        raise RuntimeError('Gemini image request failed HTTP '+str(exc.code)+
+                           '; not retried automatically to prevent duplicate charges') from None
+    except (TimeoutError,URLError):
+        raise RuntimeError('image request outcome unknown; inspect provider billing before manual rerun') from None
 
 def process_image(raw):
     try:
@@ -97,11 +109,15 @@ def process_image(raw):
                 raise ValueError(f'generated aspect ratio {ratio:.3f} is not 16:9')
             if img.mode!='RGB':img=img.convert('RGB')
             output=BytesIO()
-            img.save(output,format='JPEG',quality=92,optimize=True,subsampling=0)
-            data=output.getvalue()
-            if not 1000<=len(data)<=5_000_000:
-                raise ValueError('JPEG bytes outside R25 input range')
-            return data,[width,height]
+            # Preserve original pixel dimensions while meeting R25 5MB
+            # staging limit. Adjust JPEG quality, never resize/upscale.
+            for quality in (92,88,82,76):
+                output.seek(0);output.truncate(0)
+                img.save(output,format='JPEG',quality=quality,optimize=True,subsampling=0)
+                data=output.getvalue()
+                if 1000<=len(data)<=5_000_000:
+                    return data,[width,height]
+            raise ValueError('generated JPEG exceeds native asset size limit')
     except (UnidentifiedImageError,OSError) as exc:
         raise ValueError('invalid image bytes') from exc
 
