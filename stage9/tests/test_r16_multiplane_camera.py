@@ -57,7 +57,7 @@ def test_r16_multiplane():
             # Keep chapter visible and move it through two camera positions.
             page.evaluate("""()=>{
               const c=document.querySelector('.section.designed-chapter[data-index="2"]');
-              window.scrollTo(0,window.scrollY+c.getBoundingClientRect().top-innerHeight*.76);
+              window.scrollTo({top:window.scrollY+c.getBoundingClientRect().top-innerHeight*.76,behavior:'instant'});
             }""")
             page.wait_for_timeout(180)
             early=measure()
@@ -67,7 +67,7 @@ def test_r16_multiplane():
                 page.screenshot(animations="disabled"))
             page.evaluate("""()=>{
               const c=document.querySelector('.section.designed-chapter[data-index="2"]');
-              window.scrollTo(0,window.scrollY+c.getBoundingClientRect().top-innerHeight*.15);
+              window.scrollTo({top:window.scrollY+c.getBoundingClientRect().top-innerHeight*.15,behavior:'instant'});
             }""")
             page.wait_for_timeout(180)
             late=measure()
