@@ -94,6 +94,7 @@ exportDocument=function(){
  return output.replace('</head>',extra+'</head>')
   .replace('<body ',trial?'<body data-r30-dual-scene="true" ':'<body ');
 };
+if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
 window.MotionStudioR30={importTwo,originalImage:imageOriginal,getState:()=>({
  templateReady:!!templatePhotoCache.get('cinematic'),
  editorTemplate:project.templateId,
