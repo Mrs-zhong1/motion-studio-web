@@ -54,9 +54,7 @@ def run():
                 page.locator('#templatePreviewFrame').wait_for(state="visible")
                 stage=page.frame_locator('#templatePreviewFrame')
                 stage.locator('section.section').first.wait_for()
-                report=measure(page.frame(name=page.locator('#templatePreviewFrame').get_attribute('name')) if
-                    page.locator('#templatePreviewFrame').get_attribute('name') else
-                    page.locator('#templatePreviewFrame').element_handle().content_frame())
+                report=measure(page.locator('#templatePreviewFrame').element_handle().content_frame())
                 report["preset"]=f"{viewport['width']}x{viewport['height']}"
                 report["pageErrors"]=errors
                 evidence["samples"].append(report)
