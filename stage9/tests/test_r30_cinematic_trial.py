@@ -40,6 +40,7 @@ def run():
                 errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
                 page.goto(f'http://127.0.0.1:{server.server_port}/{EDITOR.name}',wait_until='domcontentloaded')
                 assert page.locator('#discoveryView').is_visible()
+                assert page.evaluate("()=>typeof window.MotionStudioR30")=='object', f'R30 browser bootstrap missing: {errors}'
                 page.locator('[data-template-card="cinematic"]').click()
                 page.locator('#r30TrialPreviewButton').wait_for()
                 initial=page.evaluate("()=>templatePhotoCache.get('cinematic').slice()")
