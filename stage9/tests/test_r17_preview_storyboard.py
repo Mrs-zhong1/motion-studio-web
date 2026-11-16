@@ -27,8 +27,8 @@ def test_r17_preview():
                 assert modal.is_visible() and modal.get_attribute("role")=="dialog"
                 assert modal.get_attribute("aria-modal")=="true"
                 assert modal.get_attribute("aria-labelledby")=="previewTitle"
-                if name=="editorial":
-                    # Flagship opens immersive by design; restore the overview
+                if name in ("editorial","cinematic","architecture","agency","fashion","gallery","saas"):
+                    # Narrative templates open immersive by design; restore the overview
                     # to exercise R17 filmstrip and preview device controls.
                     assert modal.evaluate("n=>n.classList.contains(\'immersive-preview\')")
                     page.locator("#previewImmersive").click()
