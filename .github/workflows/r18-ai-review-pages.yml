@@ -8,6 +8,8 @@ on:
       - 'stage9/ai-chapter-assets.mjs'
       - 'stage9/build-offline.mjs'
       - 'stage9/r30-cinematic-trial.mjs'
+      - 'stage9/r31-cinematic-continuity.mjs'
+      - 'stage9/tests/test_r31_story_continuity.mjs'
       - 'stage9/tests/test_r30_cinematic_trial.py'
       - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_r21_ai_preview_live.py'
@@ -68,6 +70,7 @@ jobs:
           python tests/test_r18_ai_folder_import.py
           python tests/test_web_product_e2e.py
           python tests/test_r30_cinematic_trial.py
+          node --test tests/test_r31_story_continuity.mjs
       - name: Stage public review page without changing production root
         run: |
           mkdir -p "$RUNNER_TEMP/r18-ai-publish"
