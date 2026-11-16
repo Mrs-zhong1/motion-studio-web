@@ -25,8 +25,8 @@ def test_r16_multiplane():
                 assert f"data-template=\"{name}\"" in out,name
                 assert "--r16-photo-y" in out,name
                 assert "--r16-mist-x" in out,name
-            editor.evaluate("async()=>await ensureTemplatePhoto('cinematic')")
-            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            editor.evaluate("async()=>await ensureTemplatePhoto('product-3d')")
+            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","product-3d")
             page=browser.new_page(viewport={"width":1440,"height":900})
             errors=[];page.on("pageerror",lambda err:errors.append(str(err)))
             page.set_content(html,wait_until="domcontentloaded",timeout=60000)
