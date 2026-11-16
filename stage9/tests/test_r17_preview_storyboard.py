@@ -34,7 +34,7 @@ def test_r17_preview():
                     page.locator("#previewImmersive").click()
                 page.wait_for_function("""()=>!document.querySelector('#templatePreview').hasAttribute('aria-busy')""",timeout=45000)
                 frame=page.frame_locator("#templatePreviewFrame")
-                frame.locator("nav.r14-story-rail").wait_for(timeout=30000)
+                frame.locator("nav.r14-story-rail").wait_for(state="attached",timeout=30000)
                 total=page.evaluate("r17PreviewTotal")
                 assert total==(4 if name=="editorial" else 5),name
                 tiles=page.locator("#r17PreviewFilmstrip button")
