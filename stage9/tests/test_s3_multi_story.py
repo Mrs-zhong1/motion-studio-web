@@ -64,7 +64,8 @@ def run():
             # 3D product template is deliberately separate; it must still use
             # the genuine standalone Three.js renderer and not a fake story.
             product=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","product-3d")
-            assert "offline-glb-scene" in product
+            product_ids=editor.evaluate("""()=>createProjectFromTemplate('product-3d').sections.map(s=>s.id)""")
+            assert "offline-glb-scene" in product_ids,product_ids
             assert 'data-template="product-3d"' in product
             assert not 'data-story-profile="product-3d"' in product
             browser.close()
