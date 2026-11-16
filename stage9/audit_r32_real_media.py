@@ -14,7 +14,7 @@ from pathlib import Path
 from PIL import Image,UnidentifiedImageError
 
 ROOT=Path(__file__).resolve().parents[1]
-ASSETS=ROOT/'ai-assets'
+ASSETS=ROOT/'stage9'/'ai-assets'
 TEMPLATES=('editorial','product-3d','cinematic','architecture','agency','fashion','gallery','saas')
 
 def audit(asset_dir=ASSETS):
