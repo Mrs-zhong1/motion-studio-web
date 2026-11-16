@@ -2,7 +2,8 @@
   "three": "0.180.0",
   "engineBytes": 624933,
   "sharedEngineBytes": 622948,
-  "editorBytes": 8999171,
+  "productStoryEngineBytes": 611579,
+  "editorBytes": 9815206,
   "photoBundle": {
     "editorial": {
       "bundledPhotos": 4,
