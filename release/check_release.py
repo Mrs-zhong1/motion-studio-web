@@ -5,6 +5,7 @@ R17 visual evidence remains historical. Production requires rebuilt AI-first
 asset evidence and browser E2E, but never native-phone/GPU device signoff.
 """
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -20,7 +21,56 @@ REQUIRED = {
     "liveIntegrity": "R21: HTTPS deployment and tested artifact hash",
 }
 
-def inspect(visual, approvals):
+
+def verify_committed_ai_assets(root):
+    """Check actual committed bytes; approval metadata alone is insufficient."""
+    errors=[]
+    directory=Path(root)/"stage9"/"ai-assets"
+    manifest_path=directory/"manifest.json"
+    if not manifest_path.is_file():
+        return ["R18: no committed stage9/ai-assets/manifest.json"]
+    try:
+        manifest=json.loads(manifest_path.read_text(encoding="utf-8"))
+        records=manifest.get("assets")
+    except (OSError, ValueError):
+        return ["R18: invalid committed AI manifest"]
+    expected={(name,index) for name in IDS for index in range(1,5 if name=="editorial" else 6)}
+    if not isinstance(records,list) or len(records)!=39:
+        return ["R18: committed AI manifest must have exactly 39 records"]
+    observed=set()
+    digest_set=set()
+    for item in records:
+        if not isinstance(item,dict):
+            errors.append("R18: malformed AI record")
+            continue
+        name=item.get("template")
+        index=item.get("chapter")
+        file=item.get("file")
+        key=(name,index)
+        if key not in expected or key in observed:
+            errors.append("R18: duplicate or unknown chapter")
+        observed.add(key)
+        if not isinstance(file,str) or not file.endswith((".jpg",".jpeg",".png",".webp")) or "/" in file or "\\\\" in file:
+            errors.append("R18: invalid AI filename")
+            continue
+        source=item.get("source")
+        if source!="AI_GENERATED" or item.get("commercialUseTermsChecked") is not True:
+            errors.append("R18: AI origin or allowed-use record missing")
+        path=directory/file
+        try:
+            data=path.read_bytes()
+        except OSError:
+            errors.append(f"R18: missing committed AI media: {file}")
+            continue
+        digest=hashlib.sha256(data).hexdigest()
+        if digest!=item.get("sha256") or len(data)<1000:
+            errors.append(f"R18: AI bytes or SHA-256 mismatch: {file}")
+        digest_set.add(digest)
+    if observed!=expected or len(digest_set)!=39:
+        errors.append("R18: 39 distinct AI chapter media files not established")
+    return sorted(set(errors))
+
+def inspect(visual, approvals, asset_root=None):
     failures, holds = [], []
     rows = visual.get("geometryAndImageEvidence", [])
     pairs = [(r.get("template"), r.get("viewport")) for r in rows]
@@ -48,6 +98,7 @@ def inspect(visual, approvals):
     if assets.get("status") == "APPROVED":
         if assets.get("assetCount") != 39 or assets.get("verifiedOrigin") != "AI_GENERATED" or assets.get("usageTermsChecked") is not True:
             failures.append("R18: AI asset attestation incomplete or use terms not checked")
+        failures.extend(verify_committed_ai_assets(asset_root or ROOT))
     status = "FAIL" if failures else ("HOLD" if holds else "PASS")
     return {"schema": "motion-studio-r18-r21-web-release-gate-v2", "result": status,
             "r17AutomatedBaseline": visual.get("automatedGate"), "failures": sorted(set(failures)),
@@ -62,7 +113,7 @@ def main():
     p.add_argument("--output", type=Path)
     a = p.parse_args()
     try:
-        report = inspect(json.loads(a.visual.read_text(encoding="utf-8")), json.loads(a.approvals.read_text(encoding="utf-8")))
+        report = inspect(json.loads(a.visual.read_text(encoding="utf-8")), json.loads(a.approvals.read_text(encoding="utf-8")), ROOT)
     except (OSError, ValueError, TypeError) as e:
         print(f"Missing or invalid release evidence: {e}", file=sys.stderr)
         return 2
