@@ -16,7 +16,7 @@ class ReleasePolicyTests(unittest.TestCase):
         r = inspect(VISUAL, APPROVAL)
         self.assertEqual(r["result"], "HOLD")
         self.assertFalse(r["nativePhoneHardwareRequired"])
-        self.assertTrue(any("art-direction" in s for s in r["holds"]))
+        self.assertTrue(any("visual design review" in s for s in r["holds"]))
         self.assertTrue(any("HTTPS deployment" in s for s in r["holds"]))
         self.assertFalse(any("physical-device" in s for s in r["holds"]))
 
