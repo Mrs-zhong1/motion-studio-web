@@ -177,7 +177,7 @@ jobs:
               assert middle.is_file() and middle.stat().st_size>1000, middle
               ending=base/f'{row["template"]}-ending-{row["device"]}.png'
               assert ending.is_file() and ending.stat().st_size>1000, ending
-          for image in ("r9-studio-model.png","r9-studio-page.png","r11-mobile-product.png","r16-cinematic-multiplane-early.png","r16-cinematic-multiplane-late.png,"r16-cross-chapter-early.png","r16-cross-chapter-late.png"):
+          for image in ("r9-studio-model.png","r9-studio-page.png","r11-mobile-product.png","r16-cinematic-multiplane-early.png","r16-cinematic-multiplane-late.png","r16-cross-chapter-early.png","r16-cross-chapter-late.png"):
               target=base/image
               assert target.is_file() and target.stat().st_size>1000, target
           for tid in ("editorial","product-3d"):
