@@ -415,10 +415,31 @@ function renderTemplateGrid(category='All'){const list=category==='All'?template
 function buildTemplatePreviewDocument(id){const previous={project,active,activeLayer,selectedLayers};project=createProjectFromTemplate(id);active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);const html=exportDocument();project=previous.project;active=previous.active;activeLayer=previous.activeLayer;selectedLayers=previous.selectedLayers;return html;}
 async function previewTemplate(id){const tpl=templateSets[id];if(!tpl)return;
 if($('templatePreview').hidden)r17PreviousFocus=document.activeElement;
+delete $('templatePreview').dataset.projectPreview;$('previewUse').hidden=false;$('previewUsePanel').hidden=false;
 setImmersivePreview(false);previewTemplateId=id;r17PreviewChapter=0;r17PreviewTotal=tpl.sections.length;r17UpdatePreviewNav();
 $('templatePreview').setAttribute('aria-busy','true');$('previewTitle').textContent=tpl.name;$('previewHeroTitle').textContent=tpl.name;$('previewDescription').textContent=tpl.description;$('previewCategory').textContent=tpl.category.toUpperCase()+' / '+tpl.tag;$('previewMeta').textContent='正在准备页面预览…';$('templatePreview').hidden=false;await ensureTemplatePhoto(id);if(previewTemplateId!==id)return;$('templatePreview').removeAttribute('aria-busy');r17RenderFilmstrip(id);$('previewClose').focus();$('previewMeta').textContent=tpl.tag+' · 可交互页面';$('templatePreviewFrame').srcdoc=buildTemplatePreviewDocument(id);if(id==='editorial')setImmersivePreview(true);$('previewDevice').classList.remove('mobile');$('previewDesktop').classList.add('active');$('previewMobile').classList.remove('active');$('templatePreview').hidden=false;}
+function previewCurrentProject(){
+ const modal=$('templatePreview');
+ if(modal.hidden)r17PreviousFocus=document.activeElement;
+ previewTemplateId=null;r17PreviewChapter=0;r17PreviewTotal=project.sections.length;
+ modal.dataset.projectPreview='true';
+ $('previewTitle').textContent=project.title;
+ $('previewHeroTitle').textContent=project.title;
+ $('previewDescription').textContent='当前编辑内容的完整连续叙事预览';
+ $('previewCategory').textContent='CURRENT PROJECT / LIVE STORY';
+ $('previewMeta').textContent='当前编辑版本 · 滚动探索';
+ $('previewUse').hidden=true;$('previewUsePanel').hidden=true;
+ const host=$('r17PreviewFilmstrip');
+ host.innerHTML=project.sections.map((section,index)=>'<button type="button" data-r17-chapter="'+index+'" aria-label="跳转第'+(index+1)+'幕">'+(section.image?'<img alt="" src="'+safe(section.image)+'">':'')+'<small>'+String(index+1).padStart(2,'0')+' / '+String(project.sections.length).padStart(2,'0')+'</small></button>').join('');
+ host.querySelectorAll('button').forEach(button=>button.onclick=()=>r17GoPreviewChapter(Number(button.dataset.r17Chapter)));
+ r17UpdatePreviewNav();
+ $('templatePreviewFrame').srcdoc=exportDocument();
+ $('previewDevice').classList.remove('mobile');
+ $('previewDesktop').classList.add('active');$('previewMobile').classList.remove('active');
+ modal.hidden=false;setImmersivePreview(true);$('previewClose').focus();
+}
 function setImmersivePreview(enabled){const overlay=$('templatePreview');overlay.classList.toggle('immersive-preview',!!enabled);const button=$('previewImmersive');button.setAttribute('aria-pressed',String(!!enabled));button.textContent=enabled?'退出沉浸':'沉浸预览';button.title=enabled?'返回模板说明和网页双栏预览':'整页展示交互网页';}
-function closeTemplatePreview(){$('templatePreview').hidden=true;$('templatePreviewFrame').srcdoc='';$('templatePreview').removeAttribute('aria-busy');previewTemplateId=null;setImmersivePreview(false);if(r17PreviousFocus?.isConnected)r17PreviousFocus.focus();r17PreviousFocus=null;}
+function closeTemplatePreview(){$('templatePreview').hidden=true;delete $('templatePreview').dataset.projectPreview;$('previewUse').hidden=false;$('previewUsePanel').hidden=false;$('templatePreviewFrame').srcdoc='';$('templatePreview').removeAttribute('aria-busy');previewTemplateId=null;setImmersivePreview(false);if(r17PreviousFocus?.isConnected)r17PreviousFocus.focus();r17PreviousFocus=null;}
 function showEditor(){closeTemplatePreview();$('discoveryView').hidden=true;$('editorView').hidden=false;queueMicrotask(()=>{render();$('canvasViewport').scrollTop=0;});}
 function showDiscovery(){$('editorView').hidden=true;$('discoveryView').hidden=false;window.scrollTo(0,0)}
 async function useTemplate(id){await ensureTemplatePhoto(id);const next=createProjectFromTemplate(id);project=next;active=project.sections[0]?.uid||null;activeLayer=project.sections[0]?.layers[0]?.id||null;selectedLayers=new Set(activeLayer?[activeLayer]:[]);historyStack=[];futureStack=[];lastHistoryState=snapshot();showEditor();persistDraftWithoutHistory();notify('已使用模板：'+templateSets[id].name);}
@@ -1080,7 +1101,4 @@ function updateLayers(){const wh=window.innerHeight||700;document.querySelectorA
 if(sec.classList.contains('designed-chapter')||sec.classList.contains('designed-hero')){const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const clamp01=x=>Math.max(0,Math.min(1,x)),ease=t=>t*t*(3-2*t);
  const enter=reduced?1:ease(clamp01((wh-r.top)/(wh*.70)));
- const exit=reduced?0:ease(clamp01((wh*.36-r.bottom)/(wh*.36)));
- sec.style.setProperty('--chapter-enter',enter.toFixed(4));sec.style.setProperty('--chapter-exit',exit.toFixed(4));
- sec.dataset.chapterEnter=enter.toFixed(3);sec.dataset.chapterExit=exit.toFixed(3);}
-const cam=chapterCameras[i]||{preset:'none',start:0,end:100,power:0};sec.dataset.transition=globalTransition;const mask=globalTransition==='veil'?.78:globalTransition==='fade'?.5:0;sec.style.setProperty('--chapter-veil',String(window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:mask*Math.max(0,(p-.79)/.21)));if(sec.classList.contains('designed-chapter')||sec.classList.contains('designed-hero')){const t=window.matchMedia('(prefers-reduced-motion: reduce)').matches?1:Math.max(0,Math.min(1,(p-.04)/.48));sec.style.setProperty('--story-reveal',String(t*t*(3-2*t)));sec.dataset.storyProgress=t.toFixed(3)}const fr=sec.querySelector('iframe');if(fr){let transform='none',opacity=1;if(cam.advanced&&cam.path?.length===3){const ix=p<=.5?0:1,a=cam.path[ix],b=cam.path[ix+1],v=Math.max(0,Math.min(1,(p*100-a.at)/(b.at-a.at))),t=v*v*(3-2*v),mix=k=>a[k]+(b[k]-a[k])*t;transform='perspective(1100px) translate('+mix('x')+'px,'+mix('y')+'px) rotateY('+mix('tilt')+'deg) scale('+(mix('zoom')/100)+')';opacity=mix('opacity')/100;}else{const start=cam.start/100,end=Math.max(start+.01,cam.end/100),raw=Math.max(0,Math.min(1,(p-start)/(end-start))),t=raw*raw*(3-2*raw),amp=cam.power/100;if(cam.preset==='push')transform='scale('+(1+amp*.28*(1-t))+')';if(cam.preset==='rise'){transform='translateY('+((1-t)*amp*120)+'px) scale('
+ 
