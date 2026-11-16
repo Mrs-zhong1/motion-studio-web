@@ -1,0 +1,107 @@
+name: R26 Original 2K Scene Production (review artifacts only)
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Dry run costs nothing. Generate makes real billable image API requests.'
+        type: choice
+        options: [dry-run, generate]
+        default: dry-run
+      template:
+        description: 'Selected template or ALL'
+        type: choice
+        options: [ALL, editorial, product-3d, cinematic, architecture, agency, fashion, gallery, saas]
+        default: ALL
+      limit:
+        description: 'Maximum individual images; 33 to process entire storyboard'
+        type: number
+        default: 2
+      authorize_cost:
+        description: 'Type GENERATE_IMAGES to authorize paid requests'
+        type: string
+        default: ''
+      terms_checked:
+        description: 'I reviewed Google Gemini API use terms and accept output usage conditions'
+        type: boolean
+        default: false
+  push:
+    branches:
+      - release/r18-r21-acceptance-gates
+    paths:
+      - 'stage9/generate_r26_ai_scenes.py'
+      - 'stage9/r26-storyboard.json'
+      - 'stage9/tests/test_r26_generation.py'
+      - '.github/workflows/r26-original-scenes.yml'
+permissions:
+  contents: read
+jobs:
+  verify-or-generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image decoder
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Test storyboard and no-spend safeguards
+        run: python -m unittest discover -s stage9/tests -p 'test_r26_generation.py' -v
+      - name: Validate 33 story prompts without image provider calls
+        run: python stage9/generate_r26_ai_scenes.py --limit 33 > r26-dry-run.json
+      - name: Verify explicit authorization (before network access)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'generate' }}
+        env:
+          KEY_PRESENT: ${{ secrets.GEMINI_API_KEY != '' }}
+          USER_APPROVAL: ${{ inputs.authorize_cost }}
+          TERMS_ACCEPTED: ${{ inputs.terms_checked }}
+          MAX_SCENES: ${{ inputs.limit }}
+        run: |
+          test "$KEY_PRESENT" = "true" || { echo 'GEMINI_API_KEY repo secret missing'; exit 1; }
+          test "$USER_APPROVAL" = "GENERATE_IMAGES" || { echo 'Explicit cost authorization required'; exit 1; }
+          test "$TERMS_ACCEPTED" = "true" || { echo 'Terms acknowledgement required'; exit 1; }
+          test "$MAX_SCENES" -ge 1 && test "$MAX_SCENES" -le 33
+      - name: Generate independent native 2K chapter images into review staging only
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'generate' }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TEMPLATE: ${{ inputs.template }}
+          LIMIT: ${{ inputs.limit }}
+        shell: bash
+        run: |
+          args=()
+          if [ "$TEMPLATE" != "ALL" ]; then args+=(--template "$TEMPLATE"); fi
+          python stage9/generate_r26_ai_scenes.py --generate --authorize-cost GENERATE_IMAGES --terms-checked --limit "$LIMIT" --out r26-review-staging "${args[@]}"
+      - name: Confirm staging assets are real full-resolution originals
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'generate' }}
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'stage9')
+          from generate_r26_ai_scenes import process_image
+          folder=Path('r26-review-staging')
+          manifest=json.loads((folder/'replacement.json').read_text())
+          assert manifest
+          for row in manifest:
+            raw=(folder/row['file']).read_bytes()
+            _,dims=process_image(raw)
+            assert dims==row['nativeSourceDimensions']
+          print('R26 staged native originals:',len(manifest))
+          print('Not merged to source: artDirection HOLD until visual approval')
+          PY
+      - name: Publish reviewed-only staging images
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'generate' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: r26-original-scenes-${{ github.sha }}
+          path: r26-review-staging/
+          retention-days: 14
+      - name: Publish no-spend storyboard evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: r26-dry-run-prompts-${{ github.sha }}
+          path: r26-dry-run.json
+          retention-days: 14
