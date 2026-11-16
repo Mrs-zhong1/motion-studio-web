@@ -17,6 +17,7 @@ on:
       - 'stage9/tests/test_r16_multiplane_camera.py'
       - 'stage9/tests/test_r16_cross_chapter.py'
       - 'stage9/tests/test_r17_preview_storyboard.py'
+      - 'stage9/tests/test_r17_quality_gate.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - '.github/workflows/web-product-e2e.yml'
@@ -38,6 +39,7 @@ on:
       - 'stage9/tests/test_r16_multiplane_camera.py'
       - 'stage9/tests/test_r16_cross_chapter.py'
       - 'stage9/tests/test_r17_preview_storyboard.py'
+      - 'stage9/tests/test_r17_quality_gate.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - 'stage9/build-offline.mjs'
@@ -116,6 +118,9 @@ jobs:
       - name: Audit all 8 full templates at desktop and mobile viewport
         if: matrix.browser == 'chromium'
         run: python tests/test_template_visual_audit.py
+      - name: R17 measurable full gallery release quality and licensing holds
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r17_quality_gate.py
       - name: Template discovery, preview and three-pane editor journey
         run: python tests/test_product_restructure.py
         env:
@@ -192,6 +197,9 @@ jobs:
           for row in report["templates"]:
               target=base/f'{row["template"]}-immersive-{row["device"]}.png'
               assert target.is_file() and target.stat().st_size>1000, target
+          quality=json.loads(Path("R17_QUALITY_GATE.json").read_text())
+          assert quality["automatedGate"]=="PASS",quality
+          assert quality["productionRelease"]=="HOLD"
           PY
           cd "$GITHUB_WORKSPACE"
           # Checkout the latest PR branch tip, never commit generated imagery to main.
@@ -199,6 +207,7 @@ jobs:
           git checkout -B "visual-evidence-publish" "origin/$REVIEW_BRANCH"
           mkdir -p stage9/visual-evidence
           cp /tmp/motion-studio-visual-audit/*.png stage9/visual-evidence/
+          cp R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
           python - <<'PY'
           from pathlib import Path
           import json
@@ -229,6 +238,13 @@ jobs:
               for row in visual.get("templates",[]):
                   if row.get("device")=="desktop":
                       out.append(f'| {row["template"]} | {row.get("realPhotoCount","?")} | {row.get("originalFallbackCount","?")} | {row["sectionCount"]} |')
+          quality=json.loads(Path("stage9/visual-evidence/R17_QUALITY_GATE.json").read_text())
+          out += ["", "## R17 — measurable visual quality and publication holds", "",
+                  f'Automated visual gate: **{quality["automatedGate"]}**; covered unique chapter photo sources: **{quality["photoCoverage"]}**.',
+                  "This test validates images, layout, and distinct story scenes; it does not claim artistic signoff.",
+                  f'Human art direction: **{quality["humanVisualArtDirection"]}**; native GPU: **{quality["nativeMobileGpuPerformance"]}**; licensing: **{quality["commercialImageRights"]}**.',
+                  "",
+                  "[Inspect full R17 quality evidence](./R17_QUALITY_GATE.json)", ""]
           out += ["", "## R5 — real third chapter of every template", "",
                   "Images below show actual exported-page sections, not the home-card covers.",
                   "",
@@ -306,6 +322,7 @@ jobs:
             git checkout -B visual-evidence-publish "origin/$REVIEW_BRANCH"
             mkdir -p stage9/visual-evidence
             cp /tmp/motion-studio-visual-audit/*.png stage9/visual-evidence/
+          cp R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
             cp /tmp/motion-studio-visual-audit/GALLERY_README.md stage9/visual-evidence/README.md
             git add stage9/visual-evidence
             if git diff --cached --quiet; then
