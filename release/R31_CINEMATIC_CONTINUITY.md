@@ -21,3 +21,9 @@ Date: 2026-11-16. Review branch only.
 - Two genuine R29 source images remain user-selectable in the live trial; R31 code changes do not silently alter official 39 AI images. The 33 collage-derived sources still need independent high-resolution replacement and review.
 - A CSS contract cannot prove human-perceived cinematic quality. Manual visual inspection should compare 1440×900 and 390×844 scrolling captures before signing `artDirection` approval.
 - Production release is **HOLD**.
+
+## R31 visual audit corrective action
+- The first R31 web-product visual audit detected Cinematic photos falling below the 0.85 source-image visibility threshold because a variable opacity formula dimmed images even though R16 clip reveal was already active. This was a **real visual regression**, not a test issue.
+- Fixed by keeping the photographic `.section-art` fully opaque (`opacity:1!important`) in Cinematic exported previews and using the existing R16 clip-path and camera scroll to reveal scenes instead. Separate color grading and text legibility remain.
+- Mobile chapter 3 now frames the carriage-window edge at 34% horizontal focal point, preserving R16 camera offsets, based on inspection of the R29 portrait screenshot. This framing requires human approval with actual R29 image input.
+- Do not label all-browser PASS until the latest post-fix E2E run succeeds; the older failing run is retained as defect evidence.
