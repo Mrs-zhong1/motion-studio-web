@@ -8,6 +8,7 @@ import {addCameraEditorStage11} from './stage11-camera-path.mjs';
 import {addCameraEditorStage12} from './stage12-camera-editor.mjs';
 import {bundleChapterPhotos} from './bundle-chapter-photos.mjs';
 import {loadAIChapterAssets} from './ai-chapter-assets.mjs';
+import {applyVisualRefinement} from './visual-refinement-r22.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 const result=await build({entryPoints:[resolve(root,'three-scene-entry.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const engine=result.outputFiles[0].text;
@@ -36,7 +37,7 @@ injected=injected.replace('const templateOfflinePhotoBundles={};',
   'const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
 // Do not leave remote secondary demo photos as runtime dependencies.
 injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
-const editor=addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected)));
+const editor=applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected))));
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
