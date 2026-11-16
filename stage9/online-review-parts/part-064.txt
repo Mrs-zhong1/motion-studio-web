@@ -1,4 +1,36 @@
-nst r=f.closest('section').getBoundingClientRect(),p=Math.max(0,Math.min(1,(wh-r.top)/(wh+r.height)));try{f.contentWindow.postMessage({type:'motion-studio-scroll',progress:p},'*')}catch(e){}})}window.addEventListener('scroll',syncScroll,{passive:true});window.addEventListener('resize',syncScroll);setTimeout(syncScroll,1200);
+nd:linear-gradient(to bottom,transparent,var(--r16-bridge-color));
+}
+body.r16-story-ready .page[data-template="agency"] .section.r16-linked-chapter::before{
+ height:clamp(90px,18vh,220px);background:linear-gradient(150deg,transparent,var(--r16-bridge-color));
+}
+body.r16-story-ready .page[data-template="gallery"] .section.r16-linked-chapter::before{
+ background:radial-gradient(ellipse 120% 150% at 50% 130%,var(--r16-bridge-color),transparent 75%);
+}
+/* The real iframe/WebGL layer hands off through a subtle exposure ramp.
+   Never replace its existing inline transform/camera or pointer behavior. */
+body.r16-story-ready .page[data-template] .section.r16-linked-chapter > iframe{
+ filter:brightness(calc(1 - var(--r16-bridge,0)*.2)) saturate(calc(1 - var(--r16-bridge,0)*.1));
+}
+body.r16-story-ready .page[data-template] .section.designed-chapter .designed-chapter-heading{
+ opacity:calc(.78 + var(--r16-incoming,1)*.22);
+}
+body.r16-story-ready .page[data-template] .section.r16-linked-chapter .r15-scene-mark{
+ opacity:calc(.54 + var(--r16-incoming,1)*.4);
+}
+@media(prefers-reduced-motion:reduce){
+ body.r16-story-ready .page[data-template] .section.r16-linked-chapter::before{
+  display:none!important;
+ }
+ body.r16-story-ready .page[data-template] .section.r16-linked-chapter > iframe{
+  filter:none!important;
+ }
+ body.r16-story-ready .page[data-template] .section.designed-chapter .designed-chapter-heading,
+ body.r16-story-ready .page[data-template] .section.r16-linked-chapter .r15-scene-mark{
+  opacity:1!important;
+ }
+}
+`;
+ const extraScript=`<script>const frames=[...document.querySelectorAll('.section iframe')];function syncScroll(){const wh=window.innerHeight||700;frames.forEach(f=>{const r=f.closest('section').getBoundingClientRect(),p=Math.max(0,Math.min(1,(wh-r.top)/(wh+r.height)));try{f.contentWindow.postMessage({type:'motion-studio-scroll',progress:p},'*')}catch(e){}})}window.addEventListener('scroll',syncScroll,{passive:true});window.addEventListener('resize',syncScroll);setTimeout(syncScroll,1200);
 const chapterLayers=${JSON.stringify(project.sections.map(s=>s.layers)).replace(/</g,'\\u003c')};const chapterCameras=${JSON.stringify(project.sections.map(s=>s.camera))};const globalTransition=${JSON.stringify(project.transition||'fade')};
 function updateLayers(){const wh=window.innerHeight||700;document.querySelectorAll('.section').forEach((sec,i)=>{const r=sec.getBoundingClientRect(),p=Math.max(0,Math.min(1,(wh-r.top)/(wh+r.height)));
 if(sec.classList.contains('designed-chapter')||sec.classList.contains('designed-hero')){const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
