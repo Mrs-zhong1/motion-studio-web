@@ -54,9 +54,12 @@ def run_audit():
                 frame = preview.content_frame
                 frame.locator("section.section").first.wait_for(timeout=30000)
                 assert page.locator("#previewHeroTitle").inner_text().strip()
-                assert page.locator("#previewUsePanel").is_visible()
                 assert page.locator(".preview-product-layout").is_visible()
-                if template_id in ("editorial", "product-3d"):
+                if template_id == "editorial":
+                    assert page.locator("#templatePreview").evaluate("n=>n.classList.contains('immersive-preview')")
+                else:
+                    assert page.locator("#previewUsePanel").is_visible()
+                if template_id == "product-3d":
                     assert frame.locator(".section.designed-hero").count()==1
 
                 total_sections = page.evaluate(
@@ -69,6 +72,48 @@ def run_audit():
                 assert len(manifest)==total_sections, (template_id,len(manifest),total_sections)
                 assert real_photo_count+fallback_count==total_sections, (template_id,manifest)
                 assert frame.locator("section.section").count() == total_sections
+                if template_id == "editorial":
+                    # S1 uses a persistent shared stage, not per-section demo
+                    # iframes. Test the same full-page story in both viewports.
+                    assert frame.locator(".s1-story-stage").count()==1
+                    assert frame.locator(".s1-story-anchor").count()==4
+                    assert frame.locator(".s1-scene-image").count()==4
+                    assert frame.locator(".section iframe").count()==0
+                    for device,width,height in (("desktop",1440,900),("mobile",390,844)):
+                        page.set_viewport_size({"width":width,"height":height})
+                        if device=="mobile":
+                            page.locator("#previewMobile").click()
+                        else:
+                            page.locator("#previewDesktop").click()
+                        stage=frame.locator(".s1-story-stage")
+                        stage.wait_for(state="visible")
+                        evidence={"template":template_id,"device":device,
+                                  "chapterCount":4,"photoCount":4,
+                                  "realPhotoCount":real_photo_count,
+                                  "originalFallbackCount":fallback_count}
+                        evidence["sceneSources"]=frame.locator(".s1-scene-image").evaluate_all(
+                            "nodes=>nodes.map(n=>n.getAttribute('src')?.startsWith('data:image/'))")
+                        assert all(evidence["sceneSources"]),evidence
+                        evidence["viewport"]=stage.evaluate("""n=>({
+                            viewportWidth:innerWidth,stageWidth:n.getBoundingClientRect().width,
+                            overflow:document.documentElement.scrollWidth-innerWidth
+                        })""")
+                        assert evidence["viewport"]["overflow"]<=32,evidence
+                        frame.evaluate("()=>scrollTo(0,document.querySelectorAll('.s1-story-anchor')[2].offsetTop)")
+                        frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='2'",timeout=12000)
+                        middle=stage.screenshot(animations="disabled",timeout=30000)
+                        frame.evaluate("()=>scrollTo(0,0)")
+                        frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='0'",timeout=12000)
+                        opening=stage.screenshot(animations="disabled",timeout=30000)
+                        evidence["sceneChangeHashes"]=[hashlib.sha256(opening).hexdigest()[:16],
+                                                        hashlib.sha256(middle).hexdigest()[:16]]
+                        assert len(set(evidence["sceneChangeHashes"]))==2,evidence
+                        (SCREENSHOTS/f"editorial-{device}-opening.png").write_bytes(opening)
+                        (SCREENSHOTS/f"editorial-{device}-chapter3.png").write_bytes(middle)
+                        result["templates"].append(evidence)
+                    page.locator("#previewClose").click()
+                    assert page.locator("#templatePreview").is_hidden()
+                    continue
                 for device, width, height in (("desktop", 1440, 900), ("mobile", 390, 844)):
                     page.set_viewport_size({"width": width, "height": height})
                     # The mobile button narrows the embedded preview to device width.
