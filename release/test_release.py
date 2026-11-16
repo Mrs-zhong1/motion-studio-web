@@ -1,4 +1,4 @@
-"""Unit tests for release policy; no browser or external dependencies required."""
+"""Web-only release gate must never require native phone hardware."""
 import copy
 import json
 import unittest
@@ -10,30 +10,36 @@ VISUAL = json.loads((ROOT / "stage9/visual-evidence/R17_QUALITY_GATE.json").read
 APPROVAL = json.loads((ROOT / "release/R18_R21_APPROVALS.json").read_text())
 
 class ReleasePolicyTests(unittest.TestCase):
-    def test_evidence_is_complete_but_release_held(self):
-        out = inspect(VISUAL, APPROVAL)
-        self.assertEqual(out["result"], "HOLD", out)
-        self.assertFalse(out["failures"])
-        self.assertFalse(out["productionEligible"])
-        self.assertTrue(any("art-direction" in s for s in out["holds"]))
-        self.assertTrue(any("commercial clearance" in s for s in out["holds"]))
+    def test_old_unsplash_photos_are_review_only(self):
+        r = inspect(VISUAL, APPROVAL)
+        self.assertEqual(r["result"], "HOLD")
+        self.assertFalse(r["nativePhoneHardwareRequired"])
+        self.assertTrue(any("AI-generated" in s for s in r["holds"]))
+        self.assertFalse(any("physical-device" in s for s in r["holds"]))
 
-    def test_missing_template_is_failure(self):
-        evidence = copy.deepcopy(VISUAL)
-        evidence["geometryAndImageEvidence"].pop()
-        self.assertEqual(inspect(evidence, APPROVAL)["result"], "FAIL")
+    def test_missing_viewport_fails(self):
+        x = copy.deepcopy(VISUAL)
+        x["geometryAndImageEvidence"].pop()
+        self.assertEqual(inspect(x, APPROVAL)["result"], "FAIL")
 
-    def test_approval_without_source_evidence_never_overrides_rights(self):
-        a = copy.deepcopy(APPROVAL)
-        for name in ("artDirection", "nativeDevice", "rightsRegister", "productFlows", "browserRegression", "liveIntegrity"):
-            a[name] = {"status":"APPROVED", "evidenceUrl":"https://example.com/evidence",
-                       "reviewer":"test", "reviewedAt":"2026-11-16"}
-        self.assertEqual(inspect(VISUAL, a)["result"], "HOLD")
+    def test_unproven_ai_asset_claim_fails(self):
+        x = copy.deepcopy(APPROVAL)
+        x["aiAssets"] = {"status":"APPROVED", "evidenceUrl":"https://example.com/proof",
+          "reviewer":"test", "reviewedAt":"2026-11-16", "assetCount":39}
+        self.assertEqual(inspect(VISUAL, x)["result"], "FAIL")
 
-    def test_image_fallback_fails(self):
-        evidence = copy.deepcopy(VISUAL)
-        evidence["geometryAndImageEvidence"][0]["fallbacks"] = 1
-        self.assertEqual(inspect(evidence, APPROVAL)["result"], "FAIL")
+    def test_complete_browser_and_asset_evidence_can_pass(self):
+        x = copy.deepcopy(APPROVAL)
+        for key in ("artDirection", "aiAssets", "browserPerformance", "productFlows", "browserRegression", "liveIntegrity"):
+            x[key] = {"status":"APPROVED", "evidenceUrl":"https://example.com/proof",
+              "reviewer":"test", "reviewedAt":"2026-11-16"}
+        x["aiAssets"].update(assetCount=39, verifiedOrigin="AI_GENERATED", usageTermsChecked=True)
+        self.assertEqual(inspect(VISUAL, x)["result"], "PASS")
+
+    def test_broken_visual_evidence_fails(self):
+        x = copy.deepcopy(VISUAL)
+        x["geometryAndImageEvidence"][0]["fallbacks"]=1
+        self.assertEqual(inspect(x, APPROVAL)["result"], "FAIL")
 
 if __name__ == "__main__":
     unittest.main()
