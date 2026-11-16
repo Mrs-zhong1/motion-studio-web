@@ -77,6 +77,16 @@ def test_r16_bridges():
             assert late["visualOpacity"]!=early["visualOpacity"],(early,late)
             assert late["redraw"]>early["redraw"]
             assert late["backdrop"]!="none"
+            # R16-05: 80 synchronous scroll notifications must coalesce into
+            # a bounded number of requestAnimationFrame redraws.
+            frame_delta=page.evaluate("""async()=>{
+              const count=()=>Number(document.documentElement.dataset.r16RedrawCount||0);
+              const start=count();
+              for(let i=0;i<80;i++)dispatchEvent(new Event('scroll'));
+              await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+              return count()-start;
+            }""")
+            assert 1<=frame_delta<=3,frame_delta
             page.set_viewport_size({"width":390,"height":844})
             page.wait_for_timeout(180)
             mobile=measure()
