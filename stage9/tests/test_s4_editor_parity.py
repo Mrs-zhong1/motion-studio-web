@@ -42,7 +42,8 @@ def run():
                 frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='1'",timeout=12000)
                 page.locator("#previewClose").click()
                 assert page.locator("#templatePreview").is_hidden()
-                assert page.locator("#previewUse").is_visible()
+                assert page.locator("#previewUse").evaluate("node=>!node.hidden")
+                assert page.locator("#templatePreview").evaluate("n=>!n.hasAttribute(\'data-project-preview\')")
                 assert page.evaluate("project.sections[1].text")==copy
                 assert page.evaluate("project.title")==title
                 with page.expect_download() as d:
