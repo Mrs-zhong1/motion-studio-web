@@ -41,7 +41,7 @@ try:
     page.locator('#resumeProject').click()
     page.locator('#modeToggle').click()
     page.locator('[data-asset-tier-button="l3"]').click()
-    page.locator('.comp[data-id="offline-glb-scene"] button').click()
+    page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
     big=make_large();result['tests']['largeBytes']=len(big)
     page.locator('#stage9GlbInput').set_input_files({'name':'large-padded-compliant.glb','mimeType':'model/gltf-binary','buffer':big})
     page.wait_for_timeout(500)
@@ -56,7 +56,7 @@ try:
     page.wait_for_timeout(120)
     result['tests']['unsupportedExtensionsRejected']=all(rejected)
     result['tests']['over4MBRejected']=page.evaluate("project.sections.find(s=>s.id==='offline-glb-scene').glb")==initial
-    page.locator('.comp[data-id="offline-glb-scene"] button').click()
+    page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
     page.locator('#stage9GlbInput').set_input_files(str(SOURCE))
     page.wait_for_timeout(350)
     uid=page.evaluate("project.sections.filter(s=>s.id==='offline-glb-scene'&&s.glb)[0].uid")
