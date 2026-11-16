@@ -1736,8 +1736,12 @@ function r17UpdatePreviewNav(){
  });
 }
 function r17GoPreviewChapter(index){
- if(!$('templatePreview').hidden&&Number.isInteger(index)&&index>=0&&index<r17PreviewTotal)
+ if(!$('templatePreview').hidden&&Number.isInteger(index)&&index>=0&&index<r17PreviewTotal){
+  // Reflect the user's target immediately. The sandboxed story runtime
+  // still performs the real scroll and reports actual progress afterward.
+  r17PreviewChapter=index;r17UpdatePreviewNav();
   $('templatePreviewFrame').contentWindow?.postMessage({type:'motion-studio-preview-goto',chapter:index},'*');
+ }
 }
 $('r17PreviewPrev').onclick=()=>r17GoPreviewChapter(r17PreviewChapter-1);
 $('r17PreviewNext').onclick=()=>r17GoPreviewChapter(r17PreviewChapter+1);
