@@ -12,11 +12,12 @@ VISUAL = json.loads((ROOT / "stage9/visual-evidence/R17_QUALITY_GATE.json").read
 APPROVAL = json.loads((ROOT / "release/R18_R21_APPROVALS.json").read_text())
 
 class ReleasePolicyTests(unittest.TestCase):
-    def test_old_unsplash_photos_are_review_only(self):
+    def test_technically_verified_ai_review_is_not_production_approval(self):
         r = inspect(VISUAL, APPROVAL)
         self.assertEqual(r["result"], "HOLD")
         self.assertFalse(r["nativePhoneHardwareRequired"])
-        self.assertTrue(any("AI-generated" in s for s in r["holds"]))
+        self.assertTrue(any("art-direction" in s for s in r["holds"]))
+        self.assertTrue(any("HTTPS deployment" in s for s in r["holds"]))
         self.assertFalse(any("physical-device" in s for s in r["holds"]))
 
     def test_missing_viewport_fails(self):
