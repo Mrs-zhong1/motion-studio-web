@@ -1,4 +1,5 @@
 """S1/S2 flagship: real continuous Editorial preview, reverse scroll & export."""
+import hashlib
 import json
 import os
 import threading
@@ -36,8 +37,14 @@ def test_editorial_story():
                 scrollTo(0,second.offsetTop)
             }""")
             frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='2'",timeout=12000)
+            evidence_dir=ROOT/"S1_STORY_EVIDENCE";evidence_dir.mkdir(parents=True,exist_ok=True)
+            middle=frame.locator(".s1-story-stage").screenshot(animations="disabled")
+            (evidence_dir/f"editorial-middle-{browser_id}.png").write_bytes(middle)
             frame.evaluate("()=>scrollTo(0,0)")
             frame.wait_for_function("()=>document.querySelector('.s1-story-stage')?.dataset.storyIndex==='0'",timeout=12000)
+            opening=frame.locator(".s1-story-stage").screenshot(animations="disabled")
+            (evidence_dir/f"editorial-opening-{browser_id}.png").write_bytes(opening)
+            assert hashlib.sha256(opening).digest()!=hashlib.sha256(middle).digest(),"No visible scene change with scroll"
             assert frame.locator(".r14-story-rail").count()==1,"Navigator event bridge must stay installed"
             assert frame.locator(".r14-story-rail").evaluate("(n)=>getComputedStyle(n).display")=="none"
             page.locator("#previewUse").click()
