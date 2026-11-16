@@ -19,7 +19,7 @@ try:
   editor.locator('[data-asset-tier-button="l3"]').click()
   result['componentCount']=editor.evaluate('registry.length')
   for fixture in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
-   editor.locator('.comp[data-id="offline-glb-scene"] button').click()
+   editor.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
    editor.locator('#stage9GlbInput').set_input_files(str(R.parent/fixture))
    editor.wait_for_timeout(200)
   result['glbChapters']=editor.evaluate("project.sections.filter(x=>x.id==='offline-glb-scene'&&x.glb).length")
