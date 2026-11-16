@@ -17,7 +17,7 @@ try:
   ed.locator('[data-asset-tier-button="l3"]').click()
   res['components']=ed.evaluate('registry.length')
   for fixture in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
-   ed.locator('.comp[data-id="offline-glb-scene"] button').click()
+   ed.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
    ed.locator('#stage9GlbInput').set_input_files(str(R.parent/fixture))
    ed.wait_for_timeout(200)
   uid=ed.evaluate("project.sections.filter(s=>s.id==='offline-glb-scene'&&s.glb)[0].uid")
