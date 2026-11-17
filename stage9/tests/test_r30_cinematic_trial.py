@@ -42,6 +42,9 @@ def run():
                 assert page.locator('#discoveryView').is_visible()
                 assert page.evaluate("()=>typeof window.MotionStudioR30")=='object', f'R30 browser bootstrap missing: {errors}'
                 page.locator('[data-template-card="cinematic"]').click()
+                # R41 moved optional utilities to the floating info drawer.
+                # The showcase stays full-width when the drawer is opened.
+                page.locator('#previewImmersive').click()
                 page.locator('#r30TrialPreviewButton').wait_for()
                 page.wait_for_function("()=>templatePhotoCache.has('cinematic')",timeout=30000)
                 initial=page.evaluate("()=>templatePhotoCache.get('cinematic').slice()")
