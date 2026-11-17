@@ -22,7 +22,12 @@ def test_r15():
             assert editor.locator(".r15-scene-mark").count()==0
             for name in TEMPLATES:
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
-                if name=='cinematic':
+                if name=='editorial':
+                    assert 'data-e42-editorial="coherent-print"' in html,name
+                    assert html.count('class="e42-spread"')==4,name
+                    assert html.count('class="e42-type"')==4,name
+                    assert '<iframe' not in html,name
+                elif name=='cinematic':
                     assert 'data-r39-film="continuous"' in html,name
                     assert html.count('class="r39-frame"')==5,name
                     assert html.count('class="r39-caption"')==5,name
