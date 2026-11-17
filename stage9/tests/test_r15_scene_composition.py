@@ -47,10 +47,17 @@ def test_r15():
                     }
                     return {scene1:measure(1),scene2:measure(2)}
                 }""")
-                assert dimensions["scene1"]["artX"]<dimensions["scene1"]["stageX"],(name,dimensions)
-                assert dimensions["scene2"]["artX"]>dimensions["scene2"]["stageX"],(name,dimensions)
-                assert all(x["minHeight"]>=200 and x["width"]>=70 and x["stageWidth"]>=70
-                           for x in dimensions.values()),(name,dimensions)
+                if name=="cinematic":
+                    # R37–R38 film no longer mounts unrelated iframe cards:
+                    # the photographic image is the ONE full-stage visual.
+                    assert page.locator('.r37-stage').count()==5,(name,dimensions)
+                    assert all(x["width"]>=x["sectionWidth"]*.95 and x["stageWidth"]==0
+                               for x in dimensions.values()),(name,dimensions)
+                else:
+                    assert dimensions["scene1"]["artX"]<dimensions["scene1"]["stageX"],(name,dimensions)
+                    assert dimensions["scene2"]["artX"]>dimensions["scene2"]["stageX"],(name,dimensions)
+                    assert all(x["minHeight"]>=200 and x["width"]>=70 and x["stageWidth"]>=70
+                               for x in dimensions.values()),(name,dimensions)
                 page.set_viewport_size({"width":390,"height":844})
                 page.wait_for_timeout(150)
                 mobile=middle.evaluate("""sec=>{
@@ -59,7 +66,10 @@ def test_r15():
                   return {artTop:a.top,frameTop:f.top,bodyWidth:document.documentElement.scrollWidth,
                           viewport:innerWidth,artW:a.width,frameW:f.width}
                 }""")
-                assert mobile["artTop"]<mobile["frameTop"],(name,mobile)
+                if name!='cinematic':
+                    assert mobile["artTop"]<mobile["frameTop"],(name,mobile)
+                else:
+                    assert mobile["artW"]>=mobile["viewport"]*.95,(name,mobile)
                 assert mobile["bodyWidth"]<=mobile["viewport"]+32,(name,mobile)
                 assert not errors,(name,errors)
                 page.close()
