@@ -52,6 +52,77 @@ def run_audit():
                                        arg=template_id, timeout=30000)
                 preview = page.locator("#templatePreviewFrame")
                 frame = preview.content_frame
+                if template_id in ("editorial","cinematic"):
+                    # R42 magazine and R39 film are intentionally not the
+                    # generic legacy iframe+section grid. Audit their ACTUAL
+                    # authored scenes, not the removed split-scene markup.
+                    if template_id=="editorial":
+                        frame.locator('html[data-e42-editorial="coherent-print"]').wait_for(timeout=30000)
+                        subject='.e42-sticky'
+                        image_selector='.e42-image'
+                        scene_selector='.e42-spread'
+                    else:
+                        frame.locator('html[data-r39-film="continuous"]').wait_for(timeout=30000)
+                        subject='.r39-stage'
+                        image_selector='.r39-frame'
+                        scene_selector='.r39-caption'
+                    total_sections=page.evaluate('(id)=>templateSets[id].sections.length',template_id)
+                    manifest=page.evaluate('(id)=>templateAssetAuditCache.get(id)||[]',template_id)
+                    assert len(manifest)==total_sections,(template_id,len(manifest),total_sections)
+                    assert frame.locator(image_selector).count()==total_sections,template_id
+                    assert frame.locator(scene_selector).count()==total_sections,template_id
+                    assert frame.locator('iframe').count()==0,(template_id,'nested duplicate demonstration')
+                    for device,width,height in (("desktop",1440,900),("mobile",390,844)):
+                        page.set_viewport_size({"width":width,"height":height})
+                        if device=="mobile":page.locator("#previewMobile").click()
+                        else:page.locator("#previewDesktop").click()
+                        snapshots=frame.locator(image_selector).evaluate_all("""els=>els.map(e=>({
+                            src:e.getAttribute('src')?.startsWith('data:image/'),
+                            loaded:e.complete&&e.naturalWidth>0,
+                            width:Math.round(e.getBoundingClientRect().width)
+                        }))""")
+                        assert all(row['src'] and row['loaded'] and row['width']>45 for row in snapshots),(template_id,device,snapshots)
+                        overflow=frame.locator('html').evaluate('e=>e.scrollWidth-innerWidth')
+                        assert overflow<=32,(template_id,device,overflow)
+                        screenshot=page.screenshot(animations="disabled",full_page=False)
+                        (SCREENSHOTS/f"{template_id}-preview-{device}.png").write_bytes(screenshot)
+                        (SCREENSHOTS/f"{template_id}-immersive-{device}.png").write_bytes(screenshot)
+                        if template_id=="editorial":
+                            first=frame.locator(subject).first
+                            middle=frame.locator(subject).nth(2)
+                            last=frame.locator(subject).last
+                        else:
+                            first=middle=last=frame.locator(subject)
+                        first.screenshot(path=str(SCREENSHOTS/f"{template_id}-{device}.png"),animations="disabled")
+                        if template_id=="editorial":middle.scroll_into_view_if_needed()
+                        else:
+                            frame.locator('html').evaluate("""e=>{
+                              e.style.setProperty('scroll-behavior','auto','important');
+                              const s=document.querySelector('#r39-story');
+                              scrollTo({top:s.offsetTop+(s.offsetHeight-innerHeight)*.5,behavior:'instant'});
+                            }""")
+                        middle.screenshot(path=str(SCREENSHOTS/f"{template_id}-chapter3-{device}.png"),animations="disabled")
+                        if template_id=="editorial":last.scroll_into_view_if_needed()
+                        else:
+                            frame.locator('html').evaluate("""e=>{
+                              const s=document.querySelector('#r39-story');
+                              scrollTo({top:s.offsetTop+s.offsetHeight-innerHeight,behavior:'instant'});
+                            }""")
+                        last.screenshot(path=str(SCREENSHOTS/f"{template_id}-ending-{device}.png"),animations="disabled")
+                        shot=(SCREENSHOTS/f"{template_id}-{device}.png").read_bytes()
+                        row={
+                          "template":template_id,"device":device,"sectionCount":total_sections,
+                          "photoCount":total_sections,"visiblyRenderedPhotos":len(snapshots),
+                          "realPhotoCount":sum(x["kind"] in ("unsplash-photo","ai-generated-image") for x in manifest),
+                          "originalFallbackCount":sum(x["kind"]=="original-generated-art" for x in manifest),
+                          "documentWidth":width+max(0,overflow),"viewportWidth":width,
+                          "firstSectionPngSHA256":hashlib.sha256(shot).hexdigest()[:16],
+                          "sourceManifest":[{"chapter":x["chapter"],"kind":x["kind"],"source":x.get("source")} for x in manifest],
+                          "mediaRightsApproved":False,"storyEngine":'R42-paper' if template_id=='editorial' else 'R39-film'
+                        }
+                        result["templates"].append(row)
+                    page.locator("#previewClose").click()
+                    continue
                 frame.locator("section.section").first.wait_for(timeout=30000)
                 assert page.locator("#previewHeroTitle").inner_text().strip()
                 assert page.locator("#previewUsePanel").is_visible()
