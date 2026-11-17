@@ -60,7 +60,7 @@ def run():
       window.scrollTo(0,y+Math.min(innerHeight*.5,360));
       await new Promise(r=>setTimeout(r,170));
       const b=s.querySelector('.r37-stage').getBoundingClientRect().top;
-      return {topAt100:a,topAt360:b,progress:s.dataset.r16Progress}
+      return {topAt100:a,topAt360:b,progress:s.dataset.r16Progress,\n       scroller:document.scrollingElement?.tagName,scrollY:window.scrollY,\n       scrollHeight:document.scrollingElement?.scrollHeight,clientHeight:document.scrollingElement?.clientHeight,\n       parentOverflows:Array.from((function*(el){while(el&&el!==document.documentElement){yield el;el=el.parentElement}})(s)).map(e=>[e.className,getComputedStyle(e).overflowY,getComputedStyle(e).position])}
     }""")
     assert abs(measurements['topAt100']-measurements['topAt360'])<5,measurements
     # Native R16 still calculates camera progress, no extra independent clock.
