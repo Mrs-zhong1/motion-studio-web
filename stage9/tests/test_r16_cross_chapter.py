@@ -20,11 +20,14 @@ def test_r16_bridges():
             assert editor.locator(".r16-linked-chapter").count()==0
             for template in IDS:
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",template)
+                if template in ("editorial","cinematic"):
+                    assert ('data-e42-editorial="coherent-print"' if template=="editorial" else 'data-r39-film="continuous"') in html,template
+                    continue
                 assert "r16BridgeCss" not in html, "Raw variable name must be interpolated away"
                 assert "r16-linked-chapter" in html
                 assert f'.page[data-template="{template}"]' in html
-            editor.evaluate("async()=>await ensureTemplatePhoto('cinematic')")
-            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            editor.evaluate("async()=>await ensureTemplatePhoto('architecture')")
+            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","architecture")
             page=browser.new_page(viewport={"width":1440,"height":900})
             errors=[];page.on("pageerror",lambda e:errors.append(str(e)))
             page.set_content(html,wait_until="domcontentloaded",timeout=60000)
