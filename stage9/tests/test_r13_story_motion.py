@@ -23,14 +23,18 @@ def test_r13_motion():
             assert page.locator("[data-template-card]").count() == 8
             for template in ("cinematic", "architecture", "agency", "fashion", "gallery", "saas", "editorial", "product-3d"):
                 exported = page.evaluate("(id) => buildTemplatePreviewDocument(id)", template)
+                if template=="cinematic":
+                    assert 'data-r39-film="continuous"' in exported,template
+                    assert exported.count('class="r39-frame"')==5,template
+                    continue
                 assert "installR13StoryMotion" in exported, template
                 assert f'data-template="{template}"' in exported, template
                 assert f'.page[data-template="{template}"] .section.designed-chapter .designed-chapter-heading::before' in exported, template
                 assert f'.page[data-template="{template}"] .section.designed-chapter .motion-atmosphere' in exported, template
             # Execute the export after photo hydration, mirroring actual preview flow.
             # Bare template definitions have not loaded artwork yet.
-            page.evaluate("async () => await ensureTemplatePhoto('cinematic')")
-            exported = page.evaluate("(id) => buildTemplatePreviewDocument(id)", "cinematic")
+            page.evaluate("async () => await ensureTemplatePhoto('agency')")
+            exported = page.evaluate("(id) => buildTemplatePreviewDocument(id)", "agency")
             output = browser.new_page(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
             output_errors = []
             output.on("pageerror", lambda error: output_errors.append(str(error)))
