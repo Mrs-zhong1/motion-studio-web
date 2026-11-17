@@ -43,11 +43,11 @@ def run():
        labelDisplay:getComputedStyle(document.querySelector('.r36-nav-caption')).display}
     }""")
     assert values['stagePosition']=='sticky',values
-    assert values['sectionHeight']>=height*1.45,values
+    assert values['sectionHeight']>=values['viewport']*1.45,values
     assert values['iframeDisplay']=='none',values
     assert values['badgeDisplay']=='none',values
     assert values['headingCount']==1,values
-    assert values['artWidth']>width*.75,values
+    assert values['artWidth']>values['viewportWidth']*.90,values
     assert values['navWidth']<=60,values
     assert values['labelDisplay']=='none',values
     # A sticky stage must hold the same viewport position when scroll changes
