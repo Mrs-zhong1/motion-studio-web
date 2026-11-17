@@ -22,15 +22,31 @@ def test_r15():
             assert editor.locator(".r15-scene-mark").count()==0
             for name in TEMPLATES:
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
-                assert 'r15-scene-mark' in html, name
-                assert f'data-template="{name}"' in html, name
-                assert html.count('class="r15-scene-mark"')==(5 if name in AUTHORED_SIX else (3 if name=="editorial" else 4)),name
+                if name=='cinematic':
+                    assert 'data-r39-film="continuous"' in html,name
+                    assert html.count('class="r39-frame"')==5,name
+                    assert html.count('class="r39-caption"')==5,name
+                else:
+                    assert 'r15-scene-mark' in html,name
+                    assert f'data-template="{name}"' in html,name
+                    assert html.count('class="r15-scene-mark"')==(5 if name in AUTHORED_SIX else (3 if name=="editorial" else 4)),name
             for name in ("cinematic","agency","saas"):
                 await_art=editor.evaluate("(id)=>ensureTemplatePhoto(id)",name)
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
                 page=browser.new_page(viewport={"width":1440,"height":900},reduced_motion="no-preference")
                 errors=[];page.on("pageerror",lambda error:errors.append(str(error)))
                 page.set_content(html,wait_until="domcontentloaded",timeout=60000)
+                if name=='cinematic':
+                    assert page.locator('.r39-stage').count()==1
+                    assert page.locator('.r39-frame').count()==5
+                    assert page.locator('.r39-caption').count()==5
+                    assert page.locator('.r37-stage').count()==0
+                    page.set_viewport_size({'width':390,'height':844})
+                    assert page.locator('.r39-stage').is_visible()
+                    assert page.locator('html').evaluate('el=>el.scrollWidth<=innerWidth+32')
+                    assert not errors,(name,errors)
+                    page.close()
+                    continue
                 sections=page.locator("section.section.authored-six")
                 assert sections.count()==5,(name,sections.count())
                 assert sections.locator(".r15-scene-mark").count()==5,name
