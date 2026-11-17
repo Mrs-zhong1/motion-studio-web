@@ -46,6 +46,23 @@ def run():
       page.close()
       continue
 
+     if template=='editorial':
+      iframe.locator('html[data-e42-editorial="coherent-print"]').wait_for()
+      assert iframe.locator('.e42-spread').count()==4
+      assert iframe.locator('.e42-image').count()==4
+      assert iframe.locator('.e42-type h1').count()==4
+      assert iframe.locator('iframe').count()==0
+      assert iframe.locator('.r14-story-rail').count()==0
+      assert iframe.locator('.e42-progress button').count()==4
+      exported=page.evaluate("""(t)=>{const p=MotionStudioUnified.createProjectFromTemplate(t);
+       MotionStudioUnified.load(p,{resetHistory:true});return MotionStudioUnified.build()}""",template)
+      assert 'data-e42-editorial="coherent-print"' in exported
+      assert exported.count('class="e42-spread"')==4
+      assert not js_errors,js_errors
+      report['checks'].append({'template':template,'viewport':[width,height],'story':'four coherent magazine spreads, no duplicated iframe'})
+      page.close()
+      continue
+
      iframe.locator('section.section').first.wait_for()
      iframe.locator('.r14-story-rail').wait_for()
      is_pilot=template in ('product-3d','cinematic')
