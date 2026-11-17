@@ -1295,6 +1295,163 @@ body.r16-story-ready .page[data-template="cinematic"] .section.designed-chapter 
   transition:none!important;transform:none!important;
  }
 }
+</style><style id="r36-pilot-css">
+body[data-motion-template="product-3d"],body[data-motion-template="cinematic"]{
+  --r36-ink:#f6f4e9;--r36-edge:rgba(255,255,255,.14);
+  background:#0c1217;color:var(--r36-ink)
+}
+/* One common visual stage: no hard cards, columns or photo/iframe borders. */
+body[data-motion-template="product-3d"] .page,
+body[data-motion-template="cinematic"] .page{background:transparent!important;border:0!important}
+body[data-motion-template="product-3d"] .page .section,
+body[data-motion-template="cinematic"] .page .section{
+  position:relative!important;display:block!important;overflow:hidden!important;
+  isolation:isolate;min-height:100svh!important;padding:0!important;
+  background:radial-gradient(ellipse at 72% 32%,#26302c,#0d1318 75%)!important;
+}
+body[data-motion-template="cinematic"] .page .section{
+  background:linear-gradient(155deg,#151c26,#090e16 80%)!important
+}
+/* Photo occupies the whole canvas. Existing R16 masks/camera continue to
+   animate the exact same section-art element; no competing animation clock. */
+body[data-motion-template="product-3d"] .page .section .section-art,
+body[data-motion-template="cinematic"] .page .section .section-art{
+  position:absolute!important;inset:0!important;
+  display:block!important;width:100%!important;height:100%!important;
+  grid-area:unset!important;grid-column:auto!important;grid-row:auto!important;
+  background-size:cover!important;background-repeat:no-repeat!important;
+  mix-blend-mode:normal!important;opacity:1!important;
+  z-index:0!important;pointer-events:none!important;border:0!important;
+}
+/* Art direction across the SAME shared canvas, behind 3D and text. */
+body[data-motion-template="product-3d"] .page .section::after,
+body[data-motion-template="cinematic"] .page .section::after{
+ content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+ background:linear-gradient(90deg,rgba(5,9,15,.90) 0%,rgba(6,11,16,.67) 35%,rgba(6,11,15,.14) 82%),
+ linear-gradient(0deg,rgba(4,8,12,.38),transparent 34%);
+}
+body[data-motion-template="cinematic"] .page .section::after{
+ background:linear-gradient(90deg,rgba(4,8,15,.81) 0%,rgba(5,9,17,.43) 45%,transparent 82%),
+ linear-gradient(0deg,rgba(4,8,14,.6),transparent 38%);
+}
+/* Keep WebGL/HTML interaction *in* the stage, without a rectangular opaque
+   pane. iframe stays operable in exported pages. We do not fake 3D assets. */
+body[data-motion-template="product-3d"] .page .section > iframe,
+body[data-motion-template="cinematic"] .page .section > iframe{
+  position:absolute!important;top:7%!important;right:3%!important;left:auto!important;
+  width:58%!important;height:86%!important;max-width:none!important;
+  grid-area:unset!important;grid-column:auto!important;grid-row:auto!important;
+  z-index:3!important;pointer-events:auto!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;mix-blend-mode:screen;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 21%,#000 94%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 21%,#000 94%,transparent 100%);
+}
+/* The chapter text is editorial overlay, not a separate green pane. */
+body[data-motion-template="product-3d"] .page .section .designed-chapter-heading,
+body[data-motion-template="cinematic"] .page .section .designed-chapter-heading{
+ position:absolute!important;top:clamp(110px,19vh,240px)!important;
+ left:clamp(24px,6vw,120px)!important;right:auto!important;bottom:auto!important;
+ width:min(48%,710px)!important;max-width:48%!important;
+ grid-area:unset!important;grid-column:auto!important;grid-row:auto!important;
+ z-index:6!important;display:block!important;padding:0!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+ color:#f9f8f0!important;pointer-events:none!important
+}
+body[data-motion-template="product-3d"] .page .section .designed-chapter-heading h2,
+body[data-motion-template="cinematic"] .page .section .designed-chapter-heading h2{
+  font:800 clamp(38px,5.4vw,91px)/.98 system-ui,sans-serif!important;
+  letter-spacing:-.07em!important;color:inherit!important;text-shadow:0 4px 42px #050a10cc;
+  max-width:100%!important;overflow-wrap:break-word!important
+}
+body[data-motion-template="cinematic"] .page .section .designed-chapter-heading h2{
+ font-family:Georgia,serif!important;font-style:italic;font-weight:500!important;
+ letter-spacing:-.05em!important
+}
+body[data-motion-template="product-3d"] .page .section .r15-scene-mark,
+body[data-motion-template="cinematic"] .page .section .r15-scene-mark{
+ z-index:7!important;bottom:clamp(20px,5vh,60px)!important
+}
+/* Hero itself is also one stage rather than an iframe mounted in a column. */
+body[data-motion-template="product-3d"] .page .section.designed-hero > iframe{
+ left:0!important;right:0!important;top:0!important;width:100%!important;height:100%!important;
+ mix-blend-mode:normal!important;mask-image:none!important;-webkit-mask-image:none!important;
+}
+body[data-motion-template="product-3d"] .page .section.designed-hero::after{
+ background:linear-gradient(90deg,rgba(4,9,12,.55),transparent 78%);pointer-events:none
+}
+/* Existing navigation has all chapter buttons, but the list is collapsed
+   until expressly requested. Slim progress and a small menu stay available. */
+body[data-motion-template="product-3d"] .r14-story-rail,
+body[data-motion-template="cinematic"] .r14-story-rail{
+ position:fixed!important;right:clamp(12px,2.6vw,35px)!important;
+ top:clamp(12px,3vh,36px)!important;bottom:auto!important;transform:none!important;
+ display:flex!important;flex-direction:column!important;gap:0!important;
+ width:48px!important;max-height:calc(100svh - 24px)!important;
+ padding:0!important;border:1px solid var(--r36-edge)!important;
+ border-radius:16px!important;background:rgba(9,16,23,.55)!important;
+ color:#f4f5ed!important;backdrop-filter:blur(20px)!important;
+ z-index:100!important;overflow:hidden!important;
+ transition:width .25s ease,background .2s ease
+}
+body[data-motion-template="product-3d"] .r14-story-rail.r36-open,
+body[data-motion-template="cinematic"] .r14-story-rail.r36-open{
+ width:min(270px,calc(100vw - 24px))!important;background:rgba(8,15,21,.94)!important
+}
+body[data-motion-template="product-3d"] .r14-rail-track,
+body[data-motion-template="cinematic"] .r14-rail-track{
+ position:absolute!important;inset:0 0 0 auto!important;width:3px!important;
+ min-height:40px!important;height:100%!important;flex:0 0 3px!important;
+ background:#ffffff30!important;border-radius:0!important
+}
+body[data-motion-template="product-3d"] .r14-rail-fill,
+body[data-motion-template="cinematic"] .r14-rail-fill{
+ width:100%!important;background:#d4f5a4!important
+}
+body[data-motion-template="product-3d"] .r14-rail-chapters,
+body[data-motion-template="cinematic"] .r14-rail-chapters{
+ display:none!important;padding:4px 8px 14px!important;
+ width:100%!important;max-height:min(65svh,540px)!important;
+ overflow-y:auto!important
+}
+body[data-motion-template="product-3d"] .r14-story-rail.r36-open .r14-rail-chapters,
+body[data-motion-template="cinematic"] .r14-story-rail.r36-open .r14-rail-chapters{display:grid!important}
+.r14-story-rail .r36-nav-toggle{
+ display:flex;align-items:center;justify-content:center;gap:8px;
+ min-height:46px;width:100%;padding:9px!important;flex:0 0 46px;
+ border:0;color:#f5f7ee;background:transparent;font:700 11px system-ui,sans-serif;
+ cursor:pointer
+}
+.r14-story-rail.r36-open .r36-nav-toggle{justify-content:space-between;padding-inline:15px!important}
+.r14-story-rail .r36-nav-toggle:focus-visible{outline:2px solid #d9ff67;outline-offset:-3px}
+body[data-motion-template="product-3d"] .r14-story-rail.r36-open button.r14-rail-chapter,
+body[data-motion-template="cinematic"] .r14-story-rail.r36-open button.r14-rail-chapter{
+ width:100%;max-width:none;justify-content:flex-start;min-height:40px
+}
+@media(max-width:760px){
+ body[data-motion-template="product-3d"] .page .section > iframe,
+ body[data-motion-template="cinematic"] .page .section > iframe{
+  left:0!important;right:0!important;top:25%!important;width:100%!important;
+  height:66%!important;opacity:.8!important;
+ }
+ body[data-motion-template="product-3d"] .page .section .designed-chapter-heading,
+ body[data-motion-template="cinematic"] .page .section .designed-chapter-heading{
+  top:13%!important;left:6%!important;right:6%!important;
+  width:88%!important;max-width:88%!important
+ }
+ body[data-motion-template="product-3d"] .page .section .designed-chapter-heading h2,
+ body[data-motion-template="cinematic"] .page .section .designed-chapter-heading h2{
+  font-size:clamp(30px,10vw,57px)!important
+ }
+ body[data-motion-template="product-3d"] .page .section::after,
+ body[data-motion-template="cinematic"] .page .section::after{
+  background:linear-gradient(180deg,rgba(4,9,14,.84),rgba(4,9,14,.23) 55%,rgba(4,9,14,.44))
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ body[data-motion-template="product-3d"] .r14-story-rail,
+ body[data-motion-template="cinematic"] .r14-story-rail{transition:none!important}
+}
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="library-section-heading"><div><span class="library-eyebrow">CURATED INTERACTIVE WEBSITES</span><h2>可探索的作品 <span id="templateResultCount">08</span></h2></div><p>打开任意模板体验完整的多章节网页，而非静态封面。</p></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" role="dialog" aria-modal="true" aria-labelledby="previewTitle" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button><div class="r17-preview-chapters" aria-label="章节导航"><button id="r17PreviewPrev" type="button" aria-label="上一章节" disabled>‹</button><span id="r17PreviewPosition" role="status" aria-live="polite">01 / 01</span><button id="r17PreviewNext" type="button" aria-label="下一章节" disabled>›</button></div></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewImmersive" aria-pressed="false" title="切换为整页沉浸式预览">沉浸预览</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="r30TrialPreviewButton" type="button" class="r30-trial-button">导入双场景试片</button><span id="r30TrialPreviewStatus" class="r30-trial-status" role="status" aria-live="polite"></span><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="r17-storyboard-heading"><strong>STORYBOARD</strong><span>点击切换真实章节</span></div><div id="r17PreviewFilmstrip" class="r17-preview-filmstrip" aria-label="真实章节照片导航"></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><div class="preview-live-badge" aria-hidden="true"><i></i> LIVE INTERACTIVE PREVIEW · 滚动探索</div><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
@@ -2911,6 +3068,66 @@ window.MotionStudioR30={importTwo,originalImage:imageOriginal,getState:()=>({
    const css=document.getElementById('r31-story-continuity')?.textContent||'';
    if(!css||output.includes('id="r31-export-story-continuity"'))return output;
    return output.replace('</head>','<style id="r31-export-story-continuity">'+css+'</style></head>');
+ };
+ if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
+})();
+</script><script type="text/plain" id="r36-pilot-bootstrap">
+(function(){
+ const pilot=['product-3d','cinematic'].includes(document.body.dataset.motionTemplate);
+ if(!pilot)return;
+ // Legacy R13–R23 template rules contain higher-specificity !important grid
+ // declarations. Inline-important geometry is intentionally restricted to
+ // the two review pilots so screenshots show a REAL single stage instead of
+ // a stylesheet that loses the cascade. R16 scroll/camera variables stay.
+ const apply=(el,props)=>{if(!el)return;for(const [key,value] of Object.entries(props))
+   el.style.setProperty(key,value,'important')};
+ document.querySelectorAll('.page[data-template] > section.section').forEach(section=>{
+  apply(section,{display:'block',position:'relative',overflow:'hidden',
+   isolation:'isolate','min-height':'100svh',padding:'0'});
+  apply(section.querySelector('.section-art'),{
+   position:'absolute',inset:'0',width:'100%',height:'100%',
+   'grid-column':'auto','grid-row':'auto','background-size':'cover',
+   'mix-blend-mode':'normal',opacity:'1','z-index':'0'});
+  const hero=section.classList.contains('designed-hero');
+  apply(section.querySelector(':scope > iframe'),hero?
+   {position:'absolute',inset:'0',width:'100%',height:'100%',
+    'grid-column':'auto','grid-row':'auto','z-index':'3'}:
+   {position:'absolute',top:'7%',right:'3%',left:'auto',width:'58%',
+    height:'86%','grid-column':'auto','grid-row':'auto','z-index':'3'});
+  apply(section.querySelector('.designed-chapter-heading'),{
+   position:'absolute',top:'clamp(110px,19vh,240px)',
+   left:'clamp(24px,6vw,120px)',right:'auto',bottom:'auto',
+   width:'min(48%,710px)','max-width':'48%',
+   'grid-column':'auto','grid-row':'auto','z-index':'6'});
+ });
+ const rail=document.querySelector('.r14-story-rail');
+ if(!rail)return;
+ rail.classList.add('r36-collapsible');
+ const btn=document.createElement('button');
+ btn.className='r36-nav-toggle';btn.type='button';
+ btn.setAttribute('aria-expanded','false');
+ btn.setAttribute('aria-label','Open story chapters');
+ btn.innerHTML='<span aria-hidden="true">☷</span><span class="r36-nav-caption">CHAPTERS</span>';
+ rail.insertBefore(btn,rail.firstChild);
+ rail.querySelectorAll('.r14-rail-chapters > button').forEach(ch=>ch.classList.add('r14-rail-chapter'));
+ const close=()=>{rail.classList.remove('r36-open');btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label','Open story chapters')};
+ btn.addEventListener('click',()=>{const open=!rail.classList.contains('r36-open');
+  rail.classList.toggle('r36-open',open);btn.setAttribute('aria-expanded',String(open));
+  btn.setAttribute('aria-label',open?'Close story chapters':'Open story chapters')});
+ rail.querySelectorAll('.r14-rail-chapters button').forEach(ch=>ch.addEventListener('click',close));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&rail.classList.contains('r36-open')){e.preventDefault();e.stopImmediatePropagation();close()}},true);
+ document.addEventListener('pointerdown',e=>{if(!rail.contains(e.target))close()},{passive:true});
+})();
+</script><script id="r36-pilot-editor">
+(function(){
+ const previous=exportDocument;
+ exportDocument=function(){
+  const html=previous();
+  if(!['product-3d','cinematic'].includes(project.templateId))return html;
+  const css=document.getElementById('r36-pilot-css').textContent;
+  const script=document.getElementById('r36-pilot-bootstrap').textContent;
+  return html.replace('</head>','<style id="r36-fullstage-css">'+css+'</style></head>')
+   .replace('</body>','<script id="r36-fullstage-runtime">'+script+'<'+'/script></body>');
  };
  if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
 })();
