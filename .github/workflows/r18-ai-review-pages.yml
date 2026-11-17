@@ -128,21 +128,23 @@ jobs:
         run: |
           git fetch origin gh-pages
           git worktree add --detach "$RUNNER_TEMP/gh-pages-worktree" origin/gh-pages
-          mkdir -p "$RUNNER_TEMP/gh-pages-worktree/r18-ai-review"
+          mkdir -p "$RUNNER_TEMP/gh-pages-worktree/r18-ai-review" "$RUNNER_TEMP/gh-pages-worktree/r39-r40-review"
           cp -f "$RUNNER_TEMP/r18-ai-publish/"* "$RUNNER_TEMP/gh-pages-worktree/r18-ai-review/"
+          cp -f "$RUNNER_TEMP/r18-ai-publish/"* "$RUNNER_TEMP/gh-pages-worktree/r39-r40-review/"
           cd "$RUNNER_TEMP/gh-pages-worktree"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add r18-ai-review
+          git add r18-ai-review r39-r40-review
           if ! git diff --cached --quiet; then
             git commit -m "Review R18 AI assets ${GITHUB_SHA}"
             git push origin HEAD:gh-pages
           fi
           echo "Review URL: https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/r18-ai-review/" >> "$GITHUB_STEP_SUMMARY"
+          echo "New R39/R40 URL: https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/r39-r40-review/" >> "$GITHUB_STEP_SUMMARY"
       - name: Verify live review HTML SHA-256 after Pages propagation
         working-directory: .
         run: |
-          url="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/r18-ai-review/"
+          url="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/r39-r40-review/"
           expected=$(python -c 'import json,os,pathlib; print(json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"r18-ai-publish/REVIEW_BUILD.json").read_text())["sha256"])')
           expected_commit="${GITHUB_SHA}"
           matched=0
@@ -159,6 +161,6 @@ jobs:
       - name: Real public HTTPS AI preview + save/export smoke
         working-directory: .
         env:
-          MOTION_R18_URL: https://${{ github.repository_owner }}.github.io/motion-studio-web/r18-ai-review/
+          MOTION_R18_URL: https://${{ github.repository_owner }}.github.io/motion-studio-web/r39-r40-review/
           MOTION_R18_EXPECTED_COMMIT: ${{ github.sha }}
         run: python stage9/tests/test_r21_ai_preview_live.py
