@@ -256,7 +256,15 @@ def test_product_restructure():
                            photo:getComputedStyle(art).backgroundImage.startsWith('url("data:image/'),
                            width:Math.round(a.width),frame:Math.round(b.width)};
                     }""")
-                    assert actual["photo"] and actual["width"]>70 and actual["frame"]>70,actual
+                    assert actual["photo"] and actual["width"]>70,actual
+                    if template_id == "cinematic":
+                        # R37 intentionally removes the unrelated micro-demo:
+                        # one photographic subject + one heading per chapter.
+                        assert actual["frame"] == 0,actual
+                        assert rendered.locator(".r37-stage").count() == 1
+                        assert standalone.locator("html").get_attribute("data-r37-director") == "single-stage"
+                    else:
+                        assert actual["frame"]>70,actual
                     assert 0 <= actual["enter"] <= 1,actual
                     assert not export_errors,export_errors
                     standalone.close()
