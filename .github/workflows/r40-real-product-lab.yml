@@ -1,0 +1,50 @@
+name: R40 Real Product 3D Materials and Camera Acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/three-scene-entry.js'
+      - 'stage9/r40-product-lab.mjs'
+      - 'stage9/tests/test_r40_product_lab.mjs'
+      - 'stage9/tests/test_r40_product_browser.py'
+      - 'stage9/build-offline.mjs'
+      - '.github/workflows/r40-real-product-lab.yml'
+permissions:
+  contents: read
+jobs:
+  actual-webgl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate product PBR bridge and no cross-template override
+        run: |
+          node --check r40-product-lab.mjs
+          node --test tests/test_r40_product_lab.mjs
+      - name: Build real offline Three.js GLB studio and 39 photos
+        run: |
+          npm install --no-audit --no-fund
+          MOTION_REQUIRE_AI_ASSETS=1 npm run build
+          python tests/check_build.py
+      - name: Real Chromium WebGL controls from preview into Three.js scene
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          python tests/test_r40_product_browser.py
+      - name: Evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r40-real-product-three-${{github.sha}}
+          path: stage9/R40_PRODUCT_ACCEPTANCE.json
+          retention-days: 14
