@@ -14,6 +14,9 @@ on:
       - 'stage9/r38-eight-art-directions.mjs'
       - 'stage9/r39-cinematic-timeline.mjs'
       - 'stage9/r40-product-lab.mjs'
+      - 'stage9/r41-preview-first-layout.mjs'
+      - 'stage9/tests/test_r41_preview_first.py'
+      - 'stage9/tests/test_r41_preview_first.mjs'
       - 'stage9/three-scene-entry.js'
       - 'stage9/tests/test_r39_cinematic_browser.py'
       - 'stage9/tests/test_r40_product_browser.py'
@@ -90,9 +93,11 @@ jobs:
           node --test tests/test_r38_eight_directions.mjs
           node --test tests/test_r39_cinematic_timeline.mjs
           node --test tests/test_r40_product_lab.mjs
+          node --test tests/test_r41_preview_first.mjs
           python tests/test_r38_template_families.py
           python tests/test_r39_cinematic_browser.py
           python tests/test_r40_product_browser.py
+          python tests/test_r41_preview_first.py
           python tests/test_r37_story_director.py
           python tests/test_r36_pilot_browser.py
           node --test tests/test_r31_story_continuity.mjs
