@@ -51,6 +51,30 @@ def run():
       report['templates'].append({'template':template,'viewport':[1440,900],**values})
       page.close()
       continue
+    if template=='editorial':
+      frame.locator('html[data-e42-editorial="coherent-print"]').wait_for(timeout=15000)
+      values=frame.locator('body').evaluate("""body=>{
+        const spreads=[...document.querySelectorAll('.e42-spread')];
+        const image=spreads[0]?.querySelector('.e42-image');
+        return {family:'print',count:spreads.length,tagged:spreads.length,marks:spreads.length,
+          chapterTitles:spreads.map(s=>s.querySelector('.e42-type h1').textContent),
+          background:getComputedStyle(spreads[0]).backgroundColor,
+          headingFont:getComputedStyle(spreads[0].querySelector('.e42-type h1')).fontFamily,
+          artWidth:image?.getBoundingClientRect().width,regionWidth:innerWidth,
+          artX:image?.getBoundingClientRect().left,artClip:'editorial offset image',
+          stickyStages:spreads.length,imageVisible:image?.naturalWidth>0,
+          horizontalOverflow:Math.max(0,document.documentElement.scrollWidth-innerWidth)}
+      }""")
+      assert values['count']==4 and values['stickyStages']==4,values
+      assert all(values['chapterTitles']) and values['imageVisible'],values
+      assert values['horizontalOverflow']<=32,values
+      exported=page.evaluate("(t)=>{const p=MotionStudioUnified.createProjectFromTemplate(t);MotionStudioUnified.load(p,{resetHistory:true});return MotionStudioUnified.build()}",template)
+      assert 'data-e42-editorial="coherent-print"' in exported
+      assert exported.count('class="e42-spread"')==4
+      assert exported.count('class="e42-image"')==4
+      report['templates'].append({'template':template,'viewport':[1440,900],**values})
+      page.close()
+      continue
     frame.locator('html[data-r38-ready="yes"]').wait_for(timeout=15000)
     values=frame.locator('body').evaluate("""body=>{
       const sections=[...document.querySelectorAll('.page[data-template] > section.section')];
