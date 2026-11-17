@@ -56,22 +56,25 @@ def test_product_restructure():
             assert page.locator("#previewMobile").is_visible()
             assert page.locator("#previewReplay").is_visible()
             assert page.locator("#previewUse").is_visible()
-            # R13: switch between editorial panel and genuinely full-width website stage.
-            immersive = page.locator("#previewImmersive")
-            assert immersive.is_visible()
-            assert immersive.get_attribute("aria-pressed") == "false"
-            immersive.click()
+            # R41: live work is full-width by DEFAULT; information is an
+            # optional floating drawer and never resizes the preview canvas.
+            info=page.locator("#previewImmersive")
+            assert info.is_visible()
+            assert info.get_attribute("aria-pressed")=="false"
             assert page.locator("#templatePreview").evaluate(
-                "el => el.classList.contains('immersive-preview')"
+                "el=>el.classList.contains('immersive-preview')"
             )
-            assert immersive.get_attribute("aria-pressed") == "true"
             assert page.locator(".preview-product-info").is_hidden()
-            assert page.locator("#previewDevice").evaluate(
-                "el => el.getBoundingClientRect().width >= innerWidth * .90"
-            )
-            page.keyboard.press("Escape")
-            assert immersive.get_attribute("aria-pressed") == "false"
+            viewport_before=page.locator("#previewDevice").bounding_box()
+            assert viewport_before["width"]>=1440*.90,viewport_before
+            info.click()
+            assert info.get_attribute("aria-pressed")=="true"
             assert page.locator(".preview-product-info").is_visible()
+            viewport_open=page.locator("#previewDevice").bounding_box()
+            assert abs(viewport_open["width"]-viewport_before["width"])<3
+            page.keyboard.press("Escape")
+            assert info.get_attribute("aria-pressed")=="false"
+            assert page.locator(".preview-product-info").is_hidden()
             assert page.locator("#templatePreview").is_visible()
             assert page.locator("#templateResultCount").inner_text() == "08"
             frame = page.locator("#templatePreviewFrame").content_frame
