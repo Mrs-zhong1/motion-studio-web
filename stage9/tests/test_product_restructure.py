@@ -174,7 +174,7 @@ def test_product_restructure():
                     return {
                       id: t.id,
                       sectionCount: project.sections.length,
-                      renderedCount: t.id==='cinematic'?(html.match(/class="r39-caption"/g)||[]).length:(html.match(/<section class=\"section/g) || []).length,
+                      renderedCount: t.id==='cinematic'?(html.match(/class="r39-caption"/g)||[]).length:t.id==='editorial'?(html.match(/class="e42-spread"/g)||[]).length:(html.match(/<section class=\"section/g) || []).length,
                       hasTitle: html.includes(t.name),
                       hasRemoteScript: /<script[^>]+src=[\"']https?:/.test(html)
                     };
@@ -209,6 +209,9 @@ def test_product_restructure():
                 if template_id=="cinematic":
                     preview_frame.locator(".r39-stage").wait_for()
                     assert preview_frame.locator(".r39-frame").count()==5
+                elif template_id=="editorial":
+                    preview_frame.locator(".e42-sticky").first.wait_for()
+                    assert preview_frame.locator(".e42-spread").count()==4
                 else:
                     preview_frame.locator("section.section").first.wait_for()
                 page.locator("#previewUse").click()
@@ -232,6 +235,10 @@ def test_product_restructure():
                     assert 'data-r39-film="continuous"' in exported_html
                     assert exported_html.count('class="r39-caption"')==len(saved_project["sections"])
                     assert exported_html.count('class="r39-frame"')==len(saved_project["sections"])
+                elif template_id=="editorial":
+                    assert 'data-e42-editorial="coherent-print"' in exported_html
+                    assert exported_html.count('class="e42-spread"')==len(saved_project["sections"])
+                    assert exported_html.count('class="e42-image"')==len(saved_project["sections"])
                 else:
                     assert f'data-template="{template_id}"' in exported_html
                     assert exported_html.count('<section class="section')==len(saved_project["sections"])
@@ -244,7 +251,13 @@ def test_product_restructure():
                     export_errors = []
                     standalone.on("pageerror",lambda err:export_errors.append(str(err)))
                     standalone.set_content(exported_html,wait_until="domcontentloaded")
-                    if template_id=="cinematic":
+                    if template_id=="editorial":
+                        assert standalone.locator('html[data-e42-editorial="coherent-print"]').count()==1
+                        assert standalone.locator('.e42-spread').count()==len(saved_project["sections"])
+                        assert standalone.locator('.e42-image').count()==len(saved_project["sections"])
+                        assert standalone.locator('.e42-spread').nth(1).locator('.e42-type h1').text_content()==chapter_text
+                        assert standalone.locator('iframe').count()==0
+                    elif template_id=="cinematic":
                         assert standalone.locator('html[data-r39-film="continuous"]').count()==1
                         assert standalone.locator('.r39-frame').count()==len(saved_project["sections"])
                         assert standalone.locator('.r39-caption').count()==len(saved_project["sections"])
