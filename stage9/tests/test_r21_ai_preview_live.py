@@ -56,9 +56,15 @@ def run():
         with page.expect_download() as dl:
             page.locator("#exportPage").click()
         exported=dl.value.path().read_bytes()
-        assert len(exported)>200000
+        # R39 is intentionally leaner than the legacy full editor export.
+        # Verify five actual embedded media and five authored frames, not an
+        # arbitrary byte count or retired <section class="section"> wrappers.
+        assert len(exported)>10000,len(exported)
         assert b"Motion AI review verified" in exported
-        assert exported.count(b'<section class="section')==5
+        assert b'data-r39-film="continuous"' in exported
+        assert exported.count(b'class="r39-frame"')==5
+        assert exported.count(b'class="r39-caption"')==5
+        assert exported.count(b'data:image/')>=5
         assert b"images.unsplash.com" not in exported
         evidence["exported"]=True
         browser.close()
