@@ -1454,6 +1454,7 @@ body[data-motion-template="cinematic"] .r14-story-rail.r36-open button.r14-rail-
 }
 </style><style id="r37-director-css">
 /* One coherent photographic stage, not a two-page panel montage. */
+body[data-motion-template="cinematic"] .page{overflow:visible!important;transform:none!important}
 body[data-motion-template="cinematic"] .page .section.r37-scene{
  height:175svh!important;min-height:175svh!important;
  overflow:visible!important;display:block!important;
@@ -1559,6 +1560,53 @@ body[data-motion-template="product-3d"] .r14-story-rail:not(.r36-open) .r36-nav-
   transform:none!important;opacity:1!important;
  }
 }
+</style><style id="r38-director-css">
+/* R38: eight separate layouts, no shared full-screen "photo and huge title" rule. */
+body[data-r38-family] .r38-marker{position:absolute;z-index:12;top:23px;left:26px;pointer-events:none;font:700 10px/1.5 ui-monospace,monospace;letter-spacing:.17em;text-transform:uppercase}
+body[data-r38-family] .r38-footer{position:absolute;z-index:12;bottom:23px;right:26px;pointer-events:none;font:700 10px ui-monospace,monospace;letter-spacing:.17em}
+body[data-r38-family="print"] .page .section{background:#e4e3d8!important;color:#1a241d!important}
+body[data-r38-family="print"] .page .section:nth-of-type(even){background:#d1d8c9!important}
+body[data-r38-family="print"] .page .section .section-art{clip-path:inset(7% 8% 9% 15%)!important;filter:grayscale(.28) contrast(1.08)}
+body[data-r38-family="print"] .page .section .designed-chapter-heading{font-family:Georgia,serif!important;max-width:52%!important;mix-blend-mode:multiply}
+body[data-r38-family="print"] .r38-marker,body[data-r38-family="print"] .r38-footer{color:#375140}
+body[data-r38-family="object"] .page .section{background:#090f14!important;color:#e8f2df!important}
+body[data-r38-family="object"] .page .section::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 75% 45%,#ceffa82c,transparent 55%)}
+body[data-r38-family="object"] .r38-marker,body[data-r38-family="object"] .r38-footer{color:#c9ff8e}
+body[data-r38-family="film"] .r37-stage .r38-marker{top:clamp(75px,10vh,120px);left:clamp(28px,7vw,120px);color:#e9ded3}
+body[data-r38-family="film"] .r37-stage .r38-footer{bottom:clamp(23px,5vh,55px);right:clamp(25px,7vw,120px);color:#d6c5b2}
+body[data-r38-family="plan"] .page .section{background-color:#e8e9e0!important;color:#26372f!important;background-image:linear-gradient(#24503c12 1px,transparent 1px),linear-gradient(90deg,#24503c12 1px,transparent 1px)!important;background-size:45px 45px!important}
+body[data-r38-family="plan"] .page .section .section-art{inset:7% 9% 9% 43%!important;width:48%!important;height:84%!important;max-width:48%!important;clip-path:inset(0)!important;filter:saturate(.7);box-shadow:13px 13px 0 #a4b4a070!important}
+body[data-r38-family="plan"] .page .section .designed-chapter-heading{left:5%!important;top:24%!important;width:35%!important;max-width:35%!important;color:#26372f!important;background:none!important}
+body[data-r38-family="plan"] .r38-marker,body[data-r38-family="plan"] .r38-footer{color:#365947}
+body[data-r38-family="play"] .page .section{background:#fa6a3b!important;color:#171523!important}
+body[data-r38-family="play"] .page .section:nth-of-type(2n){background:#add5e9!important}
+body[data-r38-family="play"] .page .section:nth-of-type(3n){background:#e9ec63!important}
+body[data-r38-family="play"] .page .section .section-art{inset:12% 5% 10% 46%!important;width:49%!important;height:78%!important;clip-path:polygon(13% 0,100% 8%,89% 100%,0 87%)!important;transform:rotate(calc(-3deg + var(--r16-incoming,1)*6deg))!important;filter:saturate(1.3)}
+body[data-r38-family="play"] .page .section .designed-chapter-heading{left:4%!important;top:20%!important;width:64%!important;max-width:64%!important;transform:rotate(-3deg)!important;color:#171523!important;z-index:10!important;text-shadow:none!important}
+body[data-r38-family="play"] .r38-marker,body[data-r38-family="play"] .r38-footer{color:#171523}
+body[data-r38-family="runway"] .page .section{background:#e9dfd5!important;color:#3a2c26!important}
+body[data-r38-family="runway"] .page .section:nth-of-type(even){background:#d4c5b7!important}
+body[data-r38-family="runway"] .page .section .section-art{inset:3% 25% 3% 28%!important;width:47%!important;height:94%!important;clip-path:inset(0)!important;background-position:center 40%!important;filter:saturate(.58)}
+body[data-r38-family="runway"] .page .section .designed-chapter-heading{left:5%!important;top:26%!important;width:39%!important;max-width:39%!important;font-family:Georgia,serif!important;font-style:italic;color:#3a2c26!important;z-index:10!important}
+body[data-r38-family="runway"] .r38-marker,body[data-r38-family="runway"] .r38-footer{writing-mode:vertical-rl;color:#554237}
+body[data-r38-family="museum"] .page .section{background:#f1f0e9!important;color:#292a2b!important}
+body[data-r38-family="museum"] .page .section .section-art{inset:12% 17% 15% 34%!important;width:49%!important;height:73%!important;max-width:49%!important;clip-path:none!important;border:12px solid #fdfdf9!important;box-shadow:0 14px 40px #0003!important}
+body[data-r38-family="museum"] .page .section .designed-chapter-heading{left:5%!important;top:31%!important;width:30%!important;max-width:30%!important;color:#292a2b!important;font-family:Georgia,serif!important;background:none!important}
+body[data-r38-family="museum"] .r38-marker,body[data-r38-family="museum"] .r38-footer{color:#3c4650}
+body[data-r38-family="system"] .page .section{background-color:#eef5ef!important;color:#173327!important;background-image:radial-gradient(#b1cdb647 1px,transparent 1px)!important;background-size:25px 25px!important}
+body[data-r38-family="system"] .page .section .section-art{inset:14% 6% 16% 45%!important;width:49%!important;height:70%!important;clip-path:none!important;border-radius:20px!important;box-shadow:0 20px 75px #244b392b!important}
+body[data-r38-family="system"] .page .section .designed-chapter-heading{left:5%!important;top:24%!important;width:40%!important;max-width:40%!important;color:#1a382a!important;background:none!important}
+body[data-r38-family="system"] .page .section iframe{border-radius:15px!important;border:1px solid #cbdfd0!important}
+body[data-r38-family="system"] .r38-marker,body[data-r38-family="system"] .r38-footer{color:#3b6b51}
+@media(max-width:760px){
+body[data-r38-family="plan"] .page .section .section-art,body[data-r38-family="museum"] .page .section .section-art,body[data-r38-family="system"] .page .section .section-art{top:42%!important;left:8%!important;right:8%!important;width:84%!important;max-width:84%!important;height:47%!important}
+body[data-r38-family="play"] .page .section .section-art{top:42%!important;left:17%!important;width:79%!important;height:50%!important}
+body[data-r38-family="runway"] .page .section .section-art{left:29%!important;width:58%!important;top:8%!important;height:84%!important}
+body[data-r38-family="plan"] .page .section .designed-chapter-heading,body[data-r38-family="museum"] .page .section .designed-chapter-heading,body[data-r38-family="system"] .page .section .designed-chapter-heading,body[data-r38-family="play"] .page .section .designed-chapter-heading{top:12%!important;left:6%!important;width:86%!important;max-width:86%!important}
+body[data-r38-family="runway"] .page .section .designed-chapter-heading{top:20%!important;left:5%!important;width:65%!important;max-width:65%!important}
+body[data-r38-family] .r38-marker{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){body[data-r38-family="play"] .page .section .section-art{transform:none!important}}
 </style></head><body class="simple-mode">
 <section class="discovery-view" id="discoveryView"><aside class="discovery-nav"><div class="discovery-brand">✳ MOTION <i>STUDIO</i></div><nav><button class="active">发现模板</button><button data-discovery-category="Portfolio">作品集</button><button data-discovery-category="Commerce">产品与商业</button><button data-discovery-category="Story">叙事体验</button><button data-discovery-category="All">全部模板</button></nav><p class="discovery-nav-note">挑选喜欢的风格，预览完整网页，再开始自由创作。</p></aside><main class="discovery-main"><header class="discovery-header"><h1>先看见作品，<br>再开始创作。</h1><p>选择一套真正不同的交互骨架。每个模板都可以完整预览、编辑、保存并导出为独立网页。</p></header><div class="discovery-quick-actions"><button id="discoveryBlank" type="button">＋ 从空白页面开始</button><span>或者探索下方的动态模板</span></div><div class="category-row" id="discoveryCategories"><button class="active" data-category="All">全部</button><button data-category="Portfolio">作品集</button><button data-category="Commerce">产品</button><button data-category="Story">叙事</button><button data-category="Studio">工作室</button><button data-category="Technology">科技</button></div><div class="library-section-heading"><div><span class="library-eyebrow">CURATED INTERACTIVE WEBSITES</span><h2>可探索的作品 <span id="templateResultCount">08</span></h2></div><p>打开任意模板体验完整的多章节网页，而非静态封面。</p></div><div class="template-grid" id="templateGrid"></div></main></section>
 <section class="preview-overlay" id="templatePreview" role="dialog" aria-modal="true" aria-labelledby="previewTitle" hidden><header class="preview-toolbar"><div class="preview-title"><strong id="previewTitle">Template preview</strong><span id="previewMeta">真实 renderer 预览</span></div><div class="preview-device-controls"><button id="previewDesktop" class="active">桌面</button><button id="previewMobile">手机</button><div class="r17-preview-chapters" aria-label="章节导航"><button id="r17PreviewPrev" type="button" aria-label="上一章节" disabled>‹</button><span id="r17PreviewPosition" role="status" aria-live="polite">01 / 01</span><button id="r17PreviewNext" type="button" aria-label="下一章节" disabled>›</button></div></div><div class="preview-actions"><button id="previewReplay">重播</button><button id="previewImmersive" aria-pressed="false" title="切换为整页沉浸式预览">沉浸预览</button><button id="previewClose">关闭</button><button id="previewUse" class="primary">使用此模板</button></div></header><div class="preview-product-layout"><aside class="preview-product-info"><div class="preview-topline"><span class="preview-free">LIVE TEMPLATE</span><span>✳ MOTION STUDIO</span></div><div class="preview-product-description"><p class="preview-category" id="previewCategory">PORTFOLIO / INTERACTIVE</p><h2 id="previewHeroTitle">Editorial Portfolio</h2><p id="previewDescription">作品集、互动叙事与完整页面设计。</p><div class="preview-specs"><span>响应式页面</span><span>实时动效预览</span><span>可视化编辑</span></div><button id="r30TrialPreviewButton" type="button" class="r30-trial-button">导入双场景试片</button><span id="r30TrialPreviewStatus" class="r30-trial-status" role="status" aria-live="polite"></span><button id="previewUsePanel" class="preview-use-big" type="button">使用这个模板 <span aria-hidden="true">↗</span></button><p class="preview-footnote">右侧为真实网页。可以滚动、点击和体验动效。</p></div><div class="r17-storyboard-heading"><strong>STORYBOARD</strong><span>点击切换真实章节</span></div><div id="r17PreviewFilmstrip" class="r17-preview-filmstrip" aria-label="真实章节照片导航"></div><div class="preview-steps">01 / 预览　02 / 编辑　03 / 发布</div></aside><div class="preview-device" id="previewDevice"><div class="preview-live-badge" aria-hidden="true"><i></i> LIVE INTERACTIVE PREVIEW · 滚动探索</div><iframe id="templatePreviewFrame" title="模板交互预览" sandbox="allow-scripts"></iframe></div></div></section>
@@ -3241,8 +3289,16 @@ window.MotionStudioR30={importTwo,originalImage:imageOriginal,getState:()=>({
 </script><script type="text/plain" id="r37-director-runtime">(function(){
  if(document.body.dataset.motionTemplate!=='cinematic')return;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const page=document.querySelector('.page[data-template="cinematic"]');
  const scenes=Array.from(document.querySelectorAll('.page[data-template="cinematic"] > section.section'));
  if(!scenes.length)return;
+ // .page in the legacy editor CSS is overflow:hidden. A sticky child cannot
+ // hold the viewport through that clipping ancestor. Cinematic exports need
+ // the document (not .page) to own the vertical scroll.
+ if(page){
+  page.style.setProperty('overflow','visible','important');
+  page.style.setProperty('transform','none','important');
+ }
  for(const section of scenes){
   if(section.querySelector(':scope > .r37-stage'))continue;
   // R16 retains the same section and image references, so it continues to
@@ -3307,6 +3363,35 @@ window.MotionStudioR30={importTwo,originalImage:imageOriginal,getState:()=>({
   if(project.templateId==='cinematic')
    doc=doc.replace('</body>','<script id="r37-final-runtime">'+runtime+'<'+'/script></body>');
   return doc;
+ };
+ if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
+})();
+</script><script type="text/plain" id="r38-director-runtime">(function(){
+ const dirs={"editorial":["print","Print / editorial","FOLIO","offset spreads"],"product-3d":["object","Object / material","SPEC","interactive 3D laboratory"],"cinematic":["film","Film / chapters","SHOT","five-act scroll story"],"architecture":["plan","Architecture / studies","SECTION","blueprint grid"],"agency":["play","Play / campaigns","CASE","energetic chromatic posters"],"fashion":["runway","Atelier / lookbook","LOOK","portrait runway"],"gallery":["museum","Gallery / exhibitions","ROOM","framed museum"],"saas":["system","Product / workflows","FEATURE","modular software interfaces"]};
+ const config=dirs[document.body.dataset.motionTemplate];if(!config)return;
+ document.body.dataset.r38Family=config[0];
+ const sections=Array.from(document.querySelectorAll('.page[data-template] > section.section'));
+ sections.forEach((section,index)=>{
+  section.dataset.r38Act=String(index+1);
+  const stage=section.querySelector(':scope > .r37-stage')||section;
+  if(stage.querySelector(':scope > .r38-marker'))return;
+  const mark=document.createElement('span');mark.className='r38-marker';
+  mark.textContent=config[1];stage.appendChild(mark);
+  const number=document.createElement('span');number.className='r38-footer';
+  number.textContent=config[2]+' '+String(index+1).padStart(2,'0')+' / '+String(sections.length).padStart(2,'0');
+  stage.appendChild(number);
+ });
+ document.documentElement.dataset.r38Ready='yes';
+})();</script><script id="r38-editor-director">
+(function(){
+ const previous=exportDocument;
+ exportDocument=function(){
+  const result=previous();
+  if(!project||!project.templateId)return result;
+  const style=document.getElementById('r38-director-css').textContent;
+  const runtime=document.getElementById('r38-director-runtime').textContent;
+  return result.replace('</head>','<style id="r38-export-style">'+style+'</style></head>')
+    .replace('</body>','<script id="r38-export-runtime">'+runtime+'<'+'/script></body>');
  };
  if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
 })();
