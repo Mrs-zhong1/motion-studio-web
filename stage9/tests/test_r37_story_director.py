@@ -53,6 +53,9 @@ def run():
     # A sticky stage must hold the same viewport position when scroll changes
     # within its long scene. Measure position after jumping into its corridor.
     measurements=sec.evaluate("""async s=>{
+      // The exported page enables html{scroll-behavior:smooth}. Force
+      // deterministic scroll measurements, not a 170ms partial tween.
+      document.documentElement.style.setProperty('scroll-behavior','auto','important');
       const y=s.getBoundingClientRect().top+window.scrollY;
       window.scrollTo(0,y+100);
       await new Promise(r=>setTimeout(r,170));
