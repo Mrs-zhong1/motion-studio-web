@@ -1,0 +1,46 @@
+name: R41 Full-Stage Template Preview UX
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/r41-preview-first-layout.mjs'
+      - 'stage9/tests/test_r41_preview_first.mjs'
+      - 'stage9/tests/test_r41_preview_first.py'
+      - 'stage9/build-offline.mjs'
+      - '.github/workflows/r41-preview-first.yml'
+permissions:
+  contents: read
+jobs:
+  full-stage-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Single-stage director and floating drawer unit
+        run: |
+          node --check r41-preview-first-layout.mjs
+          node --test tests/test_r41_preview_first.mjs
+      - name: Build real offline Web application
+        run: |
+          npm install --no-audit --no-fund
+          MOTION_REQUIRE_AI_ASSETS=1 npm run build
+          python tests/check_build.py
+      - name: Browser geometry and interactions of all eight templates
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          python tests/test_r41_preview_first.py
+      - name: Summarize R41 test without requiring repository artifact storage
+        if: always()
+        run: |
+          if [ -f R41_PREVIEW_FIRST_ACCEPTANCE.json ]; then cat R41_PREVIEW_FIRST_ACCEPTANCE.json >> "$GITHUB_STEP_SUMMARY"; fi
