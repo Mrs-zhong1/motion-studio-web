@@ -61,7 +61,14 @@ def run():
       }""")
       assert geometry['display']=='block',geometry
       assert geometry['artW']>=geometry['sectionW']*.95,geometry
-      assert geometry['frameW']>=geometry['sectionW']*.54,geometry
+      if template=='cinematic':
+       assert iframe.locator('style#r37-final-style').count()==1
+       assert iframe.locator('.r37-stage').count()==5
+       assert iframe.locator('.r37-scene').count()==5
+       assert geometry['frameW']==0,geometry  # redundant mini-demo hidden
+       assert iframe.locator('.r37-stage .designed-chapter-heading').count()==5
+      else:
+       assert geometry['frameW']>=geometry['sectionW']*.54,geometry
       assert geometry['overflow']<=32,geometry
       assert iframe.locator('body').evaluate("el=>el.dataset.motionTemplate")==template
       report['checks'].append({'template':template,'viewport':[width,height],'stage':geometry,'nav':'collapsed and keyboard operable'})
@@ -71,6 +78,8 @@ def run():
        MotionStudioUnified.load(doc,{resetHistory:true});return MotionStudioUnified.build()}""",template)
      assert ('id="r36-fullstage-css"' in export)==is_pilot
      assert ('id="r36-fullstage-runtime"' in export)==is_pilot
+     assert ('id="r37-final-style"' in export)==is_pilot
+     assert ('id="r37-final-runtime"' in export)==(template=='cinematic')
      assert not js_errors,js_errors
      page.close()
    browser.close()
