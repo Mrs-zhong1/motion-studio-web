@@ -1,0 +1,70 @@
+{
+  "three": "0.180.0",
+  "engineBytes": 625469,
+  "sharedEngineBytes": 622948,
+  "editorBytes": 9049730,
+  "photoBundle": {
+    "editorial": {
+      "bundledPhotos": 4,
+      "fallbackChapters": 0,
+      "total": 4,
+      "origin": "AI_GENERATED"
+    },
+    "product-3d": {
+      "bundledPhotos": 5,
+      "fallbackChapters": 0,
+      "total": 5,
+      "origin": "AI_GENERATED"
+    },
+    "cinematic": {
+      "bundledPhotos": 5,
+      "fallbackChapters": 0,
+      "total": 5,
+      "origin": "AI_GENERATED"
+    },
+    "architecture": {
+      "bundledPhotos": 5,
+      "fallbackChapters": 0,
+      "total": 5,
+      "origin": "AI_GENERATED"
+    },
+    "agency": {
+      "bundledPhotos": 5,
+      "fallbackChapters": 0,
+      "total": 5,
+      "origin": "AI_GENERATED"
+    },
+    "fashion": {
+      "bundledPhotos": 5,
+      "fallbackChapters": 0,
+      "total": 5,
+      "origin": "AI_GENERATED"
+    },
+    "gallery": {
+      "bundledPhotos": 5,
+      "fallbackChapters": 0,
+      "total": 5,
+      "origin": "AI_GENERATED"
+    },
+    "saas": {
+      "bundledPhotos": 5,
+      "fallbackChapters": 0,
+      "total": 5,
+      "origin": "AI_GENERATED"
+    }
+  },
+  "aiOriginalMedia": true,
+  "offline": true,
+  "source": "Motion Studio Stage9-15, real offline MeshoptDecoder and 4MB GLB validation",
+  "releasePolicy": "web-browser-matrix",
+  "gpuAcceptanceRequired": false,
+  "gpuTested": false,
+  "macHardwareGpuOptional": true,
+  "requiredChecks": [
+    "web-product-e2e",
+    "offline-export",
+    "cross-browser-acceptance",
+    "deployment-smoke"
+  ],
+  "releaseAccepted": false
+}
