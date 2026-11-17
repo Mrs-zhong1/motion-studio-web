@@ -203,5 +203,5 @@ export function injectR36Pilot(html){
 })();
 </script>`;
  return html.replace('</head>','<style id="r36-pilot-css">'+pilotCss+'</style></head>')
- .replace('</body></html>','<script type="text/plain" id="r36-pilot-bootstrap">'+browser.replace(/^<script[^>]*>|<\\\/script>$/g,'')+'</script>'+embedScript+'</body></html>');
+ .replace('</body></html>','<script type="text/plain" id="r36-pilot-bootstrap">'+browser.slice(browser.indexOf('>')+1,browser.lastIndexOf('<'))+'</script>'+embedScript+'</body></html>');
 }
