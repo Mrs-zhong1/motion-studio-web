@@ -34,11 +34,19 @@ def test_r14():
             nav.wait_for()
             expected=standalone.locator("section.section").count()
             assert nav.get_attribute("aria-label")=="Story chapters"
-            assert nav.locator("button").count()==expected
+            # R36+ compact story navigation adds a separate menu toggle.
+            # Chapter count remains exact; the menu button is not a chapter.
+            chapter_buttons=nav.locator(".r14-rail-chapters > button")
+            assert chapter_buttons.count()==expected
+            toggle=nav.locator(".r36-nav-toggle")
+            assert toggle.count()==1
+            assert toggle.get_attribute("aria-expanded")=="false"
             assert nav.locator('button[aria-current="step"]').count()==1
             assert nav.locator(".r14-rail-fill").count()==1
-            assert nav.locator("button").first.get_attribute("aria-label").startswith("Go to chapter 1")
-            last=nav.locator("button").last
+            assert chapter_buttons.first.get_attribute("aria-label").startswith("Go to chapter 1")
+            toggle.click()
+            assert toggle.get_attribute("aria-expanded")=="true"
+            last=chapter_buttons.last
             last.click()
             standalone.wait_for_function("""()=>document.querySelector('.r14-story-rail')?.dataset.activeChapter===String(document.querySelectorAll('.page > section.section').length)""",timeout=10000)
             assert standalone.evaluate("window.scrollY")>0
@@ -46,10 +54,11 @@ def test_r14():
             assert fill>40,fill
             standalone.set_viewport_size({"width":390,"height":844})
             assert nav.is_visible()
-            assert nav.locator("button").first.is_visible()
+            assert toggle.is_visible()
             assert not nav.locator(".r14-rail-label").first.is_visible()
             standalone.emulate_media(reduced_motion="reduce")
-            first=nav.locator("button").first
+            toggle.click()
+            first=chapter_buttons.first
             first.click()
             standalone.wait_for_function("()=>window.scrollY<100",timeout=10000)
             assert not problems,problems
