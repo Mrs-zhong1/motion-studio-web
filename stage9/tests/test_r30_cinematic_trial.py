@@ -55,14 +55,13 @@ def run():
                 assert cached[0]==initial[0] and cached[3]==initial[3]
                 assert page.locator('#r17PreviewFilmstrip img').count()==5
                 doc=page.locator('#templatePreviewFrame').content_frame
-                assert doc.locator('.section-art').count()==5
-                assert page.evaluate("()=>document.getElementById('templatePreviewFrame').srcdoc.includes('r30-export-story-parity')")
-                assert page.evaluate("()=>document.getElementById('templatePreviewFrame').srcdoc.includes('r31-export-story-continuity')")
-                doc.locator('body.r16-story-ready').wait_for(timeout=12000)
-                assert doc.locator('.section.designed-chapter').count()==5
-                assert doc.locator('style#r31-export-story-continuity').count()==1
-                assert doc.locator('body').evaluate(
-                  "(el)=>!!el.querySelector('.section.designed-chapter .section-art')?.style.getPropertyValue('--r16-reveal')")
+                # R39 compiles original R30 uploaded photos into one true film
+                # timeline. The old R16 section-art/iframe assertions are obsolete.
+                assert doc.locator('.r39-frame').count()==5
+                assert doc.locator('.r39-caption').count()==5
+                assert doc.locator('#r39-chapter-menu [data-seek]').count()==5
+                assert doc.locator('html[data-r39-film="continuous"]').count()==1
+                assert doc.locator('.r37-stage').count()==0
 
                 page.locator('#previewUsePanel').click()
                 page.locator('#editorView').wait_for(state='visible')
@@ -73,13 +72,12 @@ def run():
                 page.evaluate("()=>loadProject(JSON.parse(JSON.stringify(project)))")
                 assert page.evaluate("()=>project.sections[1].imageMeta.kind")=='user-upload'
                 exported=page.evaluate("()=>window.MotionStudioUnified.build()")
-                assert exported.count('id="r30-export-story-parity"')==1
-                assert exported.count('id="r31-export-story-continuity"')==1
-                assert 'var(--r16-incoming' in exported
-                assert 'data-r30-dual-scene="true"' in exported
+                assert exported.count('class="r39-frame"')==5
+                assert exported.count('class="r39-caption"')==5
+                assert 'data-r39-film="continuous"' in exported
+                assert '<script src="http' not in exported
                 assert page.evaluate("()=>project.sections[1].image") in exported
                 assert page.evaluate("()=>project.sections[2].image") in exported
-                assert 'r16' in exported.lower() or 'chapter-enter' in exported
                 for width,height in [(1440,900),(390,844)]:
                     page.set_viewport_size({'width':width,'height':height})
                     page.locator('#mobileView' if width==390 else '#desktopView').click()
@@ -96,4 +94,4 @@ def run():
             server.shutdown();server.server_close()
 if __name__=='__main__':
     run()
-    print('R30 PASS: two native scenes preview -> editor -> JSON -> export and responsive Chromium')
+    print('R30→R39 PASS: user-uploaded two native scenes preserved in five-act film preview, editor and offline export')
