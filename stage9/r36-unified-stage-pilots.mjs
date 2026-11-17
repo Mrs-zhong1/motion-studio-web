@@ -2,7 +2,7 @@
 // Only product-3d and cinematic templates are affected. Other six templates
 // keep their exact exported HTML. Editor internals, R16 timeline and 20
 // components remain unchanged.
-export const pilotCss = String.raw\`
+export const pilotCss = String.raw`
 body[data-motion-template="product-3d"],body[data-motion-template="cinematic"]{
   --r36-ink:#f6f4e9;--r36-edge:rgba(255,255,255,.14);
   background:#0c1217;color:var(--r36-ink)
@@ -159,11 +159,11 @@ body[data-motion-template="cinematic"] .r14-story-rail.r36-open button.r14-rail-
  body[data-motion-template="product-3d"] .r14-story-rail,
  body[data-motion-template="cinematic"] .r14-story-rail{transition:none!important}
 }
-\`;
+`;
 export function injectR36Pilot(html){
  if(typeof html!=='string'||!html.includes('</body></html>')||!html.includes('id="r31-story-continuity"'))throw Error('R36 requires complete R31 offline editor');
  if(html.includes('id="r36-pilot-editor"'))throw Error('R36 duplicate injection');
- const browser = String.raw\`<script id="r36-pilot-runtime">
+ const browser = String.raw`<script id="r36-pilot-runtime">
 (function(){
  const pilot=['product-3d','cinematic'].includes(document.body.dataset.motionTemplate);
  if(!pilot)return;
@@ -185,10 +185,10 @@ export function injectR36Pilot(html){
  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
  document.addEventListener('pointerdown',e=>{if(!rail.contains(e.target))close()},{passive:true});
 })();
-<\/script>\`;
+<\/script>`;
  // Use the current exportDocument chain: the same HTML drives immersive
  // preview, "use template", JSON project save and standalone HTML download.
- const embedScript = \`<script id="r36-pilot-editor">
+ const embedScript = `<script id="r36-pilot-editor">
 (function(){
  const previous=exportDocument;
  exportDocument=function(){
@@ -201,7 +201,7 @@ export function injectR36Pilot(html){
  };
  if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
 })();
-</script>\`;
+</script>`;
  return html.replace('</head>','<style id="r36-pilot-css">'+pilotCss+'</style></head>')
  .replace('</body></html>','<script type="text/plain" id="r36-pilot-bootstrap">'+browser.replace(/^<script[^>]*>|<\\\/script>$/g,'')+'</script>'+embedScript+'</body></html>');
 }
