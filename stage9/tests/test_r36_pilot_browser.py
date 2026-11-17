@@ -29,6 +29,23 @@ def run():
      assert page.locator('#discoveryView').is_visible()
      page.locator(f'[data-template-card="{template}"]').click()
      iframe=page.locator('#templatePreviewFrame').content_frame
+     if template=='cinematic':
+      iframe.locator('#r39-stage').wait_for()
+      assert iframe.locator('.r39-frame').count()==5
+      assert iframe.locator('.r39-caption').count()==5
+      assert iframe.locator('.r37-stage').count()==0
+      iframe.locator('#r39-menu-toggle').click()
+      assert iframe.locator('#r39-menu-toggle').get_attribute('aria-expanded')=='true'
+      iframe.locator('#r39-chapter-menu [data-seek="4"]').click()
+      iframe.locator('html[data-r39-chapter="5"]').wait_for()
+      exported=page.evaluate("""(t)=>{const p=MotionStudioUnified.createProjectFromTemplate(t);
+       MotionStudioUnified.load(p,{resetHistory:true});return MotionStudioUnified.build()}""",template)
+      assert 'data-r39-film="continuous"' in exported
+      assert exported.count('class="r39-frame"')==5
+      report['checks'].append({'template':template,'viewport':[width,height],'story':'five real acts, one stage, one timeline'})
+      page.close()
+      continue
+
      iframe.locator('section.section').first.wait_for()
      iframe.locator('.r14-story-rail').wait_for()
      is_pilot=template in ('product-3d','cinematic')
