@@ -53,7 +53,9 @@ def run():
                 page.locator('[data-template-card="cinematic"]').click()
                 page.locator('#templatePreviewFrame').wait_for(state="visible")
                 stage=page.frame_locator('#templatePreviewFrame')
-                stage.locator('section.section').first.wait_for()
+                # R39 Cinematic is a single continuous pinned camera stage,
+                # not five obsolete R16 section boxes.
+                stage.locator('html[data-r39-film="continuous"] #r39-stage').wait_for()
                 report=measure(page.locator('#templatePreviewFrame').element_handle().content_frame())
                 report["preset"]=f"{viewport['width']}x{viewport['height']}"
                 report["pageErrors"]=errors
