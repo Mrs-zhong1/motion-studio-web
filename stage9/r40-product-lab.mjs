@@ -16,6 +16,8 @@ export function injectR40Product(html){
  };
  if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
 })();</script>`;
- return html.replace('</head>','<style id="r40-product-css">'+r40CSS+'</style></head>')
-  .replace(/<\\/body><\\/html>\\s*$/, '<script type="text/plain" id="r40-product-runtime">'+r40Runtime+'</script>'+code+'</body></html>');
+ const end=html.lastIndexOf('</body></html>');
+ if(end<0)throw Error('R40 closing HTML tag missing');
+ const appended=html.slice(0,end)+'<script type="text/plain" id="r40-product-runtime">'+r40Runtime+'</script>'+code+html.slice(end);
+ return appended.replace('</head>','<style id="r40-product-css">'+r40CSS+'</style></head>');
 }
