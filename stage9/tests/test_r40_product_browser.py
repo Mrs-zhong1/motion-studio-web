@@ -13,7 +13,7 @@ def run():
  threading.Thread(target=server.serve_forever,daemon=True).start()
  try:
   with sync_playwright() as pw:
-   browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--enable-webgl','--use-gl=angle','--use-angle=swiftshader','--disable-web-security'])
+   browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--enable-webgl','--use-gl=angle','--use-angle=swiftshader'])
    editor=browser.new_page(viewport={'width':1440,'height':900})
    errors=[];editor.on('pageerror',lambda e:errors.append(str(e)))
    editor.goto(f'http://127.0.0.1:{server.server_port}/{EDITOR.name}',wait_until='domcontentloaded')
