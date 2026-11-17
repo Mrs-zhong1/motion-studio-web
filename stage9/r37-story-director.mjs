@@ -4,6 +4,7 @@
 // duplicate RAF loops or new paid dependencies.
 export const r37Css=String.raw`
 /* One coherent photographic stage, not a two-page panel montage. */
+body[data-motion-template="cinematic"] .page{overflow:visible!important;transform:none!important}
 body[data-motion-template="cinematic"] .page .section.r37-scene{
  height:175svh!important;min-height:175svh!important;
  overflow:visible!important;display:block!important;
@@ -114,8 +115,16 @@ body[data-motion-template="product-3d"] .r14-story-rail:not(.r36-open) .r36-nav-
 export const r37Runtime=String.raw`(function(){
  if(document.body.dataset.motionTemplate!=='cinematic')return;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const page=document.querySelector('.page[data-template="cinematic"]');
  const scenes=Array.from(document.querySelectorAll('.page[data-template="cinematic"] > section.section'));
  if(!scenes.length)return;
+ // .page in the legacy editor CSS is overflow:hidden. A sticky child cannot
+ // hold the viewport through that clipping ancestor. Cinematic exports need
+ // the document (not .page) to own the vertical scroll.
+ if(page){
+  page.style.setProperty('overflow','visible','important');
+  page.style.setProperty('transform','none','important');
+ }
  for(const section of scenes){
   if(section.querySelector(':scope > .r37-stage'))continue;
   // R16 retains the same section and image references, so it continues to
