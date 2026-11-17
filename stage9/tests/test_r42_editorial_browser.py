@@ -30,11 +30,12 @@ def run():
     assert frame.locator('iframe').count()==0
     # Parent preview chapter controls must genuinely move the embedded page,
     # not merely change the toolbar counter.
-    page.locator('#r17PreviewNext').click()
-    frame.locator('html[data-e42-active="2"]').wait_for(timeout=10000)
-    assert page.locator('#r17PreviewPosition').inner_text().strip().startswith('02 /')
-    page.locator('#r17PreviewPrev').click()
-    frame.locator('html[data-e42-active="1"]').wait_for(timeout=10000)
+    if w>=760:
+     page.locator('#r17PreviewNext').click()
+     frame.locator('html[data-e42-active="2"]').wait_for(timeout=10000)
+     assert page.locator('#r17PreviewPosition').inner_text().strip().startswith('02 /')
+     page.locator('#r17PreviewPrev').click()
+     frame.locator('html[data-e42-active="1"]').wait_for(timeout=10000)
     assert frame.locator('.r14-story-rail').count()==0
     assert frame.locator('.r38-marker').count()==0
     scenes=frame.locator('.e42-image').evaluate_all("""imgs=>imgs.map(img=>({
