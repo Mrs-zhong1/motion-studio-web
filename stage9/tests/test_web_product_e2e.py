@@ -107,7 +107,13 @@ try:
         exported_page.on("pageerror",lambda e:exported_errors.append(str(e)))
         exported_page.set_content(html,wait_until="domcontentloaded")
         exported_page.wait_for_timeout(750)
-        check("exported_sections",exported_page.locator("section.section").count()==len(data["sections"]))
+        # R42 editorial intentionally exports one magazine spread per chapter,
+        # not obsolete two-pane section.section + iframe wrappers.
+        if data.get("templateId")=="editorial":
+            check("exported_sections",exported_page.locator("section.e42-spread").count()==len(data["sections"]))
+            check("editorial_has_no_nested_duplicated_demo",exported_page.locator("iframe").count()==0)
+        else:
+            check("exported_sections",exported_page.locator("section.section").count()==len(data["sections"]))
         check("offline_no_remote_requests",not remote)
         check("export_no_page_errors",not exported_errors)
         check("editor_no_page_errors",not page_errors)
