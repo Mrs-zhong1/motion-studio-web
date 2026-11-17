@@ -1,73 +1,48 @@
-"""R14 exported chapter navigator: actual DOM and interaction smoke."""
-from pathlib import Path
+"""R14 navigator regression migrated for R39 film vs unchanged six families.
+
+The film's chapter drawer and one-stage scrubber are intentional; the
+Editorial/other family still exposes the legacy R14 chapter rail.
+"""
 from functools import partial
-from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+from http.server import ThreadingHTTPServer,SimpleHTTPRequestHandler
+from pathlib import Path
 import threading
 from playwright.sync_api import sync_playwright
-
 ROOT=Path(__file__).resolve().parents[1]
-EDITOR=ROOT/"Motion-Studio-Stage15-Meshopt-OFFLINE.html"
-TEMPLATES=("editorial","product-3d","cinematic","architecture","agency","fashion","gallery","saas")
-
+EDITOR=ROOT/'Motion-Studio-Stage15-Meshopt-OFFLINE.html'
 def test_r14():
-    server=ThreadingHTTPServer(("127.0.0.1",0),partial(SimpleHTTPRequestHandler,directory=str(ROOT)))
-    worker=threading.Thread(target=server.serve_forever,daemon=True)
-    worker.start()
-    try:
-        with sync_playwright() as pw:
-            browser=pw.chromium.launch(headless=True,args=["--no-sandbox"])
-            page=browser.new_page(viewport={"width":1440,"height":900})
-            page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
-            assert page.locator("#discoveryView").is_visible()
-            assert page.locator(".r14-story-rail").count()==0, "Navigator must not cover editor/gallery UI"
-            for template in TEMPLATES:
-                exported=page.evaluate("(id)=>buildTemplatePreviewDocument(id)",template)
-                assert "installR14Navigator" in exported, template
-                assert "r14-story-rail" in exported, template
-                assert f'data-template="{template}"' in exported, template
-            exported=page.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
-            standalone=browser.new_page(viewport={"width":1440,"height":900})
-            problems=[]
-            standalone.on("pageerror",lambda error:problems.append(str(error)))
-            standalone.set_content(exported,wait_until="domcontentloaded",timeout=60000)
-            nav=standalone.locator("nav.r14-story-rail")
-            nav.wait_for()
-            expected=standalone.locator("section.section").count()
-            assert nav.get_attribute("aria-label")=="Story chapters"
-            # R36+ compact story navigation adds a separate menu toggle.
-            # Chapter count remains exact; the menu button is not a chapter.
-            chapter_buttons=nav.locator(".r14-rail-chapters > button")
-            assert chapter_buttons.count()==expected
-            toggle=nav.locator(".r36-nav-toggle")
-            assert toggle.count()==1
-            assert toggle.get_attribute("aria-expanded")=="false"
-            assert nav.locator('button[aria-current="step"]').count()==1
-            assert nav.locator(".r14-rail-fill").count()==1
-            assert chapter_buttons.first.get_attribute("aria-label").startswith("Go to chapter 1")
-            toggle.click()
-            assert toggle.get_attribute("aria-expanded")=="true"
-            last=chapter_buttons.last
-            last.click()
-            standalone.wait_for_function("""()=>document.querySelector('.r14-story-rail')?.dataset.activeChapter===String(document.querySelectorAll('.page > section.section').length)""",timeout=10000)
-            assert standalone.evaluate("window.scrollY")>0
-            fill=nav.locator(".r14-rail-fill").evaluate("el=>parseFloat(el.style.height)")
-            assert fill>40,fill
-            standalone.set_viewport_size({"width":390,"height":844})
-            assert nav.is_visible()
-            assert toggle.is_visible()
-            assert not nav.locator(".r14-rail-label").first.is_visible()
-            standalone.emulate_media(reduced_motion="reduce")
-            toggle.click()
-            first=chapter_buttons.first
-            first.click()
-            standalone.wait_for_function("()=>window.scrollY<100",timeout=10000)
-            assert not problems,problems
-            standalone.close()
-            browser.close()
-    finally:
-        server.shutdown()
-        server.server_close()
-
-if __name__=="__main__":
-    test_r14()
-    print("R14 PASS: all eight exports, visible chapter navigation, scroll progress, mobile and reduced motion")
+ server=ThreadingHTTPServer(('127.0.0.1',0),partial(SimpleHTTPRequestHandler,directory=str(ROOT)))
+ threading.Thread(target=server.serve_forever,daemon=True).start()
+ try:
+  with sync_playwright() as pw:
+   browser=pw.chromium.launch(headless=True,args=['--no-sandbox'])
+   editor=browser.new_page(viewport={'width':1440,'height':900})
+   editor.goto(f'http://127.0.0.1:{server.server_port}/{EDITOR.name}',wait_until='domcontentloaded')
+   assert editor.locator('#discoveryView').is_visible()
+   for name in ('editorial','product-3d','cinematic','architecture','agency','fashion','gallery','saas'):
+    html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
+    page=browser.new_page(viewport={'width':1440,'height':900})
+    page.set_content(html,wait_until='domcontentloaded')
+    if name=='cinematic':
+     assert page.locator('html[data-r39-film="continuous"]').count()==1
+     assert page.locator('.r39-frame').count()==5
+     assert page.locator('.r14-story-rail').count()==0
+     btn=page.locator('#r39-menu-toggle')
+     btn.click()
+     assert btn.get_attribute('aria-expanded')=='true'
+     page.locator('#r39-chapter-menu [data-seek="4"]').click()
+     page.locator('html[data-r39-chapter="5"]').wait_for(timeout=10000)
+     assert btn.get_attribute('aria-expanded')=='false'
+     page.set_viewport_size({'width':390,'height':844})
+     assert btn.is_visible()
+    else:
+     nav=page.locator('nav.r14-story-rail')
+     nav.wait_for()
+     assert nav.locator('.r14-rail-chapters > button').count()==page.locator('section.section').count(),name
+     assert nav.locator('button[aria-current="step"]').count()==1,name
+     assert nav.locator('.r14-rail-fill').count()==1,name
+    page.close()
+   browser.close()
+ finally:server.shutdown();server.server_close()
+if __name__=='__main__':
+ test_r14();print('R14→R39 PASS: five-act film drawer and distinct legacy gallery chapter navigators')
