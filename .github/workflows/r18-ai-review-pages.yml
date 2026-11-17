@@ -32,6 +32,10 @@ on:
       - 'stage9/tests/test_r38_template_families.py'
       - 'stage9/tests/test_r37_story_director.py'
       - 'stage9/tests/test_r36_pilot_browser.py'
+      - 'stage9/tests/test_r16_story_transitions.py'
+      - 'stage9/tests/test_r16_multiplane_camera.py'
+      - 'stage9/tests/test_r16_cross_chapter.py'
+      - 'stage9/tests/test_r17_preview_storyboard.py'
       - 'stage9/tests/test_r36_unified_stage.mjs'
       - 'stage9/tests/test_r31_story_continuity.mjs'
       - 'stage9/tests/test_r30_cinematic_trial.py'
@@ -42,7 +46,7 @@ permissions:
   contents: write
 concurrency:
   group: motion-studio-r18-ai-review-deploy
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   verified-ai-build:
     runs-on: ubuntu-latest
