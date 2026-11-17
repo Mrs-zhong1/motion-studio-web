@@ -125,7 +125,8 @@ def run_audit():
                     continue
                 frame.locator("section.section").first.wait_for(timeout=30000)
                 assert page.locator("#previewHeroTitle").inner_text().strip()
-                assert page.locator("#previewUsePanel").is_visible()
+                assert page.locator("#previewUse").is_visible()
+                assert page.locator("#previewUsePanel").is_hidden()  # R41 default full-width preview
                 assert page.locator(".preview-product-layout").is_visible()
                 if template_id in ("editorial", "product-3d"):
                     assert frame.locator(".section.designed-hero").count()==1
@@ -206,11 +207,9 @@ def run_audit():
                     # R14: capture actual immersive website experience for ALL
                     # eight templates at both viewport sizes, not just two
                     # preview dialog screenshots.
+                    # R41: stage is full width by default; opening template
+                    # information is a FLOATING drawer, not a split overlay.
                     immersive = page.locator("#previewImmersive")
-                    immersive.click()
-                    assert page.locator("#templatePreview").evaluate(
-                        "el => el.classList.contains('immersive-preview')"
-                    )
                     assert page.locator(".preview-product-info").is_hidden()
                     stage_width = page.locator("#previewDevice").evaluate(
                         "el => el.getBoundingClientRect().width"
@@ -221,6 +220,10 @@ def run_audit():
                     geometry["immersivePngSHA256"] = hashlib.sha256(immersive_shot).hexdigest()[:16]
                     immersive.click()
                     assert page.locator(".preview-product-info").is_visible()
+                    assert abs(page.locator("#previewDevice").evaluate(
+                        "el => el.getBoundingClientRect().width") - stage_width) < 4
+                    immersive.click()
+                    assert page.locator(".preview-product-info").is_hidden()
                     # R4: all six newly authored templates must have complete,
                     # nonoverlapping image/renderer zones in every chapter.
                     # Previously rebuilt pilots retain their original first-page hero.
