@@ -19,6 +19,10 @@ export function applyR38EightDirectors(html){
  if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
 })();
 </script>`;
- return html.replace('</head>','<style id="r38-director-css">'+r38CSS+'</style></head>')
- .replace(/<\\/body><\\/html>\\s*$/,'<script type="text/plain" id="r38-director-runtime">'+r38Runtime+'</script>'+injected+'</body></html>');
+ const end=html.lastIndexOf('</body></html>');
+ if(end<0)throw Error('R38 closing tag missing');
+ const source=html.slice(0,end)+
+  '<script type="text/plain" id="r38-director-runtime">'+r38Runtime+'</script>'+injected+
+  html.slice(end);
+ return source.replace('</head>','<style id="r38-director-css">'+r38CSS+'</style></head>');
 }
