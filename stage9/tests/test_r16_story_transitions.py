@@ -20,12 +20,15 @@ def test_r16():
             assert editor.locator(".r16-story-ready").count()==0
             for template in TEMPLATES:
                 exported=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",template)
+                if template in ("cinematic","editorial"):
+                    assert ('data-r39-film="continuous"' if template=="cinematic" else 'data-e42-editorial="coherent-print"') in exported,template
+                    continue
                 assert "installR16StoryTransitions" in exported,template
                 assert f'.page[data-template="{template}"] .section.designed-chapter .section-art' in exported,template
             # Test actual scroll and computed clips, not only source selectors.
             # Hydrate real bundled image data just as previewTemplate() does.
-            editor.evaluate("async()=>await ensureTemplatePhoto('cinematic')")
-            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            editor.evaluate("async()=>await ensureTemplatePhoto('architecture')")
+            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","architecture")
             page=browser.new_page(viewport={"width":1440,"height":900})
             errors=[];page.on("pageerror",lambda error:errors.append(str(error)))
             page.set_content(html,wait_until="domcontentloaded",timeout=60000)
