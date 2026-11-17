@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 EDITOR=ROOT/'Motion-Studio-Stage15-Meshopt-OFFLINE.html'
 REPORT=ROOT/'R33_NATIVE_SCROLL_ACCEPTANCE.json'
 def run():
-    observations={'schema':'motion-studio-r33-scroll-v1','browser':'chromium',
+    observations={'schema':'motion-studio-r33-to-r39-continuous-film-v2','browser':'chromium',
                   'pass':False,'checks':{},'errors':[]}
     with tempfile.TemporaryDirectory() as tmp:
         images=[]
@@ -33,24 +33,25 @@ def run():
                 page.wait_for_function("()=>document.querySelector('#r30TrialPreviewStatus').textContent.includes('已替换 Cinematic')")
                 observations['checks']['two_images_imported']=True
                 frame=page.locator('#templatePreviewFrame').content_frame
-                art=frame.locator('.section.designed-chapter').nth(2)
-                frame.locator('body.r16-story-ready').wait_for(timeout=15000)
-                frame.locator('style#r31-export-story-continuity').wait_for(state='attached')
-                first=art.evaluate("(el)=>({r:el.dataset.r16Progress,opacity:getComputedStyle(el.querySelector('.section-art')).opacity})")
-                observations['checks']['native_image_not_dimmed']=float(first['opacity'])>=.85
-                art.evaluate("(el)=>el.scrollIntoView({block:'center',behavior:'instant'})")
-                frame.locator('html').evaluate("(el)=>el.ownerDocument.defaultView.dispatchEvent(new Event('scroll'))")
-                frame.locator('html').evaluate("(el)=>new Promise(res=>setTimeout(res,250))")
-                second=art.evaluate("(el)=>({r:el.dataset.r16Progress,reveal:el.querySelector('.section-art').style.getPropertyValue('--r16-reveal'),opacity:getComputedStyle(el.querySelector('.section-art')).opacity})")
-                observations['checks']['real_scroll_updates_r16_progress']=float(second['r'])>float(first['r'])
-                observations['checks']['real_scroll_reveals_photo']=float(second['reveal'].rstrip('%'))>=60
-                observations['checks']['photo_stays_visible']=float(second['opacity'])>=.85
+                frame.locator('html[data-r39-film="continuous"]').wait_for(timeout=15000)
+                observations['checks']['five_images_in_single_stage']=frame.locator('.r39-frame').count()==5 and frame.locator('.r39-stage').count()==1
+                frame.locator('html').evaluate("(el)=>el.style.setProperty('scroll-behavior','auto','important')")
+                frame.locator('#r39-story').evaluate("""(el)=>{
+                   window.scrollTo({top:el.offsetTop+Math.max(1,el.offsetHeight-innerHeight)*.5,behavior:'instant'})
+                }""")
+                frame.locator('html[data-r39-chapter="3"]').wait_for(timeout=10000)
+                third=frame.locator('.r39-frame[data-index="2"]').evaluate("(el)=>({opacity:Number(el.style.opacity),loaded:el.complete&&el.naturalWidth>0})")
+                observations['checks']['real_scroll_reveals_third_scene']=third['opacity']>.95
+                observations['checks']['native_third_scene_loaded']=third['loaded']
+                # R30 image import must change the real scene image, not only cache.
+                src=frame.locator('.r39-frame[data-index="1"]').get_attribute('src')
+                observations['checks']['uploaded_photo_reaches_stage']=src.startswith('data:image/png;base64,')
                 page.locator('#previewMobile').click()
                 observations['checks']['390px_mode']=page.locator('#previewDevice').evaluate("(el)=>el.classList.contains('mobile')")
                 page.locator('#previewUse').click()
-                export=page.evaluate("()=>MotionStudioUnified.build()")
-                observations['checks']['export_has_same_cinematic_style']='id="r31-export-story-continuity"' in export
-                observations['checks']['export_has_one_story_system']='installR16StoryTransitions' in export and export.count('function installR16StoryTransitions()')==1
+                exported=page.evaluate("()=>MotionStudioUnified.build()")
+                observations['checks']['export_has_same_5_act_film']='data-r39-film="continuous"' in exported and exported.count('class="r39-frame"')==5
+                observations['checks']['export_has_one_story_system']='id="r39-story"' in exported and 'function installR16StoryTransitions()' not in exported
                 observations['checks']['no_page_js_exceptions']=not js_errors
                 observations['errors']=js_errors
                 observations['pass']=all(observations['checks'].values())
