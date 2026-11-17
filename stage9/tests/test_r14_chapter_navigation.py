@@ -23,7 +23,14 @@ def test_r14():
     html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
     page=browser.new_page(viewport={'width':1440,'height':900})
     page.set_content(html,wait_until='domcontentloaded')
-    if name=='cinematic':
+    if name=='editorial':
+     assert page.locator('html[data-e42-editorial="coherent-print"]').count()==1
+     assert page.locator('.e42-spread').count()==4
+     assert page.locator('.r14-story-rail').count()==0
+     assert page.locator('.e42-progress button').count()==4
+     page.locator('.e42-progress button[data-seek="3"]').click()
+     page.locator('html[data-e42-active="4"]').wait_for(timeout=10000)
+    elif name=='cinematic':
      assert page.locator('html[data-r39-film="continuous"]').count()==1
      assert page.locator('.r39-frame').count()==5
      assert page.locator('.r14-story-rail').count()==0
