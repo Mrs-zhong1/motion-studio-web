@@ -26,6 +26,22 @@ def run():
     assert frame.locator('.r39-caption').count()==5
     assert frame.locator('#r39-chapter-menu [data-seek]').count()==5
     assert frame.locator('.r37-stage').count()==0
+    # Every distinct act must actually become the sole visible image/title
+    # at its own scroll waypoint, rather than merely existing in the DOM.
+    frame.locator('html').evaluate("(el)=>el.style.setProperty('scroll-behavior','auto','important')")
+    for index in range(5):
+     frame.locator('#r39-story').evaluate("""(el,i)=>{
+      const range=Math.max(1,el.offsetHeight-innerHeight);
+      window.scrollTo({top:el.offsetTop+(i/4)*range,behavior:'instant'});
+     }""",index)
+     frame.locator('html[data-r39-chapter="'+str(index+1)+'"]').wait_for(timeout=10000)
+     actual=frame.locator('.r39-frame[data-index="'+str(index)+'"]').evaluate("el=>Number(el.style.opacity)")
+     title=frame.locator('.r39-caption[data-index="'+str(index)+'"]').evaluate("el=>Number(el.style.opacity)")
+     assert actual>.96,(index,actual)
+     assert title>.96,(index,title)
+     if w==1440:
+      frame.locator('html').screenshot(path=str(ROOT/('R39_ACT_'+str(index+1).zfill(2)+'_DESKTOP.png')))
+
     frame.locator('#r39-menu-toggle').click()
     assert frame.locator('#r39-menu-toggle').get_attribute('aria-expanded')=='true'
     frame.locator('#r39-chapter-menu button').last.click()
