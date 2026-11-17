@@ -29,6 +29,28 @@ def run():
     page.goto(f'http://127.0.0.1:{server.server_port}/{EDITOR.name}',wait_until='domcontentloaded')
     page.locator(f'[data-template-card="{template}"]').click()
     frame=page.locator('#templatePreviewFrame').content_frame
+    if template=='cinematic':
+      frame.locator('html[data-r39-film="continuous"]').wait_for(timeout=15000)
+      values=frame.locator('body').evaluate("""body=>{
+        const frames=[...document.querySelectorAll('.r39-frame')];
+        return {family:'film',count:frames.length,tagged:frames.length,marks:frames.length,
+          chapterTitles:[...document.querySelectorAll('.r39-caption h1')].map(el=>el.textContent),
+          background:getComputedStyle(body).backgroundColor,
+          headingFont:getComputedStyle(document.querySelector('.r39-caption h1')).fontFamily,
+          artWidth:frames[0].getBoundingClientRect().width,
+          regionWidth:innerWidth,artX:frames[0].getBoundingClientRect().left,
+          artClip:'full-screen camera',stickyStages:1,imageVisible:true,
+          horizontalOverflow:Math.max(0,document.documentElement.scrollWidth-innerWidth)}
+      }""")
+      assert values['count']==5 and values['stickyStages']==1,values
+      assert len(values['chapterTitles'])==5 and all(values['chapterTitles']),values
+      assert values['horizontalOverflow']<=32,values
+      exported=page.evaluate("(t)=>{const p=MotionStudioUnified.createProjectFromTemplate(t);MotionStudioUnified.load(p,{resetHistory:true});return MotionStudioUnified.build()}",template)
+      assert 'data-r39-film="continuous"' in exported
+      assert exported.count('class="r39-frame"')==5
+      report['templates'].append({'template':template,'viewport':[1440,900],**values})
+      page.close()
+      continue
     frame.locator('html[data-r38-ready="yes"]').wait_for(timeout=15000)
     values=frame.locator('body').evaluate("""body=>{
       const sections=[...document.querySelectorAll('.page[data-template] > section.section')];
