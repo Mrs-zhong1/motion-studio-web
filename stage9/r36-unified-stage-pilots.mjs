@@ -167,6 +167,31 @@ export function injectR36Pilot(html){
 (function(){
  const pilot=['product-3d','cinematic'].includes(document.body.dataset.motionTemplate);
  if(!pilot)return;
+ // Legacy R13–R23 template rules contain higher-specificity !important grid
+ // declarations. Inline-important geometry is intentionally restricted to
+ // the two review pilots so screenshots show a REAL single stage instead of
+ // a stylesheet that loses the cascade. R16 scroll/camera variables stay.
+ const apply=(el,props)=>{if(!el)return;for(const [key,value] of Object.entries(props))
+   el.style.setProperty(key,value,'important')};
+ document.querySelectorAll('.page[data-template] > section.section').forEach(section=>{
+  apply(section,{display:'block',position:'relative',overflow:'hidden',
+   isolation:'isolate','min-height':'100svh',padding:'0'});
+  apply(section.querySelector('.section-art'),{
+   position:'absolute',inset:'0',width:'100%',height:'100%',
+   'grid-column':'auto','grid-row':'auto','background-size':'cover',
+   'mix-blend-mode':'normal',opacity:'1','z-index':'0'});
+  const hero=section.classList.contains('designed-hero');
+  apply(section.querySelector(':scope > iframe'),hero?
+   {position:'absolute',inset:'0',width:'100%',height:'100%',
+    'grid-column':'auto','grid-row':'auto','z-index':'3'}:
+   {position:'absolute',top:'7%',right:'3%',left:'auto',width:'58%',
+    height:'86%','grid-column':'auto','grid-row':'auto','z-index':'3'});
+  apply(section.querySelector('.designed-chapter-heading'),{
+   position:'absolute',top:'clamp(110px,19vh,240px)',
+   left:'clamp(24px,6vw,120px)',right:'auto',bottom:'auto',
+   width:'min(48%,710px)','max-width':'48%',
+   'grid-column':'auto','grid-row':'auto','z-index':'6'});
+ });
  const rail=document.querySelector('.r14-story-rail');
  if(!rail)return;
  rail.classList.add('r36-collapsible');
