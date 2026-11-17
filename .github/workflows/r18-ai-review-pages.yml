@@ -12,6 +12,13 @@ on:
       - 'stage9/r36-unified-stage-pilots.mjs'
       - 'stage9/r37-story-director.mjs'
       - 'stage9/r38-eight-art-directions.mjs'
+      - 'stage9/r39-cinematic-timeline.mjs'
+      - 'stage9/r40-product-lab.mjs'
+      - 'stage9/three-scene-entry.js'
+      - 'stage9/tests/test_r39_cinematic_browser.py'
+      - 'stage9/tests/test_r40_product_browser.py'
+      - 'stage9/tests/test_product_restructure.py'
+      - 'stage9/tests/test_r30_cinematic_trial.py'
       - 'stage9/tests/test_r38_eight_directions.mjs'
       - 'stage9/tests/test_r38_template_families.py'
       - 'stage9/tests/test_r37_story_director.py'
@@ -81,10 +88,24 @@ jobs:
           node --test tests/test_r36_unified_stage.mjs
           node --test tests/test_r37_story_director.mjs
           node --test tests/test_r38_eight_directions.mjs
+          node --test tests/test_r39_cinematic_timeline.mjs
+          node --test tests/test_r40_product_lab.mjs
           python tests/test_r38_template_families.py
+          python tests/test_r39_cinematic_browser.py
+          python tests/test_r40_product_browser.py
           python tests/test_r37_story_director.py
           python tests/test_r36_pilot_browser.py
           node --test tests/test_r31_story_continuity.mjs
+      - name: Preserve real scene screenshots and story-control evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r39-r40-cinematic-and-webgl-review-${{ github.sha }}
+          path: |
+            stage9/R39_FILM_ACCEPTANCE.json
+            stage9/R40_PRODUCT_ACCEPTANCE.json
+            stage9/R39_ACT_*.png
+          retention-days: 14
       - name: Stage public review page without changing production root
         run: |
           mkdir -p "$RUNNER_TEMP/r18-ai-publish"
