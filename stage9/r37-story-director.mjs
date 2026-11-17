@@ -128,6 +128,22 @@ export const r37Runtime=String.raw`(function(){
   section.style.setProperty('overflow','visible','important');
   section.style.setProperty('height','175svh','important');
   section.style.setProperty('min-height','175svh','important');
+  // R36 pilot uses inline !important layout styles. Match that priority on
+  // the new director geometry so browser capture cannot regress to split UI.
+  const art=stage.querySelector('.section-art');
+  if(art){
+   art.style.setProperty('inset','-4% -3%','important');
+   art.style.setProperty('width','106%','important');
+   art.style.setProperty('height','108%','important');
+   art.style.setProperty('transform','translate3d(calc(var(--r16-photo-x,0px) + var(--r37-px,0px)),calc(var(--r16-photo-y,0px) + var(--r37-py,0px)),0) scale(calc(1.03 + var(--r16-incoming,1)*.035))','important');
+  }
+  const heading=stage.querySelector('.designed-chapter-heading');
+  if(heading){
+   heading.style.setProperty('top','auto','important');
+   heading.style.setProperty('bottom','clamp(125px,17vh,210px)','important');
+   heading.style.setProperty('width','min(56vw,860px)','important');
+   heading.style.setProperty('max-width','min(56vw,860px)','important');
+  }
   for(const node of stage.querySelectorAll(':scope > iframe')){
    node.setAttribute('aria-hidden','true');
    node.setAttribute('tabindex','-1');
