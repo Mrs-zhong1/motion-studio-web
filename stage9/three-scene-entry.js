@@ -210,11 +210,12 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
     toolbar.setAttribute('aria-label','3D studio controls');
     toolbar.style.cssText='position:absolute;top:12px;right:12px;z-index:9;display:flex;flex-wrap:wrap;max-width:255px;gap:5px;padding:9px;border:1px solid #ffffff33;border-radius:13px;background:#0a141bcc;backdrop-filter:blur(10px);pointer-events:auto';
     host.appendChild(toolbar);
+    const studioControlButtons=new Map();
     const preset=(label,fn)=>{
       const b=document.createElement('button');b.type='button';b.textContent=label;
       b.style.cssText='padding:6px 9px;border:1px solid #ffffff45;border-radius:7px;color:#eef6f7;background:#263743;cursor:pointer;font:600 10px system-ui';
       b.addEventListener('click',()=>{fn();status.controlClicks++});
-      toolbar.appendChild(b);return b;
+      toolbar.appendChild(b);studioControlButtons.set(label.toLowerCase(),b);return b;
     };
     preset('Warm',()=>{key.color.set(0xffdfc2);fill.color.set(0xa9d9ff);renderer.toneMappingExposure=1.05;status.lightPreset='warm'});
     preset('Cool',()=>{key.color.set(0xbce4ff);fill.color.set(0xe0f0ff);renderer.toneMappingExposure=1.14;status.lightPreset='cool'});
@@ -230,6 +231,23 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
     preset('Front',()=>{dragYaw=-.25;dragPitch=0;status.dragYaw=dragYaw;status.dragPitch=0;status.cameraPreset='front'});
     preset('Angle',()=>{dragYaw=.68;dragPitch=-.16;status.dragYaw=dragYaw;status.dragPitch=dragPitch;status.cameraPreset='angle'});
     preset('Detail',()=>{zoom=4.3;camera.position.z=zoom;status.zoom=zoom;status.cameraPreset='detail'});
+
+    // R40 cross-frame product laboratory bridge. Changes are applied by the
+    // existing actual PBR/light/camera controllers, not a CSS color filter.
+    const allowedStudioControls={
+      light:['warm','cool','neutral'],
+      material:['original','graphite','pearl'],
+      camera:['front','angle','detail'],
+      backdrop:['noir','porcelain','cobalt']
+    };
+    window.addEventListener('message',event=>{
+      if(event.source!==window.parent||event.data?.type!=='motion-studio-product-control')return;
+      const {group,value}=event.data;
+      if(!Object.prototype.hasOwnProperty.call(allowedStudioControls,group))return;
+      if(!allowedStudioControls[group].includes(value))return;
+      studioControlButtons.get(value)?.click();
+      window.parent.postMessage({type:'motion-studio-product-applied',group,value},'*');
+    });
 
     let progress=0;
     const mobileHint=document.createElement('p');
