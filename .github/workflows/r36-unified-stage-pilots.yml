@@ -1,0 +1,51 @@
+name: R36 Unified Stage Pilot Browser Acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/r36-unified-stage-pilots.mjs'
+      - 'stage9/tests/test_r36_unified_stage.mjs'
+      - 'stage9/tests/test_r36_pilot_browser.py'
+      - 'stage9/build-offline.mjs'
+      - '.github/workflows/r36-unified-stage-pilots.yml'
+permissions:
+  contents: read
+jobs:
+  pilot-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate R36 module syntax and isolated pilot contract
+        run: |
+          node --check r36-unified-stage-pilots.mjs
+          node --test tests/test_r36_unified_stage.mjs
+      - name: Strict AI offline build with previous chapters/components intact
+        env:
+          MOTION_REQUIRE_AI_ASSETS: '1'
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          python tests/check_build.py
+      - name: Actual Chromium desktop/mobile preview navigation and HTML export tests
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          python tests/test_r36_pilot_browser.py
+      - name: Preserve actual browser geometry and test verdict
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r36-pilot-browser-result-${{ github.sha }}
+          path: stage9/R36_PILOT_VISUAL_TEST.json
+          retention-days: 14
