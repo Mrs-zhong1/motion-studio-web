@@ -27,6 +27,11 @@ def test_r13_motion():
                     assert 'data-r39-film="continuous"' in exported,template
                     assert exported.count('class="r39-frame"')==5,template
                     continue
+                if template=="editorial":
+                    assert 'data-e42-editorial="coherent-print"' in exported,template
+                    assert exported.count('class="e42-image"')==4,template
+                    assert '<iframe' not in exported,template
+                    continue
                 assert "installR13StoryMotion" in exported, template
                 assert f'data-template="{template}"' in exported, template
                 assert f'.page[data-template="{template}"] .section.designed-chapter .designed-chapter-heading::before' in exported, template
