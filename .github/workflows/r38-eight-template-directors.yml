@@ -32,7 +32,7 @@ jobs:
           node --test tests/test_r38_eight_directions.mjs
       - name: Build real offline Web editor using 39 source scenes
         run: |
-          npm ci --no-audit --no-fund
+          npm install --no-audit --no-fund
           MOTION_REQUIRE_AI_ASSETS=1 npm run build
           python tests/check_build.py
       - name: Real Chromium verifies complete five-act film and other art directions
