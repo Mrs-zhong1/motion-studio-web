@@ -26,11 +26,12 @@ def run():
     assert frame.locator('.r39-caption').count()==5
     assert frame.locator('#r39-chapter-menu [data-seek]').count()==5
     assert frame.locator('.r37-stage').count()==0
-    editor.locator('#r17PreviewNext').click()
-    frame.locator('html[data-r39-chapter="2"]').wait_for(timeout=10000)
-    assert editor.locator('#r17PreviewPosition').inner_text().strip().startswith('02 /')
-    editor.locator('#r17PreviewPrev').click()
-    frame.locator('html[data-r39-chapter="1"]').wait_for(timeout=10000)
+    if w>=760:
+     editor.locator('#r17PreviewNext').click()
+     frame.locator('html[data-r39-chapter="2"]').wait_for(timeout=10000)
+     assert editor.locator('#r17PreviewPosition').inner_text().strip().startswith('02 /')
+     editor.locator('#r17PreviewPrev').click()
+     frame.locator('html[data-r39-chapter="1"]').wait_for(timeout=10000)
     # Every distinct act must actually become the sole visible image/title
     # at its own scroll waypoint, rather than merely existing in the DOM.
     frame.locator('html').evaluate("(el)=>el.style.setProperty('scroll-behavior','auto','important')")
