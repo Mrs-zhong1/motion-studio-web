@@ -5,6 +5,8 @@ on:
     branches: [release/r18-r21-acceptance-gates]
     paths:
       - 'stage9/r36-unified-stage-pilots.mjs'
+      - 'stage9/r37-story-director.mjs'
+      - 'stage9/tests/test_r37_story_director.mjs'
       - 'stage9/tests/test_r36_unified_stage.mjs'
       - 'stage9/tests/test_r36_pilot_browser.py'
       - 'stage9/build-offline.mjs'
@@ -30,6 +32,7 @@ jobs:
         run: |
           node --check r36-unified-stage-pilots.mjs
           node --test tests/test_r36_unified_stage.mjs
+          node --test tests/test_r37_story_director.mjs
       - name: Strict AI offline build with previous chapters/components intact
         env:
           MOTION_REQUIRE_AI_ASSETS: '1'
