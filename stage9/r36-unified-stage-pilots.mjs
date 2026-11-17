@@ -107,13 +107,13 @@ body[data-motion-template="cinematic"] .r14-story-rail.r36-open{
 }
 body[data-motion-template="product-3d"] .r14-rail-track,
 body[data-motion-template="cinematic"] .r14-rail-track{
- position:absolute!important;inset:auto 0 0!important;width:100%!important;
- min-height:3px!important;height:3px!important;flex:0 0 3px!important;
+ position:absolute!important;inset:0 0 0 auto!important;width:3px!important;
+ min-height:40px!important;height:100%!important;flex:0 0 3px!important;
  background:#ffffff30!important;border-radius:0!important
 }
 body[data-motion-template="product-3d"] .r14-rail-fill,
 body[data-motion-template="cinematic"] .r14-rail-fill{
- width:0!important;height:100%!important;background:#d4f5a4!important
+ width:100%!important;background:#d4f5a4!important
 }
 body[data-motion-template="product-3d"] .r14-rail-chapters,
 body[data-motion-template="cinematic"] .r14-rail-chapters{
@@ -182,7 +182,7 @@ export function injectR36Pilot(html){
   rail.classList.toggle('r36-open',open);btn.setAttribute('aria-expanded',String(open));
   btn.setAttribute('aria-label',open?'Close story chapters':'Open story chapters')});
  rail.querySelectorAll('.r14-rail-chapters button').forEach(ch=>ch.addEventListener('click',close));
- document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&rail.classList.contains('r36-open')){e.preventDefault();e.stopImmediatePropagation();close()}},true);
  document.addEventListener('pointerdown',e=>{if(!rail.contains(e.target))close()},{passive:true});
 })();
 <\/script>`;
