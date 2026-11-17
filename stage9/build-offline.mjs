@@ -15,6 +15,7 @@ import {applyR31StoryContinuity} from './r31-cinematic-continuity.mjs';
 import {injectR36Pilot} from './r36-unified-stage-pilots.mjs';
 import {applyR37StoryDirector} from './r37-story-director.mjs';
 import {applyR38EightDirectors} from './r38-eight-art-directions.mjs';
+import {injectR39Film} from './r39-cinematic-timeline.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 const result=await build({entryPoints:[resolve(root,'three-scene-entry.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const engine=result.outputFiles[0].text;
@@ -43,7 +44,7 @@ injected=injected.replace('const templateOfflinePhotoBundles={};',
   'const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
 // Do not leave remote secondary demo photos as runtime dependencies.
 injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
-const editor=applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected))))))))));
+const editor=injectR39Film(applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected)))))))))));
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
