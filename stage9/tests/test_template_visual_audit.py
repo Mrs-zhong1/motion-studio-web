@@ -101,7 +101,7 @@ def run_audit():
                               const s=document.querySelector('#r39-story');
                               scrollTo({top:s.offsetTop+(s.offsetHeight-innerHeight)*.5,behavior:'instant'});
                             }""")
-                            frame.wait_for_function("()=>document.documentElement.dataset.r39Chapter==='3'",timeout=10000)
+                            page.wait_for_function("()=>document.querySelector('#templatePreviewFrame')?.contentDocument?.documentElement?.dataset.r39Chapter==='3'",timeout=10000)
                             page.wait_for_timeout(180)
                         middle.screenshot(path=str(SCREENSHOTS/f"{template_id}-chapter3-{device}.png"),animations="disabled")
                         if template_id=="editorial":last.scroll_into_view_if_needed()
@@ -111,7 +111,7 @@ def run_audit():
                               const s=document.querySelector('#r39-story');
                               scrollTo({top:s.offsetTop+s.offsetHeight-innerHeight,behavior:'instant'});
                             }""")
-                            frame.wait_for_function("()=>document.documentElement.dataset.r39Chapter==='5'",timeout=10000)
+                            page.wait_for_function("()=>document.querySelector('#templatePreviewFrame')?.contentDocument?.documentElement?.dataset.r39Chapter==='5'",timeout=10000)
                             page.wait_for_timeout(180)
                         last.screenshot(path=str(SCREENSHOTS/f"{template_id}-ending-{device}.png"),animations="disabled")
                         shot=(SCREENSHOTS/f"{template_id}-{device}.png").read_bytes()
