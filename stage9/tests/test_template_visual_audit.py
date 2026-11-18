@@ -110,13 +110,18 @@ def run_audit():
                             }""")
                         last.screenshot(path=str(SCREENSHOTS/f"{template_id}-ending-{device}.png"),animations="disabled")
                         shot=(SCREENSHOTS/f"{template_id}-{device}.png").read_bytes()
+                        middle_shot=(SCREENSHOTS/f"{template_id}-chapter3-{device}.png").read_bytes()
+                        ending_shot=(SCREENSHOTS/f"{template_id}-ending-{device}.png").read_bytes()
                         row={
                           "template":template_id,"device":device,"sectionCount":total_sections,
                           "photoCount":total_sections,"visiblyRenderedPhotos":len(snapshots),
+                          "collapsedSections":0,
                           "realPhotoCount":sum(x["kind"] in ("unsplash-photo","ai-generated-image") for x in manifest),
                           "originalFallbackCount":sum(x["kind"]=="original-generated-art" for x in manifest),
                           "documentWidth":width+max(0,overflow),"viewportWidth":width,
                           "firstSectionPngSHA256":hashlib.sha256(shot).hexdigest()[:16],
+                          "chapter3PngSHA256":hashlib.sha256(middle_shot).hexdigest()[:16],
+                          "designedEndingPngSHA256":hashlib.sha256(ending_shot).hexdigest()[:16],
                           "sourceManifest":[{"chapter":x["chapter"],"kind":x["kind"],"source":x.get("source")} for x in manifest],
                           "mediaRightsApproved":False,"storyEngine":'R42-paper' if template_id=='editorial' else 'R39-film'
                         }
