@@ -183,8 +183,13 @@ def run_audit():
                           return {imageWidth:image.width,textWidth:text.width,overlapPx2:Math.round(overlap)}
                         }""")
                         geometry["heroGeometry"]=sections
-                        if sections["overlapPx2"]>300:
-                            issues.append(f"{template_id} {device}: title/image zones overlap {sections}")
+                        if template_id=="product-3d":
+                            # R36 product-3d is intentionally a layered full-bleed stage:
+                            # the photograph is a backdrop behind the live GLB renderer.
+                            if sections["imageWidth"]<width*.85 or sections["textWidth"]<width*.50:
+                                issues.append(f"{template_id} {device}: layered hero collapsed {sections}")
+                        elif sections["overlapPx2"]>300:
+                            issues.append(f"{template_id} {device}: editorial hero zones overlap {sections}")
                     # R3: review the entire preview shell, not only iframe content.
                     if template_id in ("editorial", "product-3d"):
                         layout = page.locator(".preview-product-layout").evaluate("""el=>{
@@ -240,15 +245,27 @@ def run_audit():
                             const x=Math.max(0,Math.min(a.right,f.right)-Math.max(a.left,f.left));
                             const y=Math.max(0,Math.min(a.bottom,f.bottom)-Math.max(a.top,f.top));
                             const title=n.querySelector('[data-chapter-title]');
+                            const titleRect=title?.getBoundingClientRect();
+                            const section=n.getBoundingClientRect();
                             return {hasHeading:!!title&&title.textContent.trim().length>3,
                               overlap:Math.round(x*y),artW:Math.round(a.width),
-                              frameW:Math.round(f.width),artH:Math.round(a.height),frameH:Math.round(f.height)};
+                              frameW:Math.round(f.width),artH:Math.round(a.height),frameH:Math.round(f.height),
+                              sectionW:Math.round(section.width),headingW:Math.round(titleRect?.width||0),
+                              headingH:Math.round(titleRect?.height||0)};
                         })""")
                         geometry["authoredChapters"]=arrangements
-                        if any(not x["hasHeading"] or x["overlap"]>300 or
-                               x["artW"]<70 or x["frameW"]<70 or
-                               x["artH"]<200 or x["frameH"]<200 for x in arrangements):
-                            issues.append(f"{template_id} {device}: chapter grid overlap or collapsed media {arrangements}")
+                        if template_id=="product-3d":
+                            # Product-3D intentionally layers photography, live GLB and title
+                            # in one canvas. Validate each layer's usable size, not separation.
+                            if any(not x["hasHeading"] or x["artW"]<x["sectionW"]*.85 or
+                                   x["frameW"]<x["sectionW"]*.50 or x["artH"]<200 or
+                                   x["frameH"]<200 or x["headingW"]<100 or x["headingH"]<28
+                                   for x in arrangements):
+                                issues.append(f"{template_id} {device}: layered scene has a collapsed layer {arrangements}")
+                        elif any(not x["hasHeading"] or x["overlap"]>300 or
+                                 x["artW"]<70 or x["frameW"]<70 or
+                                 x["artH"]<200 or x["frameH"]<200 for x in arrangements):
+                            issues.append(f"{template_id} {device}: chapter image/renderer zones overlap or collapse {arrangements}")
                     # R8: each template needs a real designed ending, and the
                     # six non-pilot templates require a distinct opening mark.
                     closing = frame.locator("section.section.template-final").last
@@ -262,9 +279,12 @@ def run_audit():
                                               Math.max(0,Math.min(r.bottom,f.bottom)-Math.max(r.top,f.top)))};
                     }""")
                     geometry["designedEnding"]=ending
+                    # The product-3d ending is an intentional overlay over its
+                    # full-stage GLB renderer; other templates require separated zones.
                     if (not ending["heading"] or not ending["visible"] or
-                        ending["width"]<120 or ending["height"]<100 or ending["overlapped"]>300):
-                        issues.append(f"{template_id} {device}: designed ending collapsed or overlaps iframe {ending}")
+                        ending["width"]<120 or ending["height"]<100 or
+                        (template_id!="product-3d" and ending["overlapped"]>300)):
+                        issues.append(f"{template_id} {device}: designed ending collapsed or incorrectly overlaps renderer {ending}")
                     if template_id not in ("editorial","product-3d"):
                         assert frame.locator("section.template-opening .template-opening-mark").count() == 1,template_id
                         assert frame.locator("section.template-opening .chapter-step").inner_text().strip().startswith("01 /"),template_id
