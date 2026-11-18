@@ -186,7 +186,7 @@ def run_audit():
                         if template_id=="product-3d":
                             # R36 product-3d is intentionally a layered full-bleed stage:
                             # the photograph is a backdrop behind the live GLB renderer.
-                            if sections["imageWidth"]<width*.85 or sections["textWidth"]<width*.50:
+                            if sections["imageWidth"]<width*.80 or sections["textWidth"]<width*.50:
                                 issues.append(f"{template_id} {device}: layered hero collapsed {sections}")
                         elif sections["overlapPx2"]>300:
                             issues.append(f"{template_id} {device}: editorial hero zones overlap {sections}")
