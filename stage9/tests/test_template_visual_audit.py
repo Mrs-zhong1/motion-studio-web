@@ -93,7 +93,16 @@ def run_audit():
                             last=frame.locator(subject).last
                         else:
                             first=middle=last=frame.locator(subject)
-                        first.screenshot(path=str(SCREENSHOTS/f"{template_id}-{device}.png"),animations="disabled")
+                        if template_id=="cinematic":
+                            # The R39 stage is position:sticky. Locator.screenshot()
+                            # scrolls that sticky element into view and resets the
+                            # iframe's story position, making the ending hash equal
+                            # the opening hash on mobile. Capture the visible preview
+                            # viewport instead; it preserves the actual pinned scene.
+                            (SCREENSHOTS/f"{template_id}-{device}.png").write_bytes(
+                                page.screenshot(animations="disabled"))
+                        else:
+                            first.screenshot(path=str(SCREENSHOTS/f"{template_id}-{device}.png"),animations="disabled")
                         if template_id=="editorial":middle.scroll_into_view_if_needed()
                         else:
                             frame.locator('html').evaluate("""e=>{
@@ -103,7 +112,11 @@ def run_audit():
                             }""")
                             frame.locator("html[data-r39-chapter='3']").wait_for(state="attached",timeout=15000)
                             page.wait_for_timeout(180)
-                        middle.screenshot(path=str(SCREENSHOTS/f"{template_id}-chapter3-{device}.png"),animations="disabled")
+                        if template_id=="cinematic":
+                            (SCREENSHOTS/f"{template_id}-chapter3-{device}.png").write_bytes(
+                                page.screenshot(animations="disabled"))
+                        else:
+                            middle.screenshot(path=str(SCREENSHOTS/f"{template_id}-chapter3-{device}.png"),animations="disabled")
                         if template_id=="editorial":last.scroll_into_view_if_needed()
                         else:
                             frame.locator('html').evaluate("""e=>{
@@ -113,7 +126,11 @@ def run_audit():
                             }""")
                             frame.locator("html[data-r39-chapter='5']").wait_for(state="attached",timeout=15000)
                             page.wait_for_timeout(180)
-                        last.screenshot(path=str(SCREENSHOTS/f"{template_id}-ending-{device}.png"),animations="disabled")
+                        if template_id=="cinematic":
+                            (SCREENSHOTS/f"{template_id}-ending-{device}.png").write_bytes(
+                                page.screenshot(animations="disabled"))
+                        else:
+                            last.screenshot(path=str(SCREENSHOTS/f"{template_id}-ending-{device}.png"),animations="disabled")
                         shot=(SCREENSHOTS/f"{template_id}-{device}.png").read_bytes()
                         middle_shot=(SCREENSHOTS/f"{template_id}-chapter3-{device}.png").read_bytes()
                         ending_shot=(SCREENSHOTS/f"{template_id}-ending-{device}.png").read_bytes()
