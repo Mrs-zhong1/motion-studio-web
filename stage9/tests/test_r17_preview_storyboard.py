@@ -53,9 +53,11 @@ def test_r17_preview():
                     frame.locator('html[data-e42-active="2"]').wait_for(timeout=10000)
                 elif name=="cinematic":
                     frame.locator('html[data-r39-chapter="2"]').wait_for(timeout=10000)
+                tiles.last.scroll_into_view_if_needed()
                 tiles.last.click()
                 page.wait_for_function("(total)=>r17PreviewChapter===total-1",arg=total,timeout=15000)
                 assert page.locator("#r17PreviewNext").is_disabled()
+                tiles.first.scroll_into_view_if_needed()
                 tiles.first.click()
                 page.wait_for_function("()=>r17PreviewChapter===0",timeout=15000)
                 page.locator("#previewMobile").click()
