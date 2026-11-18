@@ -53,6 +53,9 @@ def test_r17_preview():
                     frame.locator('html[data-e42-active="2"]').wait_for(timeout=10000)
                 elif name=="cinematic":
                     frame.locator('html[data-r39-chapter="2"]').wait_for(timeout=10000)
+                # R41 hides the metadata/storyboard drawer by default; open it for filmstrip navigation.
+                page.locator("#previewImmersive").click()
+                assert page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
                 tiles.last.scroll_into_view_if_needed()
                 tiles.last.click()
                 page.wait_for_function("(total)=>r17PreviewChapter===total-1",arg=total,timeout=15000)
@@ -60,6 +63,8 @@ def test_r17_preview():
                 tiles.first.scroll_into_view_if_needed()
                 tiles.first.click()
                 page.wait_for_function("()=>r17PreviewChapter===0",timeout=15000)
+                page.locator("#previewImmersive").click()
+                assert not page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
                 page.locator("#previewMobile").click()
                 assert page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")
                 page.locator("#previewImmersive").click()
