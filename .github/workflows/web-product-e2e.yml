@@ -161,7 +161,7 @@ jobs:
         run: python tests/test_product_restructure.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
-      # GitHub Actions artifact storage quota is exhausted; publish concise evidence in job summaries.
+      # GitHub Actions artifact storage quota is exhausted; publish concise verified evidence in job summaries.
       # Record the evidence in job logs and GitHub's step summary without uploading large HTML.
       - name: Publish template visual-audit geometry and hashes
         if: always() && matrix.browser == 'chromium'
