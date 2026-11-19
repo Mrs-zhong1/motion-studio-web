@@ -54,7 +54,10 @@ def audit(asset_dir=ASSETS):
         target_valid=(isinstance(target,list) and len(target)==2 and all(isinstance(x,int) and x>0 for x in target))
         if not dimension_valid or not target_valid:
             errors.append(f'invalid original/target dimensions {filename}');continue
-        original=(asset.get('sourceType')=='individual-generation' and asset.get('trueHighResolutionGenerated') is True)
+        source_type=asset.get('sourceType')
+        source_class=asset.get('source')
+        original=(source_type in ('individual-generation','procedural-3d-render','procedural-vector-render','open-licensed-photography')
+                  and asset.get('trueHighResolutionGenerated') is True)
         native_enough=(native[0]>=1280 and native[1]>=720)
         amplification=max(target[0]/native[0],target[1]/native[1])
         upscale_ok=amplification<=1.25
@@ -63,6 +66,16 @@ def audit(asset_dir=ASSETS):
         # report 1600x900. Never infer native resolution from output size.
         risk=[]
         if not original:risk.append('collage_or_not_independently_generated')
+        if source_type in ('procedural-3d-render','procedural-vector-render'):
+            if source_class!='PROCEDURAL_ORIGINAL' or asset.get('embeddedThirdPartyAssets') is not False:
+                risk.append('procedural_source_declaration_incomplete')
+        elif source_type=='open-licensed-photography':
+            if source_class!='OPEN_LICENSED_PHOTOGRAPHY' or not all(asset.get(k) for k in ('creator','licenseId','licenseUrl','attributionText')):
+                risk.append('open_license_provenance_incomplete')
+            if str(asset.get('licenseId','')).upper() in ('CC-BY-NC','CC-BY-ND','CC-BY-NC-SA','CC-BY-NC-ND'):
+                risk.append('commercially_incompatible_license')
+        elif source_type=='individual-generation' and source_class!='AI_GENERATED':
+            risk.append('ai_source_declaration_incomplete')
         if not native_enough:risk.append('source_native_resolution_insufficient')
         if not upscale_ok:risk.append('upscaled_output_cannot_restore_original_pixels')
         if not output_ok:risk.append('committed_image_output_too_small')
@@ -78,7 +91,9 @@ def audit(asset_dir=ASSETS):
     flagged=[x for x in scenes if x['technicalRisk']]
     summary={'expectedImages':39,'decodedAndCheckedImages':len(scenes),
              'independentGenerationCount':sum(x['origin']=='individual-generation' for x in scenes),
-             'collageOrOtherSources':sum(x['origin']!='individual-generation' for x in scenes),
+             'proceduralOriginalCount':sum(x['origin'] in ('procedural-3d-render','procedural-vector-render') for x in scenes),
+             'openLicensedPhotographyCount':sum(x['origin']=='open-licensed-photography' for x in scenes),
+             'collageOrOtherSources':sum(x['origin'] not in ('individual-generation','procedural-3d-render','procedural-vector-render','open-licensed-photography') for x in scenes),
              'technicalCandidateImages':len(eligible),
              'flaggedImages':len(flagged),
              'structuralErrors':errors,
@@ -90,7 +105,7 @@ def audit(asset_dir=ASSETS):
         rows=[x for x in scenes if x['template']==template]
         by_template.append({'template':template,'chapters':len(rows),
           'flagged':sum(bool(x['technicalRisk']) for x in rows),
-          'individualOriginals':sum(x['origin']=='individual-generation' for x in rows),
+          'individualOriginals':sum(x['origin'] in ('individual-generation','procedural-3d-render','procedural-vector-render','open-licensed-photography') for x in rows),
           'flaggedChapters':[x['chapter'] for x in rows if x['technicalRisk']]})
     return {'schema':'motion-studio-r32-media-audit-v1',
       'summary':summary,'byTemplate':by_template,'scenes':scenes,
