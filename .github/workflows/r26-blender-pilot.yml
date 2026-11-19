@@ -6,7 +6,7 @@ on:
     paths:
       - 'stage9/r26_blender_pilot.py'
       - 'stage9/r26-storyboard.json'
-      - 'stage9/tests/test_r26_hybrid_pilot.py'
+      - 'stage9/tests/test_r26_hybrid_pilot.py'\n      - 'stage9/validate_r26_media.py'\n      - 'stage9/tests/test_r26_media_validator.py'
       - '.github/workflows/r26-blender-pilot.yml'
   workflow_dispatch:
 permissions:
@@ -43,7 +43,7 @@ jobs:
         run: python -m pip install 'Pillow==11.3.0'
       - name: Run R26 hybrid inventory and Blender source safety tests
         run: python -m unittest discover -s stage9/tests -p 'test_r26_hybrid_pilot.py' -v
-      - name: Render four representative original 3D scenes
+      - name: Run R26 33-slot provenance validator tests\n        run: python -m unittest discover -s stage9/tests -p 'test_r26_media_validator.py' -v\n      - name: Render four representative original 3D scenes
         run: blender --background --python stage9/r26_blender_pilot.py -- --out r26-blender-pilot --limit 4
       - name: Validate native pixels, unique hashes and review-only provenance
         run: |
