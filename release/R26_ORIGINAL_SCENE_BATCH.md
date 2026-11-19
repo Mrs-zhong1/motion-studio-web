@@ -1,3 +1,5 @@
+> **Superseded on 2026-11-19:** The paid Gemini image-generation route described in this historical record is disabled. Do not follow its former steps about adding a paid API key or choosing `mode=generate`. The current source of truth is [R26_HYBRID_ASSET_PLAN.md](R26_HYBRID_ASSET_PLAN.md): zero paid APIs, no model downloads as a dependency, hybrid procedural / open-licensed source routes, review-only staging, and all release gates retained as HOLD until evidence passes.
+
 # R26 — Original 2K Scene Generation and Batch Review
 
 Date: 2026-11-16
