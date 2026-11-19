@@ -81,3 +81,9 @@ All final files must be independent originals, native >=1600×900 for R26 visual
 The first four-scene Pillow geometry prototype completed CI integrity checks (four 1600×900 PNGs, unique hashes, zero paid calls). Visual inspection found the result too flat and schematic for the premium photographic / 3D direction. **Those four renders are rejected as production candidates** and must not enter the media pack. They remain only as proof that the no-cost staging and validation path works.
 
 A second pilot now uses Blender Eevee with original procedural geometry, materials, softbox lighting and camera composition for the same four representative scenes. Its workflow is review-only; even a technical PASS does not grant commercial rights approval or art-direction approval. The Blender pilot must be visually inspected before expanding procedural 3D to the 18 candidate slots.
+
+## CI environment correction — 2026-11-19
+
+The first Blender CI attempt passed both source-safety and 33-slot validator tests, then aborted at renderer startup because the Ubuntu runner lacked `libEGL.so.1` (exit 134). This is an environment dependency failure, not a generated-image quality result.
+
+The workflow now explicitly installs Mesa/EGL/OpenGL runtime libraries (`libegl1`, `libgl1`, Mesa software drivers and required X11 runtime libraries) and runs headless Blender with `EGL_PLATFORM=surfaceless`, `LIBGL_ALWAYS_SOFTWARE=1`, and the llvmpipe software driver. The retry run is `44501248194`. As of the latest check, its Blender installation step is still running; no rendered images or artifacts are yet available. Do not proceed to the 18-slot expansion until four actual PNGs pass technical checks and human visual review.
