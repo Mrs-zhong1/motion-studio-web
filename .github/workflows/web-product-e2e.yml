@@ -66,6 +66,8 @@ on:
       - 'stage9/tests/test_r44_single_canvas_preview.mjs'
       - 'stage9/r45-scene-composition.mjs'
       - 'stage9/tests/test_r45_scene_composition.mjs'
+      - 'stage9/r46-responsive-accessibility.mjs'
+      - 'stage9/tests/test_r46_responsive_accessibility.mjs'
       - 'stage9/tests/test_r38_template_families.py'
       - 'stage9/tests/test_r14_chapter_navigation.py'
       - 'stage9/tests/test_r30_cinematic_trial.py'
@@ -107,6 +109,8 @@ jobs:
         run: node --test tests/test_r44_single_canvas_preview.mjs
       - name: R45 eight-template integrated composition contract
         run: node --test tests/test_r45_scene_composition.mjs
+      - name: R46 responsive accessibility contract
+        run: node --test tests/test_r46_responsive_accessibility.mjs
       - name: Install Playwright browser
         run: |
           python -m pip install playwright
