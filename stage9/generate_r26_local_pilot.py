@@ -162,7 +162,15 @@ def run(args: argparse.Namespace) -> int:
     scenes = load_scenes(args.storyboard)
     selected_models = ["flux2", "zimage"] if args.models == "both" else [args.models]
     output = args.out.expanduser().resolve()
-    environment = preflight(output, selected_models)
+    if args.run:
+        environment = preflight(output, selected_models)
+    else:
+        # Planning must remain usable when MFLUX is not installed or PyPI is unreachable.
+        environment = {
+            "platform": platform.platform(),
+            "architecture": platform.machine(),
+            "preflight": "NOT_RUN (dry-run does not require MFLUX, model downloads, or free disk space)",
+        }
     plan = []
     for model_key in selected_models:
         for index, row in enumerate(scenes):
