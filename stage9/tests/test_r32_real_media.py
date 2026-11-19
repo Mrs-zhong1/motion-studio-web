@@ -25,6 +25,22 @@ class R32MediaAuditTests(unittest.TestCase):
             ok=audit(root)
             self.assertTrue(ok['summary']['productionMediaEligible'])
             self.assertEqual(ok['summary']['decodedAndCheckedImages'],39)
+            records[0].update(source='PROCEDURAL_ORIGINAL',sourceType='procedural-3d-render',
+                              embeddedThirdPartyAssets=False)
+            records[1].update(source='OPEN_LICENSED_PHOTOGRAPHY',sourceType='open-licensed-photography',
+                              creator='Photographer',licenseId='CC-BY-4.0',
+                              licenseUrl='https://creativecommons.org/licenses/by/4.0/',
+                              attributionText='Photo by Photographer, CC BY 4.0')
+            (root/'manifest.json').write_text(json.dumps({'assets':records}))
+            mixed=audit(root)
+            self.assertTrue(mixed['summary']['productionMediaEligible'])
+            self.assertEqual(mixed['summary']['proceduralOriginalCount'],1)
+            self.assertEqual(mixed['summary']['openLicensedPhotographyCount'],1)
+            records[1]['licenseId']='CC-BY-NC-4.0'
+            (root/'manifest.json').write_text(json.dumps({'assets':records}))
+            nc=audit(root)
+            self.assertFalse(nc['summary']['productionMediaEligible'])
+            self.assertIn('commercially_incompatible_license',nc['scenes'][1]['technicalRisk'])
             records[3]['sourceType']='crop-of-AI-generated-collage'
             records[3]['nativeSourceDimensions']=[828,306]
             (root/'manifest.json').write_text(json.dumps({'assets':records}))
