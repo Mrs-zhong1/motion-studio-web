@@ -19,24 +19,24 @@
   },
   "browserPerformance": {
     "status": "APPROVED",
-    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43817157227",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44435900814",
     "reviewer": "GitHub Actions automated evidence",
-    "reviewedAt": "2026-11-16",
-    "scope": "Chromium browser frame pacing desktop/mobile emulation, overflow and regression; not native phone GPU"
+    "reviewedAt": "2026-11-19",
+    "scope": "Fresh Chromium R19 browser frame-pacing and 390px mobile viewport geometry regression; no native-phone GPU claim."
   },
   "productFlows": {
     "status": "APPROVED",
-    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43820018261",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44435900814",
     "reviewer": "GitHub Actions automated evidence",
-    "reviewedAt": "2026-11-16",
-    "scope": "Public HTTPS AI preview: 8 templates, 39 AI assets, interactive preview, JSON save, HTML export"
+    "reviewedAt": "2026-11-19",
+    "scope": "Fresh Chromium extended editor flow plus Chromium/Firefox/WebKit baseline edit-save-reopen-export smoke and template discovery/preview/editor journey."
   },
   "browserRegression": {
     "status": "APPROVED",
-    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43817157227",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44435900814",
     "reviewer": "GitHub Actions automated evidence",
-    "reviewedAt": "2026-11-16",
-    "scope": "Chromium, Firefox, WebKit automated Web Product E2E PASS"
+    "reviewedAt": "2026-11-19",
+    "scope": "All three engines passed browser install, edit-save-reopen-export smoke and template discovery/preview/editor journey. Chromium alone ran the extended R30/R33/R9/R11/R13-R19/R16/R17/U1-U4 and eight-template desktop/mobile specialist suites; Firefox/WebKit specialist steps were skipped by workflow matrix."
   },
   "liveIntegrity": {
     "status": "HOLD",
