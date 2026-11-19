@@ -22,8 +22,9 @@ jobs:
           python-version: '3.12'
       - name: Install Blender (open-source local renderer)
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y blender
+          if ! command -v blender >/dev/null 2>&1; then
+            sudo apt-get install -y blender
+          fi
           blender --version
       - name: Install independent image validator
         run: python -m pip install 'Pillow==11.3.0'
