@@ -70,4 +70,62 @@ class ReplacementTests(unittest.TestCase):
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             with self.assertRaises(ValueError): plan(inbox,assets/"manifest.json")
 
+
+    def test_procedural_original_is_accepted_only_with_explicit_no_third_party_assets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp); assets=base/"ai-assets";assets.mkdir(); inbox=base/"incoming";inbox.mkdir()
+            old=b"old image bytes "*100
+            (assets/"agency-1.png").write_bytes(old)
+            rows=[]
+            for template in ["editorial","product-3d","cinematic","architecture","agency","fashion","gallery","saas"]:
+                for chapter in range(1,5 if template=="editorial" else 6):
+                    name=f"{template}-{chapter}.png"
+                    if (template,chapter)==("agency",1):
+                        rows.append(dict(template=template,chapter=chapter,file=name,sha256=hashlib.sha256(old).hexdigest()))
+                    else: rows.append(dict(template=template,chapter=chapter,file=name,sha256="0"*64))
+            (assets/"manifest.json").write_text(json.dumps({"assets":rows}))
+            Image.new("RGB",(1600,900),(80,100,120)).save(inbox/"agency-1.png","PNG")
+            entry=dict(template="agency",chapter=1,file="agency-1.png",source="PROCEDURAL_ORIGINAL",
+                sourceType="procedural-3d-render",trueHighResolutionGenerated=True,
+                nativeSourceDimensions=[1600,900],generationSystem="Blender Eevee",
+                generationDate="2026-11-19",sourceReference="stage9/r26_blender_pilot.py",
+                termsUrl="https://github.com/Mrs-zhong1/motion-studio-web",
+                commercialUseTermsChecked=True,embeddedThirdPartyAssets=False)
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
+            _,planned=plan(inbox,assets/"manifest.json")
+            self.assertEqual(len(planned),1)
+            entry["embeddedThirdPartyAssets"]=True
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
+            with self.assertRaisesRegex(ValueError,"embeddedThirdPartyAssets=false"):
+                plan(inbox,assets/"manifest.json")
+
+    def test_open_license_requires_attribution_and_rejects_nc_nd(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp); assets=base/"ai-assets";assets.mkdir(); inbox=base/"incoming";inbox.mkdir()
+            old=b"old image bytes "*100
+            (assets/"architecture-2.png").write_bytes(old)
+            rows=[]
+            for template in ["editorial","product-3d","cinematic","architecture","agency","fashion","gallery","saas"]:
+                for chapter in range(1,5 if template=="editorial" else 6):
+                    name=f"{template}-{chapter}.png"
+                    if (template,chapter)==("architecture",2):
+                        rows.append(dict(template=template,chapter=chapter,file=name,sha256=hashlib.sha256(old).hexdigest()))
+                    else: rows.append(dict(template=template,chapter=chapter,file=name,sha256="0"*64))
+            (assets/"manifest.json").write_text(json.dumps({"assets":rows}))
+            Image.new("RGB",(1600,900),(110,90,70)).save(inbox/"architecture-2.png","PNG")
+            entry=dict(template="architecture",chapter=2,file="architecture-2.png",source="OPEN_LICENSED_PHOTOGRAPHY",
+                sourceType="open-licensed-photography",trueHighResolutionGenerated=True,
+                nativeSourceDimensions=[1600,900],generationSystem="Original source download",
+                generationDate="2026-11-19",sourceReference="https://example.org/photo",
+                termsUrl="https://example.org/license",commercialUseTermsChecked=True,
+                creator="Photographer",licenseId="CC-BY-4.0",licenseUrl="https://creativecommons.org/licenses/by/4.0/",
+                attributionText="Photo by Photographer, CC BY 4.0")
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
+            _,planned=plan(inbox,assets/"manifest.json")
+            self.assertEqual(len(planned),1)
+            entry["licenseId"]="CC-BY-NC-4.0"
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
+            with self.assertRaisesRegex(ValueError,"non-commercial or no-derivatives"):
+                plan(inbox,assets/"manifest.json")
+
 if __name__=="__main__":unittest.main()
