@@ -52,6 +52,12 @@ class R26Tests(unittest.TestCase):
         self.assertEqual(ident,'single-image')
         self.assertRaises(ValueError,extract_image,{'status':'in_progress','output_image':{'data':encoded}})
         self.assertRaises(ValueError,extract_image,{'output_image':{'mime_type':'text/plain','data':encoded}})
+    def test_paid_generation_is_disabled_under_zero_cost_plan(self):
+        class Args:
+            generate=True
+        with self.assertRaisesRegex(ValueError,'disabled by the R26 zero-cost hybrid plan'):
+            run(Args)
+
     def test_dry_run_never_requires_api_key_or_writes_images(self):
         with tempfile.TemporaryDirectory() as td:
             class Args:
