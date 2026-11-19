@@ -76,6 +76,17 @@ def run_audit():
                         page.set_viewport_size({"width":width,"height":height})
                         if device=="mobile":page.locator("#previewMobile").click()
                         else:page.locator("#previewDesktop").click()
+                        if template_id=="cinematic":
+                            # Desktop is captured first and ends at chapter 5.
+                            # The iframe retains that scroll position when the
+                            # preview is resized; explicitly reset each viewport
+                            # so its opening capture starts at chapter 1.
+                            frame.locator("html").evaluate("""e=>{
+                              e.style.setProperty('scroll-behavior','auto','important');
+                              scrollTo({top:0,behavior:'instant'});
+                            }""")
+                            frame.locator("html[data-r39-chapter='1']").wait_for(state="attached",timeout=15000)
+                            page.wait_for_timeout(180)
                         snapshots=frame.locator(image_selector).evaluate_all("""els=>els.map(e=>({
                             src:e.getAttribute('src')?.startsWith('data:image/'),
                             loaded:e.complete&&e.naturalWidth>0,
