@@ -140,6 +140,24 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def write_pilot_manifest(output: Path, environment: dict, results: list[dict]) -> Path:
+    manifest = {
+        "schema": "motion-studio-r26-b1-local-pilot-v1",
+        "createdAt": datetime.now(timezone.utc).isoformat(),
+        "environment": environment,
+        "resolutionTarget": [WIDTH, HEIGHT],
+        "results": results,
+        "completedImages": sum(row.get("status") == "PASS" for row in results),
+        "failedImages": sum(row.get("status") == "FAIL" for row in results),
+        "releaseEligible": False,
+        "notes": "Pilot evidence only. These files are not copied into stage9/ai-assets.",
+    }
+    manifest_path = output / "pilot-manifest.json"
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+                              encoding="utf-8")
+    return manifest_path
+
+
 def run(args: argparse.Namespace) -> int:
     scenes = load_scenes(args.storyboard)
     selected_models = ["flux2", "zimage"] if args.models == "both" else [args.models]
@@ -151,6 +169,7 @@ def run(args: argparse.Namespace) -> int:
             seed = 26000 + index
             command = command_for(model_key, row, output, seed)
             plan.append({
+                "modelKey": model_key,
                 "model": MODELS[model_key]["label"],
                 "template": row["template"],
                 "chapter": row["chapter"],
@@ -178,40 +197,64 @@ def run(args: argparse.Namespace) -> int:
         return 0
 
     results = []
+    failed_models = set()
     for item in plan:
-        model_key = next(k for k in selected_models
-                         if MODELS[k]["label"] == item["model"])
-        command = item["command"]
+        model_key = item["modelKey"]
+        if model_key in failed_models:
+            continue
         target = Path(item["output"])
         target.parent.mkdir(parents=True, exist_ok=True)
         print(f"\n[B1] Generating {item['model']} / {item['template']}-{item['chapter']}",
               flush=True)
         started = time.monotonic()
-        completed = subprocess.run(command, check=False)
+        completed = subprocess.run(item["command"], check=False)
         elapsed = round(time.monotonic() - started, 2)
+        failure = None
+        dimensions = None
         if completed.returncode != 0:
-            raise RuntimeError(
-                f"{item['model']} failed on {target.name} with exit code "
-                f"{completed.returncode}; stopping to avoid repeated resource failures."
-            )
-        if not target.is_file():
-            raise RuntimeError(f"MFLUX returned success but output is missing: {target}")
-        try:
-            from PIL import Image
-            with Image.open(target) as image:
-                image.load()
-                dimensions = list(image.size)
-        except Exception as exc:
-            raise RuntimeError(f"Generated file is not a readable image: {target}") from exc
-        if dimensions[0] < 1600 or dimensions[1] < 900:
-            raise RuntimeError(
-                f"Native output too small for R25: {target.name} is {dimensions}; "
-                "do not upscale it to pass."
-            )
-        ratio = dimensions[0] / dimensions[1]
-        if not 1.68 <= ratio <= 1.88:
-            raise RuntimeError(f"Unexpected aspect ratio for {target.name}: {ratio:.3f}")
+            failure = f"MFLUX exit code {completed.returncode}"
+        elif not target.is_file():
+            failure = "MFLUX returned success but output file is missing"
+        else:
+            try:
+                from PIL import Image
+                with Image.open(target) as image:
+                    image.load()
+                    dimensions = list(image.size)
+                if dimensions[0] < 1600 or dimensions[1] < 900:
+                    failure = (
+                        f"native output too small: {dimensions}; no upscaling is allowed"
+                    )
+                else:
+                    ratio = dimensions[0] / dimensions[1]
+                    if not 1.68 <= ratio <= 1.88:
+                        failure = f"unexpected aspect ratio {ratio:.3f}"
+            except Exception as exc:
+                failure = f"output is not a readable image: {type(exc).__name__}: {exc}"
+
+        if failure:
+            failed_models.add(model_key)
+            results.append({
+                "status": "FAIL",
+                "model": item["model"],
+                "modelKey": model_key,
+                "modelLicense": MODELS[model_key]["license"],
+                "licenseUrl": MODELS[model_key]["license_url"],
+                "template": item["template"],
+                "chapter": item["chapter"],
+                "file": str(target),
+                "seconds": elapsed,
+                "error": failure,
+                "releaseEligible": False,
+            })
+            write_pilot_manifest(output, environment, results)
+            print(f"[B1] FAIL {item['model']}: {failure}", file=sys.stderr, flush=True)
+            print(f"[B1] Skipping remaining scenes for {item['model']}; testing other candidate if selected.",
+                  flush=True)
+            continue
+
         results.append({
+            "status": "PASS",
             "model": item["model"],
             "modelKey": model_key,
             "modelLicense": MODELS[model_key]["license"],
@@ -227,24 +270,17 @@ def run(args: argparse.Namespace) -> int:
             "releaseEligible": False,
             "reason": "B1 pilot only; visual review and R25 provenance validation remain required.",
         })
+        write_pilot_manifest(output, environment, results)
         print(f"[B1] PASS dimensions={dimensions} seconds={elapsed} sha256={results[-1]['sha256'][:16]}",
               flush=True)
 
-    manifest = {
-        "schema": "motion-studio-r26-b1-local-pilot-v1",
-        "createdAt": datetime.now(timezone.utc).isoformat(),
-        "environment": environment,
-        "resolutionTarget": [WIDTH, HEIGHT],
-        "results": results,
-        "releaseEligible": False,
-        "notes": "Pilot evidence only. These files are not copied into stage9/ai-assets.",
-    }
-    manifest_path = output / "pilot-manifest.json"
-    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
-                              encoding="utf-8")
-    print(f"\nB1 pilot complete: {len(results)} images. Manifest: {manifest_path}")
+    manifest_path = write_pilot_manifest(output, environment, results)
+    failed_count = sum(row.get("status") == "FAIL" for row in results)
+    passed_count = sum(row.get("status") == "PASS" for row in results)
+    print(f"\nB1 pilot finished: {passed_count} images passed, {failed_count} model failures.")
+    print(f"Manifest: {manifest_path}")
     print("No project source assets were changed.")
-    return 0
+    return 1 if failed_count else 0
 
 
 def main() -> int:
