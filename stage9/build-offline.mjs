@@ -22,6 +22,7 @@ import {injectR42Editorial} from './r42-editorial-story-spreads.mjs';
 import {applyR43TemplatePilots} from './r43-immersive-template-pilots.mjs';
 import {applyR44TemplateExperience} from './r44-single-canvas-preview.mjs';
 import {applyR45TemplateComposition} from './r45-scene-composition.mjs';
+import {applyR46ResponsiveAccessibility} from './r46-responsive-accessibility.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 const result=await build({entryPoints:[resolve(root,'three-scene-entry.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const engine=result.outputFiles[0].text;
@@ -43,7 +44,7 @@ injected=injected.replace(thumbnailPattern,'const templateThumbnailImages='+thum
 if(!injected.includes('const templateOfflinePhotoBundles={};'))throw Error('Offline photo bundle injection anchor missing');
 injected=injected.replace('const templateOfflinePhotoBundles={};','const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
 injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
-const editor=applyR45TemplateComposition(applyR44TemplateExperience(applyR43TemplatePilots(injectR42Editorial(applyR41PreviewFirst(injectR40Product(injectR39Film(applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected))))))))))))))))));
+const editor=applyR46ResponsiveAccessibility(applyR45TemplateComposition(applyR44TemplateExperience(applyR43TemplatePilots(injectR42Editorial(applyR41PreviewFirst(injectR40Product(injectR39Film(applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected))))))))))))))))));
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
