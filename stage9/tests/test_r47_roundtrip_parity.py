@@ -20,6 +20,10 @@ try:
    errors=[]
    page.on("pageerror",lambda e:errors.append(str(e)))
    page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
+   page.locator("#discoveryView").wait_for(state="visible",timeout=20000)
+   page.locator("[data-template-card]").first.wait_for(state="visible",timeout=20000)
+   assert page.locator("[data-template-card]").count()==8, f"{template_id}: template gallery did not initialize"
+   page.locator(f"[data-template-card='{template_id}']").wait_for(state="visible",timeout=20000)
    page.locator(f"[data-template-card='{template_id}']").click()
    page.locator("#previewUse").click()
    page.locator("#editorView").wait_for(state="visible")
