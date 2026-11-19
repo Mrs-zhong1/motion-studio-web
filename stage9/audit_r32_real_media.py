@@ -72,7 +72,9 @@ def audit(asset_dir=ASSETS):
         elif source_type=='open-licensed-photography':
             if source_class!='OPEN_LICENSED_PHOTOGRAPHY' or not all(asset.get(k) for k in ('creator','licenseId','licenseUrl','attributionText')):
                 risk.append('open_license_provenance_incomplete')
-            if str(asset.get('licenseId','')).upper() in ('CC-BY-NC','CC-BY-ND','CC-BY-NC-SA','CC-BY-NC-ND'):
+            license_id=str(asset.get('licenseId','')).upper().replace(' ','').replace('_','-')
+            allowed=(license_id.startswith(('CC0-','CC-BY-','CC-BY-SA-')) or license_id in ('CC0','PUBLIC-DOMAIN','PDM-1.0'))
+            if not allowed or 'NC' in license_id or 'ND' in license_id:
                 risk.append('commercially_incompatible_license')
         elif source_type=='individual-generation' and source_class!='AI_GENERATED':
             risk.append('ai_source_declaration_incomplete')
