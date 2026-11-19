@@ -66,11 +66,15 @@ class LocalPilotTests(unittest.TestCase):
             )
             original_preflight = PILOT.preflight
             original_run = PILOT.subprocess.run
+            original_platform = PILOT.platform.platform
             calls = []
             try:
                 def fail_if_preflight_called(*a, **k):
                     raise AssertionError("dry-run must not require local MFLUX preflight")
                 PILOT.preflight = fail_if_preflight_called
+                # platform.platform() internally uses subprocess.run(); isolate it
+                # from the mocked process launcher used to assert no generation.
+                PILOT.platform.platform = lambda: "test-platform"
                 PILOT.subprocess.run = lambda *a, **k: calls.append(a)
                 stream = io.StringIO()
                 with contextlib.redirect_stdout(stream):
@@ -80,6 +84,7 @@ class LocalPilotTests(unittest.TestCase):
             finally:
                 PILOT.preflight = original_preflight
                 PILOT.subprocess.run = original_run
+                PILOT.platform.platform = original_platform
             self.assertEqual(status, 0)
             self.assertEqual(payload["mode"], "DRY_RUN_NO_GENERATION")
             self.assertEqual(payload["plannedImages"], 8)
