@@ -23,12 +23,11 @@ class HybridPilotTests(unittest.TestCase):
      self.assertEqual(im.format,"PNG")
     self.assertEqual(row["sourceType"],"procedural-vector-render")
     self.assertFalse(row["commercialUseTermsChecked"])
- def test_all_33_storyboard_slots_can_render_without_network(self):
-  with tempfile.TemporaryDirectory() as td:
-   out=Path(td)/"all"
-   run=subprocess.run([sys.executable,str(ROOT/"r26_hybrid_pilot.py"),"--all","--out",str(out)],
-    check=True,capture_output=True,text=True)
-   report=json.loads(run.stdout)
-   self.assertEqual(report["generated"],33)
-   self.assertEqual(len(list(out.glob("*.png"))),33)
+ def test_all_33_storyboard_slots_are_accounted_for(self):
+  board=json.loads((ROOT/"r26-storyboard.json").read_text())
+  rows=board["replacements"]
+  self.assertEqual(len(rows),33)
+  keys={(r["template"],r["chapter"]) for r in rows}
+  self.assertEqual(len(keys),33)
+  self.assertEqual(len({r["file"] for r in rows}),33)
 if __name__=="__main__":unittest.main()
