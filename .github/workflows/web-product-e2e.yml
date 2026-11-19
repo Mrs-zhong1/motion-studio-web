@@ -25,6 +25,7 @@ on:
       - 'stage9/tests/test_r18_ai_folder_import.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/three-scene-entry.js'
+      - 'stage9/shared-three-scene.js'
       - 'stage9/bundle-chapter-photos.mjs'
       - '.github/workflows/web-product-e2e.yml'
   push:
