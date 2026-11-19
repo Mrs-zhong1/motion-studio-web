@@ -125,7 +125,7 @@ class ReplacementTests(unittest.TestCase):
             self.assertEqual(len(planned),1)
             entry["licenseId"]="CC-BY-NC-4.0"
             (inbox/"replacement.json").write_text(json.dumps([entry]))
-            with self.assertRaisesRegex(ValueError,"non-commercial or no-derivatives"):
+            with self.assertRaisesRegex(ValueError,"not explicitly approved for commercial reuse"):
                 plan(inbox,assets/"manifest.json")
 
 if __name__=="__main__":unittest.main()
