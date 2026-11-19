@@ -94,13 +94,17 @@ def run_audit():
                         else:
                             first=middle=last=frame.locator(subject)
                         if template_id=="cinematic":
-                            # The R39 stage is position:sticky. Locator.screenshot()
-                            # scrolls that sticky element into view and resets the
-                            # iframe's story position, making the ending hash equal
-                            # the opening hash on mobile. Capture the visible preview
-                            # viewport instead; it preserves the actual pinned scene.
-                            (SCREENSHOTS/f"{template_id}-{device}.png").write_bytes(
-                                page.screenshot(animations="disabled"))
+                            # Capture the iframe element from the parent document.
+                            # This preserves its internal scroll position while avoiding
+                            # the sticky-stage auto-scroll performed by child locators.
+                            state=frame.locator("html").evaluate("""e=>({
+                              chapter:Number(e.dataset.r39Chapter),
+                              progress:Number(e.dataset.r39Progress),
+                              firstOpacity:Number(getComputedStyle(document.querySelector('.r39-frame[data-index="0"]')).opacity)
+                            })""")
+                            assert state["chapter"]==1 and state["progress"]<.02 and state["firstOpacity"]>.9,(template_id,device,"opening",state)
+                            page.locator("#templatePreviewFrame").screenshot(
+                                path=str(SCREENSHOTS/f"{template_id}-{device}.png"),animations="disabled")
                         else:
                             first.screenshot(path=str(SCREENSHOTS/f"{template_id}-{device}.png"),animations="disabled")
                         if template_id=="editorial":middle.scroll_into_view_if_needed()
@@ -113,8 +117,14 @@ def run_audit():
                             frame.locator("html[data-r39-chapter='3']").wait_for(state="attached",timeout=15000)
                             page.wait_for_timeout(180)
                         if template_id=="cinematic":
-                            (SCREENSHOTS/f"{template_id}-chapter3-{device}.png").write_bytes(
-                                page.screenshot(animations="disabled"))
+                            state=frame.locator("html").evaluate("""e=>({
+                              chapter:Number(e.dataset.r39Chapter),
+                              progress:Number(e.dataset.r39Progress),
+                              middleOpacity:Number(getComputedStyle(document.querySelector('.r39-frame[data-index="2"]')).opacity)
+                            })""")
+                            assert state["chapter"]==3 and .45<=state["progress"]<=.55 and state["middleOpacity"]>.9,(template_id,device,"middle",state)
+                            page.locator("#templatePreviewFrame").screenshot(
+                                path=str(SCREENSHOTS/f"{template_id}-chapter3-{device}.png"),animations="disabled")
                         else:
                             middle.screenshot(path=str(SCREENSHOTS/f"{template_id}-chapter3-{device}.png"),animations="disabled")
                         if template_id=="editorial":last.scroll_into_view_if_needed()
@@ -127,8 +137,14 @@ def run_audit():
                             frame.locator("html[data-r39-chapter='5']").wait_for(state="attached",timeout=15000)
                             page.wait_for_timeout(180)
                         if template_id=="cinematic":
-                            (SCREENSHOTS/f"{template_id}-ending-{device}.png").write_bytes(
-                                page.screenshot(animations="disabled"))
+                            state=frame.locator("html").evaluate("""e=>({
+                              chapter:Number(e.dataset.r39Chapter),
+                              progress:Number(e.dataset.r39Progress),
+                              endingOpacity:Number(getComputedStyle(document.querySelector('.r39-frame[data-index="4"]')).opacity)
+                            })""")
+                            assert state["chapter"]==5 and state["progress"]>.98 and state["endingOpacity"]>.9,(template_id,device,"ending",state)
+                            page.locator("#templatePreviewFrame").screenshot(
+                                path=str(SCREENSHOTS/f"{template_id}-ending-{device}.png"),animations="disabled")
                         else:
                             last.screenshot(path=str(SCREENSHOTS/f"{template_id}-ending-{device}.png"),animations="disabled")
                         shot=(SCREENSHOTS/f"{template_id}-{device}.png").read_bytes()
