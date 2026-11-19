@@ -75,3 +75,9 @@ All final files must be independent originals, native >=1600×900 for R26 visual
 - Do not replace any of the 39 committed images in this pilot.
 - Do not mark any approval PASS from a script-generated result.
 - Keep PR #2 open, draft and unmerged.
+
+## Pilot review outcome — 2026-11-19
+
+The first four-scene Pillow geometry prototype completed CI integrity checks (four 1600×900 PNGs, unique hashes, zero paid calls). Visual inspection found the result too flat and schematic for the premium photographic / 3D direction. **Those four renders are rejected as production candidates** and must not enter the media pack. They remain only as proof that the no-cost staging and validation path works.
+
+A second pilot now uses Blender Eevee with original procedural geometry, materials, softbox lighting and camera composition for the same four representative scenes. Its workflow is review-only; even a technical PASS does not grant commercial rights approval or art-direction approval. The Blender pilot must be visually inspected before expanding procedural 3D to the 18 candidate slots.
