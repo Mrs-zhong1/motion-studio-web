@@ -66,6 +66,7 @@ on:
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
  # R39 mobile capture: assert chapter/progress and screenshot iframe viewport.
+ # Reset retained iframe scroll before capturing each cinematic viewport.
 permissions:
   contents: write
 jobs:
