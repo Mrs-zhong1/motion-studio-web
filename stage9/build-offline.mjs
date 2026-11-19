@@ -19,6 +19,7 @@ import {injectR39Film} from './r39-cinematic-timeline.mjs';
 import {injectR40Product} from './r40-product-lab.mjs';
 import {applyR41PreviewFirst} from './r41-preview-first-layout.mjs';
 import {injectR42Editorial} from './r42-editorial-story-spreads.mjs';
+import {applyR43TemplatePilots} from './r43-immersive-template-pilots.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 const result=await build({entryPoints:[resolve(root,'three-scene-entry.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const engine=result.outputFiles[0].text;
@@ -30,24 +31,17 @@ const thumbnailIds=['editorial','product-3d','cinematic','architecture','agency'
 const thumbnailEntries=await Promise.all(thumbnailIds.map(async id=>[id,'data:image/jpeg;base64,'+await readFile(resolve(root,'template-thumbnails',id+'.jpg'),'base64')]));
 let thumbnailData=JSON.stringify(Object.fromEntries(thumbnailEntries));
 const source=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
-// Accept both the legacy empty marker and U1's populated online preview mapping.
-// Offline releases always replace online covers with the bundled local JPEGs.
 const thumbnailPattern=/const templateThumbnailImages=\{[\s\S]*?\};/;
 if(!thumbnailPattern.test(source))throw Error('Template thumbnail declaration missing');
 let injected=source;
-// R15-04: bundle the secondary demo photographs inside the offline deliverable.
-// Successful downloads become local data URLs, failures stay explicit fallbacks.
 const aiChapterPhotos=await loadAIChapterAssets(root,{required:process.env.MOTION_REQUIRE_AI_ASSETS==='1'});
 const chapterPhotos=aiChapterPhotos || await bundleChapterPhotos(source,root);
-// When the complete AI pack is available, replace ALL eight preview covers too.
 if(aiChapterPhotos)thumbnailData=JSON.stringify(Object.fromEntries(thumbnailIds.map(id=>[id,aiChapterPhotos.data[id][0].media])));
 injected=injected.replace(thumbnailPattern,'const templateThumbnailImages='+thumbnailData+';');
 if(!injected.includes('const templateOfflinePhotoBundles={};'))throw Error('Offline photo bundle injection anchor missing');
-injected=injected.replace('const templateOfflinePhotoBundles={};',
-  'const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
-// Do not leave remote secondary demo photos as runtime dependencies.
+injected=injected.replace('const templateOfflinePhotoBundles={};','const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
 injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
-const editor=injectR42Editorial(applyR41PreviewFirst(injectR40Product(injectR39Film(applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected))))))))))))));
+const editor=applyR43TemplatePilots(injectR42Editorial(applyR41PreviewFirst(injectR40Product(injectR39Film(applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected)))))))))))))));
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
