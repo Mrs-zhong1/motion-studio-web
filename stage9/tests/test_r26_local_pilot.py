@@ -68,7 +68,9 @@ class LocalPilotTests(unittest.TestCase):
             original_run = PILOT.subprocess.run
             calls = []
             try:
-                PILOT.preflight = lambda out_dir, models: {"test": "stubbed"}
+                def fail_if_preflight_called(*a, **k):
+                    raise AssertionError("dry-run must not require local MFLUX preflight")
+                PILOT.preflight = fail_if_preflight_called
                 PILOT.subprocess.run = lambda *a, **k: calls.append(a)
                 stream = io.StringIO()
                 with contextlib.redirect_stdout(stream):
