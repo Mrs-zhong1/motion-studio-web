@@ -30,4 +30,13 @@ class HybridPilotTests(unittest.TestCase):
   keys={(r["template"],r["chapter"]) for r in rows}
   self.assertEqual(len(keys),33)
   self.assertEqual(len({r["file"] for r in rows}),33)
+ def test_blender_pilot_source_compiles_and_targets_real_storyboard_slots(self):
+  source=(ROOT/"r26_blender_pilot.py").read_text()
+  compile(source,str(ROOT/"r26_blender_pilot.py"),"exec")
+  board=json.loads((ROOT/"r26-storyboard.json").read_text())
+  slots={(r["template"],r["chapter"]) for r in board["replacements"]}
+  expected={("editorial",2),("product-3d",3),("architecture",2),("agency",1)}
+  self.assertTrue(expected.issubset(slots))
+  for forbidden in ("requests.post(","GEMINI_API_KEY","fal.ai","replicate.com"):
+   self.assertNotIn(forbidden,source)
 if __name__=="__main__":unittest.main()
