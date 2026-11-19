@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """R26: one standalone 2K image request per storyboard chapter.
 
-Dry-run is default and makes NO API calls. --generate requires GEMINI_API_KEY,
-explicit authorization of spend, and the usage-terms acknowledgement.
+Dry-run is retained for storyboard inspection only. Paid image generation is disabled
+under the R26 zero-cost production decision.
 No upscaling/collages: image source is a single model output, inspected at native
 dimensions. Output is a staging folder only; does not alter committed originals.
 """
@@ -122,6 +122,8 @@ def process_image(raw):
         raise ValueError('invalid image bytes') from exc
 
 def run(args):
+    if args.generate:
+        raise ValueError('Paid Gemini image generation is disabled by the R26 zero-cost hybrid plan; no API call was made')
     rows=storyboard(args.storyboard)
     selection=[x for x in rows if not args.template or x['template']==args.template]
     selection=selection[:args.limit]
