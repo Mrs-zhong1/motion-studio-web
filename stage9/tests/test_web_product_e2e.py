@@ -12,7 +12,7 @@ browser_name=os.environ.get("MOTION_BROWSER","chromium").strip().lower()
 if browser_name not in ("chromium","firefox","webkit"):
     raise ValueError("MOTION_BROWSER must be chromium, firefox, or webkit")
 result={"pass":False,"suite":"Motion Studio Web product E2E","checks":{},"errors":[],"browser":browser_name,
-        "webkitIsSafari":False,"scope":"Desktop automated engine smoke, not native Safari/mobile device acceptance"}
+        "webkitIsSafari":False,"scope":"Desktop automated engine smoke, not native Safari/mobile device acceptance","browserDiagnostics":{"pageErrors":[],"consoleErrors":[]}}
 def check(name,condition):
     result["checks"][name]=bool(condition)
     assert condition,name
@@ -32,7 +32,9 @@ try:
         browser=engine.launch(**launch_args)
         page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
         page_errors=[]
+        console_errors=[]
         page.on("pageerror",lambda e:page_errors.append(str(e)))
+        page.on("console",lambda msg:console_errors.append(msg.text) if msg.type=="error" else None)
         page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
         page.wait_for_function("() => !!window.MotionStudioUnified && Array.isArray(window.MotionStudioUnified.registry)",timeout=15000)
         check("20_components",page.evaluate("window.MotionStudioUnified.registry.length")==20)
@@ -151,6 +153,7 @@ finally:
     if "server" in locals():
         server.shutdown()
         server.server_close()
+    result["browserDiagnostics"]={"pageErrors":page_errors if "page_errors" in locals() else [],"consoleErrors":console_errors if "console_errors" in locals() else []}
     REPORT.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
     print(json.dumps(result,ensure_ascii=False,indent=2))
 assert result["pass"],"Web product E2E failed; inspect WEB_PRODUCT_E2E_RESULT.json"
