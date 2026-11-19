@@ -19,7 +19,13 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/"ai-assets"
-VALID_TYPES={"individual-generation"}
+VALID_TYPES={"individual-generation","procedural-3d-render","procedural-vector-render","open-licensed-photography"}
+SOURCE_BY_TYPE={
+    "individual-generation":"AI_GENERATED",
+    "procedural-3d-render":"PROCEDURAL_ORIGINAL",
+    "procedural-vector-render":"PROCEDURAL_ORIGINAL",
+    "open-licensed-photography":"OPEN_LICENSED_PHOTOGRAPHY",
+}
 VALID_EXT={".jpg",".jpeg",".png"}
 
 def native_dimensions(raw):
@@ -67,13 +73,23 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
         supplied=entry.get("file")
         if supplied!=name or Path(name).name!=name or Path(name).suffix.lower() not in VALID_EXT:
             raise ValueError("replacement file must have the existing exact chapter filename: "+name)
-        if entry.get("sourceType") not in VALID_TYPES or entry.get("trueHighResolutionGenerated") is not True:
-            raise ValueError("independently generated full-resolution original required: "+name)
-        if entry.get("source")!="AI_GENERATED" or entry.get("commercialUseTermsChecked") is not True:
-            raise ValueError("AI generation and usage evidence missing: "+name)
+        source_type=entry.get("sourceType")
+        if source_type not in VALID_TYPES or entry.get("trueHighResolutionGenerated") is not True:
+            raise ValueError("independent native-resolution original required: "+name)
+        if entry.get("source")!=SOURCE_BY_TYPE[source_type] or entry.get("commercialUseTermsChecked") is not True:
+            raise ValueError("source class or commercial-use evidence missing: "+name)
         for field in ("generationSystem","generationDate","sourceReference","termsUrl"):
             if not isinstance(entry.get(field),str) or not entry[field].strip():
                 raise ValueError("missing provenance "+field+" for "+name)
+        if source_type in ("procedural-3d-render","procedural-vector-render"):
+            if entry.get("embeddedThirdPartyAssets") is not False:
+                raise ValueError("procedural original must explicitly declare embeddedThirdPartyAssets=false: "+name)
+        if source_type=="open-licensed-photography":
+            for field in ("creator","licenseId","licenseUrl","attributionText"):
+                if not isinstance(entry.get(field),str) or not entry[field].strip():
+                    raise ValueError("open-license provenance missing "+field+" for "+name)
+            if entry["licenseId"].upper() in ("CC-BY-NC","CC-BY-ND","CC-BY-NC-SA","CC-BY-NC-ND"):
+                raise ValueError("non-commercial or no-derivatives license rejected: "+name)
         raw=(folder/name).read_bytes()
         if len(raw)<1000 or len(raw)>5_000_000: raise ValueError("image file size out of bounds "+name)
         dimensions=native_dimensions(raw)
@@ -93,9 +109,12 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
         if hashlib.sha256(raw).hexdigest()==existing[key]["sha256"]:
             raise ValueError("unchanged image is not a replacement: "+name)
         updated=dict(existing[key])
-        for k in ("source","sourceType","trueHighResolutionGenerated","nativeSourceDimensions",
-                  "generationSystem","generationDate","sourceReference","termsUrl","commercialUseTermsChecked"):
-            updated[k]=entry[k]
+        provenance_fields=("source","sourceType","trueHighResolutionGenerated","nativeSourceDimensions",
+                  "generationSystem","generationDate","sourceReference","termsUrl","commercialUseTermsChecked",
+                  "embeddedThirdPartyAssets","creator","licenseId","licenseUrl","attributionText")
+        for k in provenance_fields:
+            if k in entry: updated[k]=entry[k]
+            else: updated.pop(k,None)
         updated.pop("cropGrid",None)
         updated["sha256"]=hashlib.sha256(raw).hexdigest()
         updated["presentation"]="native-independent-generation"
