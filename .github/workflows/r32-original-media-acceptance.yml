@@ -37,7 +37,7 @@ jobs:
           print('| Template | Independently generated | Flagged chapters |')
           print('|---|---:|---|')
           for row in x['byTemplate']:
-              print(f"| {row['template']} | {row['individualOriginals']} | {','.join(map(str,row['flaggedChapters'])) or 'none'} |")
+              print(f"| {row['template']} | {row['sourceEligibleOriginals']} | {','.join(map(str,row['flaggedChapters'])) or 'none'} |")
           print('No image is automatically approved by this audit; human art direction remains HOLD.')
           PY
       - name: Verify evidence consistency, support future real replacement acceptance
