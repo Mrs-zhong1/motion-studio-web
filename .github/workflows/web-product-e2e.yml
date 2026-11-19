@@ -60,6 +60,8 @@ on:
       - 'stage9/r37-story-director.mjs'
       - 'stage9/r38-eight-art-directions.mjs'
       - 'stage9/tests/test_r38_eight_directions.mjs'
+      - 'stage9/r43-immersive-template-pilots.mjs'
+      - 'stage9/tests/test_r43_immersive_template_pilots.mjs'
       - 'stage9/tests/test_r38_template_families.py'
       - 'stage9/tests/test_r14_chapter_navigation.py'
       - 'stage9/tests/test_r30_cinematic_trial.py'
@@ -95,6 +97,8 @@ jobs:
         run: npm run build
       - name: Verify offline Three.js bundle
         run: python tests/check_build.py
+      - name: R43 eight-template design contract and Agency/SaaS pilot interaction tests
+        run: node --test tests/test_r43_immersive_template_pilots.mjs
       - name: Install Playwright browser
         run: |
           python -m pip install playwright
