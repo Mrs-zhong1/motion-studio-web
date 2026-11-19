@@ -137,7 +137,7 @@ import {installStage12Gizmo} from './stage12-spatial-gizmo.js';
      const start=performance.now();
      renderer.render(scene,stage12?.getCamera()||camera);diag.renderFrames++;
      diag.drawTotalMs=Number((diag.drawTotalMs+performance.now()-start).toFixed(3));diag.drawSamples++;
-     if(diag.cameraSamples.length<120)diag.cameraSamples.push({x:Number(camera.position.x.toFixed(4)),y:0,z:5.5,segment:ix,blend:Number(t.toFixed(4)),focus:Math.round(focus),y:Number(y.toFixed(4)),z:Number(z.toFixed(4)),yaw:Number(yaw.toFixed(4)),pitch:Number(pitch.toFixed(4)),roll:Number(roll.toFixed(4)),fov:Number(fov.toFixed(4)),stage11Custom:!!custom});
+     if(diag.cameraSamples.length<120)diag.cameraSamples.push({x:Number(camera.position.x.toFixed(4)),segment:ix,blend:Number(t.toFixed(4)),focus:Math.round(focus),y:Number(y.toFixed(4)),z:Number(z.toFixed(4)),yaw:Number(yaw.toFixed(4)),pitch:Number(pitch.toFixed(4)),roll:Number(roll.toFixed(4)),fov:Number(fov.toFixed(4)),stage11Custom:!!custom});
      if(diag.renderFrames<=8){
        const gl=renderer.getContext(),w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
        const px=new Uint8Array(4);
