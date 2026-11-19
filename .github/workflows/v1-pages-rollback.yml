@@ -1,0 +1,62 @@
+name: V1 R35 GitHub Pages Root Rollback — explicit manual only
+on:
+  workflow_dispatch:
+    inputs:
+      restore_pages_commit:
+        description: 'Exact 40-hex Git commit SHA from gh-pages history to restore the production root'
+        required: true
+        type: string
+      confirmation:
+        description: 'Type ROLLBACK_PRODUCTION_ROOT to authorize a live root restore'
+        required: true
+        type: string
+permissions:
+  contents: write
+concurrency:
+  group: motion-studio-web-pages
+  cancel-in-progress: false
+jobs:
+  rollback-only-production-root:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify explicit operator rollback authorization
+        env:
+          SHA: ${{ inputs.restore_pages_commit }}
+          CONFIRM: ${{ inputs.confirmation }}
+        run: |
+          [[ "$SHA" =~ ^[0-9a-f]{40}$ ]] || { echo 'Exact commit SHA required'; exit 1; }
+          test "$CONFIRM" = ROLLBACK_PRODUCTION_ROOT || { echo 'Explicit root rollback confirmation required'; exit 1; }
+      - name: Restore exact historical root bundle, preserving review folders
+        env:
+          RESTORE_COMMIT: ${{ inputs.restore_pages_commit }}
+        run: |
+          set -euo pipefail
+          git fetch origin gh-pages
+          git cat-file -e "${RESTORE_COMMIT}^{commit}"
+          git merge-base --is-ancestor "$RESTORE_COMMIT" origin/gh-pages || { echo 'Not a historical gh-pages ancestor'; exit 1; }
+          git worktree add --detach "$RUNNER_TEMP/v1-rollback-pages" origin/gh-pages
+          target="$RUNNER_TEMP/v1-rollback-pages"
+          test -f "$target/r18-ai-review/index.html"
+          for filename in index.html THREE_LICENSE.txt BUILD_MANIFEST.json WEB_RELEASE.json SHA256SUMS.txt; do
+            git show "${RESTORE_COMMIT}:${filename}" > "$target/$filename"
+          done
+          python - <<'PY'
+          import json,hashlib,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'v1-rollback-pages'
+          r=json.loads((root/'WEB_RELEASE.json').read_text())
+          raw=(root/'index.html').read_bytes()
+          assert len(raw)>250000
+          assert hashlib.sha256(raw).hexdigest()==r['sha256']
+          print('Restored exact verified source:',r['sourceCommit'])
+          PY
+          cd "$target"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html THREE_LICENSE.txt BUILD_MANIFEST.json WEB_RELEASE.json SHA256SUMS.txt
+          git diff --cached --quiet && { echo 'Production root already matches historical revision'; exit 0; }
+          git commit -m "Rollback production root to ${RESTORE_COMMIT} (review paths preserved)"
+          git push origin HEAD:gh-pages
+          test -f r18-ai-review/index.html
+          echo "Production root rollback committed. Verify live HTTPS immediately." >> "$GITHUB_STEP_SUMMARY"

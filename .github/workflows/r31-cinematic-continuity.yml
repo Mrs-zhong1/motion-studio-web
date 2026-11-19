@@ -1,0 +1,22 @@
+name: R31 Cinematic Story Continuity Contract
+on:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/r31-cinematic-continuity.mjs'
+      - 'stage9/tests/test_r31_story_continuity.mjs'
+      - '.github/workflows/r31-cinematic-continuity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  continuity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify camera-compatible visual continuity and export contract
+        run: node --test stage9/tests/test_r31_story_continuity.mjs

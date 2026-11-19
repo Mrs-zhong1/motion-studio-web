@@ -29,7 +29,14 @@ def test_r17_preview():
                 assert modal.get_attribute("aria-labelledby")=="previewTitle"
                 page.wait_for_function("""()=>!document.querySelector('#templatePreview').hasAttribute('aria-busy')""",timeout=45000)
                 frame=page.frame_locator("#templatePreviewFrame")
-                frame.locator("nav.r14-story-rail").wait_for(timeout=30000)
+                if name=="editorial":
+                    frame.locator('html[data-e42-editorial="coherent-print"]').wait_for(timeout=30000)
+                    assert frame.locator('.e42-progress button').count()==4
+                elif name=="cinematic":
+                    frame.locator('html[data-r39-film="continuous"]').wait_for(timeout=30000)
+                    assert frame.locator('.r39-caption').count()==5
+                else:
+                    frame.locator("nav.r14-story-rail").wait_for(timeout=30000)
                 total=page.evaluate("r17PreviewTotal")
                 assert total==(4 if name=="editorial" else 5),name
                 tiles=page.locator("#r17PreviewFilmstrip button")
@@ -42,16 +49,28 @@ def test_r17_preview():
                 page.wait_for_function("()=>r17PreviewChapter===1",timeout=15000)
                 assert "02 / " in page.locator("#r17PreviewPosition").inner_text()
                 assert tiles.nth(1).get_attribute("aria-current")=="step"
+                if name=="editorial":
+                    frame.locator('html[data-e42-active="2"]').wait_for(timeout=10000)
+                elif name=="cinematic":
+                    frame.locator('html[data-r39-chapter="2"]').wait_for(timeout=10000)
+                # R41 hides the metadata/storyboard drawer by default; open it for filmstrip navigation.
+                page.locator("#previewImmersive").click()
+                assert page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
+                tiles.last.scroll_into_view_if_needed()
                 tiles.last.click()
                 page.wait_for_function("(total)=>r17PreviewChapter===total-1",arg=total,timeout=15000)
                 assert page.locator("#r17PreviewNext").is_disabled()
+                tiles.first.scroll_into_view_if_needed()
                 tiles.first.click()
                 page.wait_for_function("()=>r17PreviewChapter===0",timeout=15000)
+                page.locator("#previewImmersive").click()
+                assert not page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
                 page.locator("#previewMobile").click()
                 assert page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")
                 page.locator("#previewImmersive").click()
-                assert page.locator("#templatePreview").evaluate("el=>el.classList.contains('immersive-preview')")
-                assert page.locator(".r17-preview-chapters").is_visible()
+                assert page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
+                assert page.locator(".preview-product-info").is_visible()
+                assert page.locator("#previewDevice").evaluate("el=>el.getBoundingClientRect().width>=innerWidth*.90")
                 page.locator("#previewDesktop").click()
                 assert not page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")
                 if name=="cinematic":
@@ -70,11 +89,11 @@ def test_r17_preview():
                     }""")
                     assert mobile["docWidth"]<=mobile["viewport"]+16,mobile
                     assert mobile["actionTop"]>=mobile["navBottom"]-2,mobile
-                    assert mobile["closeVisible"] and mobile["navVisible"],mobile
+                    assert mobile["closeVisible"],mobile
                     page.set_viewport_size({"width":1440,"height":900})
                 page.keyboard.press("Escape")
                 assert modal.is_visible()
-                assert not modal.evaluate("el=>el.classList.contains('immersive-preview')")
+                assert not modal.evaluate("el=>el.classList.contains('r41-info-open')")
                 page.keyboard.press("Escape")
                 assert modal.is_hidden()
                 assert card.evaluate("el=>el===document.activeElement"),name

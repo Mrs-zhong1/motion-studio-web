@@ -37,10 +37,12 @@ def test_r15_media_quality():
                 }
                 return result;
             }""")
+            ai_mode=all(record["urls"][0].startswith("ai-generated://") for record in all_sources.values())
+            expected_kind="ai-generated-image" if ai_mode else "unsplash-photo"
             for name,record in all_sources.items():
                 assert len(record["urls"])>=record["chapters"],(name,record)
                 assert len(set(record["urls"][:record["chapters"]]))==record["chapters"],name
-                assert all(url.startswith("https://images.unsplash.com/photo-") for url in record["urls"]),name
+                assert all(url.startswith("ai-generated://") if ai_mode else url.startswith("https://images.unsplash.com/photo-") for url in record["urls"]),name
 
             fixture=["data:image/png;base64,"+base64.b64encode(
                 make_png(40+i*37,90+i*21,120+i*13)).decode("ascii") for i in range(5)]
@@ -53,34 +55,34 @@ def test_r15_media_quality():
             page.evaluate("async()=>{templatePhotoCache.delete('cinematic');await ensureTemplatePhoto('cinematic')}")
             audit=page.evaluate("()=>templateAssetAuditCache.get('cinematic')")
             assert len(audit)==5,audit
-            assert all(row["kind"]=="unsplash-photo" and row["source"] for row in audit),audit
+            assert all(row["kind"]==expected_kind and row["source"] for row in audit),audit
             result=page.evaluate("()=>createProjectFromTemplate('cinematic')")
             page.evaluate("data=>loadProject(data)",result)
             page.evaluate("showEditor()")
             page.locator('[data-asset-tier-button="l4"]').click()
             coverage=page.locator("#r15MediaCoverage")
             assert coverage.is_visible()
-            assert "真实摄影 5" in coverage.inner_text()
+            assert ("AI 原创 5" if ai_mode else "真实摄影 5") in coverage.inner_text()
             assert "原创插画占位 0" in coverage.inner_text()
             assert "HOLD" in coverage.inner_text()
-            assert page.locator(".r15-photo-source").count()==5
+            assert page.locator(".r15-photo-source").count()==(0 if ai_mode else 5)
             with page.expect_download() as info:
                 page.locator("#r15MediaAuditExport").click()
             manifest=json.loads(info.value.path().read_text(encoding="utf-8"))
-            assert manifest["counts"]["photography"]==5
+            assert manifest["counts"]["aiGenerated" if ai_mode else "photography"]==5
             assert manifest["counts"]["missing"]==0
             assert manifest["commercialReleaseStatus"]=="HOLD"
             assert all(ch["sourceUrl"] and ch["rightsReviewed"] is False for ch in manifest["chapters"])
             with page.expect_download() as info:
                 page.locator("#saveProject").click()
             saved=json.loads(info.value.path().read_text(encoding="utf-8"))
-            assert all(s["imageMeta"]["kind"]=="unsplash-photo" for s in saved["sections"])
+            assert all(s["imageMeta"]["kind"]==expected_kind for s in saved["sections"])
             # Source provenance must survive closing/reopening with empty cache.
             page.evaluate("()=>{templatePhotoCache.clear();templateAssetAuditCache.clear()}")
             page.evaluate("data=>loadProject(data)",saved)
-            assert page.evaluate("()=>r15MediaAudit().counts.photography")==5
-            assert "真实摄影 5" in coverage.inner_text()
-            assert page.locator(".r15-photo-source").count()==5
+            assert page.evaluate("()=>r15MediaAudit().counts.aiGenerated" if ai_mode else "()=>r15MediaAudit().counts.photography")==5
+            assert ("AI 原创 5" if ai_mode else "真实摄影 5") in coverage.inner_text()
+            assert page.locator(".r15-photo-source").count()==(0 if ai_mode else 5)
             # Valid images but duplicate content are explicitly called out.
             dupe=page.evaluate("()=>JSON.parse(JSON.stringify(project))")
             dupe["sections"][2]["image"]=dupe["sections"][1]["image"]

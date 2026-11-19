@@ -33,7 +33,7 @@ try:
     item["components"]=page.evaluate("registry.length")
     page.locator('#resumeProject').click()
     page.locator('[data-asset-tier-button="l3"]').click()
-    page.locator('.comp[data-id="offline-glb-scene"] button').click()
+    page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
     page.locator("#stage9GlbInput").set_input_files(str(fixture))
     page.wait_for_function("project.sections.some(s=>s.id==='offline-glb-scene'&&s.glb.length>1000)")
     item["modelBase64Length"]=page.evaluate('project.sections.find(s=>s.id==="offline-glb-scene").glb.length')
@@ -52,6 +52,10 @@ try:
       if frame.evaluate("Boolean(window.__motionThreeStatus)"):target=frame;break
      except Exception: pass
     assert target,"No real Three.js renderer iframe was started"
+    # Ensure the tested GLB canvas is laid out on screen rather than a 0px
+    # offscreen/culled iframe. Keep pixel/PBR requirements unchanged.
+    target.frame_element().scroll_into_view_if_needed()
+    exp.wait_for_timeout(500)
     for pos in [0.02,.24,.76,.96]:
      target.evaluate("(p)=>window.postMessage({type:'motion-studio-scroll',progress:p},'*')",pos)
      exp.wait_for_timeout(90)

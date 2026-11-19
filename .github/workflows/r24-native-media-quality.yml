@@ -1,0 +1,51 @@
+name: R24 Native Media Quality Gate
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/r18-r21-acceptance-gates
+    paths:
+      - 'stage9/tests/audit_r24_source_quality.py'
+      - 'stage9/ai-assets/manifest.json'
+      - '.github/workflows/r24-native-media-quality.yml'
+permissions:
+  contents: read
+jobs:
+  audit-media:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit actual native source dimensions and provenance
+        run: python stage9/tests/audit_r24_source_quality.py
+      - name: Report risk in GitHub job summary without claiming aesthetic approval
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          j=json.load(open('stage9/R24_MEDIA_QUALITY_GATE.json'))
+          s=j['summary']
+          print('# R24 Native-source Media Quality')
+          print('Production-ready:',s['productionReady'])
+          print('Scenes:',s['totalScenes'])
+          print('Collage-derived:',s['collageDerived'])
+          print('Needs replacement review:',s['needsReplacementReview'])
+          print('Human art direction:',s['humanArtDirection'])
+          print('')
+          print('| Template | Chapters requiring review |')
+          print('|---|---:|')
+          for t in ['editorial','product-3d','cinematic','architecture','agency','fashion','gallery','saas']:
+            print(f"| {t} | {sum(x['template']==t for x in j['flaggedChapters'])} |")
+          print('')
+          print('PASS means evidence calculations succeeded; visual approval remains HOLD.')
+          PY
+      - name: Preserve inspectable source-quality evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: r24-media-quality-json
+          path: stage9/R24_MEDIA_QUALITY_GATE.json
+          retention-days: 14

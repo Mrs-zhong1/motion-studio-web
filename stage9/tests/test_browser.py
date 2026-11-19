@@ -14,7 +14,7 @@ with sync_playwright() as p:
  res['componentCount']=page.evaluate('registry.length')
  page.locator('#resumeProject').click()
  page.locator('[data-asset-tier-button="l3"]').click()
- page.locator('.comp[data-id="offline-glb-scene"] button').click()
+ page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
  page.locator('#stage9GlbInput').set_input_files(str(root.parent/'Sample-Textured-Animated.glb'))
  page.wait_for_timeout(1700)
  res['editorModelBytes']=page.evaluate('project.sections.find(s=>s.id==="offline-glb-scene").glb.length')
@@ -36,6 +36,10 @@ with sync_playwright() as p:
  res['frameScripts']=[{'title':f.evaluate('document.title'),'scriptCount':f.evaluate('document.scripts.length'),'scriptPreview':f.evaluate('Array.from(document.scripts).map(x=>x.textContent.slice(0,70))')} for f in exp.frames[1:]]
  if frames:
   target=frames[0]
+  # A hidden/offscreen iframe has a 0px WebGL drawing buffer in headless CI.
+  # Scroll the real exported chapter into view before asserting visible pixels.
+  target.frame_element().scroll_into_view_if_needed()
+  exp.wait_for_timeout(500)
   target.evaluate("window.postMessage({type:'motion-studio-scroll',progress:0.05}, '*')")
   exp.wait_for_timeout(180)
   res['animationAtStart']=target.evaluate('window.__motionThreeStatus.animationRotationSamples.slice(-1)[0] || null')

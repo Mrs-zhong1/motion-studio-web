@@ -25,7 +25,7 @@ try:
     page.set_content((ROOT/'Motion-Studio-Stage9-THREE-OFFLINE.html').read_text(),wait_until='domcontentloaded')
     page.locator('#resumeProject').click()
     page.locator('[data-asset-tier-button="l3"]').click()
-    page.locator('.comp[data-id="offline-glb-scene"] button').click()
+    page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
     page.locator('#stage9GlbInput').set_input_files(str(GOOD))
     page.wait_for_timeout(250)
     original=page.evaluate('project.sections.find(s=>s.id==="offline-glb-scene").glb')

@@ -1,0 +1,52 @@
+name: R38 Eight Distinct Template Director Gates
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/r38-eight-art-directions.mjs'
+      - 'stage9/tests/test_r38_eight_directions.mjs'
+      - 'stage9/tests/test_r37_story_director.py'
+      - 'stage9/tests/test_r15_scene_composition.py'
+      - '.github/workflows/r38-eight-template-directors.yml'
+permissions:
+  contents: read
+jobs:
+  directors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify eight true composition families and unique interactions
+        run: |
+          node --check r38-eight-art-directions.mjs
+          node --test tests/test_r38_eight_directions.mjs
+      - name: Build real offline Web editor using 39 source scenes
+        run: |
+          npm install --no-audit --no-fund
+          MOTION_REQUIRE_AI_ASSETS=1 npm run build
+          python tests/check_build.py
+      - name: Real Chromium verifies complete five-act film and other art directions
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          python tests/test_r38_template_families.py
+          python tests/test_r37_story_director.py
+      - name: Publish real browser evidence and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r38-unique-template-evidence-${{ github.sha }}
+          path: |
+            stage9/R38_EIGHT_FAMILIES.json
+            stage9/R37_STORY_DIRECTOR_RESULT.json
+          retention-days: 14

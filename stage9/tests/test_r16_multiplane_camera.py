@@ -21,12 +21,15 @@ def test_r16_multiplane():
             assert editor.locator(".r16-story-ready").count()==0
             for name in TEMPLATES:
                 out=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
+                if name in ("editorial","cinematic"):
+                    assert ('data-e42-editorial="coherent-print"' if name=="editorial" else 'data-r39-film="continuous"') in out,name
+                    continue
                 assert "const signatures=" in out,name
                 assert f"data-template=\"{name}\"" in out,name
                 assert "--r16-photo-y" in out,name
                 assert "--r16-mist-x" in out,name
-            editor.evaluate("async()=>await ensureTemplatePhoto('cinematic')")
-            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","cinematic")
+            editor.evaluate("async()=>await ensureTemplatePhoto('architecture')")
+            html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)","architecture")
             page=browser.new_page(viewport={"width":1440,"height":900})
             errors=[];page.on("pageerror",lambda err:errors.append(str(err)))
             page.set_content(html,wait_until="domcontentloaded",timeout=60000)

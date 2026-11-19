@@ -1,226 +1,164 @@
-name: Motion Studio Web - gated Pages deployment
-# One guarded release retry is triggered by this workflow change.
-# Every publish still requires all 3 browsers and Three.js regression to pass.
+name: Motion Studio V1 Web Production — fail-closed exact-build release
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - 'stage9/Motion-Studio-Unified-Editor.html'
-      - 'stage9/tests/test_web_product_e2e.py'
-      - 'stage9/tests/test_product_restructure.py'
-      - 'stage9/tests/test_live_deployment.py'
-      - 'stage9/output/Motion-Studio-Stage15-Meshopt-OFFLINE.html'
-      - 'stage9/output/BUILD_MANIFEST.json'
+      - 'stage9/**'
+      - 'release/**'
       - '.github/workflows/web-release-pages.yml'
+permissions:
+  contents: write
 concurrency:
   group: motion-studio-web-pages
   cancel-in-progress: false
-permissions:
-  contents: write
 jobs:
-  build-and-browser-gate:
+  v1-publish-exact-tested-build:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chromium, firefox, webkit]
-    defaults:
-      run:
-        working-directory: stage9
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Build pinned offline editor
-        run: |
-          npm install --no-audit --no-fund
-          npm run build
-          python tests/check_build.py
-      - name: Browser dependencies
-        run: |
-          python -m pip install playwright
-          python -m playwright install --with-deps ${{ matrix.browser }}
-      - name: Run actual edit-save-import-export browser journey
-        run: python tests/test_web_product_e2e.py
-        env:
-          MOTION_BROWSER: ${{ matrix.browser }}
-      - name: Verify template discovery, immersive preview and editor workspace
-        run: python tests/test_product_restructure.py
-        env:
-          MOTION_BROWSER: ${{ matrix.browser }}
-      - name: Verify browser-tested HTML matches committed release candidate
-        run: |
-          cmp Motion-Studio-Stage15-Meshopt-OFFLINE.html output/Motion-Studio-Stage15-Meshopt-OFFLINE.html
-          sha256sum Motion-Studio-Stage15-Meshopt-OFFLINE.html | tee -a "$GITHUB_STEP_SUMMARY"
-      - name: Record browser evidence without artifact storage
-        if: always()
-        run: |
-          echo "### Release E2E — ${{ matrix.browser }}" >> "$GITHUB_STEP_SUMMARY"
-          if [ -f WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json ]; then
-            echo '~~~json' >> "$GITHUB_STEP_SUMMARY"
-            cat WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json >> "$GITHUB_STEP_SUMMARY"
-            echo '~~~' >> "$GITHUB_STEP_SUMMARY"
-          fi
-  three-regression:
-    runs-on: ubuntu-latest
-    timeout-minutes: 35
-    defaults:
-      run:
-        working-directory: stage9
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Build real offline 3D editor
-        run: |
-          npm install --no-audit --no-fund
-          npm run build
-          python tests/check_build.py
-      - name: Install Chromium WebGL test environment
-        run: |
-          python -m pip install playwright
-          python -m playwright install --with-deps chromium
-      - name: Build deterministic advanced GLB fixture
-        run: python tests/make_advanced_fixture.py
-      - name: Verify PBR, animation and GLB pixels
-        run: python tests/test_browser.py
-      - name: Verify multiple material, texture, animation and mobile tests
-        run: python tests/test_matrix.py
-      - name: Verify invalid GLB safely rejected
-        run: python tests/test_invalid_glb.py
-      - name: Verify shared scene and camera continuity
-        run: python tests/test_shared_scene.py
-      - name: Record 3D verification evidence without artifact storage
-        if: always()
-        run: |
-          echo "### Release Three.js regression" >> "$GITHUB_STEP_SUMMARY"
-          for result in STAGE9-THREE-BROWSER-RESULT.json STAGE9-MATRIX-RESULT.json STAGE9-INVALID-GLB-RESULT.json STAGE9-SHARED-SCENE-RESULT.json; do
-            if [ -f "$result" ]; then
-              echo "#### $result" >> "$GITHUB_STEP_SUMMARY"
-              echo '~~~json' >> "$GITHUB_STEP_SUMMARY"
-              cat "$result" >> "$GITHUB_STEP_SUMMARY"
-              echo '~~~' >> "$GITHUB_STEP_SUMMARY"
-            fi
-          done
-
-  publish:
-    outputs:
-      page_url: ${{ steps.pages-url.outputs.url }}
-    needs: [build-and-browser-gate, three-regression]
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 90
     environment:
       name: github-pages
-      url: ${{ steps.pages-url.outputs.url }}
+      url: https://${{ github.repository_owner }}.github.io/motion-studio-web/
+    defaults:
+      run:
+        working-directory: stage9
     steps:
       - uses: actions/checkout@v4
-      - name: Restore exact committed candidate verified by all three browsers
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image decoder and real browser testing tools
+        working-directory: .
         run: |
-          mkdir -p release-candidate
-          cp stage9/output/Motion-Studio-Stage15-Meshopt-OFFLINE.html release-candidate/
-          cp stage9/output/THREE_LICENSE.txt release-candidate/
-          cp stage9/output/BUILD_MANIFEST.json release-candidate/
-      - name: Verify release candidate matches its build manifest
-        run: |
-          python - <<'PY'
-          import json,pathlib
-          root=pathlib.Path('release-candidate')
-          html=root/'Motion-Studio-Stage15-Meshopt-OFFLINE.html'
-          license=root/'THREE_LICENSE.txt'
-          manifest=json.loads((root/'BUILD_MANIFEST.json').read_text(encoding='utf-8'))
-          assert html.is_file() and license.is_file()
-          assert html.stat().st_size>250000
-          assert manifest.get('offline') is True
-          assert manifest.get('editorBytes')==html.stat().st_size
-          print('Publishing exact browser-tested HTML:',html.stat().st_size,'bytes')
-          PY
-      - name: Prepare static Pages site, manifest and SHA256
-        run: |
-          mkdir -p dist
-          cp release-candidate/Motion-Studio-Stage15-Meshopt-OFFLINE.html dist/index.html
-          cp release-candidate/THREE_LICENSE.txt dist/THREE_LICENSE.txt
-          cp release-candidate/BUILD_MANIFEST.json dist/BUILD_MANIFEST.json
-          python - <<'PY'
-          import json,hashlib,pathlib,os
-          root=pathlib.Path("dist")
-          index=root/"index.html"
-          raw=index.read_bytes()
-          assert len(raw)>250000, "Refusing to publish incomplete editor"
-          html=raw.decode("utf-8")
-          assert "offline-glb-scene" in html and "exportPage" in html
-          manifest={"app":"Motion Studio Web","sourceCommit":os.environ["GITHUB_SHA"],
-                    "browserGate":"three Playwright browser engines passed",
-                    "artifact":"index.html","bytes":len(raw),
-                    "sha256":hashlib.sha256(raw).hexdigest(),
-                    "deploymentSmoke":"PENDING (not claimed by this workflow)",
-                    "nativeSafari":"NOT TESTED",
-                    "realDevicePerformance":"NOT TESTED"}
-          (root/"WEB_RELEASE.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf8")
-          (root/".nojekyll").write_text("")
-          PY
-          sha256sum dist/index.html > dist/SHA256SUMS.txt
-      - name: Set expected GitHub Pages URL
-        id: pages-url
-        run: echo "url=https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/" >> "$GITHUB_OUTPUT"
-      - name: Publish exact tested bytes to gh-pages branch
-        working-directory: dist
+          python -m pip install 'Pillow==11.3.0' playwright
+          python -m playwright install --with-deps chromium firefox webkit
+      - name: Require SHA-bound human art approval and all original native images
+        working-directory: .
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          V1_APPROVED_SOURCE_SHA: ${{ vars.V1_APPROVED_SOURCE_SHA }}
         run: |
-          git init -b gh-pages
+          python release/v1_release_preflight.py --phase candidate --source-sha "$GITHUB_SHA"
+          python stage9/audit_r32_real_media.py --require-release
+      - name: Build EXACT offline HTML once from verified 39 originals
+        env:
+          MOTION_REQUIRE_AI_ASSETS: '1'
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          python tests/check_build.py
+          node --test tests/test_r31_story_continuity.mjs
+          node test_ai_chapter_assets.mjs
+      - name: Chromium actual product, 8 templates, R33 scroll and media
+        env:
+          MOTION_BROWSER: chromium
+        run: |
+          python tests/test_web_product_e2e.py
+          python tests/test_product_restructure.py
+          python tests/test_r30_cinematic_trial.py
+          python tests/test_r33_native_scroll_acceptance.py
+          python tests/test_template_visual_audit.py
+          python tests/test_r16_cross_chapter.py
+      - name: Firefox exact same built editor
+        env:
+          MOTION_BROWSER: firefox
+        run: |
+          python tests/test_web_product_e2e.py
+          python tests/test_product_restructure.py
+      - name: WebKit exact same built editor
+        env:
+          MOTION_BROWSER: webkit
+        run: |
+          python tests/test_web_product_e2e.py
+          python tests/test_product_restructure.py
+      - name: Genuine 3D PBR, GLB animation and WebGL compatibility checks
+        run: |
+          python tests/make_advanced_fixture.py
+          python tests/test_browser.py
+          python tests/test_matrix.py
+          python tests/test_invalid_glb.py
+          python tests/test_shared_scene.py
+      - name: Stage exact TESTED HTML and immutable evidence manifest
+        run: |
+          mkdir -p "$RUNNER_TEMP/v1-dist"
+          cp Motion-Studio-Stage15-Meshopt-OFFLINE.html "$RUNNER_TEMP/v1-dist/index.html"
+          cp THREE_LICENSE.txt "$RUNNER_TEMP/v1-dist/THREE_LICENSE.txt"
+          cp BUILD_MANIFEST.json "$RUNNER_TEMP/v1-dist/BUILD_MANIFEST.json"
+          python - <<'PY'
+          import json,hashlib,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'v1-dist'
+          raw=(root/'index.html').read_bytes()
+          manifest=json.loads((root/'BUILD_MANIFEST.json').read_text())
+          assert len(raw)>250000
+          assert manifest.get('offline') is True and manifest.get('aiOriginalMedia') is True
+          assert manifest.get('editorBytes')==len(raw)
+          content={'app':'Motion Studio Web V1','sourceCommit':os.environ['GITHUB_SHA'],
+            'artifact':'index.html','bytes':len(raw),
+            'sha256':hashlib.sha256(raw).hexdigest(),
+            'browserGate':'Chromium Firefox WebKit tests passed same bytes',
+            'aiOriginals':39,'fullVisualSignoffSource':'SHA-bound release approvals',
+            'productionSmoke':'PENDING'}
+          (root/'WEB_RELEASE.json').write_text(json.dumps(content,indent=2)+chr(10))
+          (root/'SHA256SUMS.txt').write_text(content['sha256']+'  index.html'+chr(10))
+          (root/'.nojekyll').write_text('')
+          print('Ready to publish test-exact bytes',content['bytes'],content['sha256'])
+          PY
+      - name: Publish root only without FORCE and preserve all review pages
+        working-directory: .
+        run: |
+          set -euo pipefail
+          git fetch origin gh-pages
+          previous="$(git rev-parse origin/gh-pages)"
+          echo "Previous rollback commit: $previous" >> "$GITHUB_STEP_SUMMARY"
+          git worktree add --detach "$RUNNER_TEMP/v1-prod-pages" origin/gh-pages
+          target="$RUNNER_TEMP/v1-prod-pages"
+          test -f "$target/r18-ai-review/index.html"
+          for filename in index.html THREE_LICENSE.txt BUILD_MANIFEST.json WEB_RELEASE.json SHA256SUMS.txt .nojekyll; do
+            cp -f "$RUNNER_TEMP/v1-dist/$filename" "$target/$filename"
+          done
+          cd "$target"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Deploy ${GITHUB_SHA}"
-          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:gh-pages
+          git add index.html THREE_LICENSE.txt BUILD_MANIFEST.json WEB_RELEASE.json SHA256SUMS.txt .nojekyll
+          if ! git diff --cached --quiet; then
+            git commit -m "Production V1 approved ${GITHUB_SHA}"
+            git push origin HEAD:gh-pages
+          fi
+          test -f r18-ai-review/index.html
           cat WEB_RELEASE.json >> "$GITHUB_STEP_SUMMARY"
-
-  live-smoke:
-    needs: publish
+  v1-live-https-smoke:
+    needs: v1-publish-exact-tested-build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install browser for real deployed site
+      - name: Install true-browser live verification
         run: |
           python -m pip install playwright
           python -m playwright install --with-deps chromium
-      - name: Wait for the exact release manifest to reach GitHub Pages
+      - name: Await exact source revision, not just a 200 HTTP status
         env:
-          MOTION_STUDIO_URL: ${{ needs.publish.outputs.page_url }}
+          MOTION_STUDIO_URL: https://${{ github.repository_owner }}.github.io/motion-studio-web/
         run: |
-          expected="${GITHUB_SHA}"
           for attempt in $(seq 1 36); do
-            deployed=$(curl -fsSL "${MOTION_STUDIO_URL}WEB_RELEASE.json" | python -c 'import json,sys; print(json.load(sys.stdin).get("sourceCommit", ""))' 2>/dev/null || true)
-            if [ "$deployed" = "$expected" ]; then
-              exit 0
-            fi
+            deployed="$(curl -fsSL "${MOTION_STUDIO_URL}WEB_RELEASE.json" 2>/dev/null | python -c 'import json,sys;print(json.load(sys.stdin).get("sourceCommit",""))' 2>/dev/null || true)"
+            if [ "$deployed" = "$GITHUB_SHA" ]; then exit 0; fi
             sleep 10
           done
-          echo "GitHub Pages did not publish source commit $expected within six minutes"
+          echo "Exact V1 commit not observed on Pages; production smoke FAILED"
           exit 1
-      - name: Verify live HTTPS page, editor, project save and HTML export
-        run: python stage9/tests/test_live_deployment.py
+      - name: Real deployed HTTPS preview/edit/save/export and served HTML SHA
         env:
-          MOTION_STUDIO_URL: ${{ needs.publish.outputs.page_url }}
-      - name: Record deployment smoke evidence without artifact storage
+          MOTION_STUDIO_URL: https://${{ github.repository_owner }}.github.io/motion-studio-web/
+        run: python stage9/tests/test_live_deployment.py
+      - name: Record immutable live smoke evidence
         if: always()
         run: |
-          if [ -f P5_LIVE_SMOKE.json ]; then
-            echo '~~~json' >> "$GITHUB_STEP_SUMMARY"
-            cat P5_LIVE_SMOKE.json >> "$GITHUB_STEP_SUMMARY"
-            echo '~~~' >> "$GITHUB_STEP_SUMMARY"
-          fi
+          echo '## V1.0 final live browser smoke' >> "$GITHUB_STEP_SUMMARY"
+          test ! -f P5_LIVE_SMOKE.json || cat P5_LIVE_SMOKE.json >> "$GITHUB_STEP_SUMMARY"
+          echo "If smoke fails, run v1-pages-rollback with the pre-publish gh-pages SHA, not a force push." >> "$GITHUB_STEP_SUMMARY"

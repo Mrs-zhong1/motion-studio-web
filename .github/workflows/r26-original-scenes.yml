@@ -1,0 +1,34 @@
+name: R26 Storyboard Verification (zero-cost only)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/r18-r21-acceptance-gates
+    paths:
+      - 'stage9/generate_r26_ai_scenes.py'
+      - 'stage9/r26-storyboard.json'
+      - 'stage9/tests/test_r26_generation.py'
+      - '.github/workflows/r26-original-scenes.yml'
+permissions:
+  contents: read
+jobs:
+  verify-storyboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image decoder for offline validation
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Run storyboard and no-spend tests
+        run: python -m unittest discover -s stage9/tests -p 'test_r26_generation.py' -v
+      - name: Validate all 33 scene briefs without provider calls
+        run: python stage9/generate_r26_ai_scenes.py --limit 33 > r26-storyboard-dry-run.json
+      - name: Upload storyboard-only evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: r26-zero-cost-storyboard-${{ github.sha }}
+          path: r26-storyboard-dry-run.json
+          retention-days: 14

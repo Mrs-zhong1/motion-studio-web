@@ -1,4 +1,5 @@
 name: Motion Studio Stage 9 - standalone Three.js + strict GLB WebGL test
+# Re-run the complete Stage 9–15 WebGL/GLB matrix after shared camera diagnostic correction.
 on:
   workflow_dispatch:
   push:

@@ -22,15 +22,36 @@ def test_r15():
             assert editor.locator(".r15-scene-mark").count()==0
             for name in TEMPLATES:
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
-                assert 'r15-scene-mark' in html, name
-                assert f'data-template="{name}"' in html, name
-                assert html.count('class="r15-scene-mark"')==(5 if name in AUTHORED_SIX else (3 if name=="editorial" else 4)),name
+                if name=='editorial':
+                    assert 'data-e42-editorial="coherent-print"' in html,name
+                    assert html.count('class="e42-spread"')==4,name
+                    assert html.count('class="e42-type"')==4,name
+                    assert '<iframe' not in html,name
+                elif name=='cinematic':
+                    assert 'data-r39-film="continuous"' in html,name
+                    assert html.count('class="r39-frame"')==5,name
+                    assert html.count('class="r39-caption"')==5,name
+                else:
+                    assert 'r15-scene-mark' in html,name
+                    assert f'data-template="{name}"' in html,name
+                    assert html.count('class="r15-scene-mark"')==(5 if name in AUTHORED_SIX else (3 if name=="editorial" else 4)),name
             for name in ("cinematic","agency","saas"):
                 await_art=editor.evaluate("(id)=>ensureTemplatePhoto(id)",name)
                 html=editor.evaluate("(id)=>buildTemplatePreviewDocument(id)",name)
                 page=browser.new_page(viewport={"width":1440,"height":900},reduced_motion="no-preference")
                 errors=[];page.on("pageerror",lambda error:errors.append(str(error)))
                 page.set_content(html,wait_until="domcontentloaded",timeout=60000)
+                if name=='cinematic':
+                    assert page.locator('.r39-stage').count()==1
+                    assert page.locator('.r39-frame').count()==5
+                    assert page.locator('.r39-caption').count()==5
+                    assert page.locator('.r37-stage').count()==0
+                    page.set_viewport_size({'width':390,'height':844})
+                    assert page.locator('.r39-stage').is_visible()
+                    assert page.locator('html').evaluate('el=>el.scrollWidth<=innerWidth+32')
+                    assert not errors,(name,errors)
+                    page.close()
+                    continue
                 sections=page.locator("section.section.authored-six")
                 assert sections.count()==5,(name,sections.count())
                 assert sections.locator(".r15-scene-mark").count()==5,name
@@ -47,10 +68,17 @@ def test_r15():
                     }
                     return {scene1:measure(1),scene2:measure(2)}
                 }""")
-                assert dimensions["scene1"]["artX"]<dimensions["scene1"]["stageX"],(name,dimensions)
-                assert dimensions["scene2"]["artX"]>dimensions["scene2"]["stageX"],(name,dimensions)
-                assert all(x["minHeight"]>=200 and x["width"]>=70 and x["stageWidth"]>=70
-                           for x in dimensions.values()),(name,dimensions)
+                if name=="cinematic":
+                    # R37–R38 film no longer mounts unrelated iframe cards:
+                    # the photographic image is the ONE full-stage visual.
+                    assert page.locator('.r37-stage').count()==5,(name,dimensions)
+                    assert all(x["width"]>=x["sectionWidth"]*.95 and x["stageWidth"]==0
+                               for x in dimensions.values()),(name,dimensions)
+                else:
+                    assert dimensions["scene1"]["artX"]<dimensions["scene1"]["stageX"],(name,dimensions)
+                    assert dimensions["scene2"]["artX"]>dimensions["scene2"]["stageX"],(name,dimensions)
+                    assert all(x["minHeight"]>=200 and x["width"]>=70 and x["stageWidth"]>=70
+                               for x in dimensions.values()),(name,dimensions)
                 page.set_viewport_size({"width":390,"height":844})
                 page.wait_for_timeout(150)
                 mobile=middle.evaluate("""sec=>{
@@ -59,7 +87,10 @@ def test_r15():
                   return {artTop:a.top,frameTop:f.top,bodyWidth:document.documentElement.scrollWidth,
                           viewport:innerWidth,artW:a.width,frameW:f.width}
                 }""")
-                assert mobile["artTop"]<mobile["frameTop"],(name,mobile)
+                if name!='cinematic':
+                    assert mobile["artTop"]<mobile["frameTop"],(name,mobile)
+                else:
+                    assert mobile["artW"]>=mobile["viewport"]*.95,(name,mobile)
                 assert mobile["bodyWidth"]<=mobile["viewport"]+32,(name,mobile)
                 assert not errors,(name,errors)
                 page.close()

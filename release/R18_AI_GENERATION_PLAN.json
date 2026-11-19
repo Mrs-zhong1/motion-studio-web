@@ -1,0 +1,281 @@
+{
+  "schema": "motion-studio-r18-ai-generation-plan-v1",
+  "requiredAssets": 39,
+  "completedInRepository": 0,
+  "chapters": [
+    {
+      "template": "editorial",
+      "chapter": 1,
+      "filename": "editorial-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, monochrome sculptural fashion portrait in folded fabrics; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "editorial",
+      "chapter": 2,
+      "filename": "editorial-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, macro study of paper folds and sculptural shadow; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "editorial",
+      "chapter": 3,
+      "filename": "editorial-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, architectural editorial silhouette through frosted glass; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "editorial",
+      "chapter": 4,
+      "filename": "editorial-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, high contrast close-up of woven textile details; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "product-3d",
+      "chapter": 1,
+      "filename": "product-3d-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, luxury glass perfume vessel and metallic orbit; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "product-3d",
+      "chapter": 2,
+      "filename": "product-3d-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, exploded product material view with glass and brushed steel; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "product-3d",
+      "chapter": 3,
+      "filename": "product-3d-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, iridescent transparent product geometry suspended in air; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "product-3d",
+      "chapter": 4,
+      "filename": "product-3d-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, macro PBR metal and glass detail on black; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "product-3d",
+      "chapter": 5,
+      "filename": "product-3d-5.jpg",
+      "prompt": "Original photoreal cinematic website scene, dramatic final packshot with luminous rim lighting; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "cinematic",
+      "chapter": 1,
+      "filename": "cinematic-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, sunset sheer fabric drifting across rocks; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "cinematic",
+      "chapter": 2,
+      "filename": "cinematic-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, warm dawn coastal ridge with mist and cinematic depth; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "cinematic",
+      "chapter": 3,
+      "filename": "cinematic-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, silk and sandstone in an abstract close-up; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "cinematic",
+      "chapter": 4,
+      "filename": "cinematic-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, wind-sculpted natural textile in blue-hour; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "cinematic",
+      "chapter": 5,
+      "filename": "cinematic-5.jpg",
+      "prompt": "Original photoreal cinematic website scene, panoramic twilight horizon resolving to soft gold; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "architecture",
+      "chapter": 1,
+      "filename": "architecture-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, minimal coastal concrete building with reflecting pool; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "architecture",
+      "chapter": 2,
+      "filename": "architecture-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, close study of cantilever slab and soft shadows; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "architecture",
+      "chapter": 3,
+      "filename": "architecture-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, glass corridor framing sea and distant islands; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "architecture",
+      "chapter": 4,
+      "filename": "architecture-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, quiet atrium with stone and clear skylight; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "architecture",
+      "chapter": 5,
+      "filename": "architecture-5.jpg",
+      "prompt": "Original photoreal cinematic website scene, sunset wide architecture and water reflections; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "agency",
+      "chapter": 1,
+      "filename": "agency-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, bold cobalt and vermilion sculptural object; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "agency",
+      "chapter": 2,
+      "filename": "agency-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, playful optical typography-free colored geometry; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "agency",
+      "chapter": 3,
+      "filename": "agency-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, kinetic surreal studio installation in acid green; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "agency",
+      "chapter": 4,
+      "filename": "agency-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, abstract collaborative sculpture with translucent plastic; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "agency",
+      "chapter": 5,
+      "filename": "agency-5.jpg",
+      "prompt": "Original photoreal cinematic website scene, final immersive rainbow-colored gallery; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "fashion",
+      "chapter": 1,
+      "filename": "fashion-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, burgundy silk and ivory pleated fabric still life; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "fashion",
+      "chapter": 2,
+      "filename": "fashion-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, minimal fashion portrait with sculptural pleats; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "fashion",
+      "chapter": 3,
+      "filename": "fashion-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, fabric fibers and asymmetric folds macro; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "fashion",
+      "chapter": 4,
+      "filename": "fashion-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, atelier runway abstract form under dramatic side light; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "fashion",
+      "chapter": 5,
+      "filename": "fashion-5.jpg",
+      "prompt": "Original photoreal cinematic website scene, couture textile installation under gallery spotlight; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "gallery",
+      "chapter": 1,
+      "filename": "gallery-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, abstract stone arch and translucent red acrylic; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "gallery",
+      "chapter": 2,
+      "filename": "gallery-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, polished glass sphere and blue shadow in museum; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "gallery",
+      "chapter": 3,
+      "filename": "gallery-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, experimental large-scale installation with mirror chrome; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "gallery",
+      "chapter": 4,
+      "filename": "gallery-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, glowing color-field art behind geometric glass; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "gallery",
+      "chapter": 5,
+      "filename": "gallery-5.jpg",
+      "prompt": "Original photoreal cinematic website scene, minimal contemporary gallery with final hero sculpture; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "saas",
+      "chapter": 1,
+      "filename": "saas-1.jpg",
+      "prompt": "Original photoreal cinematic website scene, editorial high-end abstract software interface on glass slabs; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "saas",
+      "chapter": 2,
+      "filename": "saas-2.jpg",
+      "prompt": "Original photoreal cinematic website scene, soft luminous floating interface panels, no letters; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "saas",
+      "chapter": 3,
+      "filename": "saas-3.jpg",
+      "prompt": "Original photoreal cinematic website scene, data visualization sculpture of ribbons and spheres; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "saas",
+      "chapter": 4,
+      "filename": "saas-4.jpg",
+      "prompt": "Original photoreal cinematic website scene, calm dark dashboard-like geometry and gradients; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    },
+    {
+      "template": "saas",
+      "chapter": 5,
+      "filename": "saas-5.jpg",
+      "prompt": "Original photoreal cinematic website scene, playful transparent futuristic UI tiles in ambient studio; consistent story art direction across scenes, premium lighting, coherent color palette, no logos, no readable text, no recognizable celebrities or trademarked characters, landscape 16:9; create genuinely different composition from other chapters.",
+      "status": "PENDING_GENERATION"
+    }
+  ],
+  "notes": "This is a generation plan, NOT a finished or licensed media manifest. Actual outputs must be generated, hashed and usage terms checked before marking AI assets approved."
+}

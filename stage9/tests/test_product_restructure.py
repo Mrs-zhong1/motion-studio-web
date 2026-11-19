@@ -56,22 +56,25 @@ def test_product_restructure():
             assert page.locator("#previewMobile").is_visible()
             assert page.locator("#previewReplay").is_visible()
             assert page.locator("#previewUse").is_visible()
-            # R13: switch between editorial panel and genuinely full-width website stage.
-            immersive = page.locator("#previewImmersive")
-            assert immersive.is_visible()
-            assert immersive.get_attribute("aria-pressed") == "false"
-            immersive.click()
+            # R41: live work is full-width by DEFAULT; information is an
+            # optional floating drawer and never resizes the preview canvas.
+            info=page.locator("#previewImmersive")
+            assert info.is_visible()
+            assert info.get_attribute("aria-pressed")=="false"
             assert page.locator("#templatePreview").evaluate(
-                "el => el.classList.contains('immersive-preview')"
+                "el=>el.classList.contains('immersive-preview')"
             )
-            assert immersive.get_attribute("aria-pressed") == "true"
             assert page.locator(".preview-product-info").is_hidden()
-            assert page.locator("#previewDevice").evaluate(
-                "el => el.getBoundingClientRect().width >= innerWidth * .90"
-            )
-            page.keyboard.press("Escape")
-            assert immersive.get_attribute("aria-pressed") == "false"
+            viewport_before=page.locator("#previewDevice").bounding_box()
+            assert viewport_before["width"]>=1440*.90,viewport_before
+            info.click()
+            assert info.get_attribute("aria-pressed")=="true"
             assert page.locator(".preview-product-info").is_visible()
+            viewport_open=page.locator("#previewDevice").bounding_box()
+            assert abs(viewport_open["width"]-viewport_before["width"])<3
+            page.keyboard.press("Escape")
+            assert info.get_attribute("aria-pressed")=="false"
+            assert page.locator(".preview-product-info").is_hidden()
             assert page.locator("#templatePreview").is_visible()
             assert page.locator("#templateResultCount").inner_text() == "08"
             frame = page.locator("#templatePreviewFrame").content_frame
@@ -171,7 +174,7 @@ def test_product_restructure():
                     return {
                       id: t.id,
                       sectionCount: project.sections.length,
-                      renderedCount: (html.match(/<section class=\"section/g) || []).length,
+                      renderedCount: t.id==='cinematic'?(html.match(/class="r39-caption"/g)||[]).length:t.id==='editorial'?(html.match(/class="e42-spread"/g)||[]).length:(html.match(/<section class=\"section/g) || []).length,
                       hasTitle: html.includes(t.name),
                       hasRemoteScript: /<script[^>]+src=[\"']https?:/.test(html)
                     };
@@ -193,11 +196,24 @@ def test_product_restructure():
             )
             assert legacy_template == "custom"
             for template_id in template_shapes:
-                page.locator("#backToLibrary").click()
+                # Each template must be testable from a clean launch, even after
+                # editing a legacy project and collapsing both side panels.
+                page.goto(
+                    f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",
+                    wait_until="domcontentloaded",
+                )
+                page.locator("#discoveryView").wait_for(state="visible")
                 page.locator(f"[data-template-card='{template_id}']").click()
-                page.locator("#templatePreviewFrame").content_frame.locator(
-                    "section.section"
-                ).first.wait_for()
+                page.locator("#templatePreviewFrame").wait_for(state="attached")
+                preview_frame=page.locator("#templatePreviewFrame").content_frame
+                if template_id=="cinematic":
+                    preview_frame.locator(".r39-stage").wait_for()
+                    assert preview_frame.locator(".r39-frame").count()==5
+                elif template_id=="editorial":
+                    preview_frame.locator(".e42-sticky").first.wait_for()
+                    assert preview_frame.locator(".e42-spread").count()==4
+                else:
+                    preview_frame.locator("section.section").first.wait_for()
                 page.locator("#previewUse").click()
                 changed_title = f"Acceptance {template_id}"
                 page.locator("#projectName").fill(changed_title)
@@ -215,10 +231,17 @@ def test_product_restructure():
                     page.locator("#exportPage").click()
                 exported_html = exported.value.path().read_text(encoding="utf8")
                 assert changed_title in exported_html
-                assert f'data-template="{template_id}"' in exported_html
-                assert exported_html.count('<section class="section') == len(
-                    saved_project["sections"]
-                )
+                if template_id=="cinematic":
+                    assert 'data-r39-film="continuous"' in exported_html
+                    assert exported_html.count('class="r39-caption"')==len(saved_project["sections"])
+                    assert exported_html.count('class="r39-frame"')==len(saved_project["sections"])
+                elif template_id=="editorial":
+                    assert 'data-e42-editorial="coherent-print"' in exported_html
+                    assert exported_html.count('class="e42-spread"')==len(saved_project["sections"])
+                    assert exported_html.count('class="e42-image"')==len(saved_project["sections"])
+                else:
+                    assert f'data-template="{template_id}"' in exported_html
+                    assert exported_html.count('<section class="section')==len(saved_project["sections"])
                 assert chapter_text in exported_html
                 assert saved_project["sections"][1]["text"] == chapter_text
                 # Loading real standalone HTML in a second browser page catches
@@ -228,31 +251,48 @@ def test_product_restructure():
                     export_errors = []
                     standalone.on("pageerror",lambda err:export_errors.append(str(err)))
                     standalone.set_content(exported_html,wait_until="domcontentloaded")
-                    assert standalone.locator("section.section").count() == len(saved_project["sections"])
-                    # Text fidelity is a DOM-content check; inner_text() depends on
-                    # transient layout/visibility during first paint on Firefox/WebKit.
-                    # Geometry/visibility are independently covered by visual audit.
-                    heading = standalone.locator('section.section[data-index="1"] [data-chapter-title]')
-                    assert heading.text_content().strip() == chapter_text, (
-                        template_id, heading.text_content(), chapter_text
-                    )
-                    rendered = standalone.locator("section.section").nth(1)
-                    rendered.scroll_into_view_if_needed()
-                    standalone.wait_for_function("""() => {
-                        const n=document.querySelectorAll('section.section')[1];
-                        return n && n.style.getPropertyValue('--chapter-enter') !== '';
-                    }""",timeout=12000)
-                    actual = rendered.evaluate("""node=>{
-                        const art=node.querySelector('.section-art'),motion=node.querySelector('iframe');
-                        const a=art.getBoundingClientRect(),b=motion.getBoundingClientRect();
-                        return {enter:Number(node.style.getPropertyValue('--chapter-enter')),
-                           photo:getComputedStyle(art).backgroundImage.startsWith('url("data:image/'),
-                           width:Math.round(a.width),frame:Math.round(b.width)};
-                    }""")
-                    assert actual["photo"] and actual["width"]>70 and actual["frame"]>70,actual
-                    assert 0 <= actual["enter"] <= 1,actual
+                    if template_id=="editorial":
+                        assert standalone.locator('html[data-e42-editorial="coherent-print"]').count()==1
+                        assert standalone.locator('.e42-spread').count()==len(saved_project["sections"])
+                        assert standalone.locator('.e42-image').count()==len(saved_project["sections"])
+                        assert standalone.locator('.e42-spread').nth(1).locator('.e42-type h1').text_content()==chapter_text
+                        assert standalone.locator('iframe').count()==0
+                    elif template_id=="cinematic":
+                        assert standalone.locator('html[data-r39-film="continuous"]').count()==1
+                        assert standalone.locator('.r39-frame').count()==len(saved_project["sections"])
+                        assert standalone.locator('.r39-caption').count()==len(saved_project["sections"])
+                        assert standalone.locator('.r39-caption[data-index="1"] h1').text_content()==chapter_text
+                        assert standalone.locator('#r39-menu-toggle').is_visible()
+                        assert standalone.locator('.r37-stage').count()==0
+                    else:
+                        assert standalone.locator("section.section").count()==len(saved_project["sections"])
+                        heading=standalone.locator('section.section[data-index="1"] [data-chapter-title]')
+                        assert heading.text_content().strip()==chapter_text
+                        rendered=standalone.locator("section.section").nth(1)
+                        rendered.scroll_into_view_if_needed()
+                        standalone.wait_for_function("""() => {
+                            const n=document.querySelectorAll('section.section')[1];
+                            return n && n.style.getPropertyValue('--chapter-enter') !== '';
+                        }""",timeout=12000)
+                        actual=rendered.evaluate("""node=>{
+                            const art=node.querySelector('.section-art'),motion=node.querySelector('iframe');
+                            const a=art.getBoundingClientRect(),b=motion.getBoundingClientRect();
+                            return {enter:Number(node.style.getPropertyValue('--chapter-enter')),
+                               photo:getComputedStyle(art).backgroundImage.startsWith('url("data:image/'),
+                               width:Math.round(a.width),frame:Math.round(b.width)};
+                        }""")
+                        assert actual["photo"] and actual["width"]>70,actual
+                        assert actual["frame"]>70,actual
+                        assert 0<=actual["enter"]<=1,actual
                     assert not export_errors,export_errors
                     standalone.close()
+                # R20: verify file persistence after re-opening the actual Web app,
+                # rather than relying on the same long-lived editing tab.
+                page.goto(
+                    f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",
+                    wait_until="domcontentloaded",
+                )
+                assert page.locator("#openFile").count() == 1, page.url
                 page.locator("#openFile").set_input_files(
                     {
                         "name": "roundtrip.json",

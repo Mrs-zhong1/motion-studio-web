@@ -1,0 +1,47 @@
+{
+  "schema": "motion-studio-r18-r21-web-approvals-v2",
+  "sourceCommit": "230035f33fa69829cc70e6b389b1a5fa034eef5f",
+  "releaseChannel": "public-review-only",
+  "artDirection": {
+    "status": "HOLD",
+    "reason": "33 AI collage crops require visual approval against the full scroll story; no professional signoff yet"
+  },
+  "aiAssets": {
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43820018261",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-16",
+    "scope": "39 SHA256-verified committed originals or AI-derived scenes, 8 bundled templates, no demo fallback",
+    "assetCount": 39,
+    "verifiedOrigin": "AI_GENERATED",
+    "usageTermsChecked": true,
+    "artDirectionApproved": false
+  },
+  "browserPerformance": {
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44435900814",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-19",
+    "scope": "Fresh Chromium R19 browser frame-pacing and 390px mobile viewport geometry regression; no native-phone GPU claim."
+  },
+  "productFlows": {
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44435900814",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-19",
+    "scope": "Fresh Chromium extended editor flow plus Chromium/Firefox/WebKit baseline edit-save-reopen-export smoke and template discovery/preview/editor journey."
+  },
+  "browserRegression": {
+    "status": "APPROVED",
+    "evidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44435900814",
+    "reviewer": "GitHub Actions automated evidence",
+    "reviewedAt": "2026-11-19",
+    "scope": "All three engines passed browser install, edit-save-reopen-export smoke and template discovery/preview/editor journey. Chromium alone ran the extended R30/R33/R9/R11/R13-R19/R16/R17/U1-U4 and eight-template desktop/mobile specialist suites; Firefox/WebKit specialist steps were skipped by workflow matrix."
+  },
+  "liveIntegrity": {
+    "status": "HOLD",
+    "reviewPreviewVerified": true,
+    "reviewEvidenceUrl": "https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/43820018261",
+    "reason": "Production root has not been replaced; preview URL passed exact source SHA and live HTML hash, final production deployment smoke remains"
+  }
+}

@@ -1,0 +1,1108 @@
+{
+  "schema": "motion-studio-r18-ai-assets-v1",
+  "origin": "AI_GENERATED",
+  "originalGenerationCount": 12,
+  "derivedSceneCount": 39,
+  "individualImages": 6,
+  "croppedSceneImages": 33,
+  "artDirectionStatus": "REVIEW_REQUIRED",
+  "technicalMediaCoverage": "39/39",
+  "notes": "All scenes derive from 12 AI-generated original outputs; 33 are distinct image crops from six AI collage outputs. Cropped images are lower-resolution and require human art-direction review before commercial release. Source prompts contain no named brands or celebrities.",
+  "assets": [
+    {
+      "template": "editorial",
+      "chapter": 1,
+      "file": "editorial-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "individual-generation",
+      "sourceReference": "editorial-hero.jpg",
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "8e9ba47f79906886c7a0eefd3cda55cd8cb6f55f0f28e93792f6ee9cea82b9a5",
+      "presentation": "resized-full-screen-from-original-AI-image",
+      "nativeSourceDimensions": [
+        1672,
+        941
+      ],
+      "trueHighResolutionGenerated": true,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "editorial",
+      "chapter": 2,
+      "file": "editorial-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_cgi_photoreal.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "bd1c299d34981d7ca2479a30c67de0140c79ebb0ff6ec747eaf9965086b74bd7",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "editorial",
+      "chapter": 3,
+      "file": "editorial-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_cgi_photoreal.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "59ceb93bb68b9298d02e34a0b01353c84ddb0556830faa3911673420c3f5b369",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "editorial",
+      "chapter": 4,
+      "file": "editorial-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_artboard_six_c.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "0f2c52c55a30003e463d2883fa3bbe44c6808b1060b864b7bda3f4f6411e359d",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "product-3d",
+      "chapter": 1,
+      "file": "product-3d-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "individual-generation",
+      "sourceReference": "product-3d-hero.jpg",
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "cb5294cedcb4936e709d553a1b7cf5e19a1adc853b06858e43840b0879749ba4",
+      "presentation": "resized-full-screen-from-original-AI-image",
+      "nativeSourceDimensions": [
+        1672,
+        941
+      ],
+      "trueHighResolutionGenerated": true,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "product-3d",
+      "chapter": 2,
+      "file": "product-3d-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_2x3_grid_collage_six_panels_with_no_text_high.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "591a2a1513d42d710df979a64e415f56be7de1c74d8558d5d7c0cc774a52867a",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "product-3d",
+      "chapter": 3,
+      "file": "product-3d-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_abstract_arch.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "cfbbd4bcc8188629763b6a16498e697d1f5cc653a5ad6549db48c9769d4aee48",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "product-3d",
+      "chapter": 4,
+      "file": "product-3d-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_3_rows_2_colum.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "908d2ee5d8ef2ae55b504e26b55a23225d73b3e3cbfe72b2d55b31f88743d6e2",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "product-3d",
+      "chapter": 5,
+      "file": "product-3d-5.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_grid_of_six_cinematic_abstract.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "ddcf1d005b165c43f485f35fe0bc6f24de3ff9385dc00afd9827a075449dcba1",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "cinematic",
+      "chapter": 1,
+      "file": "cinematic-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "individual-generation",
+      "sourceReference": "cinematic-hero.jpg",
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "98731e3b5364cd6701914a21a888e1c8a3bc9732542e23d0eba3ca3e301c6dea",
+      "presentation": "resized-full-screen-from-original-AI-image",
+      "nativeSourceDimensions": [
+        1672,
+        941
+      ],
+      "trueHighResolutionGenerated": true,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "cinematic",
+      "chapter": 2,
+      "file": "cinematic-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_2x3_grid_collage_six_panels_with_no_text_high.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "53d48cc9b0160b02fd3677f55edd5fc10f3f359be832afb1d1f1ce14514c265d",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "cinematic",
+      "chapter": 3,
+      "file": "cinematic-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_abstract_arch.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "180f97a2ac2bf2fa675a5a959771c351ed37e4d9bf5e992f22a5aeb2f8b60fff",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "cinematic",
+      "chapter": 4,
+      "file": "cinematic-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_3_rows_2_colum.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "7cdea415a3374b010c691d20cd219c71e2bb582fe9c49ec8353ae1a0c6a7863b",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "cinematic",
+      "chapter": 5,
+      "file": "cinematic-5.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_grid_of_six_cinematic_abstract.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "350ac3a149bd27df1b6af042ba103919b303d20894ed9241edbc512b48dbade0",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "architecture",
+      "chapter": 1,
+      "file": "architecture-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "individual-generation",
+      "sourceReference": "architecture-hero.jpg",
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "12412a92f780358e348691c8806d4b0d1b430394f38d7e0db73271bcaa7aa8ab",
+      "presentation": "resized-full-screen-from-original-AI-image",
+      "nativeSourceDimensions": [
+        1672,
+        941
+      ],
+      "trueHighResolutionGenerated": true,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "architecture",
+      "chapter": 2,
+      "file": "architecture-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_2x3_grid_collage_six_panels_with_no_text_high.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "024e2f043eb688edeb3beb28e0c5e69981bffb6d2f249519d36d07494856dc1e",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "architecture",
+      "chapter": 3,
+      "file": "architecture-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_abstract_arch.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "c961e132274c44f95f446d03f4d3dd3469e371073d189d4e7b16c6e14a832f62",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "architecture",
+      "chapter": 4,
+      "file": "architecture-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_3_rows_2_colum.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "9984eacdb4f16a866e0067ff18402bbb46c48a4ddc0a72791861dd6b34e9a9b2",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "architecture",
+      "chapter": 5,
+      "file": "architecture-5.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_grid_of_six_cinematic_abstract.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "679bacf9eaab92fd153030689612821ec338ec994c86ef18b32d5d5235cc9cff",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "agency",
+      "chapter": 1,
+      "file": "agency-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_2x3_grid_collage_six_panels_with_no_text_high.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "ef0422ab4eba82a0221fef6efc6ae2393fb739a2f749e7c8e3bafb823f0ce3ce",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "agency",
+      "chapter": 2,
+      "file": "agency-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_abstract_arch.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "af93bd1c3378a736ee94295eafb949deb5fe18c7766990a2b8375d82ff0b4d5b",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "agency",
+      "chapter": 3,
+      "file": "agency-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_3_rows_2_colum.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "d9018ef59c995eabe8c4d3fa2b1be3a34dd6d03b800767d974e91818987db340",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "agency",
+      "chapter": 4,
+      "file": "agency-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_grid_of_six_cinematic_abstract.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "61b309558f69919ca373914cc7133a54056b3920146a7d4af6787afec491af86",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "agency",
+      "chapter": 5,
+      "file": "agency-5.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_cgi_photoreal.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "6890df0cc3979740f278a1d236fe501f825c738d068fa9471e6f1aa6302f0640",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "fashion",
+      "chapter": 1,
+      "file": "fashion-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "individual-generation",
+      "sourceReference": "fashion-hero.jpg",
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "562ac44ef9737ce51eb98fdc476d4b8dbb8c4ab9d535b1fcb165866b775e6d6a",
+      "presentation": "resized-full-screen-from-original-AI-image",
+      "nativeSourceDimensions": [
+        1672,
+        941
+      ],
+      "trueHighResolutionGenerated": true,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "fashion",
+      "chapter": 2,
+      "file": "fashion-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_2x3_grid_collage_six_panels_with_no_text_high.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "3e35e5fb1ec6b573629b9ad622141489c2e0d666004380ebd9f0a5ae4bcc367f",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "fashion",
+      "chapter": 3,
+      "file": "fashion-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_abstract_arch.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "9f9e6f8c5825e7b8f439bc55308f8575dc7b1afe2e5ce71fc05d0728f3c4d82c",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "fashion",
+      "chapter": 4,
+      "file": "fashion-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_3_rows_2_colum.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "ede0eb3f8606a95b4fc210f350867cf4abd43805a0b68b6acd156d6d2bbcf8b8",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "fashion",
+      "chapter": 5,
+      "file": "fashion-5.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_grid_of_six_cinematic_abstract.png",
+      "cropGrid": {
+        "row": 2,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "a6f2e65458cbc41150c6387ebbfa373de14c65e7f15f6fef43f3b28c93ac4d80",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "gallery",
+      "chapter": 1,
+      "file": "gallery-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "individual-generation",
+      "sourceReference": "gallery-hero.jpg",
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "114efe5b321beecdc9e722040343e5100645de116dc6697acab51ba17f46bac3",
+      "presentation": "resized-full-screen-from-original-AI-image",
+      "nativeSourceDimensions": [
+        1672,
+        941
+      ],
+      "trueHighResolutionGenerated": true,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "gallery",
+      "chapter": 2,
+      "file": "gallery-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_cgi_photoreal.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "bdb9b60609e998c9320a7ad85dc9c53c6e33968ad6ad8f3f7c0730b60b57d281",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "gallery",
+      "chapter": 3,
+      "file": "gallery-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_cgi_photoreal.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "dc10c851e56ec212ff92ee89645ab452de5d774ee0a7f2b908193591d352abb1",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "gallery",
+      "chapter": 4,
+      "file": "gallery-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_artboard_six_c.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "3ae5f8ad41b42dd78f94a28890513388a25b032b05a9c9dcea321447d883dd6f",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "gallery",
+      "chapter": 5,
+      "file": "gallery-5.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_artboard_six_c.png",
+      "cropGrid": {
+        "row": 1,
+        "column": 0,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "8d5c2a43774e52133f6fda5d3474f0ae910ee5af8962974bdd951aa517b22697",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        306
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "saas",
+      "chapter": 1,
+      "file": "saas-1.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_2x3_grid_collage_six_panels_with_no_text_high.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "8401c55ad0fbaf65541a60d8fe415954a6b1a30ad5b30a12ecb29fa0aec4f3a4",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "saas",
+      "chapter": 2,
+      "file": "saas-2.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_abstract_arch.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "b5bbc63ecf51ba5a94d4899fa8381c7c4d76a8c8d613dad6666fcf551cbb7f07",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "saas",
+      "chapter": 3,
+      "file": "saas-3.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_single_composite_image_collage_3_rows_2_colum.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "e38f96246841fbd6687ce8ddf39c2fcc4c5fad5330c7218a82b817db829ffd24",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "saas",
+      "chapter": 4,
+      "file": "saas-4.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_grid_of_six_cinematic_abstract.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "33aceca68028598625261bda94eb9494b7a988815976efb935ef463aa6e0f273",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    },
+    {
+      "template": "saas",
+      "chapter": 5,
+      "file": "saas-5.jpg",
+      "source": "AI_GENERATED",
+      "generationSystem": "ChatGPT image generation",
+      "generationDate": "2026-11-16",
+      "sourceType": "crop-of-AI-generated-collage",
+      "sourceReference": "a_composite_collage_of_six_cinematic_cgi_photoreal.png",
+      "cropGrid": {
+        "row": 0,
+        "column": 1,
+        "rows": 3,
+        "columns": 2
+      },
+      "commercialUseTermsChecked": true,
+      "termsUrl": "https://openai.com/policies/terms-of-use/",
+      "sha256": "37c0beb128e4f8a70944ba0e710d33146a8b224b8e59bd08226c9ba839dc58c8",
+      "presentation": "letterbox-composite-upscaled-from-AI-collage-crop",
+      "nativeSourceDimensions": [
+        828,
+        305
+      ],
+      "trueHighResolutionGenerated": false,
+      "presentationDimensions": [
+        1600,
+        900
+      ]
+    }
+  ]
+}

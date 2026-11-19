@@ -17,7 +17,7 @@ try:
   page.locator('[data-asset-tier-button="l3"]').click()
   res['componentCount']=page.evaluate('registry.length')
   for fixture in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
-   page.locator('.comp[data-id="offline-glb-scene"] button').click()
+   page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
    page.locator('#stage9GlbInput').set_input_files(str(ROOT.parent/fixture))
    page.wait_for_function("project.sections.filter(s=>s.id==='offline-glb-scene'&&s.glb.length>1000).length===project.sections.filter(s=>s.id==='offline-glb-scene').length")
   res['glbCount']=page.evaluate("project.sections.filter(s=>s.id==='offline-glb-scene'&&s.glb).length")

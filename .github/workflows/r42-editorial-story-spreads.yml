@@ -1,0 +1,46 @@
+name: R42 Editorial Coherent Story Spreads
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/r42-editorial-story-spreads.mjs'
+      - 'stage9/tests/test_r42_editorial_spreads.mjs'
+      - 'stage9/tests/test_r42_editorial_browser.py'
+      - 'stage9/build-offline.mjs'
+      - '.github/workflows/r42-editorial-story-spreads.yml'
+permissions:
+  contents: read
+jobs:
+  editorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check strict single-editorial director
+        run: |
+          node --check r42-editorial-story-spreads.mjs
+          node --test tests/test_r42_editorial_spreads.mjs
+      - name: Compile real offline editor with all 39 assets
+        run: |
+          npm install --no-audit --no-fund
+          MOTION_REQUIRE_AI_ASSETS=1 npm run build
+          python tests/check_build.py
+      - name: Four editorial spreads in real Chromium desktop and mobile
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          python tests/test_r42_editorial_browser.py
+      - name: Evidence in GitHub summary (zero artifact quota)
+        if: always()
+        run: |
+          if [ -f R42_EDITORIAL_ACCEPTANCE.json ]; then cat R42_EDITORIAL_ACCEPTANCE.json >> "$GITHUB_STEP_SUMMARY"; fi

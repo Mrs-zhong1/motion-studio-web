@@ -15,7 +15,7 @@ try:
   page.locator('#modeToggle').click()
   page.locator('[data-asset-tier-button="l3"]').click()
   for name in ['Sample-Dual-Material.glb','Sample-Textured-Animated.glb']:
-   page.locator('.comp[data-id="offline-glb-scene"] button').click()
+   page.locator('.comp[data-id="offline-glb-scene"] .component-add-trigger').click()
    page.locator('#stage9GlbInput').set_input_files(str(R.parent/name))
    page.wait_for_timeout(180)
   res['components']=page.evaluate('registry.length')

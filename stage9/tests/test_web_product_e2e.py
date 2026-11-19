@@ -58,6 +58,31 @@ try:
         page.locator("#resumeProject").click()
         page.locator("[data-asset-tier-button='l3']").click()
         check("all_components_in_library",page.locator("#componentList .comp").count()==20)
+        # E6-02: exercise every real component preview, not merely registry presence.
+        if browser_name=="chromium":
+            effect_ids=page.evaluate("registry.slice(1).map(c=>c.id)")
+            check("19_effects_discovered",len(effect_ids)==19)
+            effect_results=[]
+            for effect_id in effect_ids:
+                page.locator(f'#componentList .comp[data-id="{effect_id}"] .component-preview-trigger').click()
+                preview_frame=page.frame_locator("#componentPreviewFrame")
+                preview_frame.locator("body").wait_for(state="visible",timeout=10000)
+                page.wait_for_timeout(220)
+                metrics=preview_frame.locator("body").evaluate("""body=>({
+                    text:body.innerText.trim().length,
+                    children:body.children.length,
+                    height:Math.max(body.scrollHeight,document.documentElement.scrollHeight),
+                    width:document.documentElement.scrollWidth,
+                    viewport:innerWidth,
+                    canvases:body.querySelectorAll('canvas').length,
+                    animations:document.getAnimations({subtree:true}).length,
+                    scripts:document.scripts.length
+                })""")
+                effect_results.append({"id":effect_id,**metrics})
+                check("effect_"+effect_id+"_renders",metrics["text"]>0 and metrics["children"]>0 and metrics["height"]>0)
+                check("effect_"+effect_id+"_no_horizontal_overflow",metrics["width"]<=metrics["viewport"]+48)
+                page.locator("#componentPreviewClose").click()
+            result["effectRegression"]={"count":len(effect_results),"items":effect_results}
         first_id=page.evaluate("registry[0].id")
         page.locator("#componentList .comp").first.locator(".component-add-trigger").click()
         check("component_add_via_ui",page.evaluate("(id)=>project.sections.length===1 && project.sections[0].id===id",first_id))
@@ -107,7 +132,13 @@ try:
         exported_page.on("pageerror",lambda e:exported_errors.append(str(e)))
         exported_page.set_content(html,wait_until="domcontentloaded")
         exported_page.wait_for_timeout(750)
-        check("exported_sections",exported_page.locator("section.section").count()==len(data["sections"]))
+        # R42 editorial intentionally exports one magazine spread per chapter,
+        # not obsolete two-pane section.section + iframe wrappers.
+        if data.get("templateId")=="editorial":
+            check("exported_sections",exported_page.locator("section.e42-spread").count()==len(data["sections"]))
+            check("editorial_has_no_nested_duplicated_demo",exported_page.locator("iframe").count()==0)
+        else:
+            check("exported_sections",exported_page.locator("section.section").count()==len(data["sections"]))
         check("offline_no_remote_requests",not remote)
         check("export_no_page_errors",not exported_errors)
         check("editor_no_page_errors",not page_errors)

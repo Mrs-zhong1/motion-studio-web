@@ -1,0 +1,51 @@
+name: R39 Cinematic single timeline acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/r39-cinematic-timeline.mjs'
+      - 'stage9/tests/test_r39_cinematic_timeline.mjs'
+      - 'stage9/tests/test_r39_cinematic_browser.py'
+      - 'stage9/build-offline.mjs'
+      - '.github/workflows/r39-cinematic-single-timeline.yml'
+permissions:
+  contents: read
+jobs:
+  five-act:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: stage9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate real five-act compiler
+        run: |
+          node --check r39-cinematic-timeline.mjs
+          node --test tests/test_r39_cinematic_timeline.mjs
+      - name: Build offline product from 39 verified story images
+        run: |
+          npm install --no-audit --no-fund
+          MOTION_REQUIRE_AI_ASSETS=1 npm run build
+          python tests/check_build.py
+      - name: Validate actual preview, scene scrubbing, editing and export in Chromium
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          python tests/test_r39_cinematic_browser.py
+      - name: Upload real results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r39-verified-five-act-${{github.sha}}
+          path: |
+            stage9/R39_FILM_ACCEPTANCE.json
+            stage9/R39_ACT_*.png
+          retention-days: 14

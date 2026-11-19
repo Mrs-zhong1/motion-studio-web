@@ -1,0 +1,57 @@
+name: V1 R34 Production Preflight — SAFE HOLD
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/r18-r21-acceptance-gates]
+    paths:
+      - 'stage9/ai-assets/**'
+      - 'stage9/audit_r32_real_media.py'
+      - 'release/v1_release_preflight.py'
+      - 'release/test_v1_release_preflight.py'
+      - '.github/workflows/v1-release-preflight.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Decode and verify all committed image bytes
+        run: python -m pip install 'Pillow==11.3.0' 'PyYAML==6.0.2'
+      - name: Parse actual production, rollback, media and review GitHub workflow YAML
+        run: |
+          python - <<'PY'
+          import pathlib,yaml
+          for path in (
+             '.github/workflows/web-release-pages.yml',
+             '.github/workflows/v1-pages-rollback.yml',
+             '.github/workflows/v1-release-preflight.yml',
+             '.github/workflows/r32-original-media-acceptance.yml',
+             '.github/workflows/r26-original-scenes.yml'):
+             obj=yaml.safe_load(pathlib.Path(path).read_text())
+             assert isinstance(obj,dict) and obj.get('jobs'),path
+             print('VALID YAML',path,len(obj['jobs']),'jobs')
+          PY
+      - name: Prove candidate/live gate tests
+        run: python -m unittest discover -s release -p 'test_*.py' -v
+      - name: Run real source-specific candidate report (no deployment)
+        env:
+          V1_APPROVED_SOURCE_SHA: ${{ vars.V1_APPROVED_SOURCE_SHA }}
+        run: python release/v1_release_preflight.py --phase candidate --source-sha "$GITHUB_SHA" --out v1-production-preflight.json --allow-hold
+      - name: Summarize exact production blockers without hiding failed status
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r=json.load(open('v1-production-preflight.json'))
+          print('# V1.0 production preflight')
+          print('Candidate SHA:',r['sourceCommit'])
+          print('**Status:',r['status'],'**')
+          for key in ('failed','holds'):
+              print('##',key.upper())
+              for line in r[key]:print('-',line)
+          print('A green REPORT job does NOT mean production approved.')
+          PY
