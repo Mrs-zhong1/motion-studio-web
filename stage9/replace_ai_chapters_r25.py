@@ -88,8 +88,10 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
             for field in ("creator","licenseId","licenseUrl","attributionText"):
                 if not isinstance(entry.get(field),str) or not entry[field].strip():
                     raise ValueError("open-license provenance missing "+field+" for "+name)
-            if entry["licenseId"].upper() in ("CC-BY-NC","CC-BY-ND","CC-BY-NC-SA","CC-BY-NC-ND"):
-                raise ValueError("non-commercial or no-derivatives license rejected: "+name)
+            license_id=entry["licenseId"].upper().replace(" ","").replace("_","-")
+            allowed=(license_id.startswith(("CC0-","CC-BY-","CC-BY-SA-")) or license_id in ("CC0","PUBLIC-DOMAIN","PDM-1.0"))
+            if not allowed or "NC" in license_id or "ND" in license_id:
+                raise ValueError("license is not explicitly approved for commercial reuse: "+name)
         raw=(folder/name).read_bytes()
         if len(raw)<1000 or len(raw)>5_000_000: raise ValueError("image file size out of bounds "+name)
         dimensions=native_dimensions(raw)
