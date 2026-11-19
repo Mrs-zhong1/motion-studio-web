@@ -69,7 +69,8 @@ def test_product_restructure():
             assert viewport_before["width"]>=1440*.90,viewport_before
             info.click()
             assert info.get_attribute("aria-pressed")=="true"
-            assert page.locator(".preview-product-info").is_visible()
+            # R44 removes the information drawer entirely; the focus toggle must never restore a second column.
+            assert page.locator(".preview-product-info").is_hidden()
             viewport_open=page.locator("#previewDevice").bounding_box()
             assert abs(viewport_open["width"]-viewport_before["width"])<3
             page.keyboard.press("Escape")
