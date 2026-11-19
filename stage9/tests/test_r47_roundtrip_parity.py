@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
 EDITOR=ROOT/"Motion-Studio-Stage15-Meshopt-OFFLINE.html"
 TEMPLATES=["editorial","product-3d","cinematic","architecture","agency","fashion","gallery","saas"]
-report={"pass":False,"suite":"R47 eight-template save/reopen/export parity","templates":{},"errors":[]}
+report={"pass":False,"suite":"R47 eight-template save/reopen/export parity","templates":{},"errors":[],"browserDiagnostics":{"pageErrors":[],"consoleErrors":[]}}
 server=None
 try:
  server=ThreadingHTTPServer(("127.0.0.1",0),partial(SimpleHTTPRequestHandler,directory=str(ROOT)))
@@ -18,7 +18,9 @@ try:
   for template_id in TEMPLATES:
    page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
    errors=[]
+   console_errors=[]
    page.on("pageerror",lambda e:errors.append(str(e)))
+   page.on("console",lambda msg:console_errors.append(msg.text) if msg.type=="error" else None)
    page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
    page.locator("#discoveryView").wait_for(state="visible",timeout=20000)
    page.locator("[data-template-card]").first.wait_for(state="visible",timeout=20000)
@@ -68,6 +70,7 @@ except Exception:
 finally:
  if server:
   server.shutdown();server.server_close()
+ report["browserDiagnostics"]={"pageErrors":errors if "errors" in locals() else [],"consoleErrors":console_errors if "console_errors" in locals() else []}
  (ROOT/"R47_ROUNDTRIP_PARITY.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf8")
  print(json.dumps(report,ensure_ascii=False,indent=2))
 assert report["pass"],"R47 eight-template roundtrip/export parity failed"
