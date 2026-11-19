@@ -26,12 +26,11 @@ PALETTES={
 }
 
 def gradient(base, lift):
- im=Image.new("RGB",(W,H)); p=im.load()
+ im=Image.new("RGB",(W,H),base); d=ImageDraw.Draw(im)
  for y in range(H):
   t=y/(H-1)
-  for x in range(W):
-   glow=max(0,1-math.sqrt(((x-W*.34)/(W*.95))**2+((y-H*.28)/(H*.9))**2))
-   p[x,y]=tuple(max(0,min(255,int(base[i]*(1-t*.18)+lift[i]*(t*.18)+glow*12))) for i in range(3))
+  color=tuple(max(0,min(255,int(base[i]*(1-t*.18)+lift[i]*(t*.18)))) for i in range(3))
+  d.line((0,y,W,y),fill=color)
  return im
 
 def polygon(draw, pts, fill, outline=None, width=1):
