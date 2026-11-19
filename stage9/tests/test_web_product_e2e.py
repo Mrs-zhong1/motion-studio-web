@@ -34,7 +34,8 @@ try:
         page_errors=[]
         page.on("pageerror",lambda e:page_errors.append(str(e)))
         page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
-        check("20_components",page.evaluate("registry.length")==20)
+        page.wait_for_function("() => !!window.MotionStudioUnified && Array.isArray(window.MotionStudioUnified.registry)",timeout=15000)
+        check("20_components",page.evaluate("window.MotionStudioUnified.registry.length")==20)
         check("template_discovery_default",page.locator("#discoveryView").is_visible())
         check("eight_full_templates",page.locator("[data-template-card]").count()==8)
         page.locator("[data-template-card='editorial']").click()
@@ -60,7 +61,7 @@ try:
         check("all_components_in_library",page.locator("#componentList .comp").count()==20)
         # E6-02: exercise every real component preview, not merely registry presence.
         if browser_name=="chromium":
-            effect_ids=page.evaluate("registry.slice(1).map(c=>c.id)")
+            effect_ids=page.evaluate("window.MotionStudioUnified.registry.slice(1).map(c=>c.id)")
             check("19_effects_discovered",len(effect_ids)==19)
             effect_results=[]
             for effect_id in effect_ids:
@@ -83,7 +84,7 @@ try:
                 check("effect_"+effect_id+"_no_horizontal_overflow",metrics["width"]<=metrics["viewport"]+48)
                 page.locator("#componentPreviewClose").click()
             result["effectRegression"]={"count":len(effect_results),"items":effect_results}
-        first_id=page.evaluate("registry[0].id")
+        first_id=page.evaluate("window.MotionStudioUnified.registry[0].id")
         page.locator("#componentList .comp").first.locator(".component-add-trigger").click()
         check("component_add_via_ui",page.evaluate("(id)=>project.sections.length===1 && project.sections[0].id===id",first_id))
         # A newly added section initially has no .section-art node. Image upload must create it.
