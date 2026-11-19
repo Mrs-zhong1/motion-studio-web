@@ -105,7 +105,7 @@ def audit(asset_dir=ASSETS):
         rows=[x for x in scenes if x['template']==template]
         by_template.append({'template':template,'chapters':len(rows),
           'flagged':sum(bool(x['technicalRisk']) for x in rows),
-          'individualOriginals':sum(x['origin'] in ('individual-generation','procedural-3d-render','procedural-vector-render','open-licensed-photography') for x in rows),
+          'sourceEligibleOriginals':sum(x['origin'] in ('individual-generation','procedural-3d-render','procedural-vector-render','open-licensed-photography') for x in rows),
           'flaggedChapters':[x['chapter'] for x in rows if x['technicalRisk']]})
     return {'schema':'motion-studio-r32-media-audit-v1',
       'summary':summary,'byTemplate':by_template,'scenes':scenes,
