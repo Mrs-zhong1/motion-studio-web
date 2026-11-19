@@ -38,6 +38,7 @@ Budget: RMB 0 / USD 0 for image APIs and paid assets
 - MFLUX project: https://github.com/mflux-community/mflux
 - MFLUX source code license: MIT.
 - MFLUX runs image models locally on Apple Silicon using MLX; no hosted image API is required.
+- Apple states that MLX requires macOS 26.2 or later to use the M5 GPU Neural Accelerators. On an earlier macOS version, do not assume that this specific M5 acceleration is active; the pilot still records the actual OS version and measures real inference time.
 - Model weights are large downloads. The pilot checks for at least 40 GB free disk space before running. Network data transfer and electricity are not API charges, but are not literally cost-free in all circumstances.
 
 ## 3. Pilot design
