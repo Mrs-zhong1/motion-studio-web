@@ -104,6 +104,10 @@ export function applyR43TemplatePilots(html){
  const hook=`;(function(){const previous=exportDocument;exportDocument=function(){const result=previous();const id=project&&project.templateId;if(!['agency','saas'].includes(id))return result;const css=document.getElementById('r43-template-pilot-css').textContent;const runtime=document.getElementById('r43-template-pilot-runtime').textContent;const marked=result.replace('<html','<html data-r43-template="'+id+'"');return marked.replace('</head>','<style id="r43-export-css">'+css+'</style></head>').replace('</body>','<script id="r43-export-runtime">'+runtime+'<'+'/script></body>')}})();`;
  const apiAnchor='window.MotionStudioUnified={undo:';
  if(!html.includes(apiAnchor))throw Error('R43 public API insertion anchor missing');
- const source=html.replace(apiAnchor,hook+apiAnchor).replace('</body>','<script type="text/plain" id="r43-template-pilot-runtime">'+r43Runtime+'</script></body>');
- return source.replace('</head>','<style id="r43-template-pilot-css">'+r43CSS+'</style></head>');
+ let source=html.replace(apiAnchor,hook+apiAnchor);
+ const bodyClose=source.lastIndexOf('</body>');
+ const headClose=source.indexOf('</head>');
+ if(bodyClose<0||headClose<0)throw Error('R43 actual document closing tags missing');
+ source=source.slice(0,bodyClose)+'<script type="text/plain" id="r43-template-pilot-runtime">'+r43Runtime+'</script>'+source.slice(bodyClose);
+ return source.slice(0,headClose)+'<style id="r43-template-pilot-css">'+r43CSS+'</style>'+source.slice(headClose);
 }
