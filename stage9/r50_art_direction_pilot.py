@@ -231,7 +231,7 @@ def write_saas_svg(path):
  <text x="608" y="550" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#fff">Reduce repetitive review work</text>
  <g font-family="Arial,sans-serif" font-size="14">
   <rect x="584" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="600" y="619" fill="#41675b">Evidence</text><text x="600" y="641" font-size="19" font-weight="700" fill="#203b34">Example set</text>
-  <rect x="734" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="750" y="619" fill="#41675b">Confidence</text><text x="750" y="641" font-size="19" font-weight="700" fill="#203b34"Unscored/text>
+  <rect x="734" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="750" y="619" fill="#41675b">Confidence</text><text x="750" y="641" font-size="19" font-weight="700" fill="#203b34">Unscored</text>
   <rect x="884" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="900" y="619" fill="#41675b">Next step</text><text x="900" y="641" font-size="19" font-weight="700" fill="#203b34">Draft test</text>
  </g>
  <rect x="584" y="680" width="432" height="70" rx="12" fill="#19352f" stroke="#527568"/>
