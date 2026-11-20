@@ -6,7 +6,7 @@
   "errors": [],
   "components": 20,
   "beforeGizmo": {
-    "scene": "5306759d-27c4-4407-b637-f950d3e55455",
+    "scene": "39b58277-27a4-44dd-846f-ec02126f59f9",
     "tangents": 4,
     "handles": 3,
     "tangentScreen": [
@@ -112,7 +112,7 @@
   ],
   "tangentDrag": {
     "count": 7,
-    "scene": "5306759d-27c4-4407-b637-f950d3e55455",
+    "scene": "39b58277-27a4-44dd-846f-ec02126f59f9",
     "canvas": 1
   },
   "edited": [
@@ -197,7 +197,7 @@
       "tension": 0
     }
   ],
-  "exportBytes": 909228,
+  "exportBytes": 909221,
   "cameraSamples": [
     {
       "focus": 2224,
@@ -248,7 +248,7 @@
   "exportScene": {
     "webgl": true,
     "models": 2,
-    "scene": "4a852efb-585c-41f0-bb7d-f52f517c7372",
+    "scene": "364a2aef-9a24-4344-9bde-08417fc09a3a",
     "error": null,
     "gizmo": false,
     "canvas": 1

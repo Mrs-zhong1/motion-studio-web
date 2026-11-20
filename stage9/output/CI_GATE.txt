@@ -12,6 +12,6 @@ Stage13 real Three.js handles: success
 Stage14 stability and project recovery: success
 Stage15 true meshopt fixture: success
 Stage15 true meshopt WebGL: success
-CI run: 43423968505
-Source SHA: 98b99670df2c5f1e580a12838c432d3ff421ab12
+CI run: 44699684759
+Source SHA: 1507c03c387465c95127f75c45a73ffa14f28a4a
 Real hardware GPU / Safari: NOT TESTED

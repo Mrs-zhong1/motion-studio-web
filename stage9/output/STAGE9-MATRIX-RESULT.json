@@ -11,7 +11,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 12352,
-      "exportBytes": 910443,
+      "exportBytes": 910436,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -36,12 +36,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 16.6,
-        "drawMaxMs": 13.5,
+        "drawTotalMs": 17.3,
+        "drawMaxMs": 15,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 2.767,
+      "avgDrawMs": 2.883,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -52,7 +52,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 2520,
-      "exportBytes": 900611,
+      "exportBytes": 900604,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -85,12 +85,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 30.8,
-        "drawMaxMs": 28.5,
+        "drawTotalMs": 22.6,
+        "drawMaxMs": 19.4,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 5.133,
+      "avgDrawMs": 3.767,
       "skinMorphPass": true,
       "modelPass": true
     },
@@ -101,7 +101,7 @@
       "passed": true,
       "components": 20,
       "modelBase64Length": 3756,
-      "exportBytes": 901847,
+      "exportBytes": 901840,
       "renderer": {
         "engine": "three",
         "threeVersion": "180",
@@ -143,12 +143,12 @@
         "renderWidth": 1100,
         "renderHeight": 460,
         "drawSamples": 6,
-        "drawTotalMs": 24.2,
-        "drawMaxMs": 21.3,
+        "drawTotalMs": 23.9,
+        "drawMaxMs": 21.7,
         "error": null,
         "progress": 0.96
       },
-      "avgDrawMs": 4.033,
+      "avgDrawMs": 3.983,
       "skinMorphPass": true,
       "modelPass": true
     }
