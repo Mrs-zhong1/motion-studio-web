@@ -12,12 +12,12 @@ class R32MediaAuditTests(unittest.TestCase):
             for template_index,template in enumerate(TEMPLATES):
                 for chapter in range(1,5 if template=='editorial' else 6):
                     name=f'{template}-{chapter}.jpg'
-                    Image.new('RGB',(1280,720),(15+template_index*24,chapter*31,20+template_index*9)).save(root/name,'JPEG',quality=85)
+                    Image.new('RGB',(1600,900),(15+template_index*24,chapter*31,20+template_index*9)).save(root/name,'JPEG',quality=85)
                     raw=(root/name).read_bytes()
                     records.append({'template':template,'chapter':chapter,'file':name,
                        'source':'AI_GENERATED','sourceType':'individual-generation',
                        'trueHighResolutionGenerated':True,
-                       'nativeSourceDimensions':[1280,720],'presentationDimensions':[1280,720],
+                       'nativeSourceDimensions':[1600,900],'presentationDimensions':[1280,720],
                        'generationSystem':'test fixture','generationDate':'2026-11-16',
                        'sourceReference':name,'termsUrl':'https://example.org/terms',
                        'commercialUseTermsChecked':True,'sha256':hashlib.sha256(raw).hexdigest()})
