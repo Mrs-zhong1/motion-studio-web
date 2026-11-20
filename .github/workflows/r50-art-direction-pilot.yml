@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'stage9/r50_art_direction_pilot.py'
+      - 'stage9/r50_editorial_finish.py'
       - '.github/workflows/r50-art-direction-pilot.yml'
   push:
     branches:
@@ -44,6 +45,8 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: "1"
           MESA_LOADER_DRIVER_OVERRIDE: llvmpipe
         run: blender --background --python stage9/r50_art_direction_pilot.py -- --out r50-review
+      - name: Apply independent editorial finish to native renders
+        run: python stage9/r50_editorial_finish.py --out r50-review
       - name: Independently validate image pixels, SVG, hashes and review-only status
         run: |
           python - <<'PY'
