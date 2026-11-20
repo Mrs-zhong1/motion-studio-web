@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Independent Pillow post-render finish for R50 review-only imagery.
+"""R50 review-only finishing pass.
 
-Adds restrained, template-specific editorial typography after Blender exits.
-Never changes review/rights status to approved.
+Editorial typography is integrated into the rendered scene. No fixed side panel,
+split canvas, opaque column, or template-wide panel is permitted. This stage
+never approves artwork or changes licensing/release status.
 """
 import argparse, hashlib, json
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 COPY = {
-    "agency": ("FORM FOLLOWS FEELING", "CREATIVE AGENCY / DIGITAL FLAGSHIP", "A considered space for ideas, identity and motion.", "01 — BRAND WORLDS"),
-    "product-3d": ("SOUND IN PURE FORM", "OBJECT STUDY / INDUSTRIAL DESIGN", "Precision surfaces. Tactile controls. Quiet confidence.", "02 — PRODUCT DETAIL"),
-    "gallery": ("THE ART OF STILLNESS", "EXHIBITION / SPATIAL EXPERIENCE", "Sculptural forms arranged as a living collection.", "03 — CURATED SPACE"),
+    "agency": ("01 / CREATIVE WORLDS", "FORM FOLLOWS FEELING", "A considered space for ideas, identity and motion."),
+    "product-3d": ("02 / OBJECT STUDY", "SOUND IN PURE FORM", "Precision surfaces. Tactile controls. Quiet confidence."),
+    "gallery": ("03 / CURATED SPACE", "THE ART OF STILLNESS", "Sculptural forms arranged as a living collection."),
 }
 
 def font(size, bold=False):
@@ -24,45 +25,49 @@ def font(size, bold=False):
             return ImageFont.truetype(candidate, size)
     return ImageFont.load_default()
 
+def wrap(draw, text, face, max_width):
+    lines, current = [], ""
+    for word in text.split():
+        trial = (current + " " + word).strip()
+        if current and draw.textbbox((0, 0), trial, font=face)[2] > max_width:
+            lines.append(current)
+            current = word
+        else:
+            current = trial
+    if current:
+        lines.append(current)
+    return lines
+
 def finish(path, key):
     image = Image.open(path).convert("RGBA")
     if image.size != (1600, 900):
         raise ValueError(f"{path}: expected 1600x900, got {image.size}")
-    overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
-    # Narrow editorial column; the rendered object remains the dominant image.
-    draw.rectangle((1110, 0, 1600, 900), fill=(7, 13, 22, 222))
-    draw.rectangle((1110, 0, 1116, 900), fill=(218, 160, 93, 255))
-    eyebrow, title, description, footer = COPY[key]
-    draw.text((1170, 170), eyebrow, font=font(15, True), fill=(195, 205, 215, 255))
-    words = title.split()
-    lines, line = [], ""
-    for word in words:
-        trial = (line + " " + word).strip()
-        if draw.textbbox((0, 0), trial, font=font(42, True))[2] > 365 and line:
-            lines.append(line); line = word
-        else:
-            line = trial
-    if line: lines.append(line)
-    y = 260
-    for text in lines:
-        draw.text((1170, y), text, font=font(42, True), fill=(248, 246, 239, 255))
-        y += 58
-    draw.line((1170, y + 28, 1510, y + 28), fill=(218, 160, 93, 220), width=2)
-    y += 72
-    # Controlled line wrapping for a compact supporting statement.
-    line = ""
-    for word in description.split():
-        trial = (line + " " + word).strip()
-        if draw.textbbox((0, 0), trial, font=font(18))[2] > 330 and line:
-            draw.text((1170, y), line, font=font(18), fill=(183, 195, 207, 255)); y += 31; line = word
-        else:
-            line = trial
-    if line:
-        draw.text((1170, y), line, font=font(18), fill=(183, 195, 207, 255))
-    draw.text((1170, 790), footer, font=font(13, True), fill=(218, 160, 93, 255))
-    image = Image.alpha_composite(image, overlay).convert("RGB")
-    image.save(path, format="PNG", optimize=True)
+    # A full-width bottom fade preserves a single uninterrupted image field.
+    # The fade is tonal, not a panel: it has no vertical edge or separate column.
+    fade = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    pixels = fade.load()
+    for y in range(590, 900):
+        t = (y - 590) / 310
+        alpha = int(12 + 164 * (t ** 1.55))
+        for x in range(1600):
+            pixels[x, y] = (5, 10, 18, alpha)
+    image = Image.alpha_composite(image, fade)
+    draw = ImageDraw.Draw(image)
+    eyebrow, title, description = COPY[key]
+    left = 92
+    draw.text((left, 652), eyebrow, font=font(15, True), fill=(226, 177, 111, 255), stroke_width=0)
+    title_face = font(45, True)
+    title_lines = wrap(draw, title, title_face, 1060)
+    y = 690
+    for line in title_lines[:2]:
+        draw.text((left, y), line, font=title_face, fill=(250, 248, 242, 255))
+        y += 54
+    desc_y = min(820, y + 8)
+    draw.text((left, desc_y), description, font=font(18), fill=(216, 224, 232, 255))
+    # A restrained index floats at the far edge; it does not create a column.
+    index = {"agency": "A / 01", "product-3d": "P / 02", "gallery": "G / 03"}[key]
+    draw.text((1430, 842), index, font=font(14, True), fill=(226, 177, 111, 255))
+    image.convert("RGB").save(path, format="PNG", optimize=True)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -76,14 +81,13 @@ def main():
         if key in COPY:
             target = args.out / row["file"]
             finish(target, key)
-            raw = target.read_bytes()
-            row["sha256"] = hashlib.sha256(raw).hexdigest()
+            row["sha256"] = hashlib.sha256(target.read_bytes()).hexdigest()
             row["dimensions"] = [1600, 900]
             row["editorialFinishSha256"] = script_hash
             row["reviewStatus"] = "HUMAN_VISUAL_REVIEW_REQUIRED"
             row["productionEligible"] = False
     manifest_path.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"finished": 3, "reviewOnly": True, "productionEligible": False}, indent=2))
+    print(json.dumps({"finished": 3, "reviewOnly": True, "fixedSidePanel": False, "productionEligible": False}, indent=2))
 
 if __name__ == "__main__":
     main()
