@@ -48,7 +48,7 @@ class ReplacementTests(unittest.TestCase):
             self.assertEqual(result["replacements"],1)
             self.assertEqual((base/"backup"/"editorial-1.png").read_bytes(),before)
             self.assertEqual((assets/"editorial-1.png").read_bytes(),raw)
-            self.assertEqual(json.loads((assets/"manifest.json").read_text())["assets"][0]["nativeSourceDimensions"],[1280,720])
+            self.assertEqual(json.loads((assets/"manifest.json").read_text())["assets"][0]["nativeSourceDimensions"],[1600,900])
     def test_reject_collage_and_corrupt_image(self):
         with tempfile.TemporaryDirectory() as tmp:
             base=Path(tmp); inbox=base/"incoming";inbox.mkdir()
@@ -60,7 +60,7 @@ class ReplacementTests(unittest.TestCase):
             (assets/"manifest.json").write_text(json.dumps({"assets":rows}))
             entry=dict(template="editorial",chapter=1,file="editorial-1.png",source="AI_GENERATED",
                        sourceType="crop-of-AI-generated-collage",trueHighResolutionGenerated=False,
-                       nativeSourceDimensions=[1280,720],generationSystem="fixture",
+                       nativeSourceDimensions=[1600,900],generationSystem="fixture",
                        generationDate="2026-11-16",sourceReference="fixture",
                        termsUrl="https://example.com",commercialUseTermsChecked=True)
             (inbox/"editorial-1.png").write_bytes(b"not real pixels"*150)
