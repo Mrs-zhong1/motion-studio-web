@@ -37,6 +37,10 @@ class HybridPilotTests(unittest.TestCase):
   slots={(r["template"],r["chapter"]) for r in board["replacements"]}
   expected={("editorial",2),("product-3d",3),("architecture",2),("agency",1)}
   self.assertTrue(expected.issubset(slots))
+  for required in ('"sourceCodeSha256"','"renderEngine"','"blenderVersion"',
+                   '"embeddedThirdPartyAssets":False','"thirdPartyAssets":False',
+                   '"commercialUseTermsChecked":False'):
+   self.assertIn(required,source)
   for forbidden in ("requests.post(","GEMINI_API_KEY","fal.ai","replicate.com"):
    self.assertNotIn(forbidden,source)
 if __name__=="__main__":unittest.main()
