@@ -12,7 +12,7 @@ permissions:
   contents: read
 concurrency:
   group: r43-r55-one-shot-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   execute:
     name: Execute R50 → R52 → R53 → R47/R48 and publish one report
