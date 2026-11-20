@@ -122,7 +122,8 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
         updated=dict(existing[key])
         provenance_fields=("source","sourceType","trueHighResolutionGenerated","nativeSourceDimensions",
                   "generationSystem","generationDate","sourceReference","termsUrl","commercialUseTermsChecked",
-                  "embeddedThirdPartyAssets","creator","licenseId","licenseUrl","attributionText")
+                  "embeddedThirdPartyAssets","thirdPartyAssets","creator","licenseId","licenseUrl",
+                  "originalSourceUrl","attribution","attributionText","downloadedAt","shareAlikeCompatibilityReviewed")
         for k in provenance_fields:
             if k in entry: updated[k]=entry[k]
             else: updated.pop(k,None)
