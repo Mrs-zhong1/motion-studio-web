@@ -54,7 +54,7 @@ output=output.replace('const stage9ThreeEngineURL=',sharedUrl+'const stage9Three
 // publishing build artifacts. This catches premature </script> termination
 // and malformed template literals at their originating script index.
 function locateOpenQuotedString(source){
- const tick=String.fromCharCode(96),slash=String.fromCharCode(92);
+ const tick=String.fromCharCode(96),slash=String.fromCharCode(92),templates=[];
  let state='code',quoteStart=-1,line=1,column=0,quoteLine=0,quoteColumn=0,escaped=false;
  for(let i=0;i<source.length;i++){
   const ch=source[i],next=source[i+1];
@@ -64,13 +64,19 @@ function locateOpenQuotedString(source){
    if(ch==='\n'||ch==='\r')return {quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,i+90))};
    if(escaped)escaped=false;else if(ch===slash)escaped=true;else if((state==='single'&&ch==="'")||(state==='double'&&ch==='"'))state='code';
   } else if(state==='template'){
-   if(escaped)escaped=false;else if(ch===slash)escaped=true;else if(ch===tick)state='code';
+   if(escaped)escaped=false;
+   else if(ch===slash)escaped=true;
+   else if(ch===tick){templates.pop();state='code';}
+   else if(ch==='$'&&next==='{'){templates[templates.length-1].depth=1;state='code';i++;column++;}
   } else {
-   if(ch==='/'&&next==='/'){state='line-comment';i++;column++;}
+   const active=templates.length?templates[templates.length-1]:null;
+   if(active&&active.depth>0&&ch==='{')active.depth++;
+   else if(active&&active.depth>0&&ch==='}'){active.depth--;if(active.depth===0)state='template';}
+   else if(ch==='/'&&next==='/'){state='line-comment';i++;column++;}
    else if(ch==='/'&&next==='*'){state='block-comment';i++;column++;}
    else if(ch==="'"){state='single';quoteStart=i;quoteLine=line;quoteColumn=column;}
    else if(ch==='"'){state='double';quoteStart=i;quoteLine=line;quoteColumn=column;}
-   else if(ch===tick){state='template';quoteStart=i;quoteLine=line;quoteColumn=column;}
+   else if(ch===tick){templates.push({depth:0});state='template';}
   }
   if(ch==='\n'){line++;column=0;}else column++;
  }
