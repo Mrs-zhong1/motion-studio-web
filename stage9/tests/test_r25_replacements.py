@@ -132,6 +132,7 @@ class ReplacementTests(unittest.TestCase):
                 plan(inbox,assets/"manifest.json")
             entry["licenseId"]="CC-BY-SA-4.0"
             entry["licenseUrl"]="https://creativecommons.org/licenses/by-sa/4.0/"
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
             with self.assertRaisesRegex(ValueError,"CC-BY-SA compatibility review missing"):
                 plan(inbox,assets/"manifest.json")
             entry["shareAlikeCompatibilityReviewed"]=True
