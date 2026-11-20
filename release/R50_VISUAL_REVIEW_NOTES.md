@@ -24,3 +24,15 @@
 - This is a source-level redesign only. The previous review artifact predates this commit and must not be used to claim the redesign passes.
 - The R50 workflow is configured for branch pushes affecting this source file, but no new run/status was visible through the available run lookup at the time of this update. Rendering, image inspection, and all visual acceptance remain pending.
 - No human approval, rights approval, or production eligibility is granted by this implementation commit.
+
+
+## Rendered follow-up inspection — 2026-11-20, run 44730045990
+
+- Render candidate SHA: `bec308afe6293a96020eb7b274bbd8acd8a69783`; workflow completed successfully and produced three decoded 1600×900 PNGs plus one valid 1600×900 SVG. All four hashes and review-only flags passed the workflow's integrity checks.
+- Agency render now visibly contains three distinct case-study canvases and a continuous sculptural ribbon, so it no longer reads as a lobby/interior. However, the frame still has composition defects: upper case labels are clipped by the frame, the lower-left environmental typography is visually crowded, and the title overlay competes with foreground objects. This remains a redesign candidate, not an accepted reference.
+- Product 3D remains a coherent single-object camera study; no browser interaction or motion evidence is supplied by this render.
+- Gallery still has a visually dominant/clipping right return wall; the current render does not resolve the earlier concern.
+- SaaS remains a static SVG workflow board. Its sample data is marked illustrative and it does not demonstrate the required animated, interactive product journey.
+- Follow-up source adjustment committed as `e3f83cbc786caf330dab07ac7c4b9cbe143f6d37`: agency camera framing widened and foreground plinth/manifesto elements removed to reduce label collisions. That source commit is newer than the inspected render and must receive its own fresh render before evaluation.
+- The new source commit has not yet been verified by a corresponding R50 run/artifact in the available PR-run lookup. Do not treat the prior run as testing this change.
+- R50 status remains **HOLD**; human art-direction and commercial-rights approvals remain open.
