@@ -49,7 +49,7 @@ try:
    html_file=ROOT/f"R47_{template_id}.html"
    exported.value.save_as(html_file)
    html=html_file.read_text(encoding="utf8")
-   assert 'id="r45-export-composition"' in html, f"{template_id}: R45 composition CSS missing from export"
+   assert 'id="r45-export-composition"' in html, f"{template_id}: R45 composition CSS missing from export; exportFn={page.evaluate('exportDocument.toString()')[:900]!r}; editorCss={page.evaluate('document.getElementById("r45-scene-composition-css")?.textContent.length')}; exportHead={html[:1800]!r}"
    assert 'id="r46-export-accessibility"' in html, f"{template_id}: R46 accessibility CSS missing from export"
    exported_page=browser.new_page(viewport={"width":1280,"height":800})
    export_errors=[]
