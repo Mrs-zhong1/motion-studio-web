@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 COPY = {
     "agency": ("01 / CREATIVE WORLDS", "FORM FOLLOWS FEELING", "A considered space for ideas, identity and motion."),
-    "product-3d": ("02 / OBJECT STUDY", "SOUND IN PURE FORM", "Precision surfaces. Tactile controls. Quiet confidence."),
+    "product-3d": ("02 / OBJECT STUDY", "PRECISION IN FRAME", "Optical glass. Tactile controls. A camera built for the moment."),
     "gallery": ("03 / CURATED SPACE", "THE ART OF STILLNESS", "Sculptural forms arranged as a living collection."),
 }
 
