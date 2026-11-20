@@ -44,7 +44,35 @@ injected=injected.replace(thumbnailPattern,'const templateThumbnailImages='+thum
 if(!injected.includes('const templateOfflinePhotoBundles={};'))throw Error('Offline photo bundle injection anchor missing');
 injected=injected.replace('const templateOfflinePhotoBundles={};','const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
 injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
-const editor=applyR46ResponsiveAccessibility(applyR45TemplateComposition(applyR44TemplateExperience(applyR43TemplatePilots(injectR42Editorial(applyR41PreviewFirst(injectR40Product(injectR39Film(applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected))))))))))))))))));
+const editorStages=[
+ ['Stage10 camera editor',addCameraEditorStage10],
+ ['Stage11 camera path',addCameraEditorStage11],
+ ['Stage12 camera editor',addCameraEditorStage12],
+ ['R22 visual refinement',applyVisualRefinement],
+ ['R23 story art direction',applyStoryArtDirection],
+ ['R30 cinematic trial',injectR30CinematicTrial],
+ ['R31 story continuity',applyR31StoryContinuity],
+ ['R36 pilot',injectR36Pilot],
+ ['R37 story director',applyR37StoryDirector],
+ ['R38 eight directors',applyR38EightDirectors],
+ ['R39 film timeline',injectR39Film],
+ ['R40 product lab',injectR40Product],
+ ['R41 preview first',applyR41PreviewFirst],
+ ['R42 editorial spreads',injectR42Editorial],
+ ['R43 template pilots',applyR43TemplatePilots],
+ ['R44 single canvas',applyR44TemplateExperience],
+ ['R45 scene composition',applyR45TemplateComposition],
+ ['R46 responsive accessibility',applyR46ResponsiveAccessibility]
+];
+let editor=injected;
+for(const [stageName,stageTransform] of editorStages){
+ editor=stageTransform(editor);
+ const firstScript=/<script\\b([^>]*)>([\\s\\S]*?)<\\/script\\s*>/i.exec(editor);
+ if(firstScript){
+  try{await transform(firstScript[2],{loader:'js',target:'es2022'});}
+  catch(error){throw new Error('Editor script first became invalid after '+stageName+': '+error.message);}
+ }
+}
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
