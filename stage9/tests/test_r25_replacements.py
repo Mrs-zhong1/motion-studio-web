@@ -119,7 +119,8 @@ class ReplacementTests(unittest.TestCase):
                 generationDate="2026-11-19",sourceReference="https://example.org/photo",
                 termsUrl="https://example.org/license",commercialUseTermsChecked=True,
                 creator="Photographer",licenseId="CC-BY-4.0",licenseUrl="https://creativecommons.org/licenses/by/4.0/",
-                attributionText="Photo by Photographer, CC BY 4.0")
+                originalSourceUrl="https://example.org/photo",attribution="Photo by Photographer, CC BY 4.0",
+                attributionText="Photo by Photographer, CC BY 4.0",downloadedAt="2026-11-19T00:00:00Z")
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             _,planned=plan(inbox,assets/"manifest.json")
             self.assertEqual(len(planned),1)
@@ -127,5 +128,14 @@ class ReplacementTests(unittest.TestCase):
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             with self.assertRaisesRegex(ValueError,"not explicitly approved for commercial reuse"):
                 plan(inbox,assets/"manifest.json")
+            entry["licenseId"]="CC-BY-SA-4.0"
+            entry["licenseUrl"]="https://creativecommons.org/licenses/by-sa/4.0/"
+            with self.assertRaisesRegex(ValueError,"CC-BY-SA compatibility review missing"):
+                plan(inbox,assets/"manifest.json")
+            entry["shareAlikeCompatibilityReviewed"]=True
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
+            _,reviewed=plan(inbox,assets/"manifest.json")
+            self.assertEqual(len(reviewed),1)
+
 
 if __name__=="__main__":unittest.main()
