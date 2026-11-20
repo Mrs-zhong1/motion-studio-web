@@ -8,11 +8,6 @@ on:
       - '.github/workflows/r43-r55-one-shot-batch.yml'
       - 'stage9/**'
       - 'release/**'
-  pull_request:
-    paths:
-      - '.github/workflows/r43-r55-one-shot-batch.yml'
-      - 'stage9/**'
-      - 'release/**'
 permissions:
   contents: read
 concurrency:
