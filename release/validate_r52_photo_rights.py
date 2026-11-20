@@ -12,6 +12,8 @@ REQUIRED={"local_file","creator","source_page_url","license_id","license_url","a
 def https(value):
  p=urlparse(value or "")
  return p.scheme=="https" and bool(p.netloc)
+def valid_dimensions(width,height):
+ return width>=1600 and height>=900 and abs((width/height)-(16/9))<=0.015
 def main():
  ap=argparse.ArgumentParser()
  ap.add_argument("--register",type=Path,default=Path("release/R52_PHOTO_RIGHTS_REGISTER.csv"))
@@ -44,7 +46,7 @@ def main():
   except ValueError: errors.append(f"line {n} {sid}: downloaded_at_utc must be ISO-8601 with timezone"); continue
   try: w,h=int(row["original_width"]),int(row["original_height"])
   except ValueError: w=h=0
-  if w<1600 or h<900 or abs((w/h)-(16/9))>0.015: errors.append(f"line {n} {sid}: original dimensions must be >=1600x900 and 16:9"); continue
+  if not valid_dimensions(w,h): errors.append(f"line {n} {sid}: original dimensions must be >=1600x900 and 16:9"); continue
   if not re.fullmatch(r"[0-9a-f]{64}",row["sha256"]): errors.append(f"line {n} {sid}: invalid SHA-256"); continue
   local=Path(row["local_file"])
   if local.is_absolute() or ".." in local.parts: errors.append(f"line {n} {sid}: unsafe asset path"); continue
