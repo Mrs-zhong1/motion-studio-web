@@ -32,7 +32,7 @@ class ReplacementTests(unittest.TestCase):
             image=Image.new("RGB",(1600,900),(32,80,120))
             image.save(inbox/"editorial-1.png",format="PNG")
             raw=(inbox/"editorial-1.png").read_bytes()
-            self.assertEqual(native_dimensions(raw),(1280,720))
+            self.assertEqual(native_dimensions(raw),(1600,900))
             entry=dict(template="editorial",chapter=1,file="editorial-1.png",
                        source="AI_GENERATED",sourceType="individual-generation",
                        trueHighResolutionGenerated=True,
