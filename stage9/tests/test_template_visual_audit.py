@@ -278,10 +278,12 @@ def run_audit():
                     (SCREENSHOTS / f"{template_id}-immersive-{device}.png").write_bytes(immersive_shot)
                     geometry["immersivePngSHA256"] = hashlib.sha256(immersive_shot).hexdigest()[:16]
                     immersive.click()
-                    assert page.locator(".preview-product-info").is_visible()
+                    assert page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
+                    assert page.locator(".preview-product-info").is_hidden()
                     assert abs(page.locator("#previewDevice").evaluate(
                         "el => el.getBoundingClientRect().width") - stage_width) < 4
                     immersive.click()
+                    assert not page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
                     assert page.locator(".preview-product-info").is_hidden()
                     # R4: all six newly authored templates must have complete,
                     # nonoverlapping image/renderer zones in every chapter.
