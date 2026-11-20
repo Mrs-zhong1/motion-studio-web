@@ -67,7 +67,7 @@ const editorStages=[
 let editor=injected;
 for(const [stageName,stageTransform] of editorStages){
  editor=stageTransform(editor);
- const firstScript=/<script\\b([^>]*)>([\\s\\S]*?)<\\/script\\s*>/i.exec(editor);
+ const firstScript=/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/i.exec(editor);
  if(firstScript){
   try{await transform(firstScript[2],{loader:'js',target:'es2022'});}
   catch(error){throw new Error('Editor script first became invalid after '+stageName+': '+error.message);}
