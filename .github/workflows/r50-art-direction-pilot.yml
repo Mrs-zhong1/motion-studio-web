@@ -1,5 +1,9 @@
 name: R50 Art Direction Review Pilot (never auto-approve)
 on:
+  pull_request:
+    paths:
+      - 'stage9/r50_art_direction_pilot.py'
+      - '.github/workflows/r50-art-direction-pilot.yml'
   push:
     branches:
       - design/r43-immersive-template-system
@@ -63,6 +67,13 @@ jobs:
           print('R50 integrity PASS: 3 decoded native 1600x900 PNG + 1 valid original SVG; SHA-256 verified.')
           print('This is a review artifact only. Human art-direction and rights gates remain OPEN.')
           PY
+      - name: Upload review-only render artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r50-art-direction-review-${{ github.sha }}
+          path: r50-review/
+          if-no-files-found: error
+          retention-days: 14
       - name: Publish review-only result
         run: |
           echo "## R50 art-direction pilot" >> "$GITHUB_STEP_SUMMARY"
