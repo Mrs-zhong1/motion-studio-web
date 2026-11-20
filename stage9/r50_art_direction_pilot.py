@@ -134,8 +134,7 @@ def build_agency(m):
             cube("Campaign poster typography bar",(x+.30,y-.35,z-.18),(.38,.025,.10),m["ink"],.012)
             cube("Campaign packaging box",(x+.60,y-.52,z-.24),(.48,.32,.32),m["blue"],.045)
             cube("Packaging label",(x+.60,y-.70,z-.24),(.34,.025,.14),m["cream"],.018)
-    # A low continuous light line ties the three campaign worlds together without crossing titles.
-    curve("Portfolio floor light",[(-4.8,-.65,-.015),(-3.2,-.68,-.015),(0,-.70,-.015),(3.2,-.68,-.015),(4.8,-.65,-.015)],.025,m["gold"])
+    # Keep the foreground stage clear; campaign frames carry the visual hierarchy.
     
 def build_product(m):
     # Premium mirrorless cinema camera with recognizable optical and tactile details.
@@ -181,7 +180,7 @@ def build_product(m):
 
 def build_gallery(m):
     # Open-front museum gallery: remove the foreground right wall that hid the third artwork.
-    bpy.context.scene.camera.data.ortho_scale=14.0
+    bpy.context.scene.camera.data.ortho_scale=15.6
     cube("Gallery floor",(0,.25,.05),(9.6,6.8,.16),m["ink"],.025)
     cube("Rear plaster exhibition wall",(0,3.15,2.10),(9.1,.18,3.75),m["cream"],.025)
     cube("Left gallery return",(-4.55,2.0,2.10),(.18,2.25,3.75),m["cream"],.025)
