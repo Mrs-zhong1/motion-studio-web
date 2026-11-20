@@ -212,11 +212,11 @@ def write_saas_svg(path):
  <rect x="88" y="356" width="430" height="66" rx="22" fill="#f8faf8"/>
  <text x="120" y="398" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#203b34">Signal inbox</text>
  <rect x="120" y="446" width="366" height="52" rx="12" fill="#f2f6f3"/>
- <circle cx="145" cy="472" r="8" fill="#7ab39e"/><text x="166" y="478" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Customer interview · 12 notes</text>
+ <circle cx="145" cy="472" r="8" fill="#7ab39e"/><text x="166" y="478" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Customer interview · sample input</text>
  <rect x="120" y="514" width="366" height="52" rx="12" fill="#f2f6f3"/>
- <circle cx="145" cy="540" r="8" fill="#d5a45e"/><text x="166" y="546" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Support themes · 28 mentions</text>
+ <circle cx="145" cy="540" r="8" fill="#d5a45e"/><text x="166" y="546" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Support themes · sample input</text>
  <rect x="120" y="582" width="366" height="52" rx="12" fill="#f2f6f3"/>
- <circle cx="145" cy="608" r="8" fill="#829ac7"/><text x="166" y="614" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Community feedback · 46 posts</text>
+ <circle cx="145" cy="608" r="8" fill="#829ac7"/><text x="166" y="614" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Community feedback · sample input</text>
  <text x="120" y="687" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#91a199">NEW INPUT</text>
  <rect x="120" y="706" width="366" height="54" rx="12" fill="#fff" stroke="#cbd8d0" stroke-dasharray="6 5"/>
  <text x="303" y="739" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#789087">+ Add a source</text>
@@ -230,9 +230,9 @@ def write_saas_svg(path):
  <text x="608" y="520" font-family="Arial,sans-serif" font-size="14" fill="#b9d9cd">TOP OPPORTUNITY</text>
  <text x="608" y="550" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#fff">Reduce repetitive review work</text>
  <g font-family="Arial,sans-serif" font-size="14">
-  <rect x="584" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="600" y="619" fill="#41675b">Evidence</text><text x="600" y="641" font-size="19" font-weight="700" fill="#203b34">18 signals</text>
-  <rect x="734" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="750" y="619" fill="#41675b">Confidence</text><text x="750" y="641" font-size="19" font-weight="700" fill="#203b34">High</text>
-  <rect x="884" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="900" y="619" fill="#41675b">Next step</text><text x="900" y="641" font-size="19" font-weight="700" fill="#203b34">Prototype</text>
+  <rect x="584" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="600" y="619" fill="#41675b">Evidence</text><text x="600" y="641" font-size="19" font-weight="700" fill="#203b34">Example set</text>
+  <rect x="734" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="750" y="619" fill="#41675b">Confidence</text><text x="750" y="641" font-size="19" font-weight="700" fill="#203b34"Unscored/text>
+  <rect x="884" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="900" y="619" fill="#41675b">Next step</text><text x="900" y="641" font-size="19" font-weight="700" fill="#203b34">Draft test</text>
  </g>
  <rect x="584" y="680" width="432" height="70" rx="12" fill="#19352f" stroke="#527568"/>
  <text x="608" y="710" font-family="Arial,sans-serif" font-size="14" fill="#b9d9cd">Suggested action</text>
@@ -250,10 +250,10 @@ def write_saas_svg(path):
  <text x="1144" y="566" font-family="Arial,sans-serif" font-size="14" fill="#647970">Scope · audience · success measure</text>
  <text x="1144" y="596" font-family="Arial,sans-serif" font-size="14" fill="#647970">Evidence links · owner · next action</text>
  <rect x="1118" y="666" width="358" height="58" rx="14" fill="#203b34"/>
- <text x="1297" y="702" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Export deliverable ↗</text>
+ <text x="1297" y="702" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Export deliverable</text>
  <text x="1118" y="760" font-family="Arial,sans-serif" font-size="13" fill="#819188">PDF · share link · project handoff</text>
 </g>
-<text x="88" y="850" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#7b8d84">NORTHSTAR / CAPTURE → SHAPE → DELIVER</text>
+<text x="88" y="820" font-family="Arial,sans-serif" font-size="12" letter-spacing="1" fill="#8b9992">ILLUSTRATIVE DEMO CONTENT · NOT LIVE CUSTOMER DATA</text>\n<text x="88" y="850" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#7b8d84">NORTHSTAR / CAPTURE → SHAPE → DELIVER</text>
 <text x="1512" y="850" text-anchor="end" font-family="Arial,sans-serif" font-size="13" fill="#7b8d84">PRODUCT FLOW / 01</text>
 </svg>"""
     path.write_text(svg, encoding="utf-8")
