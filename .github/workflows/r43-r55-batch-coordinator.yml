@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - design/r43-immersive-template-system
+      - release/r18-r21-acceptance-gates
     paths:
       - '.github/workflows/r43-r55-batch-coordinator.yml'
   workflow_run:
