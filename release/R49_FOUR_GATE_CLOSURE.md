@@ -80,3 +80,19 @@ Current state:
 4. Run the production Pages workflow only after gates 1–3 are genuinely closed; attach the exact deployed SHA, live smoke JSON, served artifact hash and rollback reference.
 
 A green CI run, a completed documentation update, or a generated pilot image cannot replace human visual review, rights clearance, physical-device testing or live production acceptance.
+
+
+## Additional batch hardening — 2026-11-20
+
+A fresh source review found several integration defects in the existing media-gate implementation. These have been corrected on the candidate branch:
+
+1. **R32 CLI summary crash:** the per-template printer referenced a nonexistent `individualOriginals` key although the audit emits `sourceEligibleOriginals`. Corrected the field and added a CLI regression test so the actual 39-file audit can finish and print its report.
+2. **R32 candidate coverage:** the report-only audit workflow now runs on the PR candidate branch and on relevant pull requests. It remains report-only; the existing 33 collage-derived source images should produce an expected HOLD, not a false release failure.
+3. **R25/R26 provenance schema alignment:** procedural originals must explicitly set both `embeddedThirdPartyAssets=false` and `thirdPartyAssets=false`. The Blender pilot now records the source-code SHA, render engine, Blender version and both explicit no-third-party flags. Its commercial-rights status remains false and production eligibility remains false.
+4. **Photo license precision:** R25 import and R26 staging validation now accept only explicit versioned CC0 / Public Domain / CC BY / CC BY-SA identifiers in the reviewed set, reject NC/ND, require HTTPS source and license URLs, ISO-8601 download time, attribution and creator, and require a compatibility review for CC BY-SA.
+5. **Rights evidence preservation:** R25 now carries source URL, creator, exact license, attribution, download time and CC BY-SA review status into the committed asset manifest rather than validating and then discarding the rights evidence.
+6. **CI coverage:** R25 safety tests now run on the candidate branch and relevant pull requests.
+
+The previous `R26_LOCAL_MODEL_B1.md` FLUX.2 / Z-Image proposal is explicitly marked superseded historical research. The approved 18 procedural + 15 licensed-photography route remains authoritative.
+
+These changes improve the release controls; they do not clear any actual asset rights or approve any image. The 33-slot replacement pack remains unproduced, the Blender render job remains a separate review-only task, and physical-device / live-production evidence is still outstanding.
