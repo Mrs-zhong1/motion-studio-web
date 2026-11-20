@@ -180,7 +180,8 @@ def run_audit():
                 frame.locator("section.section").first.wait_for(timeout=30000)
                 assert page.locator("#previewHeroTitle").inner_text().strip()
                 assert page.locator("#previewUse").is_visible()
-                assert page.locator("#previewUsePanel").is_hidden()  # R41 default full-width preview
+                assert page.locator("#previewUsePanel").is_visible()  # R44 relocates the primary action into the single canvas
+                assert page.locator("#previewUsePanel").evaluate("el=>el.parentElement.id==='previewDevice'")
                 assert page.locator(".preview-product-layout").is_visible()
                 if template_id in ("editorial", "product-3d"):
                     assert frame.locator(".section.designed-hero").count()==1
