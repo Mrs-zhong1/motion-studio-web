@@ -17,3 +17,10 @@
 - `commercialUseTermsChecked=false` remains unchanged in the manifest.
 - No third-party assets are listed, but source-code ownership and project licensing checks are not a substitute for commercial/legal review.
 - Required next work: redesign the Agency pilot to match the Creative Agency portfolio/storytelling baseline; inspect full-page scroll/transition behavior for the other three candidates; obtain explicit human approval against the exact artifact and commit SHA.
+
+## Follow-up implementation — 2026-11-20
+- Commit `3bca85f35a5f93392cc03770677599e8d1cf28e0` replaces the former Agency lobby/interior composition with a three-case immersive creative portfolio stage.
+- The new source includes three differentiated campaign canvases (Brand World, Digital Culture, Campaign), dimensional graphic objects, a continuous spatial ribbon, campaign artifacts, and integrated environmental typography.
+- This is a source-level redesign only. The previous review artifact predates this commit and must not be used to claim the redesign passes.
+- The R50 workflow is configured for branch pushes affecting this source file, but no new run/status was visible through the available run lookup at the time of this update. Rendering, image inspection, and all visual acceptance remain pending.
+- No human approval, rights approval, or production eligibility is granted by this implementation commit.
