@@ -1,0 +1,70 @@
+name: R50 Art Direction Review Pilot (never auto-approve)
+on:
+  push:
+    branches:
+      - design/r43-immersive-template-system
+    paths:
+      - 'stage9/r50_art_direction_pilot.py'
+      - '.github/workflows/r50-art-direction-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render-review-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Blender and software-rendering runtime
+        run: |
+          set -euxo pipefail
+          installed=0
+          for attempt in 1 2 3 4 5; do
+            sudo apt-get clean
+            sudo rm -rf /var/lib/apt/lists/*
+            sudo apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=90 update
+            if sudo apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=90 install -y --no-install-recommends blender libegl1 libgl1 libglx-mesa0 libgl1-mesa-dri; then installed=1; break; fi
+            sleep $((attempt * 12))
+          done
+          test "$installed" -eq 1
+          blender --version
+          ldconfig -p | grep -E 'libEGL.so.1|libGL.so.1'
+      - name: Install independent image validator
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Render three original 3D scenes and one SaaS vector composition
+        env:
+          EGL_PLATFORM: surfaceless
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          MESA_LOADER_DRIVER_OVERRIDE: llvmpipe
+        run: blender --background --python stage9/r50_art_direction_pilot.py -- --out r50-review
+      - name: Independently validate image pixels, SVG, hashes and review-only status
+        run: |
+          python - <<'PY'
+          import hashlib,json,xml.etree.ElementTree as ET
+          from pathlib import Path
+          from PIL import Image
+          root=Path('r50-review'); rows=json.loads((root/'manifest.json').read_text())
+          assert len(rows)==4 and {x['template'] for x in rows}=={'agency','product-3d','gallery','saas'}
+          assert len({x['sha256'] for x in rows})==4
+          for row in rows:
+            p=root/row['file']; raw=p.read_bytes()
+            assert hashlib.sha256(raw).hexdigest()==row['sha256']
+            assert row['thirdPartyAssets'] is False and row['commercialUseTermsChecked'] is False
+            assert row['productionEligible'] is False and row['reviewStatus']=='HUMAN_VISUAL_REVIEW_REQUIRED'
+            if p.suffix=='.png':
+              with Image.open(p) as im:
+                im.load(); assert im.format=='PNG' and im.size==(1600,900)
+            else:
+              node=ET.parse(p).getroot()
+              assert node.tag.endswith('svg') and node.attrib.get('viewBox')=='0 0 1600 900'
+          print('R50 integrity PASS: 3 decoded native 1600x900 PNG + 1 valid original SVG; SHA-256 verified.')
+          print('This is a review artifact only. Human art-direction and rights gates remain OPEN.')
+          PY
+      - name: Publish review-only result
+        run: |
+          echo "## R50 art-direction pilot" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Technical integrity: PASS (3 PNG + 1 SVG, hashes verified)." >> "$GITHUB_STEP_SUMMARY"
+          echo "- Production approval: **HOLD** — human visual review and rights review required." >> "$GITHUB_STEP_SUMMARY"
