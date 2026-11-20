@@ -132,8 +132,8 @@ def build_agency(m):
             cube("Campaign poster board",(x,y-.27,z+.05),(1.35,.10,1.35),m["cream"],.035)
             cube("Campaign poster color block",(x-.25,y-.34,z+.18),(.48,.025,.76),m["orange"],.018)
             cube("Campaign poster typography bar",(x+.30,y-.35,z-.18),(.38,.025,.10),m["ink"],.012)
-            cube("Campaign packaging box",(x+.20,y-.52,z-.34),(.62,.36,.38),m["blue"],.045)
-            cube("Packaging label",(x+.20,y-.72,z-.34),(.42,.025,.18),m["cream"],.018)
+            cube("Campaign packaging box",(x+.60,y-.52,z-.24),(.48,.32,.32),m["blue"],.045)
+            cube("Packaging label",(x+.60,y-.70,z-.24),(.34,.025,.14),m["cream"],.018)
     # A low continuous light line ties the three campaign worlds together without crossing titles.
     curve("Portfolio floor light",[(-4.8,-.65,-.015),(-3.2,-.68,-.015),(0,-.70,-.015),(3.2,-.68,-.015),(4.8,-.65,-.015)],.025,m["gold"])
     
@@ -241,9 +241,9 @@ def write_saas_svg(path):
 </g>
 <g font-family="Arial,sans-serif">
  <text x="294" y="232" font-size="12" fill="#75867e">Active projects</text><text x="294" y="282" font-size="34" font-weight="700" fill="#1b3731">24</text><text x="352" y="281" font-size="11" fill="#36856a">+12.5%</text>
- <text x="606" y="232" font-size="12" fill="#75867e">Tasks completed</text><text x="606" y="282" font-size="34" font-weight="700" fill="#1b3731">86%</text><text x="666" y="281" font-size="11" fill="#36856a">+4.8%</text>
- <text x="918" y="232" font-size="12" fill="#75867e">Team capacity</text><text x="918" y="282" font-size="34" font-weight="700" fill="#1b3731">78%</text><text x="978" y="281" font-size="11" fill="#b27b3f">-2.1%</text>
- <text x="1230" y="232" font-size="12" fill="#75867e">On-time delivery</text><text x="1230" y="282" font-size="34" font-weight="700" fill="#1b3731">92%</text><text x="1290" y="281" font-size="11" fill="#36856a">+6.3%</text>
+ <text x="606" y="232" font-size="12" fill="#75867e">Tasks completed</text><text x="606" y="282" font-size="34" font-weight="700" fill="#1b3731">86%</text><text x="710" y="281" font-size="11" fill="#36856a">+4.8%</text>
+ <text x="918" y="232" font-size="12" fill="#75867e">Team capacity</text><text x="918" y="282" font-size="34" font-weight="700" fill="#1b3731">78%</text><text x="1022" y="281" font-size="11" fill="#b27b3f">-2.1%</text>
+ <text x="1230" y="232" font-size="12" fill="#75867e">On-time delivery</text><text x="1230" y="282" font-size="34" font-weight="700" fill="#1b3731">92%</text><text x="1334" y="281" font-size="11" fill="#36856a">+6.3%</text>
  <text x="294" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="606" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="918" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="1230" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text>
 </g>
 <g filter="url(#shadow)"><rect x="270" y="354" width="824" height="310" rx="14" fill="#fff"/><rect x="1114" y="354" width="430" height="310" rx="14" fill="#fff"/><rect x="270" y="688" width="824" height="166" rx="14" fill="#fff"/><rect x="1114" y="688" width="430" height="166" rx="14" fill="#fff"/></g>
