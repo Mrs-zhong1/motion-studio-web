@@ -98,7 +98,7 @@ def build_agency(m):
     # Creative-agency portfolio environment: three distinct, full-scale campaign worlds.
     # Keep the portfolio wall readable and the foreground clear; avoid generic abstract rings.
     bpy.context.scene.camera.data.ortho_scale=14.0
-    cube("Agency stage",(0,0,-.16),(12.0,7.4,.24),m["ink"],.035)
+    # Use the seamless cyclorama ground from reset(); a finite plinth creates a hard diagonal edge through the editorial title.
     cube("Portfolio backdrop",(0,3.0,2.20),(11.7,.18,4.35),m["ink"],.025)
     panels=[
       (-3.35,2.0,2.10,2.72,3.05,m["orange"],"01 / BRAND IDENTITY","FORM / FIELD"),
@@ -194,9 +194,11 @@ def build_gallery(m):
     uv("Carved stone upper mass",(.18,-.17,1.78),(.36,.34,.62),m["silver"])
     uv("Carved stone crown",(-.08,-.15,2.27),(.22,.24,.28),m["orange"])
     cyl("Work three stone pedestal",(2.55,-.25,.32),.72,.42,m["silver"])
-    torus("Suspended blue orbital form",(2.55,-.20,1.58),.62,.17,m["blue"],(.45,.2,.15))
-    torus("Suspended brass inner orbit",(2.55,-.42,1.58),.34,.055,m["gold"],(.8,.35,.2))
-    curve("Sculpture organic spine",[(2.15,-.20,.95),(2.10,-.18,1.55),(2.60,-.15,2.18),(3.05,-.15,1.72)],.07,m["cream"])
+    # A grounded sculptural composition visibly occupies the third pedestal; orbital forms are secondary accents.
+    uv("Orbital sculpture central mass",(2.55,-.24,1.35),(.42,.38,.72),m["cream"])
+    torus("Blue orbital sculpture",(2.55,-.28,1.48),.58,.15,m["blue"],(.45,.2,.15))
+    torus("Brass inner orbital detail",(2.55,-.48,1.48),.30,.05,m["gold"],(.8,.35,.2))
+    curve("Sculpture organic spine",[(2.20,-.20,.88),(2.12,-.18,1.42),(2.60,-.15,2.10),(3.00,-.15,1.68)],.07,m["cream"])
     # Track lighting is mounted behind the works; beams stay above the display silhouettes.
     cube("Museum lighting track",(0,2.55,3.72),(7.2,.10,.10),m["ink"],.025)
     for i,x in enumerate((-2.55,0,2.55)):
