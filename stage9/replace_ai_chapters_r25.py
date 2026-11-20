@@ -113,8 +113,10 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
                     raise ValueError("header/decoded dimensions disagree: "+name)
         except (UnidentifiedImageError, OSError) as e:
             raise ValueError("unreadable or corrupted original image: "+name) from e
-        if dimensions[0]<1280 or dimensions[1]<720:
-            raise ValueError("native image below 1280×720: "+name+" "+str(dimensions))
+        if dimensions[0]<1600 or dimensions[1]<900:
+            raise ValueError("native image below 1600×900: "+name+" "+str(dimensions))
+        if abs(dimensions[0]/dimensions[1]-16/9)>0.015:
+            raise ValueError("native image aspect ratio outside 16:9 tolerance: "+name)
         if list(dimensions)!=entry.get("nativeSourceDimensions"):
             raise ValueError("manifest native dimensions do not match original bytes: "+name)
         if hashlib.sha256(raw).hexdigest()==existing[key]["sha256"]:
