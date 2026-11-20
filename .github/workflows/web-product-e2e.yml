@@ -120,8 +120,9 @@ jobs:
           python -m pip install playwright
           python -m playwright install --with-deps ${{ matrix.browser }}
       - name: R47 eight-template save, reopen and export parity
-        if: matrix.browser == 'chromium'
         run: python tests/test_r47_roundtrip_parity.py
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
       - name: Real browser edit-save-reopen-export smoke
         run: python tests/test_web_product_e2e.py
         env:
