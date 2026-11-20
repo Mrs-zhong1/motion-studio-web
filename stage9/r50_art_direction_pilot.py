@@ -95,108 +95,117 @@ def text3d(name, body, loc, size, material, align="LEFT"):
     return obj
 
 def build_agency(m):
-    # Wider orthographic framing keeps all case labels inside the safe frame.
-    bpy.context.scene.camera.data.ortho_scale=14.2
-    # Creative agency world-building stage: three distinct campaign case studies,
-    # oversized editorial typography, spatial transitions and authored brand objects.
-    # Deliberately not an office, lobby, reception, interior-design or miniature scene.
-    cube("Agency infinite stage",(0,0,-.12),(11.8,7.2,.22),m["ink"],.035)
-    cube("Rear black scrim",(0,2.95,2.5),(11.5,.16,5.0),m["ink"],.025)
-    # Three monumental case-study canvases sit at different depths and scales,
-    # reading as a curated portfolio wall rather than a row of dashboard cards.
+    # Creative-agency portfolio environment: three distinct, full-scale campaign worlds.
+    # Keep the portfolio wall readable and the foreground clear; avoid generic abstract rings.
+    bpy.context.scene.camera.data.ortho_scale=14.0
+    cube("Agency stage",(0,0,-.16),(12.0,7.4,.24),m["ink"],.035)
+    cube("Portfolio backdrop",(0,3.0,2.20),(11.7,.18,4.35),m["ink"],.025)
     panels=[
-      (-3.35,1.85,2.45,2.75,3.65,m["orange"],"01 / BRAND WORLD","FORM / FIELD"),
-      (0.0,2.05,2.50,2.95,3.95,m["blue"],"02 / DIGITAL CULTURE","MOVE / BEYOND"),
-      (3.30,1.72,2.25,2.55,3.35,m["cream"],"03 / CAMPAIGN","MAKE / IMPACT")
+      (-3.35,2.0,2.10,2.72,3.05,m["orange"],"01 / BRAND IDENTITY","FORM / FIELD"),
+      (0.0,2.0,2.10,2.72,3.05,m["blue"],"02 / DIGITAL CULTURE","MOVE / BEYOND"),
+      (3.35,2.0,2.10,2.72,3.05,m["cream"],"03 / CAMPAIGN","MAKE / IMPACT")
     ]
     for idx,(x,y,z,w,h,accent,kicker,title) in enumerate(panels):
-        cube("Case canvas %02d"%idx,(x,y,z),(w,.12,h),accent,.035)
-        cube("Case canvas inset %02d"%idx,(x,y-.085,z),(w-.16,.035,h-.16),m["ink"] if idx!=2 else m["gold"],.012)
-        text3d("Case kicker %02d"%idx,kicker,(x-w*.43,y-.13,z+h*.34),.13,m["cream"] if idx!=2 else m["ink"])
-        text3d("Case title %02d"%idx,title,(x-w*.43,y-.14,z-h*.30),.24,m["cream"] if idx!=2 else m["ink"])
-        # A unique visual signature per case, visible as an authored campaign artwork.
+        cube("Campaign frame %02d"%idx,(x,y,z),(w,.12,h),accent,.035)
+        cube("Campaign canvas %02d"%idx,(x,y-.085,z),(w-.15,.035,h-.15),m["ink"] if idx!=2 else m["gold"],.012)
+        text3d("Campaign kicker %02d"%idx,kicker,(x-w*.43,y-.13,z+h*.31),.115,m["cream"] if idx!=2 else m["ink"])
+        text3d("Campaign title %02d"%idx,title,(x-w*.43,y-.14,z-h*.31),.205,m["cream"] if idx!=2 else m["ink"])
         if idx==0:
-            torus("Brand orbit ring",(x,y-.27,z+.12),.72,.075,m["gold"],(.28,.2,.12))
-            uv("Brand core sphere",(x,y-.28,z+.12),(.38,.38,.38),m["cream"])
-            for j in range(5):
-                cube("Brand graphic bar %d"%j,(x-.70+j*.34,y-.25,z-.55),(.12,.035,.42+j*.08),m["gold"],.025)
+            # Identity packaging study: glass fragrance vessel, metal cap and label.
+            cube("Identity bottle body",(x,y-.30,z+.05),(.78,.30,.94),m["cream"],.14)
+            cyl("Bottle neck",(x,y-.31,z+.56),.20,.18,m["gold"],64)
+            cube("Bottle cap",(x,y-.31,z+.72),(.43,.34,.22),m["ink"],.045)
+            cube("Bottle label",(x,y-.47,z+.04),(.56,.025,.34),m["orange"],.025)
+            for j in range(3):
+                cube("Identity color bar %d"%j,(x-.83+j*.20,y-.26,z-.62),(.10,.035,.38+j*.08),m["gold"],.018)
         elif idx==1:
-            torus("Digital culture kinetic ring",(x,y-.27,z+.10),.86,.10,m["orange"],(.2,.55,.3))
-            torus("Digital culture orbit",(x,y-.31,z+.10),.53,.045,m["cream"],(.8,.1,.4))
-            uv("Digital culture nucleus",(x,y-.32,z+.10),(.25,.25,.25),m["orange"])
-        else:
+            # Digital-culture campaign: dimensional device screen with a vivid content tile.
+            cube("Digital campaign device",(x,y-.28,z+.02),(1.25,.13,1.42),m["silver"],.12)
+            cube("Digital screen glass",(x,y-.37,z+.05),(1.08,.035,1.22),m["ink"],.07)
+            cube("Digital artwork field",(x,y-.40,z+.12),(.88,.025,.72),m["blue"],.035)
+            torus("Digital signal loop",(x,y-.46,z+.12),.30,.045,m["orange"],(math.pi/2,.15,.1))
+            uv("Digital signal core",(x,y-.47,z+.12),(.13,.035,.13),m["cream"])
             for j in range(4):
-                cube("Campaign typography block %d"%j,(x-.48+j*.32,y-.24,z+.12),(.20,.045,1.05-j*.16),m["ink"],.025)
-            torus("Campaign halo",(x+.25,y-.28,z+.38),.58,.065,m["orange"],(.35,.2,.1))
-    # A large sculptural transition object crosses the three cases, implying
-    # one continuous creative practice rather than disconnected template tiles.
-    curve("Continuous creative ribbon",[(-4.8,-.45,.16),(-3.4,-.55,.22),(-1.8,-.62,.18),(0,-.66,.25),(1.8,-.62,.18),(3.5,-.55,.22),(4.8,-.45,.16)],.065,m["gold"])
-    # Keep the lower foreground intentionally quiet: the continuous ribbon and
-    # three authored case canvases carry the composition without obscuring labels.
-
+                cube("Digital UI line %d"%j,(x-.30+j*.20,y-.45,z-.42),(.12,.025,.035),m["cream"],.01)
+        else:
+            # Campaign art direction: layered print pieces and a sculpted display object.
+            cube("Campaign poster board",(x,y-.27,z+.05),(1.35,.10,1.35),m["cream"],.035)
+            cube("Campaign poster color block",(x-.25,y-.34,z+.18),(.48,.025,.76),m["orange"],.018)
+            cube("Campaign poster typography bar",(x+.30,y-.35,z-.18),(.38,.025,.10),m["ink"],.012)
+            cube("Campaign packaging box",(x+.20,y-.52,z-.48),(.72,.42,.48),m["blue"],.045)
+            cube("Packaging label",(x+.20,y-.75,z-.48),(.46,.025,.22),m["cream"],.018)
+    # A low continuous light line ties the three campaign worlds together without crossing titles.
+    curve("Portfolio floor light",[(-4.8,-.65,-.015),(-3.2,-.68,-.015),(0,-.70,-.015),(3.2,-.68,-.015),(4.8,-.65,-.015)],.025,m["gold"])
+    
 def build_product(m):
-    # Premium mirrorless cinema camera: unmistakable lens, grip, viewfinder, dials and hot shoe.
-    cube("Camera presentation slab",(0,0,.12),(5.8,3.6,.24),m["ink"],.18)
-    cube("Magnesium camera body",(-.25,.05,1.42),(2.95,1.22,1.72),m["ink"],.22)
-    cube("Top titanium shoulder",(-.25,.05,2.32),(2.55,1.10,.16),m["silver"],.07)
-    # Deep cylindrical lens projects toward camera; concentric rings are functional lens barrels.
-    cyl("Cinematic lens outer barrel",(-.15,-.88,1.47),.78,.88,m["silver"],128).rotation_euler[0]=math.pi/2
-    cyl("Lens matte black barrel",(-.15,-1.20,1.47),.69,.62,m["ink"],128).rotation_euler[0]=math.pi/2
-    torus("Lens front precision rim",(-.15,-1.53,1.47),.59,.055,m["gold"],(math.pi/2,0,0))
-    cyl("Optical front element",(-.15,-1.55,1.47),.53,.035,m["glass"],128).rotation_euler[0]=math.pi/2
-    torus("Focus ring knurl",(-.15,-1.28,1.47),.70,.035,m["silver"],(math.pi/2,0,0))
-    # Textured right-hand grip and front shutter release.
-    cube("Ergonomic leather camera grip",(1.12,-.48,1.42),(.58,.42,1.42),m["cream"],.16)
+    # Premium mirrorless cinema camera with recognizable optical and tactile details.
+    bpy.context.scene.camera.data.ortho_scale=10.8
+    cube("Camera presentation slab",(0,0,.12),(5.9,3.8,.24),m["ink"],.18)
+    cube("Magnesium camera body",(-.25,.08,1.42),(2.95,1.25,1.72),m["ink"],.22)
+    cube("Top titanium shoulder",(-.25,.08,2.32),(2.55,1.12,.16),m["silver"],.07)
+    # Multi-stage optical lens barrel with visible aperture and engraved focus rings.
+    cyl("Lens outer hood",(-.15,-.92,1.47),.82,.78,m["ink"],128).rotation_euler[0]=math.pi/2
+    cyl("Lens aluminium barrel",(-.15,-1.23,1.47),.72,.68,m["silver"],128).rotation_euler[0]=math.pi/2
+    cyl("Lens inner barrel",(-.15,-1.49,1.47),.63,.24,m["ink"],128).rotation_euler[0]=math.pi/2
+    torus("Lens front gold rim",(-.15,-1.63,1.47),.58,.045,m["gold"],(math.pi/2,0,0))
+    cyl("Optical front glass",(-.15,-1.65,1.47),.52,.025,m["glass"],128).rotation_euler[0]=math.pi/2
+    torus("Focus ring front",(-.15,-1.38,1.47),.69,.028,m["gold"],(math.pi/2,0,0))
+    torus("Zoom ring rear",(-.15,-1.08,1.47),.77,.025,m["ink"],(math.pi/2,0,0))
+    for i in range(16):
+        a=2*math.pi*i/16
+        cube("Lens grip notch %02d"%i,(-.15+.70*math.cos(a),-1.39,1.47+.70*math.sin(a)),(.035,.035,.055),m["ink"],.008)
+    # Lens aperture blades visible behind the front glass.
     for i in range(8):
-        cube("Grip tactile rib "+str(i),(1.12,-.71,.92+i*.14),(.42,.035,.025),m["ink"],.008)
+        a=2*math.pi*i/8
+        uv("Aperture blade %02d"%i,(-.15+.22*math.cos(a),-1.675,1.47+.22*math.sin(a)),(.13,.012,.035),m["silver"])
+    cube("Ergonomic camera grip",(1.12,-.48,1.42),(.58,.42,1.42),m["cream"],.16)
+    for i in range(9):
+        cube("Grip tactile rib %02d"%i,(1.12,-.71,.88+i*.13),(.42,.035,.022),m["ink"],.008)
     cyl("Shutter release button",(.65,-.28,2.42),.12,.08,m["orange"],64)
     cyl("Exposure compensation dial",(-.85,-.25,2.45),.19,.10,m["gold"],64)
     torus("Exposure dial engraved ring",(-.85,-.25,2.51),.14,.012,m["silver"])
-    # Electronic viewfinder, rear screen and top hot shoe.
     cube("Electronic viewfinder housing",(-.28,.60,2.38),(.82,.48,.42),m["silver"],.09)
     cube("Viewfinder optical glass",(-.28,.86,2.39),(.48,.035,.23),m["glass"],.045)
     cube("Rear articulating display",(-.28,.70,1.40),(1.42,.12,.92),m["blue"],.08)
     cube("Hot shoe rail",(-.28,-.02,2.48),(.72,.28,.07),m["gold"],.025)
     for i in range(4):
-        cyl("Top control dial "+str(i),(-1.12+i*.32,-.10,2.48),.105,.10,m["silver"],64)
+        cyl("Top control dial %02d"%i,(-1.12+i*.32,-.10,2.48),.105,.10,m["silver"],64)
+    for i in range(5):
+        cube("Rear control key %02d"%i,(.55+i*.20,.70,.92),(.12,.035,.08),m["orange"] if i==0 else m["silver"],.018)
     for i in range(4):
-        cube("I O port cover "+str(i),(-1.15+i*.32,.69,.95),(.22,.035,.18),m["gold"],.025)
+        cube("I O port cover %02d"%i,(-1.15+i*.32,.69,.95),(.22,.035,.18),m["gold"],.025)
     cube("Camera mount base",(-.25,.25,.42),(1.65,.82,.18),m["silver"],.07)
     for x in (-.82,.32):
         cyl("Tripod mount foot "+str(x),(x,.25,.27),.13,.25,m["ink"],64)
 
 def build_gallery(m):
-    # A complete contemporary museum room with three authored, biomorphic works and track lighting.
-    cube("Gallery floor",(0,0,.05),(9.0,6.4,.16),m["ink"],.025)
-    cube("Rear plaster exhibition wall",(0,2.55,2.25),(8.8,.18,4.45),m["cream"],.025)
-    cube("Left gallery return",(-4.35,-.05,2.25),(.18,5.1,4.45),m["cream"],.025)
-    cube("Right gallery return",(4.35,-.05,2.25),(.18,5.1,4.45),m["cream"],.025)
-    cube("Ceiling reveal",(0,2.35,4.47),(8.5,.10,.08),m["gold"],.015)
-    # Work one: folded ribbon with an open central void and a contrasting metal edge.
-    cyl("Work one stone pedestal",(-2.45,-.35,.32),.72,.42,m["silver"])
-    uv("Folded ceramic volume A",(-2.45,-.35,1.28),(.46,.40,.96),m["orange"])
-    uv("Folded ceramic volume B",(-2.10,-.30,1.48),(.30,.34,.76),m["cream"])
-    curve("Folded ribbon contour",[(-2.8,-.62,.85),(-2.95,-.62,1.55),(-2.4,-.62,2.05),(-1.95,-.62,1.52),(-2.12,-.62,.92)],.075,m["gold"])
-    # Work two: stacked carved stone forms with a visibly offset balance.
-    cyl("Work two stone pedestal",(0,-.30,.32),.72,.42,m["silver"])
-    uv("Carved stone lower mass",(0,-.28,1.02),(.58,.48,.58),m["cream"])
-    uv("Carved stone upper mass",(.18,-.27,1.78),(.36,.34,.62),m["silver"])
-    uv("Carved stone crown",(-.08,-.25,2.27),(.22,.24,.28),m["orange"])
-    # Work three: suspended orbital sculpture with organic connecting spine.
-    cyl("Work three stone pedestal",(2.45,-.35,.32),.72,.42,m["silver"])
-    torus("Suspended blue orbital form",(2.45,-.30,1.58),.62,.17,m["blue"],(.45,.2,.15))
-    torus("Suspended brass inner orbit",(2.45,-.52,1.58),.34,.055,m["gold"],(.8,.35,.2))
-    curve("Sculpture organic spine",[(2.05,-.30,.95),(2.0,-.28,1.55),(2.5,-.25,2.18),(2.95,-.25,1.72)],.07,m["cream"])
-    # Lighting is mounted inside the room and aimed at each work.
-    cube("Museum lighting track",(0,1.95,4.12),(6.8,.10,.10),m["ink"],.025)
-    for i,x in enumerate((-2.45,0,2.45)):
-        cyl("Museum spotlight "+str(i),(x,1.88,3.86),.14,.20,m["gold"],64)
-        curve("Spotlight beam "+str(i),[(x,1.82,3.78),(x,.70,2.65),(x,-.25,2.15)],.018,m["cream"])
+    # Open-front museum gallery: remove the foreground right wall that hid the third artwork.
+    bpy.context.scene.camera.data.ortho_scale=12.8
+    cube("Gallery floor",(0,.25,.05),(9.6,6.8,.16),m["ink"],.025)
+    cube("Rear plaster exhibition wall",(0,3.15,2.25),(9.1,.18,4.45),m["cream"],.025)
+    cube("Left gallery return",(-4.55,2.0,2.25),(.18,2.25,4.45),m["cream"],.025)
+    cube("Ceiling reveal",(0,2.95,4.47),(8.8,.10,.08),m["gold"],.015)
+    cyl("Work one stone pedestal",(-2.55,-.25,.32),.72,.42,m["silver"])
+    uv("Folded ceramic volume A",(-2.55,-.25,1.28),(.46,.40,.96),m["orange"])
+    uv("Folded ceramic volume B",(-2.20,-.20,1.48),(.30,.34,.76),m["cream"])
+    curve("Folded ribbon contour",[(-2.9,-.52,.85),(-3.05,-.52,1.55),(-2.5,-.52,2.05),(-2.05,-.52,1.52),(-2.22,-.52,.92)],.075,m["gold"])
+    cyl("Work two stone pedestal",(0,-.20,.32),.72,.42,m["silver"])
+    uv("Carved stone lower mass",(0,-.18,1.02),(.58,.48,.58),m["cream"])
+    uv("Carved stone upper mass",(.18,-.17,1.78),(.36,.34,.62),m["silver"])
+    uv("Carved stone crown",(-.08,-.15,2.27),(.22,.24,.28),m["orange"])
+    cyl("Work three stone pedestal",(2.55,-.25,.32),.72,.42,m["silver"])
+    torus("Suspended blue orbital form",(2.55,-.20,1.58),.62,.17,m["blue"],(.45,.2,.15))
+    torus("Suspended brass inner orbit",(2.55,-.42,1.58),.34,.055,m["gold"],(.8,.35,.2))
+    curve("Sculpture organic spine",[(2.15,-.20,.95),(2.10,-.18,1.55),(2.60,-.15,2.18),(3.05,-.15,1.72)],.07,m["cream"])
+    # Track lighting is mounted behind the works; beams stay above the display silhouettes.
+    cube("Museum lighting track",(0,2.55,4.12),(7.2,.10,.10),m["ink"],.025)
+    for i,x in enumerate((-2.55,0,2.55)):
+        cyl("Museum spotlight "+str(i),(x,2.48,3.86),.14,.20,m["gold"],64)
+        curve("Spotlight beam "+str(i),[(x,2.42,3.78),(x,1.0,2.95),(x,.1,2.35)],.012,m["cream"])
     for i in range(7):
-        cube("Wall wash vertical reveal "+str(i),(-3.0+i*.95,2.43,2.28),(.018,.025,3.5),m["gold"],.004)
+        cube("Wall wash vertical reveal "+str(i),(-3.0+i*.95,3.03,2.28),(.018,.025,3.5),m["gold"],.004)
 
-
-def write_saas_svg(path):
+def write_saas_svg(path):def write_saas_svg(path):
     """Original SaaS product journey: Capture -> Shape -> Deliver, not a generic KPI dashboard."""
     svg = """<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
 <defs>
