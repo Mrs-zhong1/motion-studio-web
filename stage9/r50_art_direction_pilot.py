@@ -96,9 +96,17 @@ def build_agency(m):
     cube("Upper floating canopy",(-.55,-.02,2.94),(2.8,2.15,.16),m["silver"],.045)
     cube("Secondary glass pavilion",(1.38,.28,.98),(1.42,1.58,1.72),m["glass"],.12)
     cube("Pavilion roof",(1.38,.28,1.88),(1.58,1.72,.14),m["gold"],.035)
-    # Layered fins create a designed facade rather than a primitive abstract arrangement.
+    # Layered facade, glazing mullions and a deep portal make the installation read as architecture.
+    cube("Shadow reveal over entrance",(-.55,-.79,1.68),(1.04,.10,1.72),m["ink"],.025)
+    cube("Recessed bronze portal surround",(-.55,-.855,1.55),(1.02,.045,1.88),m["gold"],.025)
+    cube("Portal dark glazing",(-.55,-.89,1.55),(.78,.035,1.62),m["glass"],.015)
     for i in range(9):
         cube("Facade vertical brass fin "+str(i),(-1.38+i*.205,-.735,1.73),(.035,.045,1.48),m["gold"],.012)
+    for i in range(4):
+        cube("Pavilion glazing mullion "+str(i),(0.88+i*.32,-.54,1.0),(.025,.035,1.52),m["silver"],.008)
+    cube("Cantilevered signage blade",(-1.95,-.15,2.55),(.72,.08,.12),m["orange"],.025)
+    for i in range(3):
+        cube("Landscape stone terrace "+str(i),(-2.05+i*.30,-1.48,.30+i*.055),(.25,.38,.10),m["cream"],.025)
     for i in range(4):
         cube("Landscape step "+str(i),(-2.05+i*.32,-1.25,.36+i*.08),(.27,.46,.12),m["blue"] if i%2 else m["orange"],.025)
     curve("Sculptural wayfinding light",[(-2.7,-.2,2.0),(-2.35,-.2,2.8),(-1.9,-.2,3.0)],.035,m["orange"])
@@ -113,14 +121,23 @@ def build_product(m):
     # Tiny status indicators and engraved interface marks.
     for i,col in enumerate((m["orange"],m["blue"],m["gold"])):
         uv("Status LED "+str(i),(-.86+i*.16,-.833,1.76),(.025,.018,.025),col)
-    cyl("Precision driver housing",(.43,-.83,1.43),.62,.07,m["ink"])
-    torus("Concentric machined driver ring",(.43,-.89,1.43),.54,.045,m["gold"],(math.pi/2,0,0))
-    torus("Inner diaphragm suspension",(.43,-.91,1.43),.39,.018,m["silver"],(math.pi/2,0,0))
-    uv("Textured driver diaphragm",(.43,-.91,1.43),(.34,.055,.34),m["glass"])
-    uv("Brushed aluminium dust cap",(.43,-.97,1.43),(.12,.045,.12),m["silver"])
+    cyl("Precision driver housing",(.48,-.83,1.43),.48,.07,m["ink"])
+    torus("Concentric machined driver ring",(.48,-.89,1.43),.41,.035,m["gold"],(math.pi/2,0,0))
+    torus("Inner diaphragm suspension",(.48,-.91,1.43),.30,.016,m["silver"],(math.pi/2,0,0))
+    uv("Textured driver diaphragm",(.48,-.91,1.43),(.26,.045,.26),m["glass"])
+    uv("Brushed aluminium dust cap",(.48,-.96,1.43),(.09,.035,.09),m["silver"])
+    cyl("Secondary monitor driver housing",(1.04,-.83,1.43),.23,.055,m["ink"],72)
+    torus("Secondary driver titanium rim",(1.04,-.88,1.43),.18,.018,m["silver"],(math.pi/2,0,0))
+    uv("Secondary driver diaphragm",(1.04,-.90,1.43),(.14,.035,.14),m["glass"])
     for i in range(3):
         cyl("Knurled encoder dial",(-.62+i*.39,-.86,.86),.105,.095,m["gold"],64)
         torus("Encoder etched ring "+str(i),(-.62+i*.39,-.92,.86),.083,.009,m["silver"],(math.pi/2,0,0))
+    # A row of recessed faders and illuminated touch keys gives the front panel a real workflow.
+    for i in range(4):
+        cube("Fader track "+str(i),(-.78+i*.42,-.81,1.05),(.035,.025,.24),m["silver"],.012)
+        cube("Fader cap "+str(i),(-.78+i*.42,-.85,1.00+(i%2)*.10),(.11,.07,.065),m["cream"],.018)
+    for i in range(5):
+        uv("Illuminated function key "+str(i),(-.82+i*.22,-.835,.62),(.035,.018,.035),m["blue"] if i%2 else m["orange"])
     for i in range(11):
         for j in range(2):
             uv("Precision speaker grille perforation",(1.05,-.81,.72+j*.11),(.018,.012,.018),m["ink"])
@@ -133,11 +150,15 @@ def build_product(m):
 def build_gallery(m):
     # Contemporary museum room with architectural wall, spotlights and distinct curated works.
     cube("Gallery floor plinth",(0,0,.10),(6.3,3.9,.20),m["ink"],.10)
-    cube("Rear exhibition wall",(0,1.55,2.0),(6.0,.16,3.8),m["cream"],.045)
-    cube("Left shadow reveal",(-2.86,1.43,2.0),(.08,.08,3.6),m["gold"],.015)
+    cube("Rear exhibition wall",(0,1.55,1.58),(6.0,.16,2.85),m["cream"],.045)
+    cube("Left shadow reveal",(-2.86,1.43,1.58),(.08,.08,2.68),m["gold"],.015)
+    cube("Right wall return",(2.96,.72,1.58),(.12,1.72,2.85),m["cream"],.035)
+    cube("Gallery ceiling shadow line",(0,1.40,2.98),(5.75,.06,.055),m["gold"],.012)
     # Three intentionally different works: folded metal, stone monolith and kinetic glass.
     cyl("Sculpture one low plinth",(-1.65,-.05,.25),.62,.18,m["silver"])
-    cube("Folded metal artwork",(-1.65,-.02,1.12),(.78,.42,1.48),m["orange"],.18).rotation_euler[1]=.28
+    folded=cube("Folded metal artwork",(-1.65,-.02,1.12),(.78,.42,1.48),m["orange"],.18)
+    folded.rotation_euler[1]=.28
+    cube("Folded artwork contrasting plane",(-1.92,-.10,1.20),(.12,.34,1.22),m["gold"],.035).rotation_euler[1]=-.22
     torus("Folded artwork aperture",(-1.65,-.27,1.12),.28,.045,m["gold"],(math.pi/2,.2,0))
     cyl("Sculpture two low plinth",(0,-.05,.25),.62,.18,m["silver"])
     cube("Carved stone monolith",(0,.02,1.25),(.72,.54,1.75),m["cream"],.16)
@@ -146,10 +167,10 @@ def build_gallery(m):
     torus("Kinetic glass sculpture",(1.65,.0,1.32),.58,.16,m["blue"],(.48,.22,.18))
     torus("Kinetic inner brass ring",(1.65,-.18,1.32),.30,.045,m["gold"],(.72,.3,.2))
     # Track lighting and discreet wall washes ground the scene as a real exhibition interior.
-    cube("Ceiling lighting rail",(0,.9,3.58),(4.8,.12,.10),m["ink"],.035)
+    cube("Ceiling lighting rail",(0,.9,2.78),(4.8,.12,.10),m["ink"],.035)
     for i,x in enumerate((-1.65,0,1.65)):
-        cyl("Museum spotlight "+str(i),(x,.86,3.32),.11,.16,m["gold"],48)
-        curve("Focused gallery light "+str(i),[(x,.8,3.25),(x,-.1,2.4),(x,-.25,1.8)],.012,m["cream"])
+        cyl("Museum spotlight "+str(i),(x,.86,2.58),.11,.16,m["gold"],48)
+        curve("Focused gallery light "+str(i),[(x,.8,2.50),(x,-.1,2.12),(x,-.25,1.78)],.012,m["cream"])
 
 
 def write_saas_svg(path):
@@ -194,7 +215,7 @@ def write_saas_svg(path):
 <text x="334" y="164" fill="#f8fafc" font-family="Arial,sans-serif" font-size="34" font-weight="700">Good morning, Alex</text>
 <text x="334" y="196" fill="#91a5bf" font-family="Arial,sans-serif" font-size="16">Here is what is happening across your workspace today.</text>
 <rect x="1300" y="142" width="190" height="42" rx="10" fill="#1b3048" stroke="#3b536e"/>
-<text x="1320" y="168" fill="#c5d4e5" font-family="Arial,sans-serif" font-size="14">Last 30 days  ▾</text>
+<text x="1320" y="168" fill="#c5d4e5" font-family="Arial,sans-serif" font-size="14">Last 30 days</text>
 <!-- KPI cards -->
 <g>
  <rect x="334" y="230" width="350" height="142" rx="15" fill="#17283d" stroke="#31465f"/>
@@ -202,7 +223,7 @@ def write_saas_svg(path):
  <rect x="1074" y="230" width="416" height="142" rx="15" fill="#17283d" stroke="#31465f"/>
  <g fill="#91a5bf" font-family="Arial,sans-serif" font-size="14"><text x="360" y="267">Total revenue</text><text x="730" y="267">Active subscribers</text><text x="1100" y="267">Conversion rate</text></g>
  <g fill="#f1f5f9" font-family="Arial,sans-serif" font-size="34" font-weight="700"><text x="360" y="317">$84,254</text><text x="730" y="317">12,840</text><text x="1100" y="317">8.42%</text></g>
- <g fill="#5eead4" font-family="Arial,sans-serif" font-size="13"><text x="550" y="316">↗ 12.8%</text><text x="920" y="316">↗ 6.4%</text><text x="1365" y="316">↗ 2.1%</text></g>
+ <g fill="#5eead4" font-family="Arial,sans-serif" font-size="13"><text x="550" y="316">+12.8%</text><text x="920" y="316">+6.4%</text><text x="1365" y="316">+2.1%</text></g>
  <g fill="#7188a6" font-family="Arial,sans-serif" font-size="12"><text x="360" y="346">vs. previous period</text><text x="730" y="346">vs. previous period</text><text x="1100" y="346">vs. previous period</text></g>
 </g>
 <!-- analytics chart -->
