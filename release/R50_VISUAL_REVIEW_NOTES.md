@@ -36,3 +36,21 @@
 - Follow-up source adjustment committed as `e3f83cbc786caf330dab07ac7c4b9cbe143f6d37`: agency camera framing widened and foreground plinth/manifesto elements removed to reduce label collisions. That source commit is newer than the inspected render and must receive its own fresh render before evaluation.
 - The new source commit has not yet been verified by a corresponding R50 run/artifact in the available PR-run lookup. Do not treat the prior run as testing this change.
 - R50 status remains **HOLD**; human art-direction and commercial-rights approvals remain open.
+
+
+## Latest artifact inspection — 2026-11-20, R50 run #46
+
+- Run: [R50 Art Direction Review Pilot #46](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44731093997)
+- Artifact: `r50-art-direction-review-2ef62b431c70811ec4b944341dac5079648acf03`
+- Inspected all three 1600×900 PNGs and the 1600×900 SaaS SVG.
+- Agency: the scene now reads as a three-case creative portfolio rather than an interior lobby. However, the first and second case kicker text is clipped at the top edge; the right case's lower title is crossed/obscured by the ribbon; the left case title is partly obstructed by the ribbon. The lower-left hero headline and caption are too close to the lower edge. **HOLD — composition still fails the approved art-direction standard.**
+- Gallery: the right return wall still dominates and occludes a significant portion of the third sculptural display. **HOLD — composition unresolved.**
+- Product 3D: camera remains legible and centered; this artifact alone is only a static render and provides no orbit/scroll interaction evidence.
+- SaaS: static workflow SVG remains a visual board, not evidence of a working animated SaaS journey. The sample content is illustrative.
+- This run is the fresh render for the source adjustment in commit `e3f83cbc786caf330dab07ac7c4b9cbe143f6d37`; the subsequent `e68b4c6` commit changes review documentation, not the scene source. The run #47 triggered on that documentation update was still in progress at inspection time and had no artifact yet.
+- No human sign-off or commercial rights sign-off has been recorded. All four assets remain `productionEligible=false`.
+
+## Current related gates
+- R52 run #37: report says 15 rows, 0 accepted, 0 validator errors, status HOLD. A successful report-only workflow means the report was generated, not that rights were approved.
+- R53 run #36: report says 33 expected, 0 accepted; all 33 slots fail the explicit human approval + `productionEligible=true` requirement. Status HOLD.
+- Product E2E run #1164 on commit `e68b4c6`: Chromium, Firefox and WebKit jobs all completed successfully. This is browser automation evidence only; it does not approve visual direction, third-party rights or release.
