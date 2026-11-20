@@ -124,7 +124,7 @@ def main():
     report=audit(args.assets)
     print(json.dumps(report['summary'],indent=2,ensure_ascii=False))
     for row in report['byTemplate']:
-        print(f"{row['template']}: {row['individualOriginals']} individual, {row['flagged']} flagged: {row['flaggedChapters']}")
+        print(f"{row['template']}: {row['sourceEligibleOriginals']} source-eligible originals, {row['flagged']} flagged: {row['flaggedChapters']}")
     if args.out:
         args.out.parent.mkdir(parents=True,exist_ok=True)
         args.out.write_text(json.dumps(report,indent=2,ensure_ascii=False)+chr(10),encoding='utf-8')
