@@ -1,0 +1,62 @@
+name: R12 release evidence guard
+on:
+  push:
+    paths:
+      - 'stage9/check_r12_release.py'
+      - 'stage9/R12_RELEASE_GATE.md'
+      - '.github/workflows/r12-release-guard.yml'
+  pull_request:
+    paths:
+      - 'stage9/check_r12_release.py'
+      - '.github/workflows/r12-release-guard.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fail-closed-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate release checker edge cases
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import json
+          import subprocess
+          import sys
+          import tempfile
+          from pathlib import Path
+          script = Path("stage9/check_r12_release.py")
+          spec = importlib.util.spec_from_file_location("r12", script)
+          gate = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(gate)
+          assert gate.check({})  # no evidence fails
+          assert gate.check({"release_sha": "bad", "gates": {}})
+          sha = "a" * 40
+          values = {k: {"status": "pass", "evidence_url": "https://example.org/proof",
+                        "release_sha": sha, "reviewer": "independent tester"}
+                    for k in gate.REQUIRED}
+          good = {"release_sha": sha, "gates": values}
+          assert gate.check(good) == [], gate.check(good)
+          for key in gate.REQUIRED:
+              incomplete = json.loads(json.dumps(good))
+              del incomplete["gates"][key]
+              assert gate.check(incomplete), f"{key} must fail closed"
+          bad = json.loads(json.dumps(good))
+          bad["gates"]["native_macos_safari"]["release_sha"] = "b" * 40
+          assert gate.check(bad)
+          with tempfile.TemporaryDirectory() as d:
+              filename = Path(d) / "none.json"
+              assert subprocess.run([sys.executable, str(script), "--evidence", str(filename)]).returncode != 0
+          print("R12 evidence guard: 7 mandatory gates, SHA binding and fail-closed tested")
+          PY
+      - name: Confirm production blocked by absent real evidence
+        run: |
+          if python stage9/check_r12_release.py; then
+            echo "::error::Release guard unexpectedly passed without evidence"
+            exit 1
+          fi
+          echo "Release is correctly blocked pending native hardware, rights, visual, and current-SHA evidence."

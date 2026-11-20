@@ -1,0 +1,64 @@
+name: Prepare R9 Bundled Web Review
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'stage9/three-scene-entry.js'
+      - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/prepare-online-preview.mjs'
+      - '.github/workflows/prepare-r9-online-review.yml'
+permissions:
+  contents: write
+jobs:
+  build-r9-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned dependencies and compile real Three.js
+        working-directory: stage9
+        run: |
+          npm install --no-audit --no-fund
+          node build-offline.mjs
+          node prepare-online-preview.mjs
+      - name: Verify compiled review manifest
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          import {createHash} from 'node:crypto';
+          const m=JSON.parse(await readFile('stage9/online-review-parts/manifest.json'));
+          let parts='';
+          for(const name of m.parts)parts+=await readFile('stage9/online-review-parts/'+name,'utf8');
+          if(Buffer.byteLength(parts)!==m.utf8Bytes||createHash('sha256').update(parts).digest('hex')!==m.sha256)throw Error('Chunk integrity failed');
+          if(!parts.includes('stage9ThreeEngineURL')||!parts.includes('stage9SharedEngineURL'))throw Error('R9 engines are missing');
+          console.log('Bundled R9 review verified',m.parts.length,m.utf8Bytes);
+          NODE
+      - name: Save source-browser package chunks for connector publication
+        env:
+          REVIEW_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/motion-r9-online-parts
+          cp stage9/online-review-parts/* /tmp/motion-r9-online-parts/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          pushed=0
+          for attempt in 1 2 3 4; do
+            git fetch origin "$REVIEW_BRANCH"
+            git checkout -B r9-online-publish "origin/$REVIEW_BRANCH"
+            mkdir -p stage9/online-review-parts
+            cp /tmp/motion-r9-online-parts/* stage9/online-review-parts/
+            git add stage9/online-review-parts
+            if git diff --cached --quiet; then pushed=1; break; fi
+            git commit -m 'build(R9): publish verified bundled online review parts'
+            if git push origin "HEAD:$REVIEW_BRANCH"; then pushed=1; break; fi
+            sleep 2
+          done
+          test "$pushed" -eq 1
+      - name: Publish review transport summary
+        run: |
+          echo '### Bundled R9 browser package generated' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Content is committed under stage9/online-review-parts. Transfer the verified parts to the public review repo before claiming live deployment.' >> "$GITHUB_STEP_SUMMARY"

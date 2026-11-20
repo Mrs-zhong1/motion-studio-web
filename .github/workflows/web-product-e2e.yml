@@ -1,15 +1,51 @@
 name: Motion Studio Web Product E2E
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/tests/test_u1_u4_regression.py'
+      - 'stage9/tests/test_template_visual_audit.py'
+      - 'stage9/tests/test_r9_studio_3d.py'
+      - 'stage9/tests/test_r11_mobile_acceptance.py'
+      - 'stage9/tests/test_r13_story_motion.py'
+      - 'stage9/tests/test_r14_chapter_navigation.py'
+      - 'stage9/tests/test_r15_scene_composition.py'
+      - 'stage9/tests/test_r15_asset_batch.py'
+      - 'stage9/tests/test_r15_media_quality.py'
+      - 'stage9/tests/test_r16_story_transitions.py'
+      - 'stage9/tests/test_r16_multiplane_camera.py'
+      - 'stage9/tests/test_r16_cross_chapter.py'
+      - 'stage9/tests/test_r17_preview_storyboard.py'
+      - 'stage9/tests/test_r17_quality_gate.py'
+      - 'stage9/three-scene-entry.js'
+      - 'stage9/bundle-chapter-photos.mjs'
+      - '.github/workflows/web-product-e2e.yml'
   push:
     paths:
       - 'stage9/Motion-Studio-Unified-Editor.html'
       - 'stage9/tests/test_web_product_e2e.py'
       - 'stage9/tests/test_product_restructure.py'
+      - 'stage9/tests/test_u1_u4_regression.py'
+      - 'stage9/tests/test_template_visual_audit.py'
+      - 'stage9/tests/test_r9_studio_3d.py'
+      - 'stage9/tests/test_r11_mobile_acceptance.py'
+      - 'stage9/tests/test_r13_story_motion.py'
+      - 'stage9/tests/test_r14_chapter_navigation.py'
+      - 'stage9/tests/test_r15_scene_composition.py'
+      - 'stage9/tests/test_r15_asset_batch.py'
+      - 'stage9/tests/test_r15_media_quality.py'
+      - 'stage9/tests/test_r16_story_transitions.py'
+      - 'stage9/tests/test_r16_multiplane_camera.py'
+      - 'stage9/tests/test_r16_cross_chapter.py'
+      - 'stage9/tests/test_r17_preview_storyboard.py'
+      - 'stage9/tests/test_r17_quality_gate.py'
+      - 'stage9/three-scene-entry.js'
+      - 'stage9/bundle-chapter-photos.mjs'
       - 'stage9/build-offline.mjs'
       - '.github/workflows/web-product-e2e.yml'
 permissions:
-  contents: read
+  contents: write
 jobs:
   web-product-e2e:
     runs-on: ubuntu-latest
@@ -43,12 +79,75 @@ jobs:
         run: python tests/test_web_product_e2e.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: R9 real offline Three.js PBR studio and pointer orbit validation
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r9_studio_3d.py
+      - name: R11 simulated mobile/WebGL fallback/reduced-motion acceptance
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r11_mobile_acceptance.py
+      - name: R13 exported-page scroll, pointer and art signature regression
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r13_story_motion.py
+      - name: R14 chapter navigator and full-page scroll quality regression
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r14_chapter_navigation.py
+      - name: R15 multi-act visual composition and mobile layouts
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r15_scene_composition.py
+      - name: R15-02 batch photo replacement and export fidelity
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r15_asset_batch.py
+      - name: R15-04 chapter photo coverage, source and licensing provenance audit
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r15_media_quality.py
+      - name: R16 eight authored scroll reveals and accessible reduced motion
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r16_story_transitions.py
+      - name: R16-02 multi-plane photographic camera and accessible layers
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r16_multiplane_camera.py
+      - name: R16-03..06 real adjacent chapter bridges and mobile accessibility
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r16_cross_chapter.py
+      - name: R17 eight visual storyboards, 390px responsive layout and accessible preview controls
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r17_preview_storyboard.py
+      - name: U1-U4 image-led discovery and blank editor regression
+        if: matrix.browser == 'chromium'
+        run: python tests/test_u1_u4_regression.py
+      - name: Audit all 8 full templates at desktop and mobile viewport
+        if: matrix.browser == 'chromium'
+        run: python tests/test_template_visual_audit.py
+      - name: R17 measurable full gallery release quality and licensing holds
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r17_quality_gate.py
       - name: Template discovery, preview and three-pane editor journey
         run: python tests/test_product_restructure.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
       # GitHub Actions artifact storage quota is exhausted in this repository.
       # Record the evidence in job logs and GitHub's step summary without uploading large HTML.
+      - name: Publish template visual-audit geometry and hashes
+        if: always() && matrix.browser == 'chromium'
+        shell: bash
+        run: |
+          echo "### Template visual audit: 8 templates × 2 viewports" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f TEMPLATE_VISUAL_AUDIT.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          doc=json.load(open("TEMPLATE_VISUAL_AUDIT.json"))
+          print("Status:",doc["status"])
+          print("| Template | Viewport | Image layers | Loaded photos | Generated fallbacks | Overflow | SHA256 prefix |")
+          print("|---|---|---|---|---|---|---|")
+          for row in doc["templates"]:
+              overflow=max(0,row["documentWidth"]-row["viewportWidth"])
+              print(f'| {row["template"]} | {row["device"]} | {row["visiblyRenderedPhotos"]}/{row["sectionCount"]} | {row.get("realPhotoCount","?")} | {row.get("originalFallbackCount","?")} | {overflow}px | {row["firstSectionPngSHA256"]} |')
+          print("\\n**Photos are CDN-loaded demo images, not commercially cleared artwork.**")
+          if doc.get("error"): print("\\nFailure:",doc["error"])
+          PY
+          else
+            echo "Audit result unavailable" >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Publish browser result in job summary (zero artifact storage)
         if: always()
         shell: bash
@@ -62,3 +161,181 @@ jobs:
           else
             echo "Result JSON unavailable: build, setup, or browser launch failed before result creation." >> "$GITHUB_STEP_SUMMARY"
           fi
+
+
+      # The repository's Actions artifact quota is exhausted. Store reviewable
+      # screenshots in the same PR branch, only for internal/same-repo PRs.
+      # This does not modify main and screenshots alone do not retrigger E2E.
+      - name: Persist 68+ template chapter and immersive screenshots in review branch
+        if: ${{ success() && matrix.browser == 'chromium' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          REVIEW_BRANCH: ${{ github.head_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f TEMPLATE_VISUAL_AUDIT.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path("TEMPLATE_VISUAL_AUDIT.json").read_text())
+          assert report["status"]=="pass" and len(report["templates"])==16
+          base=Path("/tmp/motion-studio-visual-audit")
+          for row in report["templates"]:
+              target=base/f'{row["template"]}-{row["device"]}.png'
+              assert target.is_file() and target.stat().st_size>1000, target
+              middle=base/f'{row["template"]}-chapter3-{row["device"]}.png'
+              assert middle.is_file() and middle.stat().st_size>1000, middle
+              ending=base/f'{row["template"]}-ending-{row["device"]}.png'
+              assert ending.is_file() and ending.stat().st_size>1000, ending
+          for image in ("r9-studio-model.png","r9-studio-page.png","r11-mobile-product.png","r16-cinematic-multiplane-early.png","r16-cinematic-multiplane-late.png","r16-cross-chapter-early.png","r16-cross-chapter-late.png"):
+              target=base/image
+              assert target.is_file() and target.stat().st_size>1000, target
+          for tid in ("editorial","product-3d"):
+              for device in ("desktop","mobile"):
+                  target=base/f"{tid}-preview-{device}.png"
+                  assert target.is_file() and target.stat().st_size>1000, target
+          for row in report["templates"]:
+              target=base/f'{row["template"]}-immersive-{row["device"]}.png'
+              assert target.is_file() and target.stat().st_size>1000, target
+          quality=json.loads(Path("R17_QUALITY_GATE.json").read_text())
+          assert quality["automatedGate"]=="PASS",quality
+          assert quality["productionRelease"]=="HOLD"
+          PY
+          cd "$GITHUB_WORKSPACE"
+          # Checkout the latest PR branch tip, never commit generated imagery to main.
+          git fetch origin "$REVIEW_BRANCH"
+          git checkout -B "visual-evidence-publish" "origin/$REVIEW_BRANCH"
+          mkdir -p stage9/visual-evidence
+          cp /tmp/motion-studio-visual-audit/*.png stage9/visual-evidence/
+          cp stage9/R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          target=Path("stage9/visual-evidence")
+          ids=["editorial","product-3d","cinematic","architecture","agency","fashion","gallery","saas"]
+          names=["Editorial Portfolio","3D Product Experience","Cinematic Journey","Architecture Studio","Creative Agency","Fashion Lookbook","Interactive Gallery","Modern SaaS"]
+          out=["# Motion Studio — visual review gallery",
+               "",
+               "Actual first-section browser screenshots from the offline HTML build.",
+               "Each template was captured at desktop (1440×900) and mobile (390×844).",
+               "Screenshots are raw CI evidence, not approved visual design.",
+               "",
+               "| Template | Desktop | Mobile |",
+               "|---|---|---|"]
+          for tid,name in zip(ids,names):
+              out.append(f"| {name} | ![Desktop {name}](./{tid}-desktop.png) | ![Mobile {name}](./{tid}-mobile.png) |")
+          # The rendered screenshot gallery must not confuse image layers
+          # with actual CDN-loaded photography; record both source counts.
+          source=Path("stage9/TEMPLATE_VISUAL_AUDIT.json")
+          if source.is_file():
+              visual=json.loads(source.read_text())
+              out += ["", "## R15-04 — actual photography / fallback audit", "",
+                      "The counts below were observed by the browser at screenshot time.",
+                      "Photos are provisional demonstration media, not legally cleared assets.",
+                      "",
+                      "| Template | Real photos loaded | Program-generated fallbacks | Total chapters |",
+                      "|---|---:|---:|---:|"]
+              for row in visual.get("templates",[]):
+                  if row.get("device")=="desktop":
+                      out.append(f'| {row["template"]} | {row.get("realPhotoCount","?")} | {row.get("originalFallbackCount","?")} | {row["sectionCount"]} |')
+          quality=json.loads(Path("stage9/visual-evidence/R17_QUALITY_GATE.json").read_text())
+          out += ["", "## R17 — measurable visual quality and publication holds", "",
+                  f'Automated visual gate: **{quality["automatedGate"]}**; covered unique chapter photo sources: **{quality["photoCoverage"]}**.',
+                  "This test validates images, layout, and distinct story scenes; it does not claim artistic signoff.",
+                  f'Human art direction: **{quality["humanVisualArtDirection"]}**; native GPU: **{quality["nativeMobileGpuPerformance"]}**; licensing: **{quality["commercialImageRights"]}**.',
+                  "",
+                  "[Inspect full R17 quality evidence](./R17_QUALITY_GATE.json)", ""]
+          out += ["", "## R5 — real third chapter of every template", "",
+                  "Images below show actual exported-page sections, not the home-card covers.",
+                  "",
+                  "| Template | Desktop chapter 3 | Mobile chapter 3 |",
+                  "|---|---|---|"]
+          for tid,name in zip(ids,names):
+              out.append(f"| {name} | ![Chapter 3 {name} desktop](./{tid}-chapter3-desktop.png) | ![Chapter 3 {name} mobile](./{tid}-chapter3-mobile.png) |")
+          out += ["", "## R8 — designed ending of every template", "",
+                  "Last-section screenshots show the editorial ending, not a static cover.",
+                  "",
+                  "| Template | Desktop closing | Mobile closing |",
+                  "|---|---|---|"]
+          for tid,name in zip(ids,names):
+              out.append(f"| {name} | ![Closing {name} desktop](./{tid}-ending-desktop.png) | ![Closing {name} mobile](./{tid}-ending-mobile.png) |")
+          out += ["", "## R3 — complete template preview dialog (not only page hero)", "",
+                  "| Template | Desktop preview | Mobile preview |",
+                  "|---|---|---|"]
+          for tid,name in zip(ids[:2],names[:2]):
+              out.append(f"| {name} | ![Preview {name} desktop](./{tid}-preview-desktop.png) | ![Preview {name} mobile](./{tid}-preview-mobile.png) |")
+          out += ["", "## R14 — full-stage immersive preview (all eight templates)", "",
+                  "Click the immersive-preview control to hide the editorial sidebar. These are actual browser captures, not static cover designs.",
+                  "",
+                  "| Template | Desktop immersive | Mobile immersive |",
+                  "|---|---|---|"]
+          for tid,name in zip(ids,names):
+              out.append(f"| {name} | ![Desktop immersive {name}](./{tid}-immersive-desktop.png) | ![Mobile immersive {name}](./{tid}-immersive-mobile.png) |")
+          out += ["", "## R16-02 — real scroll-scrub multi-plane camera", "",
+                  "These browser screenshots show the same Cinematic chapter at different scroll positions.",
+                  "The photograph, title and atmosphere layers change at independent rates.",
+                  "Screenshots demonstrate real exported-page rendering, not final art-direction approval.",
+                  "",
+                  "| Earlier in chapter | Later in chapter |",
+                  "|---|---|",
+                  "| ![R16 Cinematic camera earlier](./r16-cinematic-multiplane-early.png) | ![R16 Cinematic camera later](./r16-cinematic-multiplane-late.png) |"]
+          out += ["", "## R16-03 — continuous between-chapter transition", "",
+                  "Two actual Chromium screenshots of the same scene seam at different scroll positions; the outgoing chapter feathers into the next chapter's computed background.",
+                  "",
+                  "| Before chapter seam | During chapter handoff |",
+                  "|---|---|",
+                  "| ![R16 first seam](./r16-cross-chapter-early.png) | ![R16 second seam](./r16-cross-chapter-late.png) |"]
+          out += ["", "## R9 — Real offline Three.js studio scene", "",
+                  "These are screenshots of the actual bundled Three.js WebGL2 renderer, **not** the public online editor's lightweight Canvas fallback.",
+                  "",
+                  "![Three.js PBR headphone showcase](./r9-studio-model.png)",
+                  "",
+                  "![Exported 3D product page](./r9-studio-page.png)",
+                  "",
+                  "Rendered in headless Chromium via software WebGL2. This is neither native hardware GPU approval nor art-direction sign-off.",
+                  "",
+                  "## R11 — simulated mobile WebGL2, reduced motion", "",
+                  "Real WebGL2 screenshot in a 390px simulated viewport. This is NOT real-phone or native Safari performance certification.",
+                  "",
+                  "![Mobile R11 Three.js product](./r11-mobile-product.png)",
+                  "",
+                  "## Review gates", "",
+                  "- Typography, photo crop and subject matter",
+                  "- Content hierarchy and readability",
+                  "- Motion quality while scrolling and interacting (not judged by still screenshots)",
+                  "- Template differentiation and reference-site visual quality",
+                  "- Source-media licensing: not yet verified",
+                  "",
+                  "Screenshots were generated by the browser visual-audit suite.",
+                  "See `../VISUAL_AUDIT_REPORT.md` for geometry results and limitations."]
+          (target/"README.md").write_text("\n".join(out)+"\n",encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp stage9/visual-evidence/README.md /tmp/motion-studio-visual-audit/GALLERY_README.md
+          # Screenshot PNGs are binary and cannot safely be auto-rebased.
+          # Always rebuild the evidence-only commit on the latest remote tip.
+          # Never force push or overwrite unrelated source changes.
+          pushed=0
+          for attempt in 1 2 3 4 5; do
+            git fetch origin "$REVIEW_BRANCH"
+            git checkout -B visual-evidence-publish "origin/$REVIEW_BRANCH"
+            mkdir -p stage9/visual-evidence
+            cp /tmp/motion-studio-visual-audit/*.png stage9/visual-evidence/
+          cp stage9/R17_QUALITY_GATE.json stage9/visual-evidence/R17_QUALITY_GATE.json
+            cp /tmp/motion-studio-visual-audit/GALLERY_README.md stage9/visual-evidence/README.md
+            git add stage9/visual-evidence
+            if git diff --cached --quiet; then
+              pushed=1
+              break
+            fi
+            git commit -m "test(evidence): publish template visual screenshots"
+            if git push origin "HEAD:$REVIEW_BRANCH"; then
+              pushed=1
+              break
+            fi
+            sleep 2
+          done
+          test "$pushed" -eq 1
+          echo "### Screenshots available in source branch" >> "$GITHUB_STEP_SUMMARY"
+          echo "[Open visual-review gallery](https://github.com/$GITHUB_REPOSITORY/blob/$REVIEW_BRANCH/stage9/visual-evidence/README.md)" >> "$GITHUB_STEP_SUMMARY"

@@ -6,6 +6,7 @@ import {injectOfflineEngine} from './inject-offline-engine.mjs';
 import {addCameraEditorStage10} from './stage10-camera-editor.mjs';
 import {addCameraEditorStage11} from './stage11-camera-path.mjs';
 import {addCameraEditorStage12} from './stage12-camera-editor.mjs';
+import {bundleChapterPhotos} from './bundle-chapter-photos.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 const result=await build({entryPoints:[resolve(root,'three-scene-entry.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const engine=result.outputFiles[0].text;
@@ -17,8 +18,20 @@ const thumbnailIds=['editorial','product-3d','cinematic','architecture','agency'
 const thumbnailEntries=await Promise.all(thumbnailIds.map(async id=>[id,'data:image/jpeg;base64,'+await readFile(resolve(root,'template-thumbnails',id+'.jpg'),'base64')]));
 const thumbnailData=JSON.stringify(Object.fromEntries(thumbnailEntries));
 const source=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
-if(!source.includes('const templateThumbnailImages={};'))throw Error('Template thumbnail injection marker missing');
-const editor=addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(source.replace('const templateThumbnailImages={};','const templateThumbnailImages='+thumbnailData+';'))));
+// Accept both the legacy empty marker and U1's populated online preview mapping.
+// Offline releases always replace online covers with the bundled local JPEGs.
+const thumbnailPattern=/const templateThumbnailImages=\{[\s\S]*?\};/;
+if(!thumbnailPattern.test(source))throw Error('Template thumbnail declaration missing');
+let injected=source.replace(thumbnailPattern,'const templateThumbnailImages='+thumbnailData+';');
+// R15-04: bundle the secondary demo photographs inside the offline deliverable.
+// Successful downloads become local data URLs, failures stay explicit fallbacks.
+const chapterPhotos=await bundleChapterPhotos(source,root);
+if(!injected.includes('const templateOfflinePhotoBundles={};'))throw Error('Offline photo bundle injection anchor missing');
+injected=injected.replace('const templateOfflinePhotoBundles={};',
+  'const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
+// Do not leave remote secondary demo photos as runtime dependencies.
+injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
+const editor=addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected)));
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
@@ -31,5 +44,6 @@ await writeFile(resolve(root,'Motion-Studio-Stage13-Bezier-OFFLINE.html'),output
 await writeFile(resolve(root,'Motion-Studio-Stage14-Stability-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage15-Meshopt-OFFLINE.html'),output);
 await writeFile(resolve(root,'THREE_LICENSE.txt'),await readFile(resolve(root,'node_modules/three/LICENSE'),'utf8'));
-await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,sharedEngineBytes:sharedEngine.length,editorBytes:Buffer.byteLength(output),offline:true,source:'Motion Studio Stage9-15, real offline MeshoptDecoder and 4MB GLB validation',releasePolicy:'web-browser-matrix',gpuAcceptanceRequired:false,gpuTested:false,macHardwareGpuOptional:true,requiredChecks:['web-product-e2e','offline-export','cross-browser-acceptance','deployment-smoke'],releaseAccepted:false},null,2));
+await writeFile(resolve(root,'BUILD_MANIFEST.json'),JSON.stringify({three:'0.180.0',engineBytes:engine.length,sharedEngineBytes:sharedEngine.length,editorBytes:Buffer.byteLength(output),photoBundle:chapterPhotos.audit,offline:true,source:'Motion Studio Stage9-15, real offline MeshoptDecoder and 4MB GLB validation',releasePolicy:'web-browser-matrix',gpuAcceptanceRequired:false,gpuTested:false,macHardwareGpuOptional:true,requiredChecks:['web-product-e2e','offline-export','cross-browser-acceptance','deployment-smoke'],releaseAccepted:false},null,2));
 console.log('Stage9 genuine offline Three.js bundle',engine.length,Buffer.byteLength(output));
+console.log('R15 offline actual photo bundle inventory',JSON.stringify(chapterPhotos.audit));

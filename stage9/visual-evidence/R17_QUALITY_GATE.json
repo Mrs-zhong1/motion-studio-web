@@ -1,0 +1,239 @@
+{
+  "schema": "motion-studio-r17-quality-gate-v1",
+  "automatedGate": "PASS",
+  "visualEvidence": "Eight complete templates, desktop/mobile, opening/middle/ending captures",
+  "photoCoverage": "39/39",
+  "uniquePhotoSourceCount": 39,
+  "geometryAndImageEvidence": [
+    {
+      "template": "editorial",
+      "viewport": "desktop",
+      "chapters": 4,
+      "loadedPhotos": 4,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "4d9a1d76578aae28",
+        "225cf24d59e1838e",
+        "85231d155d6a659d"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "editorial",
+      "viewport": "mobile",
+      "chapters": 4,
+      "loadedPhotos": 4,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "fb55e32bea3b66ab",
+        "224ce9291fdba8ba",
+        "c14e14af0bff391f"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "product-3d",
+      "viewport": "desktop",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "824703e37d798248",
+        "4f1e35762a963de4",
+        "c2f5dabd32987b37"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "product-3d",
+      "viewport": "mobile",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "ebead056fcc2ee6e",
+        "56d860ed327397b0",
+        "8aebeb79d32894da"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "cinematic",
+      "viewport": "desktop",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "15e1fe52eeabc942",
+        "258430dc5eab1dda",
+        "c23c5deafd7934d3"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "cinematic",
+      "viewport": "mobile",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "2c466d610926e892",
+        "7b893171fbf5f16f",
+        "d6f7e4c8a13ad4d3"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "architecture",
+      "viewport": "desktop",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "d5a3b2988f7a9a08",
+        "8cba23af9d266459",
+        "7c92e45d77a5877d"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "architecture",
+      "viewport": "mobile",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "10aa7f70c312e767",
+        "35f3bf283c8848c0",
+        "243e0c9ef53debd0"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "agency",
+      "viewport": "desktop",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "a0132b07d53e793f",
+        "d30cd444b02f2881",
+        "eaeac738f1d98a56"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "agency",
+      "viewport": "mobile",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "102e9910a2bdbba7",
+        "7a62675d94408c04",
+        "a7e113930df7a2a4"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "fashion",
+      "viewport": "desktop",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "48a982f7b36562b4",
+        "dd06a6c7ca78b6e3",
+        "fb37d3bb8715e419"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "fashion",
+      "viewport": "mobile",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "fa50daf0bab3c390",
+        "65efffaa56ceae63",
+        "fb9522e4c823cae4"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "gallery",
+      "viewport": "desktop",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "b5f2bec003272d23",
+        "180e4486e5049d18",
+        "17596c77cc257a69"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "gallery",
+      "viewport": "mobile",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "668dbb4eb7105645",
+        "c4ea161c658a1929",
+        "ba824a0b115a38cf"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "saas",
+      "viewport": "desktop",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "b44baf14e19cce50",
+        "e5f01971304e30ac",
+        "4277033136c4386e"
+      ],
+      "commercialRightsApproved": false
+    },
+    {
+      "template": "saas",
+      "viewport": "mobile",
+      "chapters": 5,
+      "loadedPhotos": 5,
+      "fallbacks": 0,
+      "horizontalOverflowPx": 0,
+      "captureHashes": [
+        "1d02455b4de5cbed",
+        "1c9bff8e5c06b46d",
+        "e7a5883c071039f1"
+      ],
+      "commercialRightsApproved": false
+    }
+  ],
+  "blockingErrors": [],
+  "humanVisualArtDirection": "HOLD",
+  "nativeMobileGpuPerformance": "HOLD",
+  "commercialImageRights": "HOLD",
+  "productionRelease": "HOLD",
+  "limitations": "Browser automation confirms structural and media evidence, not reference-grade design quality, legal clearance or native-device frame rates."
+}
