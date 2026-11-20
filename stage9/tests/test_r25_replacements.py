@@ -90,7 +90,7 @@ class ReplacementTests(unittest.TestCase):
                 nativeSourceDimensions=[1600,900],generationSystem="Blender Eevee",
                 generationDate="2026-11-19",sourceReference="stage9/r26_blender_pilot.py",
                 termsUrl="https://github.com/Mrs-zhong1/motion-studio-web",
-                commercialUseTermsChecked=True,embeddedThirdPartyAssets=False)
+                commercialUseTermsChecked=True,embeddedThirdPartyAssets=False,thirdPartyAssets=False)
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             _,planned=plan(inbox,assets/"manifest.json")
             self.assertEqual(len(planned),1)
