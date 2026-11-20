@@ -10,6 +10,7 @@ on:
       - design/r43-immersive-template-system
     paths:
       - 'stage9/r50_art_direction_pilot.py'
+      - 'stage9/r50_editorial_finish.py'
       - '.github/workflows/r50-art-direction-pilot.yml'
   workflow_dispatch:
 permissions:
