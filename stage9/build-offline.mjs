@@ -54,24 +54,25 @@ output=output.replace('const stage9ThreeEngineURL=',sharedUrl+'const stage9Three
 // publishing build artifacts. This catches premature </script> termination
 // and malformed template literals at their originating script index.
 function locateOpenQuotedString(source){
+ const tick=String.fromCharCode(96),slash=String.fromCharCode(92);
  let state='code',quoteStart=-1,line=1,column=0,quoteLine=0,quoteColumn=0,escaped=false;
  for(let i=0;i<source.length;i++){
   const ch=source[i],next=source[i+1];
-  if(state==='line-comment'){if(ch==='\\n')state='code';}
+  if(state==='line-comment'){if(ch==='\n')state='code';}
   else if(state==='block-comment'){if(ch==='*'&&next==='/'){state='code';i++;column++;}}
   else if(state==='single'||state==='double'){
-   if(ch==='\\n'||ch==='\\r')return {quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,i+90))};
-   if(escaped)escaped=false;else if(ch==='\\\\')escaped=true;else if((state==='single'&&ch==="'")||(state==='double'&&ch==='"'))state='code';
+   if(ch==='\n'||ch==='\r')return {quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,i+90))};
+   if(escaped)escaped=false;else if(ch===slash)escaped=true;else if((state==='single'&&ch==="'")||(state==='double'&&ch==='"'))state='code';
   } else if(state==='template'){
-   if(escaped)escaped=false;else if(ch==='\\\\')escaped=true;else if(ch==='\\`')state='code';
+   if(escaped)escaped=false;else if(ch===slash)escaped=true;else if(ch===tick)state='code';
   } else {
    if(ch==='/'&&next==='/'){state='line-comment';i++;column++;}
    else if(ch==='/'&&next==='*'){state='block-comment';i++;column++;}
    else if(ch==="'"){state='single';quoteStart=i;quoteLine=line;quoteColumn=column;}
    else if(ch==='"'){state='double';quoteStart=i;quoteLine=line;quoteColumn=column;}
-   else if(ch==='\\`'){state='template';quoteStart=i;quoteLine=line;quoteColumn=column;}
+   else if(ch===tick){state='template';quoteStart=i;quoteLine=line;quoteColumn=column;}
   }
-  if(ch==='\\n'){line++;column=0;}else column++;
+  if(ch==='\n'){line++;column=0;}else column++;
  }
  return (state==='single'||state==='double'||state==='template')?{quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,quoteStart+220))}:null;
 }
