@@ -3,7 +3,7 @@
 
 This script does not approve licenses, visual fit, or production eligibility.
 """
-import csv, hashlib, json, re, urllib.request
+import csv, hashlib, json, re, time, urllib.request, urllib.error
 from pathlib import Path
 from PIL import Image, UnidentifiedImageError
 
@@ -27,8 +27,26 @@ def main():
             continue
         request=urllib.request.Request(url,headers={"User-Agent":"MotionStudioR52EvidenceBot/1.0 (rights-review; contact via repository issues)"})
         try:
-            with urllib.request.urlopen(request,timeout=45) as response:
-                raw=response.read()
+            raw=None
+            last_error=None
+            for attempt in range(5):
+                try:
+                    with urllib.request.urlopen(request,timeout=45) as response:
+                        raw=response.read()
+                    break
+                except urllib.error.HTTPError as exc:
+                    last_error=exc
+                    if exc.code not in (429,500,502,503,504) or attempt==4:
+                        raise
+                    retry_after=exc.headers.get("Retry-After")
+                    try:
+                        delay=min(90.0,max(2.0,float(retry_after))) if retry_after else min(60.0,5.0*(2**attempt))
+                    except ValueError:
+                        delay=min(60.0,5.0*(2**attempt))
+                    print(f"RETRY {row.get('candidate_id')}: HTTP {exc.code}; attempt {attempt+1}/5; wait {delay:.1f}s",flush=True)
+                    time.sleep(delay)
+            if raw is None:
+                raise last_error or RuntimeError("download failed without response bytes")
             path=ROOT/(row["candidate_id"]+"-"+name)
             path.write_bytes(raw)
             with Image.open(path) as im:
@@ -49,7 +67,7 @@ def main():
                 "file":path.name,"reviewStatus":"HUMAN_VISUAL_AND_RIGHTS_REVIEW_REQUIRED",
                 "productionEligible":False
             })
-        except (OSError,ValueError,UnidentifiedImageError) as exc:
+        except (OSError,ValueError,UnidentifiedImageError,urllib.error.URLError) as exc:
             report["errors"].append(row.get("candidate_id")+": "+str(exc))
     (ROOT/"download-report.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2))
