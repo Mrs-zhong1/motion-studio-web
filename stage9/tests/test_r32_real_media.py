@@ -25,7 +25,7 @@ class R32MediaAuditTests(unittest.TestCase):
             ok=audit(root)
             self.assertTrue(ok['summary']['productionMediaEligible'])
             self.assertEqual(ok['summary']['decodedAndCheckedImages'],39)
-            self.assertEqual(ok['by_template'][0]['sourceEligibleOriginals'],4)
+            self.assertEqual(ok['byTemplate'][0]['sourceEligibleOriginals'],4)
             cli=subprocess.run([sys.executable,str(Path(__file__).resolve().parents[1]/'audit_r32_real_media.py'),
                                 '--assets',str(root)],capture_output=True,text=True)
             self.assertEqual(cli.returncode,0,cli.stderr)
