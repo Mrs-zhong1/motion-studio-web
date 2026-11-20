@@ -87,35 +87,58 @@ def reset(template):
       "gold":mat("Champagne brass",(.65,.39,.13),.82,.24)
     }
 
+def text3d(name, body, loc, size, material, align="LEFT"):
+    data=bpy.data.curves.new(name,"FONT"); data.body=body; data.size=size
+    data.align_x=align; data.extrude=.004; data.bevel_depth=.001
+    obj=bpy.data.objects.new(name,data); bpy.context.scene.collection.objects.link(obj)
+    obj.location=loc; obj.rotation_euler=(math.pi/2,0,0); obj.data.materials.append(material)
+    return obj
+
 def build_agency(m):
-    # Full-scale architectural brand environment: gallery lobby, deep portal, reception and campaign wall.
-    cube("Continuous limestone lobby floor",(0,0,.05),(9.2,6.8,.18),m["cream"],.025)
-    cube("Rear architectural wall",(-.35,2.45,2.35),(7.6,.22,4.7),m["ink"],.035)
-    cube("Left return wall",(-4.0,-.05,2.35),(.22,5.0,4.7),m["ink"],.035)
-    cube("Ceiling floating acoustic plane",(-.35,.25,4.72),(7.55,4.5,.16),m["silver"],.025)
-    # A tall, asymmetrical illuminated portal is the visual anchor, not a miniature on a plinth.
-    cube("Portal left bronze pier",(-2.2,.95,2.15),(.24,.28,4.1),m["gold"],.025)
-    cube("Portal right bronze pier",(.65,.95,2.15),(.24,.28,4.1),m["gold"],.025)
-    cube("Portal deep lintel",(-.78,.95,4.12),(1.9,.28,.22),m["gold"],.025)
-    cube("Portal dark interior",(-.78,1.10,2.12),(2.48,.05,3.75),m["glass"],.015)
-    cube("Backlit identity wall",(-.55,2.30,2.75),(3.2,.06,2.25),m["cream"],.018)
-    cube("Brand accent line",(-.55,2.22,1.58),(2.3,.035,.055),m["orange"],.012)
-    # Reception desk and lounge seating establish a believable inhabited interior.
-    cube("Sculpted reception desk",(-2.45,-1.20,.68),(2.0,.82,1.15),m["silver"],.16)
-    cube("Desk dark inset",(-2.45,-1.625,.72),(1.55,.035,.62),m["ink"],.055)
-    cube("Lounge bench seat",(1.55,-1.55,.62),(2.0,.72,.28),m["orange"],.12)
-    for x in (.78,2.32):
-        cube("Lounge bench leg "+str(x),(x,-1.5,.30),(.10,.52,.48),m["ink"],.025)
-    cyl("Sculptural side table",(3.05,-.65,.55),.48,.12,m["gold"])
-    cyl("Side table pedestal",(3.05,-.65,.28),.09,.48,m["silver"])
-    # Vertical light fins and overhead linear lighting give the room full-scale rhythm.
-    for i in range(13):
-        cube("Lobby timber acoustic fin "+str(i),(-3.55+i*.19,2.30,2.3),(.035,.10,3.75),m["gold"],.012)
-    for i in range(5):
-        cube("Ceiling linear light "+str(i),(-2.65+i*1.15,-.25,4.61),(.045,3.1,.025),m["cream"],.008)
-    uv("Lobby planter vessel",(3.15,1.2,.55),(.52,.52,.55),m["blue"])
-    for i in range(5):
-        curve("Architectural planting stem "+str(i),[(3.15,1.2,.85),(3.0+i*.08,1.18,1.35),(2.82+i*.16,1.15,1.8)],.035,m["blue"])
+    # Creative agency world-building stage: three distinct campaign case studies,
+    # oversized editorial typography, spatial transitions and authored brand objects.
+    # Deliberately not an office, lobby, reception, interior-design or miniature scene.
+    cube("Agency infinite stage",(0,0,-.12),(11.8,7.2,.22),m["ink"],.035)
+    cube("Rear black scrim",(0,2.95,2.5),(11.5,.16,5.0),m["ink"],.025)
+    # Three monumental case-study canvases sit at different depths and scales,
+    # reading as a curated portfolio wall rather than a row of dashboard cards.
+    panels=[
+      (-3.35,1.85,2.45,2.75,3.65,m["orange"],"01 / BRAND WORLD","FORM / FIELD"),
+      (0.0,2.05,2.50,2.95,3.95,m["blue"],"02 / DIGITAL CULTURE","MOVE / BEYOND"),
+      (3.30,1.72,2.25,2.55,3.35,m["cream"],"03 / CAMPAIGN","MAKE / IMPACT")
+    ]
+    for idx,(x,y,z,w,h,accent,kicker,title) in enumerate(panels):
+        cube("Case canvas %02d"%idx,(x,y,z),(w,.12,h),accent,.035)
+        cube("Case canvas inset %02d"%idx,(x,y-.085,z),(w-.16,.035,h-.16),m["ink"] if idx!=2 else m["gold"],.012)
+        text3d("Case kicker %02d"%idx,kicker,(x-w*.43,y-.13,z+h*.34),.13,m["cream"] if idx!=2 else m["ink"])
+        text3d("Case title %02d"%idx,title,(x-w*.43,y-.14,z-h*.30),.24,m["cream"] if idx!=2 else m["ink"])
+        # A unique visual signature per case, visible as an authored campaign artwork.
+        if idx==0:
+            torus("Brand orbit ring",(x,y-.27,z+.12),.72,.075,m["gold"],(.28,.2,.12))
+            uv("Brand core sphere",(x,y-.28,z+.12),(.38,.38,.38),m["cream"])
+            for j in range(5):
+                cube("Brand graphic bar %d"%j,(x-.70+j*.34,y-.25,z-.55),(.12,.035,.42+j*.08),m["gold"],.025)
+        elif idx==1:
+            torus("Digital culture kinetic ring",(x,y-.27,z+.10),.86,.10,m["orange"],(.2,.55,.3))
+            torus("Digital culture orbit",(x,y-.31,z+.10),.53,.045,m["cream"],(.8,.1,.4))
+            uv("Digital culture nucleus",(x,y-.32,z+.10),(.25,.25,.25),m["orange"])
+        else:
+            for j in range(4):
+                cube("Campaign typography block %d"%j,(x-.48+j*.32,y-.24,z+.12),(.20,.045,1.05-j*.16),m["ink"],.025)
+            torus("Campaign halo",(x+.25,y-.28,z+.38),.58,.065,m["orange"],(.35,.2,.1))
+    # A large sculptural transition object crosses the three cases, implying
+    # one continuous creative practice rather than disconnected template tiles.
+    curve("Continuous creative ribbon",[(-4.8,-.15,.55),(-3.4,-.45,1.15),(-1.8,-.52,2.55),(0,-.58,1.25),(1.8,-.48,.72),(3.5,-.36,2.25),(4.8,-.12,1.5)],.095,m["gold"])
+    # Foreground plinths hold campaign artifacts, not furniture or an office desk.
+    cube("Campaign artifact plinth left",(-3.65,-1.55,.28),(1.55,.95,.48),m["silver"],.10)
+    uv("Campaign artifact left",(-3.65,-1.55,.82),(.48,.48,.48),m["orange"])
+    cube("Campaign artifact plinth center",(0,-1.62,.25),(1.65,1.02,.42),m["gold"],.09)
+    torus("Campaign artifact center",(0,-1.62,.88),.52,.12,m["blue"],(.5,.2,.1))
+    cube("Campaign artifact plinth right",(3.65,-1.52,.26),(1.55,.95,.44),m["silver"],.10)
+    uv("Campaign artifact right",(3.65,-1.52,.82),(.38,.58,.48),m["cream"])
+    # Oversized wayfinding in the environment reinforces the agency's authored point of view.
+    text3d("Agency manifesto","IDEAS IN MOTION",(-4.95,-2.28,.72),.30,m["cream"])
+    text3d("Agency descriptor","INDEPENDENT CREATIVE PRACTICE  /  IDENTITY  /  DIGITAL  /  CAMPAIGN",( -4.92,-2.28,.38),.105,m["gold"])
 
 def build_product(m):
     # Premium mirrorless cinema camera: unmistakable lens, grip, viewfinder, dials and hot shoe.
