@@ -145,7 +145,9 @@ def write_saas_svg(path):
     path.write_text(svg,encoding="utf-8")
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=Path("r50-review")); args=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=Path("r50-review"))
+    argv=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
+    args=ap.parse_args(argv)
     args.out.mkdir(parents=True,exist_ok=True); manifest=[]
     for template,builder in (("agency",build_agency),("product-3d",build_product),("gallery",build_gallery)):
         # reset() returns a scene-specific material palette and clears the prior scene.
