@@ -82,8 +82,8 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
             if not isinstance(entry.get(field),str) or not entry[field].strip():
                 raise ValueError("missing provenance "+field+" for "+name)
         if source_type in ("procedural-3d-render","procedural-vector-render"):
-            if entry.get("embeddedThirdPartyAssets") is not False:
-                raise ValueError("procedural original must explicitly declare embeddedThirdPartyAssets=false: "+name)
+            if entry.get("embeddedThirdPartyAssets") is not False or entry.get("thirdPartyAssets") is not False:
+                raise ValueError("procedural original must explicitly declare both third-party asset flags=false: "+name)
         if source_type=="open-licensed-photography":
             for field in ("creator","licenseId","licenseUrl","attributionText"):
                 if not isinstance(entry.get(field),str) or not entry[field].strip():
