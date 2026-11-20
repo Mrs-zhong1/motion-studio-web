@@ -1,5 +1,5 @@
 import {readFile,writeFile} from 'node:fs/promises';
-import {build} from 'esbuild';
+import {build,transform} from 'esbuild';
 import {fileURLToPath} from 'node:url';
 import {dirname,resolve} from 'node:path';
 import {injectOfflineEngine} from './inject-offline-engine.mjs';
@@ -60,9 +60,10 @@ while((inlineScriptMatch=inlineScriptPattern.exec(output))){
  const isExternal=/\bsrc\s*=/i.test(attrs);
  const type=(attrs.match(/\btype\s*=\s*["']?([^\s"'>]+)/i)||[])[1]||'text/javascript';
  if(isExternal||!/(?:java|ecma)script/i.test(type)) {inlineScriptIndex++;continue;}
- try { new Function(body); }
+ try { await transform(body,{loader:'js',target:'es2022'}); }
  catch(error) {
-  const location=String(error.stack||error).split('\n').slice(0,3).join(' | ');
+  const detail=error.errors?.[0];
+  const location=detail?.location?('line '+(detail.location.line||'?')+', column '+(detail.location.column||'?')+' '+(detail.text||'')):String(error.stack||error).split('\n').slice(0,3).join(' | ');
   throw new Error('Generated inline script syntax failure at index '+inlineScriptIndex+
    ' (id '+((attrs.match(/\bid\s*=\s*["']([^"']+)/i)||[])[1]||'none')+
    ', '+body.length+' chars): '+error.message+'; '+location);
