@@ -25,7 +25,7 @@ export function buildR42Editorial(project){
 export function injectR42Editorial(html){
  if(typeof html!=='string'||!html.includes('id="r41-preview-first-css"')||!html.includes('</body></html>'))throw Error('R42 expects R41 editor');
  if(html.includes('id="r42-editorial-director"'))throw Error('R42 duplicate');
- const script='<script id="r42-editorial-director">(function(){const old=exportDocument;const render='+buildR42Editorial.toString()+';exportDocument=function(){if(project.templateId==="editorial")return render(project);return old()};if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument})();</script>';
+ const script='<script id="r42-editorial-director">(function(){const old=exportDocument;const render='+buildR42Editorial.toString()+';function addExportStyles(html){if(!html||!html.includes("</head>"))return html;const r45=document.getElementById("r45-scene-composition-css")?.textContent||"";const r46=document.getElementById("r46-responsive-accessibility-css")?.textContent||"";return html.replace("</head>","<style id=\"r45-export-composition\">"+r45+"</style><style id=\"r46-export-accessibility\">"+r46+"</style></head>")}exportDocument=function(){if(project.templateId==="editorial")return addExportStyles(render(project));return old()};if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument})();</script>';
  const end=html.lastIndexOf('</body></html>');
  return html.slice(0,end)+script+html.slice(end);
 }
