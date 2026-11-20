@@ -13,6 +13,7 @@ on:
   pull_request:
     paths:
       - 'release/R52_PHOTO_RIGHTS_REGISTER.csv'
+      - 'release/R52_CANDIDATE_EVIDENCE_LEDGER.csv'
       - 'release/validate_r52_photo_rights.py'
       - '.github/workflows/r52-photo-rights-gate.yml'
       - 'stage9/ai-assets/**'
