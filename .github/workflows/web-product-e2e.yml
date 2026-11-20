@@ -220,9 +220,18 @@ jobs:
           echo "### Motion Studio E2E — ${{ matrix.browser }}" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           if [ -f WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json ]; then
-            echo '~~~json' >> "$GITHUB_STEP_SUMMARY"
-            cat WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json >> "$GITHUB_STEP_SUMMARY"
-            echo '~~~' >> "$GITHUB_STEP_SUMMARY"
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          doc=json.loads(Path("WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json").read_text())
+          keep={"status","pass","passed","failed","failed_checks","suite","browser","error","errors","checks","testcount","passedcount","failedcount","duration","summary","result"}
+          def compact(v):
+              if isinstance(v,dict): return {k:compact(x) for k,x in v.items() if k.lower() in keep}
+              if isinstance(v,list): return [compact(x) for x in v[:12]]
+              if isinstance(v,str): return v[:240]
+              return v
+          print(json.dumps(compact(doc),ensure_ascii=False,indent=2)[:12000])
+          PY
           else
             echo "Result JSON unavailable: build, setup, or browser launch failed before result creation." >> "$GITHUB_STEP_SUMMARY"
           fi
