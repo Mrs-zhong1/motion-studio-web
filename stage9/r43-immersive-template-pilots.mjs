@@ -102,23 +102,9 @@ export function applyR43TemplatePilots(html){
  if(html.includes('id="r43-template-pilot-css"'))throw Error('R43 duplicate injection');
  const previous='const original=exportDocument;';
  if(!html.includes('function exportDocument('))throw Error('R43 exportDocument hook missing');
- const injected=`<script id="r43-template-pilot-director">
-(function(){
- const original=exportDocument;
- exportDocument=function(){
-  const result=original();
-  const id=project&&project.templateId;
-  if(!['agency','saas'].includes(id))return result;
-  const css=document.getElementById('r43-template-pilot-css').textContent;
-  const runtime=document.getElementById('r43-template-pilot-runtime').textContent;
-  const marked=result.replace('<html','<html data-r43-template="'+id+'"');
-  return marked.replace('</head>','<style id="r43-export-css">'+css+'</style></head>')
-    .replace('</body>','<script id="r43-export-runtime">'+runtime+'<'+'/script></body>');
- };
- if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument;
-})();
-</script>`;
- const at=html.lastIndexOf('</body>');
- const source=html.slice(0,at)+'<script type="text/plain" id="r43-template-pilot-runtime">'+r43Runtime+'</script>'+injected+html.slice(at);
+ const hook=`;(function(){const previous=exportDocument;exportDocument=function(){const result=previous();const id=project&&project.templateId;if(!['agency','saas'].includes(id))return result;const css=document.getElementById('r43-template-pilot-css').textContent;const runtime=document.getElementById('r43-template-pilot-runtime').textContent;const marked=result.replace('<html','<html data-r43-template="'+id+'"');return marked.replace('</head>','<style id="r43-export-css">'+css+'</style></head>').replace('</body>','<script id="r43-export-runtime">'+runtime+'<'+'/script></body>')}})();`;
+ const apiAnchor='window.MotionStudioUnified={undo:';
+ if(!html.includes(apiAnchor))throw Error('R43 public API insertion anchor missing');
+ const source=html.replace(apiAnchor,hook+apiAnchor).replace('</body>','<script type="text/plain" id="r43-template-pilot-runtime">'+r43Runtime+'</script></body>');
  return source.replace('</head>','<style id="r43-template-pilot-css">'+r43CSS+'</style></head>');
 }
