@@ -58,10 +58,10 @@ def audit(asset_dir=ASSETS):
         source_class=asset.get('source')
         original=(source_type in ('individual-generation','procedural-3d-render','procedural-vector-render','open-licensed-photography')
                   and asset.get('trueHighResolutionGenerated') is True)
-        native_enough=(native[0]>=1280 and native[1]>=720)
+        native_enough=(native[0]>=1600 and native[1]>=900)
         amplification=max(target[0]/native[0],target[1]/native[1])
         upscale_ok=amplification<=1.25
-        output_ok=(dimensions[0]>=1280 and dimensions[1]>=720)
+        output_ok=(dimensions[0]>=1600 and dimensions[1]>=900)
         # Original pixel size is a provenance claim: a resized JPEG can still
         # report 1600x900. Never infer native resolution from output size.
         risk=[]
