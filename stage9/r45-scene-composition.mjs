@@ -39,6 +39,9 @@ export function applyR45TemplateComposition(html){
  if(typeof html!=='string'||!html.includes('</head>')||!html.includes('</body>'))throw Error('R45 requires complete editor HTML');
  if(html.includes('id="r45-scene-composition-css"'))throw Error('R45 duplicate injection');
  if(!html.includes('function exportDocument('))throw Error('R45 exportDocument hook missing');
- const injected=`<script id="r45-scene-composition-director">(function(){const previous=exportDocument;exportDocument=function(){const result=previous();if(!result||!result.includes('</head>'))return result;const css=document.getElementById('r45-scene-composition-css').textContent;return result.replace('</head>','<style id="r45-export-composition">'+css+'</style></head>')};if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument})();</script>`;
+ const hook=`;(function(){const previous=exportDocument;exportDocument=function(){const result=previous();if(!result||!result.includes('</head>'))return result;const css=document.getElementById('r45-scene-composition-css').textContent;return result.replace('</head>','<style id="r45-export-composition">'+css+'</style></head>')}})();`;
+ const apiAnchor='window.MotionStudioUnified={undo:';
+ if(!html.includes(apiAnchor))throw Error('R45 public API insertion anchor missing');
+ return html.replace(apiAnchor,hook+apiAnchor).replace('</head>','<style id="r45-scene-composition-css">'+R45_CSS+'</style></head>').replace('</body>','<script type="text/plain" id="r45-composition-source">'+R45_CSS+'</script></body>');
  return html.replace('</head>','<style id="r45-scene-composition-css">'+R45_CSS+'</style></head>').replace('</body>','<script type="text/plain" id="r45-composition-source">'+R45_CSS+'</script>'+injected+'</body>');
 }
