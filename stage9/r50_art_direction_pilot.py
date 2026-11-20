@@ -95,6 +95,8 @@ def text3d(name, body, loc, size, material, align="LEFT"):
     return obj
 
 def build_agency(m):
+    # Wider orthographic framing keeps all case labels inside the safe frame.
+    bpy.context.scene.camera.data.ortho_scale=14.2
     # Creative agency world-building stage: three distinct campaign case studies,
     # oversized editorial typography, spatial transitions and authored brand objects.
     # Deliberately not an office, lobby, reception, interior-design or miniature scene.
@@ -128,7 +130,7 @@ def build_agency(m):
             torus("Campaign halo",(x+.25,y-.28,z+.38),.58,.065,m["orange"],(.35,.2,.1))
     # A large sculptural transition object crosses the three cases, implying
     # one continuous creative practice rather than disconnected template tiles.
-    curve("Continuous creative ribbon",[(-4.8,-.15,.55),(-3.4,-.45,1.15),(-1.8,-.52,2.55),(0,-.58,1.25),(1.8,-.48,.72),(3.5,-.36,2.25),(4.8,-.12,1.5)],.095,m["gold"])
+    curve("Continuous creative ribbon",[(-4.8,-.45,.16),(-3.4,-.55,.22),(-1.8,-.62,.18),(0,-.66,.25),(1.8,-.62,.18),(3.5,-.55,.22),(4.8,-.45,.16)],.065,m["gold"])
     # Keep the lower foreground intentionally quiet: the continuous ribbon and
     # three authored case canvases carry the composition without obscuring labels.
 
