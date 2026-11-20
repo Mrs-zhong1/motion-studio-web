@@ -19,7 +19,7 @@ try:
    page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
    errors=[]
    console_errors=[]
-   page.on("pageerror",lambda e:errors.append(str(e)))
+   page.on("pageerror",lambda e:errors.append({"message":str(e),"stack":getattr(e,"stack",None)}))
    page.on("console",lambda msg:console_errors.append(msg.text) if msg.type=="error" else None)
    page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
    page.locator("#discoveryView").wait_for(state="visible",timeout=20000)
@@ -52,7 +52,7 @@ try:
    assert 'id="r46-export-accessibility"' in html, f"{template_id}: R46 accessibility CSS missing from export"
    exported_page=browser.new_page(viewport={"width":1280,"height":800})
    export_errors=[]
-   exported_page.on("pageerror",lambda e:export_errors.append(str(e)))
+   exported_page.on("pageerror",lambda e:export_errors.append({"message":str(e),"stack":getattr(e,"stack",None)}))
    exported_page.set_content(html,wait_until="domcontentloaded")
    exported_page.wait_for_timeout(350)
    section_count=exported_page.locator("section.section,section.e42-spread").count()
