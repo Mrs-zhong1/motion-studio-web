@@ -92,7 +92,7 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
             if not entry["originalSourceUrl"].startswith("https://") or not entry["licenseUrl"].startswith("https://"):
                 raise ValueError("open-license source and license URLs must use HTTPS: "+name)
             license_id=re.sub(r"[^A-Z0-9.]+","-",entry["licenseId"].upper()).strip("-")
-            allowed=bool(re.fullmatch(r"(?:CC0(?:-1\\.0)?|PUBLIC-DOMAIN|PDM-1\\.0|CC-BY-(?:2\\.0|2\\.5|3\\.0|4\\.0)|CC-BY-SA-(?:2\\.0|2\\.5|3\\.0|4\\.0))",license_id))
+            allowed=bool(re.fullmatch(r"(?:CC0(?:-1[.]0)?|PUBLIC-DOMAIN|PDM-1[.]0|CC-BY-(?:2[.]0|2[.]5|3[.]0|4[.]0)|CC-BY-SA-(?:2[.]0|2[.]5|3[.]0|4[.]0))",license_id))
             if not allowed:
                 raise ValueError("license is not explicitly approved for commercial reuse: "+name)
             if license_id.startswith("CC-BY-SA-") and entry.get("shareAlikeCompatibilityReviewed") is not True:
