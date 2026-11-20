@@ -130,35 +130,6 @@ def build_gallery(m):
     curve("Ceiling installation cable",[(-2.6,1.2,3.5),(-1.2,1.2,3.1),(0,1.2,3.7),(1.3,1.2,3.15),(2.6,1.2,3.5)],.018,m["gold"])
 
 
-def editorial_finish(path, template):
-    # Distinct editorial identity for each art direction; typography is original
-    # and rendered locally, with no external fonts or image dependencies.
-    from PIL import Image, ImageDraw, ImageFont
-    image=Image.open(path).convert("RGB")
-    draw=ImageDraw.Draw(image,"RGBA")
-    draw.rectangle((0,0,330,H),fill=(8,14,23,242))
-    draw.rectangle((330,0,334,H),fill=(201,151,87,255))
-    font_root=Path("/usr/share/fonts/truetype/dejavu")
-    regular=ImageFont.truetype(str(font_root/"DejaVuSans.ttf"),18)
-    small=ImageFont.truetype(str(font_root/"DejaVuSans.ttf"),13)
-    title_font=ImageFont.truetype(str(font_root/"DejaVuSans-Bold.ttf"),43)
-    specs={
-      "agency":("FIELD / 01","FORM FOLLOWS\nFEELING","Creative direction\n& digital worlds","ATELIER  /  2026","A01"),
-      "product-3d":("OBJECT / 02","SOUND IN\nPURE FORM","Precision audio\nobject study","INDUSTRIAL  /  01","P02"),
-      "gallery":("SPACE / 03","THE ART OF\nSTILLNESS","Sculpture, light\n& spatial rhythm","EXHIBITION  /  04","G03")
-    }
-    eyebrow,title,sub,meta,code=specs[template]
-    white=(241,240,233,255); muted=(154,169,184,255); accent=(210,160,91,255)
-    draw.text((42,52),"M / S     MOTION STUDIO",font=small,fill=muted)
-    draw.line((42,92,278,92),fill=(96,112,128,180),width=1)
-    draw.text((42,145),eyebrow,font=regular,fill=accent)
-    draw.multiline_text((40,215),title,font=title_font,fill=white,spacing=7)
-    draw.multiline_text((42,365),sub,font=regular,fill=muted,spacing=9)
-    draw.line((42,760,278,760),fill=(96,112,128,180),width=1)
-    draw.text((42,786),meta,font=small,fill=muted)
-    draw.text((42,835),code,font=regular,fill=accent)
-    image.save(path,format="PNG",optimize=True)
-
 def write_saas_svg(path):
     # Original vector UI scene: task flow, data cards and live signal; no external fonts/images.
     svg='''<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
@@ -184,7 +155,7 @@ def main():
         materials=reset(template)
         builder(materials)
         scene=bpy.context.scene; out=args.out/(template+"-r50.png"); scene.render.filepath=str(out)
-        bpy.ops.render.render(write_still=True); editorial_finish(out,template); raw=out.read_bytes()
+        bpy.ops.render.render(write_still=True); raw=out.read_bytes()
         manifest.append({"template":template,"file":out.name,"sourceType":"procedural-3d-render","dimensions":[W,H],"sha256":hashlib.sha256(raw).hexdigest(),"sourceCodeSha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),"blenderVersion":bpy.app.version_string,"renderEngine":scene.render.engine,"thirdPartyAssets":False,"commercialUseTermsChecked":False,"reviewStatus":"HUMAN_VISUAL_REVIEW_REQUIRED","productionEligible":False})
     svg=args.out/"saas-r50.svg"; write_saas_svg(svg); raw=svg.read_bytes()
     manifest.append({"template":"saas","file":svg.name,"sourceType":"original-svg-vector","dimensions":[W,H],"sha256":hashlib.sha256(raw).hexdigest(),"sourceCodeSha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),"thirdPartyAssets":False,"commercialUseTermsChecked":False,"reviewStatus":"HUMAN_VISUAL_REVIEW_REQUIRED","productionEligible":False})
