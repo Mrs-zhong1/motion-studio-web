@@ -26,6 +26,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install image decoder for independent dimension verification
+        run: python -m pip install 'Pillow==11.3.0'
       - name: Run asset gate unit tests
         run: python -m unittest release.tests.test_asset_validation -v
       - name: Validate evidence without treating missing sourcing as CI infrastructure failure
