@@ -62,3 +62,10 @@
 - Increased the Agency orthographic camera scale to 14.2 to create a wider safe frame for all three case canvases.
 - Repositioned and reduced the continuous gold ribbon to a low foreground path so it no longer crosses the case-study typography and artwork.
 - This is a source change only. The available GitHub Actions tools do not expose workflow dispatch, and no new R50 render run/artifact is associated with this SHA yet. The change is therefore **awaiting render**, not visually accepted.
+
+
+## R50 batch revision — 2026-11-20, source commits f9abc8c and 33b9a10
+
+- `f9abc8c`: rebuilt the Agency sample as a three-part campaign portfolio with distinct brand-identity packaging, digital-culture device art and campaign print/packaging; removed the crossing ribbon and tightened the case safe frame. Added optical barrel/aperture and tactile details to the cinema camera. Removed the foreground right gallery wall so it cannot occlude the third sculpture; opened the gallery front and widened the framing.
+- `33b9a10`: replaced the SaaS Capture/Shape/Deliver infographic with a conventional workspace product UI: navigation, metric cards, activity chart, team workload, recent projects and priority insight. All figures and project names are explicitly labeled illustrative demo content.
+- These are source changes only. They are not visually accepted until a fresh render for the exact PR head is downloaded and inspected. The generated manifest must continue to report `HUMAN_VISUAL_REVIEW_REQUIRED` and `productionEligible=false` until explicit approval. No commercial-rights or release signoff is implied.
