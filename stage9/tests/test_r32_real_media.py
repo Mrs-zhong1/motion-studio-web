@@ -17,7 +17,7 @@ class R32MediaAuditTests(unittest.TestCase):
                     records.append({'template':template,'chapter':chapter,'file':name,
                        'source':'AI_GENERATED','sourceType':'individual-generation',
                        'trueHighResolutionGenerated':True,
-                       'nativeSourceDimensions':[1600,900],'presentationDimensions':[1280,720],
+                       'nativeSourceDimensions':[1600,900],'presentationDimensions':[1600,900],
                        'generationSystem':'test fixture','generationDate':'2026-11-16',
                        'sourceReference':name,'termsUrl':'https://example.org/terms',
                        'commercialUseTermsChecked':True,'sha256':hashlib.sha256(raw).hexdigest()})
@@ -55,7 +55,7 @@ class R32MediaAuditTests(unittest.TestCase):
             self.assertIn('source_native_resolution_insufficient',blocked['scenes'][3]['technicalRisk'])
             self.assertIn('upscaled_output_cannot_restore_original_pixels',blocked['scenes'][3]['technicalRisk'])
             records[3]['sourceType']='individual-generation'
-            records[3]['nativeSourceDimensions']=[1280,720]
+            records[3]['nativeSourceDimensions']=[1600,900]
             (root/'manifest.json').write_text(json.dumps({'assets':records}))
             (root/'editorial-4.jpg').write_bytes(b'not an image')
             corrupted=audit(root)
