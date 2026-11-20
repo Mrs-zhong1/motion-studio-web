@@ -124,6 +124,8 @@ class ReplacementTests(unittest.TestCase):
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             _,planned=plan(inbox,assets/"manifest.json")
             self.assertEqual(len(planned),1)
+            self.assertEqual(planned[0][3]["originalSourceUrl"],"https://example.org/photo")
+            self.assertEqual(planned[0][3]["attribution"],"Photo by Photographer, CC BY 4.0")
             entry["licenseId"]="CC-BY-NC-4.0"
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             with self.assertRaisesRegex(ValueError,"not explicitly approved for commercial reuse"):
