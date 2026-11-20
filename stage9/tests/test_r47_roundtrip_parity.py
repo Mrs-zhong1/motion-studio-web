@@ -14,7 +14,7 @@ try:
  server=ThreadingHTTPServer(("127.0.0.1",0),partial(SimpleHTTPRequestHandler,directory=str(ROOT)))
  threading.Thread(target=server.serve_forever,daemon=True).start()
  with sync_playwright() as pw:
-  browser=pw.chromium.launch(headless=True,args=["--no-sandbox","--use-gl=angle","--use-angle=swiftshader","--enable-webgl","--enable-unsafe-swiftshader"])
+  browser_name=os.environ.get("MOTION_BROWSER","chromium").lower()\n  browser_type=getattr(pw,browser_name)\n  browser=browser_type.launch(headless=True,args=["--no-sandbox","--use-gl=angle","--use-angle=swiftshader","--enable-webgl","--enable-unsafe-swiftshader"] if browser_name=="chromium" else [])\n  report["browser"]=browser_name
   for template_id in TEMPLATES:
    page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
    errors=[]
