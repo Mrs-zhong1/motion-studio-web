@@ -42,8 +42,9 @@ def main():
   if key in seen: errors.append(f"duplicate slot {key}")
   seen.add(key)
   if key not in expected: errors.append(f"{slot}: unexpected slot {key}"); continue
-  if row.get("productionEligible") is not True or row.get("humanVisualApproval") is not True or row.get("reviewStatus")!="APPROVED":
-   errors.append(f"{slot}: human approval and productionEligible=true required"); continue
+  approval_ok=(row.get("productionEligible") is True and row.get("humanVisualApproval") is True and row.get("reviewStatus")=="APPROVED")
+  if not approval_ok:
+   errors.append(f"{slot}: human approval and productionEligible=true required")
   filename=row.get("file","")
   if not filename or Path(filename).name!=filename: errors.append(f"{slot}: unsafe/missing filename"); continue
   path=a.asset_root/filename
@@ -89,7 +90,7 @@ def main():
      im.load(); actual=im.size
    except (OSError,UnidentifiedImageError): errors.append(f"{slot}: photo cannot be decoded"); continue
    if actual!=(dims[0],dims[1]): errors.append(f"{slot}: manifest dimensions differ from decoded photo"); continue
-  accepted.append(slot)
+  if approval_ok: accepted.append(slot)
  missing=expected-seen
  if missing: errors.append(f"missing slots: {sorted(missing)}")
  report={"expected":33,"accepted":len(accepted),"acceptedSlots":accepted,"errors":errors,"status":"PASS" if not errors and len(accepted)==33 else "HOLD"}
