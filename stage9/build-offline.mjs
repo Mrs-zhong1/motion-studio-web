@@ -53,18 +53,18 @@ output=output.replace('const stage9ThreeEngineURL=',sharedUrl+'const stage9Three
 // Parse the exact inline-script payloads produced by the HTML parser before
 // publishing build artifacts. This catches premature </script> termination
 // and malformed template literals at their originating script index.
-const inlineScriptPattern=/<script\\b([^>]*)>([\\s\\S]*?)<\\/script\\s*>/gi;
+const inlineScriptPattern=/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi;
 let inlineScriptMatch,inlineScriptIndex=0;
 while((inlineScriptMatch=inlineScriptPattern.exec(output))){
  const attrs=inlineScriptMatch[1],body=inlineScriptMatch[2];
- const isExternal=/\\bsrc\\s*=/i.test(attrs);
- const type=(attrs.match(/\\btype\\s*=\\s*["']?([^\\s"'>]+)/i)||[])[1]||'text/javascript';
+ const isExternal=/\bsrc\s*=/i.test(attrs);
+ const type=(attrs.match(/\btype\s*=\s*["']?([^\s"'>]+)/i)||[])[1]||'text/javascript';
  if(isExternal||!/(?:java|ecma)script/i.test(type)) {inlineScriptIndex++;continue;}
  try { new Function(body); }
  catch(error) {
-  const location=String(error.stack||error).split('\\n').slice(0,3).join(' | ');
+  const location=String(error.stack||error).split('\n').slice(0,3).join(' | ');
   throw new Error('Generated inline script syntax failure at index '+inlineScriptIndex+
-   ' (id '+((attrs.match(/\\bid\\s*=\\s*["']([^"']+)/i)||[])[1]||'none')+
+   ' (id '+((attrs.match(/\bid\s*=\s*["']([^"']+)/i)||[])[1]||'none')+
    ', '+body.length+' chars): '+error.message+'; '+location);
  }
  inlineScriptIndex++;
