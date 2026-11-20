@@ -42,5 +42,10 @@ export function applyR45TemplateComposition(html){
  const hook=`;(function(){const previous=exportDocument;exportDocument=function(){const result=previous();if(!result||!result.includes('</head>'))return result;const css=document.getElementById('r45-scene-composition-css').textContent;return result.replace('</head>','<style id="r45-export-composition">'+css+'</style></head>')}})();`;
  const apiAnchor='window.MotionStudioUnified={undo:';
  if(!html.includes(apiAnchor))throw Error('R45 public API insertion anchor missing');
- return html.replace(apiAnchor,hook+apiAnchor).replace('</head>','<style id="r45-scene-composition-css">'+R45_CSS+'</style></head>').replace('</body>','<script type="text/plain" id="r45-composition-source">'+R45_CSS+'</script></body>');
+ let output=html.replace(apiAnchor,hook+apiAnchor);
+ const bodyClose=output.lastIndexOf('</body>');
+ const headClose=output.indexOf('</head>');
+ if(bodyClose<0||headClose<0)throw Error('R45 actual document closing tags missing');
+ output=output.slice(0,bodyClose)+'<script type="text/plain" id="r45-composition-source">'+R45_CSS+'</script>'+output.slice(bodyClose);
+ return output.slice(0,headClose)+'<style id="r45-scene-composition-css">'+R45_CSS+'</style>'+output.slice(headClose);
 }
