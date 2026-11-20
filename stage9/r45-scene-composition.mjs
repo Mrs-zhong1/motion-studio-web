@@ -43,5 +43,4 @@ export function applyR45TemplateComposition(html){
  const apiAnchor='window.MotionStudioUnified={undo:';
  if(!html.includes(apiAnchor))throw Error('R45 public API insertion anchor missing');
  return html.replace(apiAnchor,hook+apiAnchor).replace('</head>','<style id="r45-scene-composition-css">'+R45_CSS+'</style></head>').replace('</body>','<script type="text/plain" id="r45-composition-source">'+R45_CSS+'</script></body>');
- return html.replace('</head>','<style id="r45-scene-composition-css">'+R45_CSS+'</style></head>').replace('</body>','<script type="text/plain" id="r45-composition-source">'+R45_CSS+'</script>'+injected+'</body>');
 }
