@@ -100,7 +100,6 @@ export const r43Runtime = String.raw`
 export function applyR43TemplatePilots(html){
  if(typeof html!=='string'||!html.includes('</head>')||!html.includes('</body>'))throw Error('R43 requires a complete exported HTML document');
  if(html.includes('id="r43-template-pilot-css"'))throw Error('R43 duplicate injection');
- const previous='const original=exportDocument;';
  if(!html.includes('function exportDocument('))throw Error('R43 exportDocument hook missing');
  const hook=`;(function(){const previous=exportDocument;exportDocument=function(){const result=previous();const id=project&&project.templateId;if(!['agency','saas'].includes(id))return result;const css=document.getElementById('r43-template-pilot-css').textContent;const runtime=document.getElementById('r43-template-pilot-runtime').textContent;const marked=result.replace('<html','<html data-r43-template="'+id+'"');return marked.replace('</head>','<style id="r43-export-css">'+css+'</style></head>').replace('</body>','<script id="r43-export-runtime">'+runtime+'<'+'/script></body>')}})();`;
  const apiAnchor='window.MotionStudioUnified={undo:';
