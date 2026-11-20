@@ -8,12 +8,14 @@ on:
       - 'release/validate_r52_photo_rights.py'
       - '.github/workflows/r52-photo-rights-gate.yml'
       - 'stage9/ai-assets/**'
+      - 'release/tests/test_asset_validation.py'
   pull_request:
     paths:
       - 'release/R52_PHOTO_RIGHTS_REGISTER.csv'
       - 'release/validate_r52_photo_rights.py'
       - '.github/workflows/r52-photo-rights-gate.yml'
       - 'stage9/ai-assets/**'
+      - 'release/tests/test_asset_validation.py'
 permissions:
   contents: read
 jobs:
@@ -24,6 +26,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Run asset gate unit tests
+        run: python -m unittest release.tests.test_asset_validation -v
       - name: Validate evidence without treating missing sourcing as CI infrastructure failure
         run: python release/validate_r52_photo_rights.py --allow-incomplete --report r52-photo-rights-report.json
       - name: Publish itemized rights HOLD report
