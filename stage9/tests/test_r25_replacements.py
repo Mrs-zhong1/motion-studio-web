@@ -29,14 +29,14 @@ class ReplacementTests(unittest.TestCase):
                     records.append(dict(template=template,chapter=chapter,file=f"{template}-{chapter}.png",
                                         sha256="0"*64,source="AI_GENERATED"))
             (assets/"manifest.json").write_text(json.dumps({"assets":records}))
-            image=Image.new("RGB",(1280,720),(32,80,120))
+            image=Image.new("RGB",(1600,900),(32,80,120))
             image.save(inbox/"editorial-1.png",format="PNG")
             raw=(inbox/"editorial-1.png").read_bytes()
             self.assertEqual(native_dimensions(raw),(1280,720))
             entry=dict(template="editorial",chapter=1,file="editorial-1.png",
                        source="AI_GENERATED",sourceType="individual-generation",
                        trueHighResolutionGenerated=True,
-                       nativeSourceDimensions=[1280,720],
+                       nativeSourceDimensions=[1600,900],
                        generationSystem="fixture-generator",generationDate="2026-11-16",
                        sourceReference="fixture-original",commercialUseTermsChecked=True,
                        termsUrl="https://example.com/terms")
