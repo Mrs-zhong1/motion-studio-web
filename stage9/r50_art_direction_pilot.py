@@ -180,89 +180,83 @@ def build_gallery(m):
 
 
 def write_saas_svg(path):
-    # Original SaaS product interface: navigable workspace, KPI cards, analytics and activity.
-    svg='''<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+    """Original SaaS product journey: Capture -> Shape -> Deliver, not a generic KPI dashboard."""
+    svg = """<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
 <defs>
- <linearGradient id="canvas" x2="1" y2="1"><stop stop-color="#0b1220"/><stop offset="1" stop-color="#17263a"/></linearGradient>
- <linearGradient id="accent"><stop stop-color="#5eead4"/><stop offset="1" stop-color="#60a5fa"/></linearGradient>
- <filter id="soft"><feGaussianBlur stdDeviation="42"/></filter>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f4f1eb"/><stop offset="1" stop-color="#e5e9e6"/></linearGradient>
+ <linearGradient id="hero" x2="1" y2="1"><stop stop-color="#172c2a"/><stop offset="1" stop-color="#31564d"/></linearGradient>
+ <linearGradient id="mint" x2="1"><stop stop-color="#b6e4d5"/><stop offset="1" stop-color="#d5eee4"/></linearGradient>
+ <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#172c2a" flood-opacity=".12"/></filter>
 </defs>
-<rect width="1600" height="900" fill="url(#canvas)"/>
-<circle cx="1330" cy="120" r="260" fill="#2563eb" opacity=".10" filter="url(#soft)"/>
-<!-- app chrome -->
-<rect x="54" y="42" width="1492" height="816" rx="24" fill="#0e1929" stroke="#34465e" stroke-width="2"/>
-<rect x="54" y="42" width="1492" height="70" rx="24" fill="#142238"/>
-<circle cx="92" cy="77" r="7" fill="#fb7185"/><circle cx="116" cy="77" r="7" fill="#fbbf24"/><circle cx="140" cy="77" r="7" fill="#5eead4"/>
-<rect x="178" y="61" width="34" height="32" rx="9" fill="url(#accent)"/>
-<path d="M187 83 L195 69 L203 83" fill="none" stroke="#0e1929" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="226" y="84" fill="#f1f5f9" font-family="Arial,sans-serif" font-size="22" font-weight="700">Northstar</text>
-<rect x="1110" y="58" width="220" height="38" rx="19" fill="#1c2e45" stroke="#3b506c"/>
-<circle cx="1132" cy="77" r="6" fill="#5eead4"/><text x="1150" y="83" fill="#b8c7d9" font-family="Arial,sans-serif" font-size="14">All systems operational</text>
-<circle cx="1390" cy="77" r="18" fill="#263b55"/><text x="1384" y="83" fill="#dbeafe" font-family="Arial,sans-serif" font-size="15">A</text>
-<text x="1422" y="83" fill="#dbeafe" font-family="Arial,sans-serif" font-size="15">Alex Morgan</text>
-<!-- sidebar -->
-<rect x="54" y="112" width="238" height="746" fill="#101d30"/>
-<text x="84" y="158" fill="#7188a6" font-family="Arial,sans-serif" font-size="12" letter-spacing="2">WORKSPACE</text>
-<rect x="72" y="178" width="202" height="48" rx="10" fill="#203b53"/>
-<rect x="88" y="194" width="15" height="15" rx="4" fill="#5eead4"/>
-<text x="118" y="208" fill="#e7f4f7" font-family="Arial,sans-serif" font-size="16" font-weight="700">Overview</text>
-<g fill="#9aabc0" font-family="Arial,sans-serif" font-size="15">
- <text x="118" y="267">Analytics</text><text x="118" y="319">Campaigns</text><text x="118" y="371">Audience</text><text x="118" y="423">Automations</text>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<text x="88" y="78" font-family="Arial,sans-serif" font-size="17" letter-spacing="4" fill="#527066">NORTHSTAR / PRODUCT STUDIO</text>
+<text x="88" y="156" font-family="Arial,sans-serif" font-size="56" font-weight="700" fill="#172c2a">From raw signal to shipped work.</text>
+<text x="90" y="198" font-family="Arial,sans-serif" font-size="20" fill="#667b73">A guided workspace that turns customer input into clear, ready-to-launch outcomes.</text>
+<g font-family="Arial,sans-serif">
+ <rect x="88" y="244" width="1424" height="78" rx="18" fill="#fff" stroke="#d6ded8"/>
+ <rect x="110" y="264" width="38" height="38" rx="12" fill="#172c2a"/><text x="129" y="290" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">1</text>
+ <text x="168" y="291" font-size="21" font-weight="700" fill="#172c2a">CAPTURE</text>
+ <text x="320" y="291" font-size="16" fill="#72837b">Collect the signal</text>
+ <path d="M520 283 H620" stroke="#b7c7bf" stroke-width="2"/><path d="M612 275 L622 283 L612 291" fill="none" stroke="#789087" stroke-width="2"/>
+ <rect x="650" y="264" width="38" height="38" rx="12" fill="#172c2a"/><text x="669" y="290" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">2</text>
+ <text x="708" y="291" font-size="21" font-weight="700" fill="#172c2a">SHAPE</text>
+ <text x="835" y="291" font-size="16" fill="#72837b">Make it actionable</text>
+ <path d="M1045 283 H1130" stroke="#b7c7bf" stroke-width="2"/><path d="M1122 275 L1132 283 L1122 291" fill="none" stroke="#789087" stroke-width="2"/>
+ <rect x="1160" y="264" width="38" height="38" rx="12" fill="#172c2a"/><text x="1179" y="290" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">3</text>
+ <text x="1218" y="291" font-size="21" font-weight="700" fill="#172c2a">DELIVER</text>
+ <text x="1350" y="291" font-size="16" fill="#72837b">Ship with confidence</text>
 </g>
-<g fill="none" stroke="#6f89a8" stroke-width="2"><path d="M89 250 h18 v16 h-18z M89 302 h18 v16 h-18z M89 354 h18 v16 h-18z M89 406 h18 v16 h-18z"/></g>
-<path d="M78 470 H268" stroke="#293d56"/>
-<text x="84" y="508" fill="#7188a6" font-family="Arial,sans-serif" font-size="12" letter-spacing="2">MANAGE</text>
-<g fill="#9aabc0" font-family="Arial,sans-serif" font-size="15"><text x="118" y="557">Integrations</text><text x="118" y="609">Settings</text></g>
-<circle cx="98" cy="550" r="8" fill="none" stroke="#6f89a8" stroke-width="2"/><path d="M90 609 h16 M98 601 v16" stroke="#6f89a8" stroke-width="2"/>
-<rect x="76" y="772" width="194" height="58" rx="12" fill="#172a40"/>
-<circle cx="101" cy="801" r="14" fill="#36516d"/><text x="96" y="806" fill="#e2e8f0" font-family="Arial,sans-serif" font-size="13">?</text>
-<text x="126" y="797" fill="#dbe7f3" font-family="Arial,sans-serif" font-size="13">Help center</text><text x="126" y="815" fill="#7f94ad" font-family="Arial,sans-serif" font-size="11">Guides and support</text>
-<!-- main content -->
-<text x="334" y="164" fill="#f8fafc" font-family="Arial,sans-serif" font-size="34" font-weight="700">Good morning, Alex</text>
-<text x="334" y="196" fill="#91a5bf" font-family="Arial,sans-serif" font-size="16">Here is what is happening across your workspace today.</text>
-<rect x="1300" y="142" width="190" height="42" rx="10" fill="#1b3048" stroke="#3b536e"/>
-<text x="1320" y="168" fill="#c5d4e5" font-family="Arial,sans-serif" font-size="14">Last 30 days</text>
-<!-- KPI cards -->
-<g>
- <rect x="334" y="230" width="350" height="142" rx="15" fill="#17283d" stroke="#31465f"/>
- <rect x="704" y="230" width="350" height="142" rx="15" fill="#17283d" stroke="#31465f"/>
- <rect x="1074" y="230" width="416" height="142" rx="15" fill="#17283d" stroke="#31465f"/>
- <g fill="#91a5bf" font-family="Arial,sans-serif" font-size="14"><text x="360" y="267">Total revenue</text><text x="730" y="267">Active subscribers</text><text x="1100" y="267">Conversion rate</text></g>
- <g fill="#f1f5f9" font-family="Arial,sans-serif" font-size="34" font-weight="700"><text x="360" y="317">$84,254</text><text x="730" y="317">12,840</text><text x="1100" y="317">8.42%</text></g>
- <g fill="#5eead4" font-family="Arial,sans-serif" font-size="13"><text x="550" y="316">+12.8%</text><text x="920" y="316">+6.4%</text><text x="1365" y="316">+2.1%</text></g>
- <g fill="#7188a6" font-family="Arial,sans-serif" font-size="12"><text x="360" y="346">vs. previous period</text><text x="730" y="346">vs. previous period</text><text x="1100" y="346">vs. previous period</text></g>
+<!-- Capture: real-looking source inbox -->
+<g filter="url(#shadow)">
+ <rect x="88" y="356" width="430" height="438" rx="22" fill="#fff"/>
+ <rect x="88" y="356" width="430" height="66" rx="22" fill="#f8faf8"/>
+ <text x="120" y="398" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#203b34">Signal inbox</text>
+ <rect x="120" y="446" width="366" height="52" rx="12" fill="#f2f6f3"/>
+ <circle cx="145" cy="472" r="8" fill="#7ab39e"/><text x="166" y="478" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Customer interview · 12 notes</text>
+ <rect x="120" y="514" width="366" height="52" rx="12" fill="#f2f6f3"/>
+ <circle cx="145" cy="540" r="8" fill="#d5a45e"/><text x="166" y="546" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Support themes · 28 mentions</text>
+ <rect x="120" y="582" width="366" height="52" rx="12" fill="#f2f6f3"/>
+ <circle cx="145" cy="608" r="8" fill="#829ac7"/><text x="166" y="614" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Community feedback · 46 posts</text>
+ <text x="120" y="687" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#91a199">NEW INPUT</text>
+ <rect x="120" y="706" width="366" height="54" rx="12" fill="#fff" stroke="#cbd8d0" stroke-dasharray="6 5"/>
+ <text x="303" y="739" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#789087">+ Add a source</text>
 </g>
-<!-- analytics chart -->
-<rect x="334" y="396" width="730" height="282" rx="15" fill="#17283d" stroke="#31465f"/>
-<text x="360" y="435" fill="#e8eef6" font-family="Arial,sans-serif" font-size="18" font-weight="700">Revenue performance</text>
-<text x="360" y="460" fill="#8298b3" font-family="Arial,sans-serif" font-size="12">Revenue over time · USD</text>
-<g stroke="#2b4059" stroke-width="1"><path d="M390 500 H1025 M390 545 H1025 M390 590 H1025 M390 635 H1025"/></g>
-<path d="M390 610 C440 590 460 602 500 566 S565 555 600 570 S665 520 710 535 S770 505 810 520 S875 470 915 490 S970 455 1025 465 L1025 635 L390 635 Z" fill="#2dd4bf" opacity=".10"/>
-<path d="M390 610 C440 590 460 602 500 566 S565 555 600 570 S665 520 710 535 S770 505 810 520 S875 470 915 490 S970 455 1025 465" fill="none" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
-<circle cx="915" cy="490" r="6" fill="#5eead4" stroke="#d5fffa" stroke-width="3"/>
-<g fill="#7188a6" font-family="Arial,sans-serif" font-size="11"><text x="390" y="657">01 NOV</text><text x="540" y="657">08 NOV</text><text x="690" y="657">15 NOV</text><text x="840" y="657">22 NOV</text><text x="980" y="657">30 NOV</text></g>
-<!-- right insight panel -->
-<rect x="1084" y="396" width="406" height="282" rx="15" fill="#17283d" stroke="#31465f"/>
-<text x="1110" y="435" fill="#e8eef6" font-family="Arial,sans-serif" font-size="18" font-weight="700">Channel insights</text>
-<text x="1110" y="460" fill="#8298b3" font-family="Arial,sans-serif" font-size="12">Share of new subscriptions</text>
-<g font-family="Arial,sans-serif" font-size="13">
- <text x="1110" y="510" fill="#c6d4e4">Organic search</text><text x="1448" y="510" fill="#e5edf6" text-anchor="end">42%</text>
- <rect x="1110" y="522" width="330" height="8" rx="4" fill="#2b4059"/><rect x="1110" y="522" width="139" height="8" rx="4" fill="#5eead4"/>
- <text x="1110" y="565" fill="#c6d4e4">Referral</text><text x="1448" y="565" fill="#e5edf6" text-anchor="end">31%</text>
- <rect x="1110" y="577" width="330" height="8" rx="4" fill="#2b4059"/><rect x="1110" y="577" width="102" height="8" rx="4" fill="#60a5fa"/>
- <text x="1110" y="620" fill="#c6d4e4">Paid campaigns</text><text x="1448" y="620" fill="#e5edf6" text-anchor="end">27%</text>
- <rect x="1110" y="632" width="330" height="8" rx="4" fill="#2b4059"/><rect x="1110" y="632" width="89" height="8" rx="4" fill="#a78bfa"/>
+<!-- Shape: central transformation workspace -->
+<g filter="url(#shadow)">
+ <rect x="548" y="356" width="504" height="438" rx="22" fill="url(#hero)"/>
+ <text x="584" y="406" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#b6d8cb">WORKSPACE / SHAPE</text>
+ <text x="584" y="456" font-family="Arial,sans-serif" font-size="29" font-weight="700" fill="#f3f6f0">Turn patterns into a plan.</text>
+ <rect x="584" y="486" width="432" height="86" rx="14" fill="#25443d" stroke="#527568"/>
+ <text x="608" y="520" font-family="Arial,sans-serif" font-size="14" fill="#b9d9cd">TOP OPPORTUNITY</text>
+ <text x="608" y="550" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#fff">Reduce repetitive review work</text>
+ <g font-family="Arial,sans-serif" font-size="14">
+  <rect x="584" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="600" y="619" fill="#41675b">Evidence</text><text x="600" y="641" font-size="19" font-weight="700" fill="#203b34">18 signals</text>
+  <rect x="734" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="750" y="619" fill="#41675b">Confidence</text><text x="750" y="641" font-size="19" font-weight="700" fill="#203b34">High</text>
+  <rect x="884" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="900" y="619" fill="#41675b">Next step</text><text x="900" y="641" font-size="19" font-weight="700" fill="#203b34">Prototype</text>
+ </g>
+ <rect x="584" y="680" width="432" height="70" rx="12" fill="#19352f" stroke="#527568"/>
+ <text x="608" y="710" font-family="Arial,sans-serif" font-size="14" fill="#b9d9cd">Suggested action</text>
+ <text x="608" y="733" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Create a focused test brief</text>
 </g>
-<!-- recent activity -->
-<rect x="334" y="700" width="1156" height="126" rx="15" fill="#17283d" stroke="#31465f"/>
-<text x="360" y="738" fill="#e8eef6" font-family="Arial,sans-serif" font-size="17" font-weight="700">Recent activity</text>
-<g font-family="Arial,sans-serif" font-size="13">
- <text x="360" y="778" fill="#d5e0ed">New subscription</text><text x="600" y="778" fill="#91a5bf">Olivia Chen · Pro plan</text><text x="1438" y="778" fill="#5eead4" text-anchor="end">Just now</text>
- <path d="M360 792 H1460" stroke="#2b4059"/>
- <text x="360" y="815" fill="#d5e0ed">Campaign completed</text><text x="600" y="815" fill="#91a5bf">Autumn launch · 4,820 reached</text><text x="1438" y="815" fill="#91a5bf" text-anchor="end">18 min ago</text>
+<!-- Deliver: output artifact and next action -->
+<g filter="url(#shadow)">
+ <rect x="1082" y="356" width="430" height="438" rx="22" fill="#fff"/>
+ <text x="1118" y="406" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#203b34">Ready to deliver</text>
+ <rect x="1118" y="446" width="358" height="194" rx="15" fill="#f2f6f3"/>
+ <rect x="1144" y="472" width="54" height="54" rx="14" fill="url(#mint)"/>
+ <path d="M1159 500 L1170 511 L1185 487" fill="none" stroke="#315e50" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+ <text x="1216" y="491" font-family="Arial,sans-serif" font-size="13" fill="#82958c">PROJECT BRIEF</text>
+ <text x="1216" y="518" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#203b34">Review workflow v1</text>
+ <text x="1144" y="566" font-family="Arial,sans-serif" font-size="14" fill="#647970">Scope · audience · success measure</text>
+ <text x="1144" y="596" font-family="Arial,sans-serif" font-size="14" fill="#647970">Evidence links · owner · next action</text>
+ <rect x="1118" y="666" width="358" height="58" rx="14" fill="#203b34"/>
+ <text x="1297" y="702" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Export deliverable ↗</text>
+ <text x="1118" y="760" font-family="Arial,sans-serif" font-size="13" fill="#819188">PDF · share link · project handoff</text>
 </g>
-</svg>'''
-    path.write_text(svg,encoding="utf-8")
+<text x="88" y="850" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#7b8d84">NORTHSTAR / CAPTURE → SHAPE → DELIVER</text>
+<text x="1512" y="850" text-anchor="end" font-family="Arial,sans-serif" font-size="13" fill="#7b8d84">PRODUCT FLOW / 01</text>
+</svg>"""
+    path.write_text(svg, encoding="utf-8")
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=Path("r50-review"))
