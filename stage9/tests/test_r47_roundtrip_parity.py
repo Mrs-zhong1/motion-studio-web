@@ -39,7 +39,8 @@ try:
    assert project.get("templateId")==template_id and project.get("sections"), f"{template_id}: save payload mismatch"
    page.once("dialog",lambda dialog:dialog.accept())
    page.locator("#newProject").click()
-   page.locator("#resumeProject").click()
+   # New Project clears the canvas in-place; the discovery-only Resume button is intentionally hidden here.
+   page.locator("#editorView").wait_for(state="visible")
    page.locator("#openFile").set_input_files(str(project_file))
    page.wait_for_function("(id)=>project.templateId===id && project.sections.length>0",arg=template_id)
    assert page.evaluate("project.templateId")==template_id, f"{template_id}: reopen mismatch"
