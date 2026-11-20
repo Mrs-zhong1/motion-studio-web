@@ -99,3 +99,20 @@ The user approved the following 33-slot split; this supersedes the earlier FLUX/
 - The four-scene Blender pilot is still a prerequisite for visual review. Its latest retry failed before rendering due HTTP 503 package mirror errors; therefore there are no Blender pilot images to approve yet.
 - Once the four pilot renders exist, human visual review is required before expanding procedural production to 18 slots. The 15 photography slots can be researched and rights-screened in parallel, but no downloaded photo is accepted until its exact license and source evidence are recorded.
 - This plan remains a technical production route, not commercial legal advice or a release approval.
+
+
+## Blender pilot result — 2026-11-20
+
+Run `44690965370` completed successfully and produced four distinct 1600×900 PNG files. The workflow independently verified file decoding, PNG format, native pixel dimensions and unique SHA-256 hashes. Artifact: `r26-blender-3d-pilot-2ce0ff8fb68849cbdca559ccffaf37ddece31a56`.
+
+**Technical result: PASS for the four-file review artifact only. Art-direction result: REJECTED / NOT PRODUCTION-SUITABLE.**
+
+The visual inspection found the current renders too primitive and schematic for the premium visual baseline:
+- Agency: floating basic geometric props; insufficient material depth and art direction.
+- Product 3D: generic box-like audio object and oversized halo; not a convincing premium product render.
+- Editorial: simple tabletop primitives, not a convincing editorial environment.
+- Architecture: block-like building and sphere-canopy trees; not architectural photography quality.
+
+The four images are renderer smoke tests only. They are not approved samples, must not enter the 33-slot asset pack, and do not authorize expansion to the 18-scene batch. Editorial and Architecture are also in the approved 15-photo route, not the 18 procedural-scene allocation; their inclusion in this first smoke test was exploratory only.
+
+Next engineering iteration must replace the primitive scene compositions with higher-fidelity, scene-specific art direction and align the pilot slots to the approved procedural categories (Agency, Product 3D, Gallery, SaaS vector). SaaS must use original SVG/Canvas scenes, not Blender. Keep all generated output review-only until human review and rights evidence are complete.
