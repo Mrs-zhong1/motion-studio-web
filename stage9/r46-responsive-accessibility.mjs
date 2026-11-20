@@ -6,4 +6,12 @@ html{scroll-padding-top:24px}body{overflow-x:hidden}button,a,[role="button"],[ro
 @supports(padding:max(0px)){body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 `;
-export function applyR46ResponsiveAccessibility(html){if(typeof html!=='string'||!html.includes('</head>')||!html.includes('</body>'))throw Error('R46 requires complete editor HTML');if(html.includes('id="r46-responsive-accessibility-css"'))throw Error('R46 duplicate injection');if(!html.includes('function exportDocument('))throw Error('R46 exportDocument hook missing');const script=`<script id="r46-responsive-accessibility-director">(function(){const previous=exportDocument;exportDocument=function(){const result=previous();if(!result||!result.includes('</head>'))return result;const css=document.getElementById('r46-responsive-accessibility-css').textContent;return result.replace('</head>','<style id="r46-export-accessibility">'+css+'</style></head>')};if(window.MotionStudioUnified)window.MotionStudioUnified.build=exportDocument})();</script>`;return html.replace('</head>','<style id="r46-responsive-accessibility-css">'+R46_CSS+'</style></head>').replace('</body>',script+'</body>')}
+export function applyR46ResponsiveAccessibility(html){
+ if(typeof html!=='string'||!html.includes('</head>')||!html.includes('</body>'))throw Error('R46 requires complete editor HTML');
+ if(html.includes('id="r46-responsive-accessibility-css"'))throw Error('R46 duplicate injection');
+ if(!html.includes('function exportDocument('))throw Error('R46 exportDocument hook missing');
+ const hook=`;(function(){const previous=exportDocument;exportDocument=function(){const result=previous();if(!result||!result.includes('</head>'))return result;const css=document.getElementById('r46-responsive-accessibility-css').textContent;return result.replace('</head>','<style id="r46-export-accessibility">'+css+'</style></head>')}})();`;
+ const apiAnchor='window.MotionStudioUnified={undo:';
+ if(!html.includes(apiAnchor))throw Error('R46 public API insertion anchor missing');
+ return html.replace(apiAnchor,hook+apiAnchor).replace('</head>','<style id="r46-responsive-accessibility-css">'+R46_CSS+'</style></head>');
+}
