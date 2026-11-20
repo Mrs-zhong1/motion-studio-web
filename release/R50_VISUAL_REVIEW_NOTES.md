@@ -69,3 +69,16 @@
 - `f9abc8c`: rebuilt the Agency sample as a three-part campaign portfolio with distinct brand-identity packaging, digital-culture device art and campaign print/packaging; removed the crossing ribbon and tightened the case safe frame. Added optical barrel/aperture and tactile details to the cinema camera. Removed the foreground right gallery wall so it cannot occlude the third sculpture; opened the gallery front and widened the framing.
 - `33b9a10`: replaced the SaaS Capture/Shape/Deliver infographic with a conventional workspace product UI: navigation, metric cards, activity chart, team workload, recent projects and priority insight. All figures and project names are explicitly labeled illustrative demo content.
 - These are source changes only. They are not visually accepted until a fresh render for the exact PR head is downloaded and inspected. The generated manifest must continue to report `HUMAN_VISUAL_REVIEW_REQUIRED` and `productionEligible=false` until explicit approval. No commercial-rights or release signoff is implied.
+
+
+## R50 second visual review — 2026-11-20, render artifact 14627965629
+
+Exact source SHA: `72d7cf088eec8383bef3505e1951ddef0dd25060`; render workflow `44733233053` succeeded and produced four integrity-checked review outputs.
+
+Observed by inspecting the actual PNG/SVG files:
+- Agency: three campaign frames are present, but foreground objects still collide with campaign typography and the lower stage has excessive empty space. HOLD.
+- Product 3D: the camera silhouette is present, but the lens face reads too much like a speaker grille and the overlay title `SOUND IN PURE FORM` misidentifies the camera as an audio object. HOLD.
+- Gallery: all three objects are visible, but the upper lighting track and wall composition are too close to the frame edge. HOLD.
+- SaaS: workspace layout direction is correct; KPI delta labels overlap the metric values and need spacing correction. HOLD pending corrected SVG and visual check.
+
+Follow-up source commits `bd13ebb`, `be8ec41`, and `eafb738` address campaign-title clearance, camera aperture and narrative, gallery framing, and SaaS metric spacing. Fresh renders for the latest exact head are mandatory before accepting any of these changes. All outputs remain review-only; no human approval, commercial rights clearance or production eligibility is asserted.
