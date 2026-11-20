@@ -1,5 +1,5 @@
 """R32 media gate tests: actual decoded pixels cannot disguise collage origin."""
-import hashlib,json,sys,tempfile,unittest
+import hashlib,json,sys,tempfile,unittest,subprocess
 from pathlib import Path
 from PIL import Image
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
@@ -25,6 +25,11 @@ class R32MediaAuditTests(unittest.TestCase):
             ok=audit(root)
             self.assertTrue(ok['summary']['productionMediaEligible'])
             self.assertEqual(ok['summary']['decodedAndCheckedImages'],39)
+            self.assertEqual(ok['by_template'][0]['sourceEligibleOriginals'],4)
+            cli=subprocess.run([sys.executable,str(Path(__file__).resolve().parents[1]/'audit_r32_real_media.py'),
+                                '--assets',str(root)],capture_output=True,text=True)
+            self.assertEqual(cli.returncode,0,cli.stderr)
+            self.assertIn('source-eligible originals',cli.stdout)
             records[0].update(source='PROCEDURAL_ORIGINAL',sourceType='procedural-3d-render',
                               embeddedThirdPartyAssets=False)
             records[1].update(source='OPEN_LICENSED_PHOTOGRAPHY',sourceType='open-licensed-photography',
