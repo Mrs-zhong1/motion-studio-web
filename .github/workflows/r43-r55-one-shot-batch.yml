@@ -51,11 +51,13 @@ jobs:
           npm --prefix stage9 install --no-audit --no-fund
           python -m playwright install --with-deps chromium firefox webkit
       - name: Build the standalone web editor and verify offline Three.js bundle
+        id: build_editor
         working-directory: stage9
         run: |
           npm run build
           python tests/check_build.py
       - name: Run R43-R46 design and interaction contracts
+        id: design_contracts
         working-directory: stage9
         run: |
           node --test tests/test_r43_immersive_template_pilots.mjs
@@ -110,7 +112,9 @@ jobs:
         id: r52_validate
         if: always() && steps.r52_unit.outcome == 'success'
         continue-on-error: true
-        run: python release/validate_r52_photo_rights.py --allow-incomplete --report batch-report/R52_PHOTO_RIGHTS_REPORT.json
+        run: |
+          mkdir -p batch-report
+          python release/validate_r52_photo_rights.py --allow-incomplete --report batch-report/R52_PHOTO_RIGHTS_REPORT.json
       - name: R53 validate all 33 production slots (fail closed)
         id: r53_validate
         if: always()
@@ -125,6 +129,7 @@ jobs:
         env:
           MOTION_BROWSER: chromium
         run: |
+          mkdir -p ../batch-report
           python tests/test_r47_roundtrip_parity.py
           cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_chromium.json
       - name: Chromium product journey E2E
@@ -134,6 +139,7 @@ jobs:
         env:
           MOTION_BROWSER: chromium
         run: |
+          mkdir -p ../batch-report
           python tests/test_web_product_e2e.py
           cp WEB_PRODUCT_E2E_RESULT_chromium.json ../batch-report/E2E_chromium.json
       - name: R48 reproducible candidate gate (candidate only; never release approval)
@@ -156,6 +162,7 @@ jobs:
         env:
           MOTION_BROWSER: firefox
         run: |
+          mkdir -p ../batch-report
           python tests/test_r47_roundtrip_parity.py
           cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_firefox.json
       - name: Firefox product journey E2E
@@ -165,6 +172,7 @@ jobs:
         env:
           MOTION_BROWSER: firefox
         run: |
+          mkdir -p ../batch-report
           python tests/test_web_product_e2e.py
           cp WEB_PRODUCT_E2E_RESULT_firefox.json ../batch-report/E2E_firefox.json
       - name: R47 WebKit save/reopen/export parity
@@ -174,6 +182,7 @@ jobs:
         env:
           MOTION_BROWSER: webkit
         run: |
+          mkdir -p ../batch-report
           python tests/test_r47_roundtrip_parity.py
           cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_webkit.json
       - name: WebKit product journey E2E
@@ -183,6 +192,7 @@ jobs:
         env:
           MOTION_BROWSER: webkit
         run: |
+          mkdir -p ../batch-report
           python tests/test_web_product_e2e.py
           cp WEB_PRODUCT_E2E_RESULT_webkit.json ../batch-report/E2E_webkit.json
       - name: Generate one consolidated result and human-action list
