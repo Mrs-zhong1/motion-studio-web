@@ -9,11 +9,6 @@ on:
       - 'stage9/audit_r32_real_media.py'
       - 'stage9/tests/test_r32_real_media.py'
       - '.github/workflows/r32-original-media-acceptance.yml'
-    paths:
-      - 'stage9/ai-assets/**'
-      - 'stage9/audit_r32_real_media.py'
-      - 'stage9/tests/test_r32_real_media.py'
-      - '.github/workflows/r32-original-media-acceptance.yml'
 permissions:
   contents: read
 jobs:
