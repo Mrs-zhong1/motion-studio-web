@@ -88,46 +88,68 @@ def reset(template):
     }
 
 def build_agency(m):
-    # A deliberate architectural composition: nested portals, a folded ribbon and a plinth.
-    cube("Basalt monolith plinth",(-.2,0,.18),(5.8,3.7,.36),m["ink"],.18)
-    for i, material in enumerate((m["orange"],m["blue"],m["gold"])):
-        torus("Layered sculptural portal "+str(i),(-.65+i*.55,.1,2.15+i*.12),1.35-i*.16,.095,material,(math.pi/2,0,.12*i))
-    curve("Continuous folded metal gesture",[(-2.1,-.5,1.2),(-1.4,-.2,3.4),(.1,.15,3.8),(1.35,.3,2.5),(2.1,.2,1.4)],.11,m["silver"])
-    uv("Gloss enamel sphere",(1.45,-.55,1.15),(.72,.72,.72),m["orange"])
-    for i in range(5):
-        cube("Floating editorial color tile "+str(i),(-2.1+i*.62,-1.45,.48+i*.12),(.42,.12,.42), (m["blue"],m["gold"],m["cream"],m["orange"],m["silver"])[i],.035)
+    # Architectural identity installation: stepped volumes, recessed facade and light blade.
+    cube("Basalt architectural podium",(-.15,0,.16),(6.0,3.8,.32),m["ink"],.16)
+    cube("Main gallery volume",(-.55,.25,1.55),(2.45,1.8,2.75),m["ink"],.12)
+    cube("Warm stone facade inset",(-.55,-.675,1.58),(1.92,.055,2.22),m["cream"],.035)
+    cube("Deep recessed entrance",(-.55,-.72,.94),(.78,.07,1.18),m["ink"],.025)
+    cube("Upper floating canopy",(-.55,-.02,2.94),(2.8,2.15,.16),m["silver"],.045)
+    cube("Secondary glass pavilion",(1.38,.28,.98),(1.42,1.58,1.72),m["glass"],.12)
+    cube("Pavilion roof",(1.38,.28,1.88),(1.58,1.72,.14),m["gold"],.035)
+    # Layered fins create a designed facade rather than a primitive abstract arrangement.
+    for i in range(9):
+        cube("Facade vertical brass fin "+str(i),(-1.38+i*.205,-.735,1.73),(.035,.045,1.48),m["gold"],.012)
+    for i in range(4):
+        cube("Landscape step "+str(i),(-2.05+i*.32,-1.25,.36+i*.08),(.27,.46,.12),m["blue"] if i%2 else m["orange"],.025)
+    curve("Sculptural wayfinding light",[(-2.7,-.2,2.0),(-2.35,-.2,2.8),(-1.9,-.2,3.0)],.035,m["orange"])
+    uv("Spherical light marker",(1.65,-.65,2.12),(.16,.16,.16),m["cream"])
 
 def build_product(m):
-    # A premium desktop audio instrument with visible controls, machined rings and a dock.
-    cube("Floating dark titanium product deck",(0,0,.18),(5.1,3.3,.34),m["ink"],.22)
-    cube("Sculpted speaker chassis",(0,0,1.48),(2.65,1.45,2.35),m["ink"],.38)
-    cube("Brushed front fascia",(0,-.755,1.48),(2.3,.08,2.05),m["silver"],.28)
-    cyl("Driver surround",(0,-.83,1.58),.77,.09,m["ink"])
-    torus("Precision brass driver rim",(0,-.9,1.58),.68,.045,m["gold"],(math.pi/2,0,0))
-    uv("Carbon fiber diaphragm",(0,-.91,1.58),(.57,.07,.57),m["glass"])
-    uv("Aluminium dust cap",(0,-.99,1.58),(.19,.08,.19),m["silver"])
+    # High-end desktop audio control unit with layered machining, screen, ports and tactile controls.
+    cube("Floating graphite presentation base",(0,0,.16),(5.3,3.45,.32),m["ink"],.2)
+    cube("Main aluminium enclosure",(0,.05,1.38),(2.72,1.55,2.12),m["silver"],.28)
+    cube("Dark glass front control panel",(0,-.765,1.42),(2.42,.055,1.82),m["ink"],.19)
+    cube("OLED status display",(-.58,-.805,2.02),(.82,.035,.36),m["glass"],.035)
+    # Tiny status indicators and engraved interface marks.
+    for i,col in enumerate((m["orange"],m["blue"],m["gold"])):
+        uv("Status LED "+str(i),(-.86+i*.16,-.833,1.76),(.025,.018,.025),col)
+    cyl("Precision driver housing",(.43,-.83,1.43),.62,.07,m["ink"])
+    torus("Concentric machined driver ring",(.43,-.89,1.43),.54,.045,m["gold"],(math.pi/2,0,0))
+    torus("Inner diaphragm suspension",(.43,-.91,1.43),.39,.018,m["silver"],(math.pi/2,0,0))
+    uv("Textured driver diaphragm",(.43,-.91,1.43),(.34,.055,.34),m["glass"])
+    uv("Brushed aluminium dust cap",(.43,-.97,1.43),(.12,.045,.12),m["silver"])
     for i in range(3):
-        cyl("Machined rotary control",(.95+i*.28,-.86,.78),.085,.11,m["gold"],48)
-    for i in range(13):
-        for j in range(3):
-            uv("Precision ventilation perforation",(-.96+i*.16,-.84,.72+j*.13),(.018,.012,.018),m["ink"])
-    torus("Dock halo",(0,.12,2.75),1.8,.018,m["silver"],(.15,.08,0))
-    cube("Ceramic charging dock",(0,.35,.42),(3.5,1.2,.16),m["cream"],.08)
+        cyl("Knurled encoder dial",(-.62+i*.39,-.86,.86),.105,.095,m["gold"],64)
+        torus("Encoder etched ring "+str(i),(-.62+i*.39,-.92,.86),.083,.009,m["silver"],(math.pi/2,0,0))
+    for i in range(11):
+        for j in range(2):
+            uv("Precision speaker grille perforation",(1.05,-.81,.72+j*.11),(.018,.012,.018),m["ink"])
+    # Rear connector bank and a removable dock establish product plausibility.
+    for i in range(4):
+        cyl("Rear I O connector "+str(i),(-.9+i*.58,.84,1.05),.075,.06,m["ink"],48)
+    cube("Ceramic charging cradle",(0,.34,.39),(3.75,1.22,.14),m["cream"],.06)
+    cube("Cradle contact strip",(0,-.24,.47),(1.2,.035,.025),m["gold"],.01)
 
 def build_gallery(m):
-    # Sculptural exhibition: layered plinths, a suspended kinetic ring and stone monolith.
-    cube("Gallery black stage",(0,0,.12),(6.2,3.8,.24),m["ink"],.12)
-    for i,(x,z,ma) in enumerate([(-1.55,1.0,m["cream"]),(0,1.35,m["orange"]),(1.55,.9,m["blue"])]):
-        cyl("Museum pedestal "+str(i),(x,.1,z/2),.68,.12,m["silver"])
-        if i==0:
-            uv("Porcelain biomorphic sculpture",(x,0,z+.48),(.48,.4,.72),ma)
-        elif i==1:
-            torus("Suspended kinetic sculpture",(x,0,z+.35),.62,.13,ma,(.55,.2,.2))
-            torus("Inner orbit",(x,0,z+.35),.36,.055,m["gold"],(.9,.3,.1))
-        else:
-            cube("Monolithic cobalt sculpture",(x,0,z+.28),(.72,.52,1.1),ma,.24)
-            torus("Cutout frame",(x,-.3,z+.28),.34,.055,m["gold"],(math.pi/2,0,0))
-    curve("Ceiling installation cable",[(-2.6,1.2,3.5),(-1.2,1.2,3.1),(0,1.2,3.7),(1.3,1.2,3.15),(2.6,1.2,3.5)],.018,m["gold"])
+    # Contemporary museum room with architectural wall, spotlights and distinct curated works.
+    cube("Gallery floor plinth",(0,0,.10),(6.3,3.9,.20),m["ink"],.10)
+    cube("Rear exhibition wall",(0,1.55,2.0),(6.0,.16,3.8),m["cream"],.045)
+    cube("Left shadow reveal",(-2.86,1.43,2.0),(.08,.08,3.6),m["gold"],.015)
+    # Three intentionally different works: folded metal, stone monolith and kinetic glass.
+    cyl("Sculpture one low plinth",(-1.65,-.05,.25),.62,.18,m["silver"])
+    cube("Folded metal artwork",(-1.65,-.02,1.12),(.78,.42,1.48),m["orange"],.18).rotation_euler[1]=.28
+    torus("Folded artwork aperture",(-1.65,-.27,1.12),.28,.045,m["gold"],(math.pi/2,.2,0))
+    cyl("Sculpture two low plinth",(0,-.05,.25),.62,.18,m["silver"])
+    cube("Carved stone monolith",(0,.02,1.25),(.72,.54,1.75),m["cream"],.16)
+    cube("Monolith inset shadow",(0,-.265,1.30),(.24,.025,1.08),m["ink"],.08)
+    cyl("Sculpture three low plinth",(1.65,-.05,.25),.62,.18,m["silver"])
+    torus("Kinetic glass sculpture",(1.65,.0,1.32),.58,.16,m["blue"],(.48,.22,.18))
+    torus("Kinetic inner brass ring",(1.65,-.18,1.32),.30,.045,m["gold"],(.72,.3,.2))
+    # Track lighting and discreet wall washes ground the scene as a real exhibition interior.
+    cube("Ceiling lighting rail",(0,.9,3.58),(4.8,.12,.10),m["ink"],.035)
+    for i,x in enumerate((-1.65,0,1.65)):
+        cyl("Museum spotlight "+str(i),(x,.86,3.32),.11,.16,m["gold"],48)
+        curve("Focused gallery light "+str(i),[(x,.8,3.25),(x,-.1,2.4),(x,-.25,1.8)],.012,m["cream"])
 
 
 def write_saas_svg(path):
