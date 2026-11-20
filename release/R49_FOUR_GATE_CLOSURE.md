@@ -96,3 +96,14 @@ A fresh source review found several integration defects in the existing media-ga
 The previous `R26_LOCAL_MODEL_B1.md` FLUX.2 / Z-Image proposal is explicitly marked superseded historical research. The approved 18 procedural + 15 licensed-photography route remains authoritative.
 
 These changes improve the release controls; they do not clear any actual asset rights or approve any image. The 33-slot replacement pack remains unproduced, the Blender render job remains a separate review-only task, and physical-device / live-production evidence is still outstanding.
+
+
+## Final media-gate consistency pass — 2026-11-20
+
+- Unified R25 import and R32 source audit at **1600×900 minimum native source/output resolution**, 16:9 tolerance, and no source-to-output upscaling. R26 already enforces 1600×900 and exact source dimensions.
+- R32 now rejects both non-16:9 source/output and any output larger than its recorded native source dimensions. The old 1.25× amplification allowance is removed.
+- R25 photo evidence now includes the original source URL, exact license URL/version, creator, attribution text, ISO-8601 download timestamp and (for CC BY-SA) compatibility review. The importer preserves these fields in the main manifest.
+- R25 regression run `44692463986` passed at SHA `8706e821` before the final 1600×900 tightening. The newer strict-floor R25 and R32 runs are queued against the updated candidate; their results must be checked before calling these changes verified.
+- R32 regression test was also corrected to use the report's actual `byTemplate` key; the CLI summary field typo is separately covered by an end-to-end subprocess test.
+
+The successful Blender smoke run `44690965370` generated four technically valid 1600×900 PNGs, but manual inspection rejected all four for visual quality. They remain review artifacts only. No images have been imported, and no human visual approval has been inferred.
