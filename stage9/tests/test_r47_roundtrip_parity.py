@@ -56,7 +56,7 @@ try:
    exported_page.on("pageerror",lambda e:export_errors.append({"message":str(e),"stack":getattr(e,"stack",None)}))
    exported_page.set_content(html,wait_until="domcontentloaded")
    exported_page.wait_for_timeout(350)
-   section_count=exported_page.locator("section.section,section.e42-spread").count()
+   section_count=exported_page.locator("section.section,section.e42-spread,section.r39-caption").count()
    assert section_count==len(project["sections"]), f"{template_id}: exported section count {section_count} != saved {len(project['sections'])}"
    geometry=exported_page.evaluate("({width:document.documentElement.scrollWidth,viewport:innerWidth,height:document.documentElement.scrollHeight})")
    assert geometry["width"]<=geometry["viewport"]+2, f"{template_id}: horizontal overflow {geometry}"
