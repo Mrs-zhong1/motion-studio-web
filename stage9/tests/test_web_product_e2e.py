@@ -35,9 +35,11 @@ try:
         console_errors=[]
         failed_requests=[]
         page.on("pageerror",lambda e:page_errors.append({"message":str(e),"stack":getattr(e,"stack",None)}))
+        page.on("framenavigated",lambda frame:result["browserDiagnostics"]["frames"].append({"url":frame.url,"name":frame.name}))
         page.on("console",lambda msg:console_errors.append({"text":msg.text,"location":msg.location}) if msg.type=="error" else None)
         page.on("requestfailed",lambda req:failed_requests.append({"url":req.url,"failure":req.failure}))
         page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
+        result["browserDiagnostics"]["inlineScripts"]=page.locator("script").evaluate_all("""nodes=>nodes.map((s,i)=>({index:i,id:s.id||null,type:s.type||'text/javascript',src:s.src||null,length:(s.textContent||'').length,head:(s.textContent||'').slice(0,100)}))""")
         page.wait_for_function("() => !!window.MotionStudioUnified && Array.isArray(window.MotionStudioUnified.registry)",timeout=15000)
         check("20_components",page.evaluate("window.MotionStudioUnified.registry.length")==20)
         check("template_discovery_default",page.locator("#discoveryView").is_visible())
@@ -159,7 +161,7 @@ finally:
         "consoleErrors":console_errors if "console_errors" in locals() else [],
         "failedRequests":failed_requests if "failed_requests" in locals() else [],
         "frames":[{"url":frame.url,"name":frame.name} for frame in page.frames] if "page" in locals() else [],
-        "inlineScripts":page.locator("script").evaluate_all("""nodes=>nodes.map((s,i)=>({index:i,id:s.id||null,type:s.type||'text/javascript',src:s.src||null,length:(s.textContent||'').length,head:(s.textContent||'').slice(0,100)}))""") if "page" in locals() and not page.is_closed() else []}
+        "inlineScripts":result["browserDiagnostics"].get("inlineScripts",[])}
     REPORT.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
     print(json.dumps(result,ensure_ascii=False,indent=2))
 assert result["pass"],"Web product E2E failed; inspect WEB_PRODUCT_E2E_RESULT.json"
