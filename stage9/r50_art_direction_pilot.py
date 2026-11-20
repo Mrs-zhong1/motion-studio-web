@@ -205,82 +205,72 @@ def build_gallery(m):
     for i in range(7):
         cube("Wall wash vertical reveal "+str(i),(-3.0+i*.95,3.03,2.28),(.018,.025,3.5),m["gold"],.004)
 
-def write_saas_svg(path):def write_saas_svg(path):
-    """Original SaaS product journey: Capture -> Shape -> Deliver, not a generic KPI dashboard."""
+def write_saas_svg(path):
+    """Original SaaS workspace dashboard composition with explicitly illustrative demo data."""
     svg = """<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
 <defs>
- <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f4f1eb"/><stop offset="1" stop-color="#e5e9e6"/></linearGradient>
- <linearGradient id="hero" x2="1" y2="1"><stop stop-color="#172c2a"/><stop offset="1" stop-color="#31564d"/></linearGradient>
- <linearGradient id="mint" x2="1"><stop stop-color="#b6e4d5"/><stop offset="1" stop-color="#d5eee4"/></linearGradient>
- <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#172c2a" flood-opacity=".12"/></filter>
+ <linearGradient id="canvas" x2="1" y2="1"><stop stop-color="#f6f7f5"/><stop offset="1" stop-color="#e9eeeb"/></linearGradient>
+ <linearGradient id="brand" x2="1" y2="1"><stop stop-color="#183b35"/><stop offset="1" stop-color="#315e51"/></linearGradient>
+ <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#183b35" flood-opacity=".09"/></filter>
 </defs>
-<rect width="1600" height="900" fill="url(#bg)"/>
-<text x="88" y="78" font-family="Arial,sans-serif" font-size="17" letter-spacing="4" fill="#527066">NORTHSTAR / PRODUCT STUDIO</text>
-<text x="88" y="156" font-family="Arial,sans-serif" font-size="56" font-weight="700" fill="#172c2a">From raw signal to shipped work.</text>
-<text x="90" y="198" font-family="Arial,sans-serif" font-size="20" fill="#667b73">A guided workspace that turns customer input into clear, ready-to-launch outcomes.</text>
+<rect width="1600" height="900" fill="url(#canvas)"/>
+<rect x="0" y="0" width="226" height="900" fill="#172e2a"/>
+<text x="34" y="58" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#f5f7f3">NORTHSTAR</text>
+<text x="34" y="82" font-family="Arial,sans-serif" font-size="10" letter-spacing="2" fill="#8eaaa0">WORKSPACE</text>
+<rect x="22" y="126" width="182" height="42" rx="10" fill="#31574d"/>
+<text x="48" y="153" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff">Overview</text>
+<g font-family="Arial,sans-serif" font-size="14" fill="#b8c9c1">
+ <text x="48" y="210">Projects</text><text x="48" y="258">Insights</text><text x="48" y="306">Campaigns</text><text x="48" y="354">Reports</text>
+ <text x="34" y="430" font-size="10" letter-spacing="2" fill="#78948a">WORKSPACE</text>
+ <text x="48" y="474">Team members</text><text x="48" y="522">Integrations</text><text x="48" y="570">Settings</text>
+</g>
+<circle cx="42" cy="204" r="4" fill="#a6d7c1"/><circle cx="42" cy="252" r="4" fill="#78948a"/><circle cx="42" cy="300" r="4" fill="#78948a"/><circle cx="42" cy="348" r="4" fill="#78948a"/>
+<circle cx="42" cy="468" r="4" fill="#78948a"/><circle cx="42" cy="516" r="4" fill="#78948a"/><circle cx="42" cy="564" r="4" fill="#78948a"/>
+<circle cx="48" cy="836" r="17" fill="#d4a76c"/><text x="48" y="841" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#172e2a">A</text>
+<text x="76" y="833" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#f5f7f3">Alex Morgan</text><text x="76" y="851" font-family="Arial,sans-serif" font-size="10" fill="#8eaaa0">Workspace admin</text>
+<rect x="226" y="0" width="1374" height="76" fill="#fff"/>
+<text x="270" y="47" font-family="Arial,sans-serif" font-size="14" fill="#73847d">Workspace /</text><text x="365" y="47" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#1c3731">Overview</text>
+<rect x="1290" y="20" width="180" height="36" rx="9" fill="#f3f6f3" stroke="#dce5df"/><text x="1310" y="43" font-family="Arial,sans-serif" font-size="12" fill="#71837b">Last 30 days</text>
+<circle cx="1515" cy="38" r="17" fill="#e4eee8"/><text x="1515" y="43" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#315e51">?</text>
+<text x="270" y="132" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#1b3731">Good morning, Alex</text>
+<text x="270" y="164" font-family="Arial,sans-serif" font-size="14" fill="#71837b">A clear view of your team's work and performance.</text>
+<rect x="1360" y="108" width="184" height="42" rx="10" fill="url(#brand)"/><text x="1452" y="135" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">+ New project</text>
+<g filter="url(#shadow)">
+ <rect x="270" y="198" width="292" height="132" rx="14" fill="#fff"/><rect x="582" y="198" width="292" height="132" rx="14" fill="#fff"/><rect x="894" y="198" width="292" height="132" rx="14" fill="#fff"/><rect x="1206" y="198" width="338" height="132" rx="14" fill="#fff"/>
+</g>
 <g font-family="Arial,sans-serif">
- <rect x="88" y="244" width="1424" height="78" rx="18" fill="#fff" stroke="#d6ded8"/>
- <rect x="110" y="264" width="38" height="38" rx="12" fill="#172c2a"/><text x="129" y="290" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">1</text>
- <text x="168" y="291" font-size="21" font-weight="700" fill="#172c2a">CAPTURE</text>
- <text x="320" y="291" font-size="16" fill="#72837b">Collect the signal</text>
- <path d="M520 283 H620" stroke="#b7c7bf" stroke-width="2"/><path d="M612 275 L622 283 L612 291" fill="none" stroke="#789087" stroke-width="2"/>
- <rect x="650" y="264" width="38" height="38" rx="12" fill="#172c2a"/><text x="669" y="290" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">2</text>
- <text x="708" y="291" font-size="21" font-weight="700" fill="#172c2a">SHAPE</text>
- <text x="835" y="291" font-size="16" fill="#72837b">Make it actionable</text>
- <path d="M1045 283 H1130" stroke="#b7c7bf" stroke-width="2"/><path d="M1122 275 L1132 283 L1122 291" fill="none" stroke="#789087" stroke-width="2"/>
- <rect x="1160" y="264" width="38" height="38" rx="12" fill="#172c2a"/><text x="1179" y="290" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">3</text>
- <text x="1218" y="291" font-size="21" font-weight="700" fill="#172c2a">DELIVER</text>
- <text x="1350" y="291" font-size="16" fill="#72837b">Ship with confidence</text>
+ <text x="294" y="232" font-size="12" fill="#75867e">Active projects</text><text x="294" y="282" font-size="34" font-weight="700" fill="#1b3731">24</text><text x="352" y="281" font-size="11" fill="#36856a">+12.5%</text>
+ <text x="606" y="232" font-size="12" fill="#75867e">Work completed</text><text x="606" y="282" font-size="34" font-weight="700" fill="#1b3731">86%</text><text x="666" y="281" font-size="11" fill="#36856a">+4.8%</text>
+ <text x="918" y="232" font-size="12" fill="#75867e">Team capacity</text><text x="918" y="282" font-size="34" font-weight="700" fill="#1b3731">78%</text><text x="978" y="281" font-size="11" fill="#b27b3f">-2.1%</text>
+ <text x="1230" y="232" font-size="12" fill="#75867e">On-time delivery</text><text x="1230" y="282" font-size="34" font-weight="700" fill="#1b3731">92%</text><text x="1290" y="281" font-size="11" fill="#36856a">+6.3%</text>
+ <text x="294" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="606" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="918" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="1230" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text>
 </g>
-<!-- Capture: real-looking source inbox -->
-<g filter="url(#shadow)">
- <rect x="88" y="356" width="430" height="438" rx="22" fill="#fff"/>
- <rect x="88" y="356" width="430" height="66" rx="22" fill="#f8faf8"/>
- <text x="120" y="398" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#203b34">Signal inbox</text>
- <rect x="120" y="446" width="366" height="52" rx="12" fill="#f2f6f3"/>
- <circle cx="145" cy="472" r="8" fill="#7ab39e"/><text x="166" y="478" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Customer interview · sample input</text>
- <rect x="120" y="514" width="366" height="52" rx="12" fill="#f2f6f3"/>
- <circle cx="145" cy="540" r="8" fill="#d5a45e"/><text x="166" y="546" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Support themes · sample input</text>
- <rect x="120" y="582" width="366" height="52" rx="12" fill="#f2f6f3"/>
- <circle cx="145" cy="608" r="8" fill="#829ac7"/><text x="166" y="614" font-family="Arial,sans-serif" font-size="15" fill="#52675f">Community feedback · sample input</text>
- <text x="120" y="687" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#91a199">NEW INPUT</text>
- <rect x="120" y="706" width="366" height="54" rx="12" fill="#fff" stroke="#cbd8d0" stroke-dasharray="6 5"/>
- <text x="303" y="739" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#789087">+ Add a source</text>
+<g filter="url(#shadow)"><rect x="270" y="354" width="824" height="310" rx="14" fill="#fff"/><rect x="1114" y="354" width="430" height="310" rx="14" fill="#fff"/><rect x="270" y="688" width="824" height="166" rx="14" fill="#fff"/><rect x="1114" y="688" width="430" height="166" rx="14" fill="#fff"/></g>
+<text x="296" y="392" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#1b3731">Project activity</text><text x="296" y="416" font-family="Arial,sans-serif" font-size="11" fill="#8a9992">Work completed over time · illustrative data</text>
+<g stroke="#e9eeeb" stroke-width="1"><path d="M318 462 H1058 M318 510 H1058 M318 558 H1058 M318 606 H1058"/></g>
+<g font-family="Arial,sans-serif" font-size="10" fill="#93a199"><text x="292" y="466">100</text><text x="298" y="514">75</text><text x="298" y="562">50</text><text x="298" y="610">25</text></g>
+<path d="M330 580 C390 560 420 574 470 530 S560 548 610 500 S700 518 750 470 S840 494 890 444 S980 458 1040 426" fill="none" stroke="#3b806a" stroke-width="4" stroke-linecap="round"/>
+<path d="M330 580 C390 560 420 574 470 530 S560 548 610 500 S700 518 750 470 S840 494 890 444 S980 458 1040 426 L1040 620 L330 620Z" fill="#d9ebe2" opacity=".65"/>
+<g fill="#3b806a"><circle cx="470" cy="530" r="5"/><circle cx="610" cy="500" r="5"/><circle cx="750" cy="470" r="5"/><circle cx="890" cy="444" r="5"/><circle cx="1040" cy="426" r="5"/></g>
+<g font-family="Arial,sans-serif" font-size="10" fill="#93a199"><text x="330" y="640">01 Nov</text><text x="500" y="640">08 Nov</text><text x="670" y="640">15 Nov</text><text x="840" y="640">22 Nov</text><text x="1000" y="640">30 Nov</text></g>
+<text x="1140" y="392" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#1b3731">Team workload</text><text x="1140" y="416" font-family="Arial,sans-serif" font-size="11" fill="#8a9992">Capacity by team · illustrative data</text>
+<g font-family="Arial,sans-serif" font-size="12" fill="#596d64">
+ <text x="1140" y="464">Design</text><text x="1495" y="464" text-anchor="end" font-weight="700" fill="#1b3731">82%</text>
+ <text x="1140" y="520">Strategy</text><text x="1495" y="520" text-anchor="end" font-weight="700" fill="#1b3731">68%</text>
+ <text x="1140" y="576">Production</text><text x="1495" y="576" text-anchor="end" font-weight="700" fill="#1b3731">91%</text>
 </g>
-<!-- Shape: central transformation workspace -->
-<g filter="url(#shadow)">
- <rect x="548" y="356" width="504" height="438" rx="22" fill="url(#hero)"/>
- <text x="584" y="406" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#b6d8cb">WORKSPACE / SHAPE</text>
- <text x="584" y="456" font-family="Arial,sans-serif" font-size="29" font-weight="700" fill="#f3f6f0">Turn patterns into a plan.</text>
- <rect x="584" y="486" width="432" height="86" rx="14" fill="#25443d" stroke="#527568"/>
- <text x="608" y="520" font-family="Arial,sans-serif" font-size="14" fill="#b9d9cd">TOP OPPORTUNITY</text>
- <text x="608" y="550" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#fff">Reduce repetitive review work</text>
- <g font-family="Arial,sans-serif" font-size="14">
-  <rect x="584" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="600" y="619" fill="#41675b">Evidence</text><text x="600" y="641" font-size="19" font-weight="700" fill="#203b34">Example set</text>
-  <rect x="734" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="750" y="619" fill="#41675b">Confidence</text><text x="750" y="641" font-size="19" font-weight="700" fill="#203b34">Unscored</text>
-  <rect x="884" y="594" width="132" height="62" rx="12" fill="#d4e9df"/><text x="900" y="619" fill="#41675b">Next step</text><text x="900" y="641" font-size="19" font-weight="700" fill="#203b34">Draft test</text>
- </g>
- <rect x="584" y="680" width="432" height="70" rx="12" fill="#19352f" stroke="#527568"/>
- <text x="608" y="710" font-family="Arial,sans-serif" font-size="14" fill="#b9d9cd">Suggested action</text>
- <text x="608" y="733" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Create a focused test brief</text>
+<g><rect x="1140" y="476" width="355" height="8" rx="4" fill="#edf1ee"/><rect x="1140" y="476" width="291" height="8" rx="4" fill="#3b806a"/><rect x="1140" y="532" width="355" height="8" rx="4" fill="#edf1ee"/><rect x="1140" y="532" width="241" height="8" rx="4" fill="#7aa995"/><rect x="1140" y="588" width="355" height="8" rx="4" fill="#edf1ee"/><rect x="1140" y="588" width="323" height="8" rx="4" fill="#c28b50"/></g>
+<text x="296" y="728" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#1b3731">Recent projects</text>
+<g font-family="Arial,sans-serif" font-size="11" fill="#8a9992"><text x="296" y="765">PROJECT</text><text x="680" y="765">OWNER</text><text x="830" y="765">STATUS</text><text x="1010" y="765">DUE</text></g>
+<g font-family="Arial,sans-serif" font-size="12" fill="#40574e">
+ <text x="296" y="794">Brand refresh / Northstar</text><text x="680" y="794">M. Chen</text><text x="830" y="794" fill="#36856a">In progress</text><text x="1010" y="794">Nov 24</text>
+ <text x="296" y="828">Product launch / Atlas</text><text x="680" y="828">J. Rivera</text><text x="830" y="828" fill="#b27b3f">In review</text><text x="1010" y="828">Nov 27</text>
 </g>
-<!-- Deliver: output artifact and next action -->
-<g filter="url(#shadow)">
- <rect x="1082" y="356" width="430" height="438" rx="22" fill="#fff"/>
- <text x="1118" y="406" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#203b34">Ready to deliver</text>
- <rect x="1118" y="446" width="358" height="194" rx="15" fill="#f2f6f3"/>
- <rect x="1144" y="472" width="54" height="54" rx="14" fill="url(#mint)"/>
- <path d="M1159 500 L1170 511 L1185 487" fill="none" stroke="#315e50" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
- <text x="1216" y="491" font-family="Arial,sans-serif" font-size="13" fill="#82958c">PROJECT BRIEF</text>
- <text x="1216" y="518" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#203b34">Review workflow v1</text>
- <text x="1144" y="566" font-family="Arial,sans-serif" font-size="14" fill="#647970">Scope · audience · success measure</text>
- <text x="1144" y="596" font-family="Arial,sans-serif" font-size="14" fill="#647970">Evidence links · owner · next action</text>
- <rect x="1118" y="666" width="358" height="58" rx="14" fill="#203b34"/>
- <text x="1297" y="702" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Export deliverable</text>
- <text x="1118" y="760" font-family="Arial,sans-serif" font-size="13" fill="#819188">PDF · share link · project handoff</text>
-</g>
-<text x="88" y="820" font-family="Arial,sans-serif" font-size="12" letter-spacing="1" fill="#8b9992">ILLUSTRATIVE DEMO CONTENT · NOT LIVE CUSTOMER DATA</text>\n<text x="88" y="850" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#7b8d84">NORTHSTAR / CAPTURE → SHAPE → DELIVER</text>
-<text x="1512" y="850" text-anchor="end" font-family="Arial,sans-serif" font-size="13" fill="#7b8d84">PRODUCT FLOW / 01</text>
+<text x="1140" y="728" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#1b3731">Priority insight</text>
+<rect x="1140" y="750" width="378" height="78" rx="10" fill="#eef5f0"/>
+<text x="1160" y="778" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#315e51">Production capacity is nearing its limit.</text>
+<text x="1160" y="801" font-family="Arial,sans-serif" font-size="11" fill="#6d8177">Review workload allocation before the next launch.</text>
+<text x="270" y="882" font-family="Arial,sans-serif" font-size="10" letter-spacing="1" fill="#9aa8a1">CONCEPT UI · ALL METRICS AND PROJECTS ARE ILLUSTRATIVE DEMO CONTENT</text>
 </svg>"""
     path.write_text(svg, encoding="utf-8")
 
