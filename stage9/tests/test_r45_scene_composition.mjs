@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {R45_CONTRACT,R45_CSS,applyR45TemplateComposition} from '../r45-scene-composition.mjs';
-const fixture='<!doctype html><html><head></head><body><script>function exportDocument(){return "<html><head></head><body></body></html>"}</script></body></html>';
+const fixture='<!doctype html><html><head></head><body><script>function exportDocument(){return "<html><head></head><body></body></html>"};window.MotionStudioUnified={undo:0};</script></body></html>';
 test('R45 covers eight scene families',()=>{assert.equal(R45_CONTRACT.families.length,8);assert.equal(R45_CONTRACT.composition,'scene-integrated');assert.equal(R45_CONTRACT.persistentSplitColumns,false);for(const f of ['print','object','film','plan','play','runway','museum','system'])assert.ok(R45_CSS.includes('data-r38-family="'+f+'"'))});
 test('Agency project index overlays the hero scene',()=>{assert.match(R45_CSS,/r43-agency-index\{position:absolute/);assert.match(R45_CSS,/r43-agency-index button\{min-height:72px/)});
 test('SaaS workflow is vertical and full width',()=>{assert.match(R45_CSS,/r43-saas-workflow\{display:flex!important;flex-direction:column/);assert.match(R45_CSS,/r43-saas-preview\{width:100%!important/)});
