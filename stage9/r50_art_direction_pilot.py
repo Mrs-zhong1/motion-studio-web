@@ -148,8 +148,7 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=Path("r50-review")); args=ap.parse_args()
     args.out.mkdir(parents=True,exist_ok=True); manifest=[]
     for template,builder in (("agency",build_agency),("product-3d",build_product),("gallery",build_gallery)):
-        reset(template); materials=reset_materials=None
-        # reset() returns a scene-specific material palette.
+        # reset() returns a scene-specific material palette and clears the prior scene.
         materials=reset(template)
         builder(materials)
         scene=bpy.context.scene; out=args.out/(template+"-r50.png"); scene.render.filepath=str(out)
