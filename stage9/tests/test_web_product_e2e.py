@@ -39,7 +39,7 @@ try:
         page.on("console",lambda msg:console_errors.append({"text":msg.text,"location":msg.location}) if msg.type=="error" else None)
         page.on("requestfailed",lambda req:failed_requests.append({"url":req.url,"failure":req.failure}))
         page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
-        result["browserDiagnostics"]["inlineScripts"]=page.locator("script").evaluate_all("""nodes=>nodes.map((s,i)=>({index:i,id:s.id||null,type:s.type||'text/javascript',src:s.src||null,length:(s.textContent||'').length,head:(s.textContent||'').slice(0,100)}))""")
+        result["browserDiagnostics"]["inlineScripts"]=page.locator("script").evaluate_all("""nodes=>nodes.map((s,i)=>({index:i,id:s.id||null,type:s.type||'text/javascript',src:s.src||null,length:(s.textContent||'').length,head:(s.textContent||'').slice(0,100),tail:(s.textContent||'').slice(-700),lineCount:(s.textContent||'').split('\\n').length,tailLines:(s.textContent||'').split('\\n').slice(-12)}))""")
         page.wait_for_function("() => !!window.MotionStudioUnified && Array.isArray(window.MotionStudioUnified.registry)",timeout=15000)
         check("20_components",page.evaluate("window.MotionStudioUnified.registry.length")==20)
         check("template_discovery_default",page.locator("#discoveryView").is_visible())
