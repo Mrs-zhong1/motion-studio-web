@@ -53,6 +53,28 @@ output=output.replace('const stage9ThreeEngineURL=',sharedUrl+'const stage9Three
 // Parse the exact inline-script payloads produced by the HTML parser before
 // publishing build artifacts. This catches premature </script> termination
 // and malformed template literals at their originating script index.
+function locateOpenQuotedString(source){
+ let state='code',quoteStart=-1,line=1,column=0,quoteLine=0,quoteColumn=0,escaped=false;
+ for(let i=0;i<source.length;i++){
+  const ch=source[i],next=source[i+1];
+  if(state==='line-comment'){if(ch==='\\n')state='code';}
+  else if(state==='block-comment'){if(ch==='*'&&next==='/'){state='code';i++;column++;}}
+  else if(state==='single'||state==='double'){
+   if(ch==='\\n'||ch==='\\r')return {quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,i+90))};
+   if(escaped)escaped=false;else if(ch==='\\\\')escaped=true;else if((state==='single'&&ch==="'")||(state==='double'&&ch==='"'))state='code';
+  } else if(state==='template'){
+   if(escaped)escaped=false;else if(ch==='\\\\')escaped=true;else if(ch==='\\`')state='code';
+  } else {
+   if(ch==='/'&&next==='/'){state='line-comment';i++;column++;}
+   else if(ch==='/'&&next==='*'){state='block-comment';i++;column++;}
+   else if(ch==="'"){state='single';quoteStart=i;quoteLine=line;quoteColumn=column;}
+   else if(ch==='"'){state='double';quoteStart=i;quoteLine=line;quoteColumn=column;}
+   else if(ch==='\\`'){state='template';quoteStart=i;quoteLine=line;quoteColumn=column;}
+  }
+  if(ch==='\\n'){line++;column=0;}else column++;
+ }
+ return (state==='single'||state==='double'||state==='template')?{quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,quoteStart+220))}:null;
+}
 const inlineScriptPattern=/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi;
 let inlineScriptMatch,inlineScriptIndex=0;
 while((inlineScriptMatch=inlineScriptPattern.exec(output))){
@@ -63,10 +85,11 @@ while((inlineScriptMatch=inlineScriptPattern.exec(output))){
  try { await transform(body,{loader:'js',target:'es2022'}); }
  catch(error) {
   const detail=error.errors?.[0];
+  const openQuote=locateOpenQuotedString(body);
   const location=detail?.location?('line '+(detail.location.line||'?')+', column '+(detail.location.column||'?')+' '+(detail.text||'')):String(error.stack||error).split('\n').slice(0,3).join(' | ');
   throw new Error('Generated inline script syntax failure at index '+inlineScriptIndex+
    ' (id '+((attrs.match(/\bid\s*=\s*["']([^"']+)/i)||[])[1]||'none')+
-   ', '+body.length+' chars): '+error.message+'; '+location);
+   ', '+body.length+' chars): '+error.message+'; '+location+'; quoteScan='+JSON.stringify(openQuote));
  }
  inlineScriptIndex++;
 }
