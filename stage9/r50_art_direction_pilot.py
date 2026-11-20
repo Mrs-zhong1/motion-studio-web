@@ -129,16 +129,8 @@ def build_agency(m):
     # A large sculptural transition object crosses the three cases, implying
     # one continuous creative practice rather than disconnected template tiles.
     curve("Continuous creative ribbon",[(-4.8,-.15,.55),(-3.4,-.45,1.15),(-1.8,-.52,2.55),(0,-.58,1.25),(1.8,-.48,.72),(3.5,-.36,2.25),(4.8,-.12,1.5)],.095,m["gold"])
-    # Foreground plinths hold campaign artifacts, not furniture or an office desk.
-    cube("Campaign artifact plinth left",(-3.65,-1.55,.28),(1.55,.95,.48),m["silver"],.10)
-    uv("Campaign artifact left",(-3.65,-1.55,.82),(.48,.48,.48),m["orange"])
-    cube("Campaign artifact plinth center",(0,-1.62,.25),(1.65,1.02,.42),m["gold"],.09)
-    torus("Campaign artifact center",(0,-1.62,.88),.52,.12,m["blue"],(.5,.2,.1))
-    cube("Campaign artifact plinth right",(3.65,-1.52,.26),(1.55,.95,.44),m["silver"],.10)
-    uv("Campaign artifact right",(3.65,-1.52,.82),(.38,.58,.48),m["cream"])
-    # Oversized wayfinding in the environment reinforces the agency's authored point of view.
-    text3d("Agency manifesto","IDEAS IN MOTION",(-4.95,-2.28,.72),.30,m["cream"])
-    text3d("Agency descriptor","INDEPENDENT CREATIVE PRACTICE  /  IDENTITY  /  DIGITAL  /  CAMPAIGN",( -4.92,-2.28,.38),.105,m["gold"])
+    # Keep the lower foreground intentionally quiet: the continuous ribbon and
+    # three authored case canvases carry the composition without obscuring labels.
 
 def build_product(m):
     # Premium mirrorless cinema camera: unmistakable lens, grip, viewfinder, dials and hot shoe.
