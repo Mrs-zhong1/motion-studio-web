@@ -12,7 +12,7 @@ browser_name=os.environ.get("MOTION_BROWSER","chromium").strip().lower()
 if browser_name not in ("chromium","firefox","webkit"):
     raise ValueError("MOTION_BROWSER must be chromium, firefox, or webkit")
 result={"pass":False,"suite":"Motion Studio Web product E2E","checks":{},"errors":[],"browser":browser_name,
-        "webkitIsSafari":False,"scope":"Desktop automated engine smoke, not native Safari/mobile device acceptance","browserDiagnostics":{"pageErrors":[],"consoleErrors":[]}}
+        "webkitIsSafari":False,"scope":"Desktop automated engine smoke, not native Safari/mobile device acceptance","browserDiagnostics":{"pageErrors":[],"consoleErrors":[],"failedRequests":[],"frames":[],"inlineScripts":[]}}
 def check(name,condition):
     result["checks"][name]=bool(condition)
     assert condition,name
@@ -33,8 +33,10 @@ try:
         page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
         page_errors=[]
         console_errors=[]
-        page.on("pageerror",lambda e:page_errors.append(str(e)))
-        page.on("console",lambda msg:console_errors.append(msg.text) if msg.type=="error" else None)
+        failed_requests=[]
+        page.on("pageerror",lambda e:page_errors.append({"message":str(e),"stack":getattr(e,"stack",None)}))
+        page.on("console",lambda msg:console_errors.append({"text":msg.text,"location":msg.location}) if msg.type=="error" else None)
+        page.on("requestfailed",lambda req:failed_requests.append({"url":req.url,"failure":req.failure}))
         page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
         page.wait_for_function("() => !!window.MotionStudioUnified && Array.isArray(window.MotionStudioUnified.registry)",timeout=15000)
         check("20_components",page.evaluate("window.MotionStudioUnified.registry.length")==20)
@@ -153,7 +155,11 @@ finally:
     if "server" in locals():
         server.shutdown()
         server.server_close()
-    result["browserDiagnostics"]={"pageErrors":page_errors if "page_errors" in locals() else [],"consoleErrors":console_errors if "console_errors" in locals() else []}
+    result["browserDiagnostics"]={"pageErrors":page_errors if "page_errors" in locals() else [],
+        "consoleErrors":console_errors if "console_errors" in locals() else [],
+        "failedRequests":failed_requests if "failed_requests" in locals() else [],
+        "frames":[{"url":frame.url,"name":frame.name} for frame in page.frames] if "page" in locals() else [],
+        "inlineScripts":page.locator("script").evaluate_all("""nodes=>nodes.map((s,i)=>({index:i,id:s.id||null,type:s.type||'text/javascript',src:s.src||null,length:(s.textContent||'').length,head:(s.textContent||'').slice(0,100)}))""") if "page" in locals() and not page.is_closed() else []}
     REPORT.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
     print(json.dumps(result,ensure_ascii=False,indent=2))
 assert result["pass"],"Web product E2E failed; inspect WEB_PRODUCT_E2E_RESULT.json"
