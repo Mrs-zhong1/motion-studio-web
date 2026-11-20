@@ -54,3 +54,11 @@
 - R52 run #37: report says 15 rows, 0 accepted, 0 validator errors, status HOLD. A successful report-only workflow means the report was generated, not that rights were approved.
 - R53 run #36: report says 33 expected, 0 accepted; all 33 slots fail the explicit human approval + `productionEligible=true` requirement. Status HOLD.
 - Product E2E run #1164 on commit `e68b4c6`: Chromium, Firefox and WebKit jobs all completed successfully. This is browser automation evidence only; it does not approve visual direction, third-party rights or release.
+
+
+## Agency composition correction — source commit 2026-11-20
+
+- Commit: `5f1e06925154de6a7c3b04a7c12a06082b94f24c`
+- Increased the Agency orthographic camera scale to 14.2 to create a wider safe frame for all three case canvases.
+- Repositioned and reduced the continuous gold ribbon to a low foreground path so it no longer crosses the case-study typography and artwork.
+- This is a source change only. The available GitHub Actions tools do not expose workflow dispatch, and no new R50 render run/artifact is associated with this SHA yet. The change is therefore **awaiting render**, not visually accepted.
