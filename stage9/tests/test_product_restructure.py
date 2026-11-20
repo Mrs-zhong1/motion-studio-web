@@ -94,10 +94,12 @@ def test_product_restructure():
             assert page.locator("#previewDevice").evaluate(
                 "el => el.classList.contains('mobile')"
             )
-            replay_before = page.locator("#templatePreviewFrame").get_attribute("srcdoc")
+            # WebKit does not consistently expose the reflected srcdoc attribute through
+            # Playwright's get_attribute(); inspect the actual rendered iframe document instead.
+            replay_before = frame.locator("html").evaluate("el => el.outerHTML")
             page.locator("#previewReplay").click()
             frame.locator("section.section").first.wait_for()
-            replay_after = page.locator("#templatePreviewFrame").get_attribute("srcdoc")
+            replay_after = frame.locator("html").evaluate("el => el.outerHTML")
             assert replay_before and replay_after
             assert "3D Product Experience" in replay_after
 
