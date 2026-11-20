@@ -96,7 +96,7 @@ class ReplacementTests(unittest.TestCase):
             self.assertEqual(len(planned),1)
             entry["embeddedThirdPartyAssets"]=True
             (inbox/"replacement.json").write_text(json.dumps([entry]))
-            with self.assertRaisesRegex(ValueError,"embeddedThirdPartyAssets=false"):
+            with self.assertRaisesRegex(ValueError,"both third-party asset flags=false"):
                 plan(inbox,assets/"manifest.json")
 
     def test_open_license_requires_attribution_and_rejects_nc_nd(self):
