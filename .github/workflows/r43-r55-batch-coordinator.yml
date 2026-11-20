@@ -1,0 +1,94 @@
+name: R43-R55 Batch Acceptance Coordinator
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - design/r43-immersive-template-system
+    paths:
+      - '.github/workflows/r43-r55-batch-coordinator.yml'
+  workflow_run:
+    workflows:
+      - 'R50 Art Direction Review Pilot (never auto-approve)'
+      - 'R52 Photography Rights Evidence Gate (report-only until complete)'
+      - 'R53 33-Asset Integration Acceptance (fail closed)'
+      - 'R25 Native-Quality Replacement Safety'
+      - 'R26 Blender Original Asset Pilot'
+      - 'R32 Original Media Acceptance'
+      - 'Web Product E2E'
+    types: [completed]
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+concurrency:
+  group: r43-r55-coordinator-${{ github.event.workflow_run.head_branch || github.ref }}
+  cancel-in-progress: false
+jobs:
+  consolidate:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.head_branch == 'design/r43-immersive-template-system'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Collect current branch workflow evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TARGET_BRANCH: design/r43-immersive-template-system
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_WORKFLOW: ${{ github.event.workflow_run.name || 'manual-or-pull-request' }}
+          EVENT_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'not-applicable' }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request, urllib.error
+          from datetime import datetime, timezone
+          repo=os.environ['GH_REPO']; branch=os.environ['TARGET_BRANCH']; token=os.environ['GH_TOKEN']
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def get(path):
+            req=urllib.request.Request(f'https://api.github.com/repos/{repo}/{path}',headers=headers)
+            with urllib.request.urlopen(req,timeout=20) as r: return json.load(r)
+          runs=get('actions/runs?branch='+branch+'&per_page=100').get('workflow_runs',[])
+          wanted=('R50','R52','R53','R25','R26','R32','R47','R48','E2E','Web Product')
+          latest={}
+          for run in runs:
+            name=run.get('name','')
+            if not any(x.lower() in name.lower() for x in wanted): continue
+            if name not in latest: latest[name]=run
+          stages=[]
+          for name,run in sorted(latest.items()):
+            status=run.get('status'); conclusion=run.get('conclusion')
+            state='RUNNING' if status!='completed' else ('WORKFLOW_SUCCESS_REVIEW_REQUIRED' if conclusion=='success' else ('FAILED' if conclusion in ('failure','timed_out','action_required') else 'CANCELLED_OR_UNKNOWN'))
+            stages.append({'workflow':name,'runId':run.get('id'),'status':state,'conclusion':conclusion,'htmlUrl':run.get('html_url'),'createdAt':run.get('created_at'),'updatedAt':run.get('updated_at')})
+          holds=[
+            'R50 output remains review-only until human visual and rights review.',
+            'R52 candidate downloads are not production approvals; complete itemized source/license/hash review.',
+            'R53 accepts zero assets unless all 33 slots have original files, hashes, source evidence and explicit human approval.',
+            'R54 physical-device testing and R55 exact-SHA HTTPS deployment remain separate acceptance gates.',
+            'Workflow success means the report/test job ran successfully; it does not mean product release acceptance.'
+          ]
+          report={'schema':'motion-studio-r43-r55-batch-status-v1','generatedAtUtc':datetime.now(timezone.utc).isoformat(),'branch':branch,'trigger':{'event':os.environ['EVENT_NAME'],'completedWorkflow':os.environ['EVENT_WORKFLOW'],'completedConclusion':os.environ['EVENT_CONCLUSION']},'overall':'HOLD','releaseEligible':False,'stages':stages,'humanAndExternalGates':holds,'automationPolicy':{'mergeAllowed':False,'publishAllowed':False,'draftMustRemain':True,'failedNetworkJobs':'retry only within their own bounded workflow; otherwise mark BLOCKED','noEvidenceFabrication':True}}
+          os.makedirs('batch-report',exist_ok=True)
+          with open('batch-report/R43-R55_BATCH_STATUS.json','w') as f: json.dump(report,f,indent=2)
+          with open('batch-report/HUMAN_ACTION_REQUIRED.md','w') as f:
+            f.write('# Human / external acceptance actions\n\n')
+            f.write('- Review R50 candidate visuals and explicitly record approval or requested changes.\n')
+            f.write('- Complete R52 image-by-image source, license, attribution and hash review.\n')
+            f.write('- Supply and review original evidence for all 33 R53 slots; no placeholder approvals.\n')
+            f.write('- Perform real iPhone/Android checks for R54 when hardware is available.\n')
+            f.write('- Deploy the exact candidate SHA over HTTPS and verify critical flows for R55.\n')
+            f.write('- Keep PR #4 open and Draft; do not merge or publish.\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Publish consolidated batch status
+        if: always()
+        run: |
+          echo "## R43–R55 batch coordinator" >> "$GITHUB_STEP_SUMMARY"
+          echo "This coordinator consolidates workflow evidence. A green workflow is not a release approval." >> "$GITHUB_STEP_SUMMARY"
+          if [ -f batch-report/R43-R55_BATCH_STATUS.json ]; then cat batch-report/R43-R55_BATCH_STATUS.json >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f batch-report/HUMAN_ACTION_REQUIRED.md ]; then cat batch-report/HUMAN_ACTION_REQUIRED.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r43-r55-batch-status
+          path: batch-report/
+          if-no-files-found: warn
+          retention-days: 30
