@@ -60,8 +60,10 @@ def audit(asset_dir=ASSETS):
                   and asset.get('trueHighResolutionGenerated') is True)
         native_enough=(native[0]>=1600 and native[1]>=900)
         amplification=max(target[0]/native[0],target[1]/native[1])
-        upscale_ok=amplification<=1.25
+        upscale_ok=amplification<=1.0
         output_ok=(dimensions[0]>=1600 and dimensions[1]>=900)
+        aspect_ok=(abs(native[0]/native[1]-16/9)<=0.015 and abs(dimensions[0]/dimensions[1]-16/9)<=0.015)
+        if target!=dimensions:errors.append(f'presentation dimensions mismatch {filename}')
         # Original pixel size is a provenance claim: a resized JPEG can still
         # report 1600x900. Never infer native resolution from output size.
         risk=[]
@@ -81,6 +83,7 @@ def audit(asset_dir=ASSETS):
         if not native_enough:risk.append('source_native_resolution_insufficient')
         if not upscale_ok:risk.append('upscaled_output_cannot_restore_original_pixels')
         if not output_ok:risk.append('committed_image_output_too_small')
+        if not aspect_ok:risk.append('source_or_output_aspect_ratio_not_16_9')
         if not asset.get('commercialUseTermsChecked'):risk.append('usage_terms_not_checked')
         if not all(asset.get(x) for x in ('generationSystem','generationDate','sourceReference','termsUrl')):risk.append('source_provenance_incomplete')
         scenes.append({'template':template,'chapter':chapter,'file':filename,
