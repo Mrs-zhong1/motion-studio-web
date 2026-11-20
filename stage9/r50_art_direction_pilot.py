@@ -109,7 +109,7 @@ def build_agency(m):
         cube("Campaign frame %02d"%idx,(x,y,z),(w,.12,h),accent,.035)
         cube("Campaign canvas %02d"%idx,(x,y-.085,z),(w-.15,.035,h-.15),m["ink"] if idx!=2 else m["gold"],.012)
         text3d("Campaign kicker %02d"%idx,kicker,(x-w*.43,y-.13,z+h*.31),.115,m["cream"] if idx!=2 else m["ink"])
-        text3d("Campaign title %02d"%idx,title,(x-w*.43,y-.14,z-h*.31),.205,m["cream"] if idx!=2 else m["ink"])
+        text3d("Campaign title %02d"%idx,title,(x-w*.43,y-.14,z-h*.40),.165,m["cream"] if idx!=2 else m["ink"])
         if idx==0:
             # Identity packaging study: glass fragrance vessel, metal cap and label.
             cube("Identity bottle body",(x,y-.30,z+.05),(.78,.30,.94),m["cream"],.14)
@@ -132,14 +132,14 @@ def build_agency(m):
             cube("Campaign poster board",(x,y-.27,z+.05),(1.35,.10,1.35),m["cream"],.035)
             cube("Campaign poster color block",(x-.25,y-.34,z+.18),(.48,.025,.76),m["orange"],.018)
             cube("Campaign poster typography bar",(x+.30,y-.35,z-.18),(.38,.025,.10),m["ink"],.012)
-            cube("Campaign packaging box",(x+.20,y-.52,z-.48),(.72,.42,.48),m["blue"],.045)
-            cube("Packaging label",(x+.20,y-.75,z-.48),(.46,.025,.22),m["cream"],.018)
+            cube("Campaign packaging box",(x+.20,y-.52,z-.34),(.62,.36,.38),m["blue"],.045)
+            cube("Packaging label",(x+.20,y-.72,z-.34),(.42,.025,.18),m["cream"],.018)
     # A low continuous light line ties the three campaign worlds together without crossing titles.
     curve("Portfolio floor light",[(-4.8,-.65,-.015),(-3.2,-.68,-.015),(0,-.70,-.015),(3.2,-.68,-.015),(4.8,-.65,-.015)],.025,m["gold"])
     
 def build_product(m):
     # Premium mirrorless cinema camera with recognizable optical and tactile details.
-    bpy.context.scene.camera.data.ortho_scale=10.8
+    bpy.context.scene.camera.data.ortho_scale=11.8
     cube("Camera presentation slab",(0,0,.12),(5.9,3.8,.24),m["ink"],.18)
     cube("Magnesium camera body",(-.25,.08,1.42),(2.95,1.25,1.72),m["ink"],.22)
     cube("Top titanium shoulder",(-.25,.08,2.32),(2.55,1.12,.16),m["silver"],.07)
@@ -154,10 +154,11 @@ def build_product(m):
     for i in range(16):
         a=2*math.pi*i/16
         cube("Lens grip notch %02d"%i,(-.15+.70*math.cos(a),-1.39,1.47+.70*math.sin(a)),(.035,.035,.055),m["ink"],.008)
-    # Lens aperture blades visible behind the front glass.
-    for i in range(8):
-        a=2*math.pi*i/8
-        uv("Aperture blade %02d"%i,(-.15+.22*math.cos(a),-1.675,1.47+.22*math.sin(a)),(.13,.012,.035),m["silver"])
+    # Optical aperture: dark central iris and a subtle blue glass reflection read clearly as a camera lens.
+    cyl("Recessed aperture iris",(-.15,-1.681,1.47),.29,.018,m["ink"],128).rotation_euler[0]=math.pi/2
+    cyl("Lens optical center",(-.15,-1.696,1.47),.19,.012,m["glass"],128).rotation_euler[0]=math.pi/2
+    uv("Optical blue reflection",(-.23,-1.711,1.57),(.085,.012,.035),m["blue"])
+    torus("Inner aperture ring",(-.15,-1.705,1.47),.24,.012,m["silver"],(math.pi/2,0,0))
     cube("Ergonomic camera grip",(1.12,-.48,1.42),(.58,.42,1.42),m["cream"],.16)
     for i in range(9):
         cube("Grip tactile rib %02d"%i,(1.12,-.71,.88+i*.13),(.42,.035,.022),m["ink"],.008)
@@ -180,11 +181,11 @@ def build_product(m):
 
 def build_gallery(m):
     # Open-front museum gallery: remove the foreground right wall that hid the third artwork.
-    bpy.context.scene.camera.data.ortho_scale=12.8
+    bpy.context.scene.camera.data.ortho_scale=14.0
     cube("Gallery floor",(0,.25,.05),(9.6,6.8,.16),m["ink"],.025)
-    cube("Rear plaster exhibition wall",(0,3.15,2.25),(9.1,.18,4.45),m["cream"],.025)
-    cube("Left gallery return",(-4.55,2.0,2.25),(.18,2.25,4.45),m["cream"],.025)
-    cube("Ceiling reveal",(0,2.95,4.47),(8.8,.10,.08),m["gold"],.015)
+    cube("Rear plaster exhibition wall",(0,3.15,2.10),(9.1,.18,3.75),m["cream"],.025)
+    cube("Left gallery return",(-4.55,2.0,2.10),(.18,2.25,3.75),m["cream"],.025)
+    cube("Ceiling reveal",(0,2.95,3.98),(8.8,.10,.08),m["gold"],.015)
     cyl("Work one stone pedestal",(-2.55,-.25,.32),.72,.42,m["silver"])
     uv("Folded ceramic volume A",(-2.55,-.25,1.28),(.46,.40,.96),m["orange"])
     uv("Folded ceramic volume B",(-2.20,-.20,1.48),(.30,.34,.76),m["cream"])
@@ -198,12 +199,12 @@ def build_gallery(m):
     torus("Suspended brass inner orbit",(2.55,-.42,1.58),.34,.055,m["gold"],(.8,.35,.2))
     curve("Sculpture organic spine",[(2.15,-.20,.95),(2.10,-.18,1.55),(2.60,-.15,2.18),(3.05,-.15,1.72)],.07,m["cream"])
     # Track lighting is mounted behind the works; beams stay above the display silhouettes.
-    cube("Museum lighting track",(0,2.55,4.12),(7.2,.10,.10),m["ink"],.025)
+    cube("Museum lighting track",(0,2.55,3.72),(7.2,.10,.10),m["ink"],.025)
     for i,x in enumerate((-2.55,0,2.55)):
-        cyl("Museum spotlight "+str(i),(x,2.48,3.86),.14,.20,m["gold"],64)
-        curve("Spotlight beam "+str(i),[(x,2.42,3.78),(x,1.0,2.95),(x,.1,2.35)],.012,m["cream"])
+        cyl("Museum spotlight "+str(i),(x,2.48,3.48),.14,.20,m["gold"],64)
+        curve("Spotlight beam "+str(i),[(x,2.42,3.38),(x,1.0,2.75),(x,.1,2.25)],.012,m["cream"])
     for i in range(7):
-        cube("Wall wash vertical reveal "+str(i),(-3.0+i*.95,3.03,2.28),(.018,.025,3.5),m["gold"],.004)
+        cube("Wall wash vertical reveal "+str(i),(-3.0+i*.95,3.03,2.10),(.018,.025,2.9),m["gold"],.004)
 
 def write_saas_svg(path):
     """Original SaaS workspace dashboard composition with explicitly illustrative demo data."""
@@ -240,7 +241,7 @@ def write_saas_svg(path):
 </g>
 <g font-family="Arial,sans-serif">
  <text x="294" y="232" font-size="12" fill="#75867e">Active projects</text><text x="294" y="282" font-size="34" font-weight="700" fill="#1b3731">24</text><text x="352" y="281" font-size="11" fill="#36856a">+12.5%</text>
- <text x="606" y="232" font-size="12" fill="#75867e">Work completed</text><text x="606" y="282" font-size="34" font-weight="700" fill="#1b3731">86%</text><text x="666" y="281" font-size="11" fill="#36856a">+4.8%</text>
+ <text x="606" y="232" font-size="12" fill="#75867e">Tasks completed</text><text x="606" y="282" font-size="34" font-weight="700" fill="#1b3731">86%</text><text x="666" y="281" font-size="11" fill="#36856a">+4.8%</text>
  <text x="918" y="232" font-size="12" fill="#75867e">Team capacity</text><text x="918" y="282" font-size="34" font-weight="700" fill="#1b3731">78%</text><text x="978" y="281" font-size="11" fill="#b27b3f">-2.1%</text>
  <text x="1230" y="232" font-size="12" fill="#75867e">On-time delivery</text><text x="1230" y="282" font-size="34" font-weight="700" fill="#1b3731">92%</text><text x="1290" y="281" font-size="11" fill="#36856a">+6.3%</text>
  <text x="294" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="606" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="918" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text><text x="1230" y="309" font-size="10" fill="#9aa8a1">ILLUSTRATIVE DEMO METRIC</text>
