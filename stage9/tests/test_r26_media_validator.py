@@ -16,7 +16,7 @@ class R26MediaValidatorTests(unittest.TestCase):
      "nativeSourceDimensions":[1600,900],"sourceType":"procedural-3d-render",
      "generationSystem":"Blender test scene","sourceReference":"test.py#scene",
      "generationDate":"2026-11-19T00:00:00Z","thirdPartyAssets":False,
-     "humanVisualReviewApproved":False,"productionEligible":False})
+     "embeddedThirdPartyAssets":False,"humanVisualReviewApproved":False,"productionEligible":False})
    manifest=root/"replacement.json";manifest.write_text(json.dumps(rows))
    result=validate(root,manifest)
    self.assertTrue(result["technicalPass"])
@@ -35,5 +35,29 @@ class R26MediaValidatorTests(unittest.TestCase):
    result=validate(root,manifest)
    self.assertFalse(result["technicalPass"])
    self.assertTrue(any("originalSourceUrl" in e for e in result["errors"]))
+
+ def test_cc_by_sa_requires_compatibility_review_and_nc_nd_are_rejected(self):
+  with tempfile.TemporaryDirectory() as td:
+   root=Path(td); path=root/"photo.png"
+   Image.new("RGB",(1600,900),(30,60,90)).save(path)
+   row={"file":"photo.png","sha256":hashlib.sha256(path.read_bytes()).hexdigest(),
+    "nativeSourceDimensions":[1600,900],"sourceType":"open-licensed-photography",
+    "originalSourceUrl":"https://example.org/photo","creator":"Photographer",
+    "licenseId":"CC-BY-SA-4.0","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution":"Photo by Photographer, CC BY-SA 4.0","downloadedAt":"2026-11-19T00:00:00Z",
+    "humanVisualReviewApproved":False,"productionEligible":False}
+   manifest=root/"replacement.json";manifest.write_text(json.dumps([row]))
+   missing_review=validate(root,manifest)
+   self.assertFalse(missing_review["technicalPass"])
+   self.assertTrue(any("compatibility review" in e for e in missing_review["errors"]))
+   row["shareAlikeCompatibilityReviewed"]=True
+   manifest.write_text(json.dumps([row]))
+   reviewed=validate(root,manifest)
+   self.assertTrue(reviewed["technicalPass"],reviewed["errors"])
+   row["licenseId"]="CC-BY-NC-4.0"
+   manifest.write_text(json.dumps([row]))
+   rejected=validate(root,manifest)
+   self.assertFalse(rejected["technicalPass"])
+   self.assertTrue(any("NC/ND" in e for e in rejected["errors"]))
 
 if __name__=="__main__":unittest.main()
