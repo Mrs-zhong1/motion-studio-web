@@ -1,0 +1,249 @@
+name: R43-R55 One-Shot Batch Execution
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - design/r43-immersive-template-system
+    paths:
+      - '.github/workflows/r43-r55-one-shot-batch.yml'
+      - 'stage9/**'
+      - 'release/**'
+  pull_request:
+    paths:
+      - '.github/workflows/r43-r55-one-shot-batch.yml'
+      - 'stage9/**'
+      - 'release/**'
+permissions:
+  contents: read
+concurrency:
+  group: r43-r55-one-shot-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  execute:
+    name: Execute R50 → R52 → R53 → R47/R48 and publish one report
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Blender and headless rendering runtime (bounded retries)
+        continue-on-error: true
+        run: |
+          set -euxo pipefail
+          installed=0
+          for attempt in 1 2 3 4 5; do
+            sudo apt-get clean
+            sudo rm -rf /var/lib/apt/lists/*
+            sudo apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=90 update
+            if sudo apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=90 install -y --no-install-recommends blender libegl1 libgl1 libglx-mesa0 libgl1-mesa-dri; then installed=1; break; fi
+            sleep $((attempt * 12))
+          done
+          test "$installed" -eq 1
+          blender --version
+      - name: Install pinned image and browser test dependencies
+        run: |
+          python -m pip install 'Pillow==11.3.0' playwright
+          npm --prefix stage9 install --no-audit --no-fund
+          python -m playwright install --with-deps chromium firefox webkit
+      - name: Build the standalone web editor and verify offline Three.js bundle
+        working-directory: stage9
+        run: |
+          npm run build
+          python tests/check_build.py
+      - name: Run R43-R46 design and interaction contracts
+        working-directory: stage9
+        run: |
+          node --test tests/test_r43_immersive_template_pilots.mjs
+          node --test tests/test_r44_single_canvas_preview.mjs
+          node --test tests/test_r45_scene_composition.mjs
+          node --test tests/test_r46_responsive_accessibility.mjs
+      - name: R50 render review-only original art direction candidates
+        id: r50_render
+        continue-on-error: true
+        env:
+          EGL_PLATFORM: surfaceless
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          MESA_LOADER_DRIVER_OVERRIDE: llvmpipe
+        run: |
+          blender --background --python stage9/r50_art_direction_pilot.py -- --out r50-review
+          python stage9/r50_editorial_finish.py --out r50-review
+      - name: Independently validate R50 image bytes, dimensions and review-only flags
+        id: r50_validate
+        if: always() && steps.r50_render.outcome == 'success'
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import hashlib,json,xml.etree.ElementTree as ET
+          from pathlib import Path
+          from PIL import Image
+          root=Path('r50-review'); rows=json.loads((root/'manifest.json').read_text())
+          assert len(rows)==4 and {x['template'] for x in rows}=={'agency','product-3d','gallery','saas'}
+          assert len({x['sha256'] for x in rows})==4
+          for row in rows:
+            p=root/row['file']; raw=p.read_bytes()
+            assert hashlib.sha256(raw).hexdigest()==row['sha256']
+            assert row['productionEligible'] is False
+            assert row['reviewStatus']=='HUMAN_VISUAL_REVIEW_REQUIRED'
+            if p.suffix=='.png':
+              with Image.open(p) as im:
+                im.load(); assert im.format=='PNG' and im.size==(1600,900)
+            else:
+              node=ET.parse(p).getroot()
+              assert node.tag.endswith('svg') and node.attrib.get('viewBox')=='0 0 1600 900'
+          print('R50 technical integrity PASS; human visual/rights approval remains OPEN.')
+          PY
+      - name: R52 asset validator unit tests
+        id: r52_unit
+        continue-on-error: true
+        run: python -m unittest release.tests.test_asset_validation -v
+      - name: R52 fetch candidate originals (review only; bounded per-file retries)
+        id: r52_fetch
+        if: always() && steps.r52_unit.outcome == 'success'
+        continue-on-error: true
+        run: python release/fetch_r52_candidate_evidence.py
+      - name: R52 itemized rights evidence report (never auto-approve)
+        id: r52_validate
+        if: always() && steps.r52_unit.outcome == 'success'
+        continue-on-error: true
+        run: python release/validate_r52_photo_rights.py --allow-incomplete --report batch-report/R52_PHOTO_RIGHTS_REPORT.json
+      - name: R53 validate all 33 production slots (fail closed)
+        id: r53_validate
+        if: always()
+        continue-on-error: true
+        run: |
+          mkdir -p batch-report
+          python release/validate_r53_production_assets.py --report batch-report/R53_33_ASSET_REPORT.json
+      - name: R47 Chromium save/reopen/export parity
+        id: r47_chromium
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: chromium
+        run: |
+          python tests/test_r47_roundtrip_parity.py
+          cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_chromium.json
+      - name: Chromium product journey E2E
+        id: e2e_chromium
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: chromium
+        run: |
+          python tests/test_web_product_e2e.py
+          cp WEB_PRODUCT_E2E_RESULT_chromium.json ../batch-report/E2E_chromium.json
+      - name: R48 reproducible candidate gate (candidate only; never release approval)
+        id: r48_candidate
+        if: always() && steps.r47_chromium.outcome == 'success' && steps.e2e_chromium.outcome == 'success'
+        continue-on-error: true
+        working-directory: stage9
+        run: |
+          python tests/test_r48_release_gate.py
+          cp R48_RELEASE_GATE.json ../batch-report/R48_CANDIDATE_GATE.json
+      - name: Mark R48 HOLD when Chromium evidence is incomplete
+        if: always() && (steps.r47_chromium.outcome != 'success' || steps.e2e_chromium.outcome != 'success')
+        run: |
+          mkdir -p batch-report
+          printf '%s\n' '{"status":"HOLD","scope":"candidate-only","reason":"Chromium R47 and E2E evidence must both pass before R48 can run.","releaseApproval":false}' > batch-report/R48_CANDIDATE_GATE.json
+      - name: R47 Firefox save/reopen/export parity
+        id: r47_firefox
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: firefox
+        run: |
+          python tests/test_r47_roundtrip_parity.py
+          cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_firefox.json
+      - name: Firefox product journey E2E
+        id: e2e_firefox
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: firefox
+        run: |
+          python tests/test_web_product_e2e.py
+          cp WEB_PRODUCT_E2E_RESULT_firefox.json ../batch-report/E2E_firefox.json
+      - name: R47 WebKit save/reopen/export parity
+        id: r47_webkit
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: webkit
+        run: |
+          python tests/test_r47_roundtrip_parity.py
+          cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_webkit.json
+      - name: WebKit product journey E2E
+        id: e2e_webkit
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: webkit
+        run: |
+          python tests/test_web_product_e2e.py
+          cp WEB_PRODUCT_E2E_RESULT_webkit.json ../batch-report/E2E_webkit.json
+      - name: Generate one consolidated result and human-action list
+        id: consolidate
+        if: always()
+        env:
+          STEPS_JSON: ${{ toJSON(steps) }}
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.sha }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          mkdir -p batch-report
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          steps=json.loads(os.environ['STEPS_JSON'])
+          technical=['build_editor','design_contracts','r50_render','r50_validate','r52_unit','r52_fetch','r52_validate','r53_validate','r47_chromium','e2e_chromium','r48_candidate','r47_firefox','e2e_firefox','r47_webkit','e2e_webkit']
+          failed=[name for name in technical if steps.get(name,{}).get('outcome') not in ('success','skipped')]
+          report={
+            'schema':'motion-studio-r43-r55-one-shot-batch-v1',
+            'commit':os.environ['HEAD_SHA'],'branch':os.environ['BRANCH'],
+            'workflowJobStatus':os.environ['JOB_STATUS'],
+            'technicalStepOutcomes':{name:steps.get(name,{}).get('outcome','not-run') for name in technical},
+            'technicalFailures':failed,
+            'R50':'REVIEW_ARTIFACT_ONLY; human visual and rights approval required',
+            'R52':'REPORT_ONLY; every photo requires itemized source/license and human review',
+            'R53':'FAIL_CLOSED; all 33 original assets and explicit approvals required',
+            'R47':'PASS only if Chromium, Firefox and WebKit parity reports pass on this SHA',
+            'R48':'CANDIDATE_ONLY; never a merge, publish or production approval',
+            'overall':'FAILED' if failed else 'HOLD',
+            'releaseEligible':False,
+            'humanGates':['R50 exact-SHA visual art-direction review','R52 photo-by-photo source/license/attribution review','R53 33 original asset approvals','R54 physical-device evidence','R55 exact-SHA HTTPS deployment and live smoke'],
+            'automationBoundary':'Retries transient download/install failures and reruns deterministic checks on relevant pushes. It does not fabricate assets, legal approval, visual signoff, device evidence, or production approval.'
+          }
+          Path('batch-report/R43-R55_ONE_SHOT_RESULT.json').write_text(json.dumps(report,indent=2)+'\n')
+          Path('batch-report/HUMAN_ACTION_REQUIRED.md').write_text(
+            '# Human / external gates still required\n\n'
+            '- Inspect the exact-SHA R50 render artifact and explicitly approve or request changes.\n'
+            '- Review every R52 photograph source, creator, exact license, attribution, compatibility and local hash.\n'
+            '- Supply and approve all 33 R53 originals; the validator must report 33/33 accepted.\n'
+            '- Perform physical-device checks for R54.\n'
+            '- Run R55 only after the prior gates; verify the exact deployed SHA and live HTTPS flows.\n'
+            '- Keep PR #4 Draft and do not merge or publish automatically.\n')
+          print(json.dumps(report,indent=2))
+          if failed: raise SystemExit(1)
+          PY
+      - name: Publish consolidated batch report
+        if: always()
+        run: |
+          echo "## R43–R55 one-shot batch result" >> "$GITHUB_STEP_SUMMARY"
+          cat batch-report/R43-R55_ONE_SHOT_RESULT.json >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          cat batch-report/HUMAN_ACTION_REQUIRED.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r43-r55-one-shot-batch-${{ github.sha }}
+          path: |
+            batch-report/
+            r50-review/
+            r52-candidates/
+            stage9/R47_ROUNDTRIP_PARITY.json
+            stage9/R48_RELEASE_GATE.json
+          if-no-files-found: warn
+          retention-days: 30
