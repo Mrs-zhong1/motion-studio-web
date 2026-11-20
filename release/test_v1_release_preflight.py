@@ -19,7 +19,7 @@ class CandidateTests(unittest.TestCase):
     raw=(assets/filename).read_bytes()
     rows.append(dict(template=t,chapter=chapter,file=filename,sha256=hashlib.sha256(raw).hexdigest(),
        source='AI_GENERATED',sourceType='individual-generation',trueHighResolutionGenerated=True,
-       nativeSourceDimensions=[1600,900],presentationDimensions=[1280,720],
+       nativeSourceDimensions=[1600,900],presentationDimensions=[1600,900],
        generationSystem='fixture',generationDate='2026-11-16',
        sourceReference=filename,termsUrl='https://example.com/terms',
        commercialUseTermsChecked=True))
