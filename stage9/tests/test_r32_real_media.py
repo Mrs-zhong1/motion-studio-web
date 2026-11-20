@@ -46,6 +46,7 @@ class R32MediaAuditTests(unittest.TestCase):
             nc=audit(root)
             self.assertFalse(nc['summary']['productionMediaEligible'])
             self.assertIn('commercially_incompatible_license',nc['scenes'][1]['technicalRisk'])
+            records[1]['licenseId']='CC-BY-4.0'
             records[3]['sourceType']='crop-of-AI-generated-collage'
             records[3]['nativeSourceDimensions']=[828,306]
             (root/'manifest.json').write_text(json.dumps({'assets':records}))
