@@ -62,7 +62,7 @@ export const r43Runtime = String.raw`
  const text=(el,selector)=>el?.querySelector(selector)?.textContent?.trim()||'';
  const make=(tag,cls,content)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(content!==undefined)el.textContent=content;return el};
  if(kind==='agency'){
-   const intro=make('h1','r43-agency-intro');intro.innerHTML='WORK THAT <em>MOVES</em> PEOPLE';
+   // Reuse the source template's own hero. R43 must not stack a second headline or duplicate nav/status copy.
    const index=make('ol','r43-agency-index');
    const labels=sections.map((s,i)=>text(s,'.designed-chapter-heading')||('Selected project '+String(i+1).padStart(2,'0')));
    sections.forEach((section,i)=>{
@@ -73,9 +73,7 @@ export const r43Runtime = String.raw`
      button.addEventListener('click',()=>{section.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});index.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));button.setAttribute('aria-pressed','true')});
      li.append(button);index.append(li);
    });
-   page.prepend(index);page.prepend(intro);
-   const status=make('span','r43-scene-status','SELECT A CASE · SCROLL TO EXPLORE');
-   const control=make('div','r43-scene-control');control.append(status);intro.after(control);
+   if(sections[0]) sections[0].after(index); else page.prepend(index);
  } else {
    const shell=make('section','r43-saas-shell');shell.setAttribute('aria-label','Interactive product workflow demo');
    const top=make('div','r43-saas-top');top.append(make('span',null,'WORKFLOW / LIVE DEMO'),make('span',null,'01 — 03'));
