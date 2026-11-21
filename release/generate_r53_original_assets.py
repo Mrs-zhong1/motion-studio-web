@@ -80,14 +80,35 @@ def make_art(row):
     im=Image.blend(im,glow,.10)
     return im
 
+def make_saas_svg(row):
+    """Create native, editable SVG product-interface artwork for SaaS slots."""
+    chapter=int(row["chapter"])
+    seed=int(hashlib.sha256(row["slotId"].encode()).hexdigest()[:8],16)
+    rng=random.Random(seed)
+    accent="#a9f278" if chapter%2 else "#8de4c5"
+    dark="#0e271d"; panel="#17382b"; pale="#eff7eb"; muted="#a9c3b2"
+    cards=[]
+    labels=[("CAPTURE","Signals collected","24 new signals"),("SHAPE","Work made clear","08 priorities"),("DELIVER","Ready to move","03 outcomes"),("INSIGHTS","Patterns surfaced","12 useful signals"),("REVIEW","Progress in view","96% complete")]
+    for i,(tag,title,meta) in enumerate(labels):
+        x=150+i*265; y=260+(i%2)*42
+        bars="".join('<rect x="{0}" y="{1}" width="{2}" height="7" rx="3.5" fill="{3}" opacity=".7"/>'.format(x+24,y+160+j*25,130+rng.randint(0,55),muted) for j in range(5))
+        cards.append('<g><rect x="{x}" y="{y}" width="225" height="340" rx="18" fill="{panel}" stroke="{accent}" stroke-opacity=".55"/><rect x="{a}" y="{b}" width="76" height="22" rx="11" fill="{accent}"/><text x="{c}" y="{d}" text-anchor="middle" font-size="10" font-weight="700" fill="{dark}">{tag}</text><text x="{e}" y="{f}" font-size="18" font-weight="700" fill="{pale}">{title}</text><text x="{g}" y="{h}" font-size="12" fill="{muted}">{meta}</text>{bars}<circle cx="{i}" cy="{j}" r="13" fill="{accent}" opacity=".9"/></g>'.format(x=x,y=y,panel=panel,accent=accent,a=x+22,b=y+22,c=x+60,d=y+37,dark=dark,tag=tag,e=x+22,f=y+94,pale=pale,g=x+22,h=y+122,muted=muted,meta=meta,bars=bars,i=x+184,j=y+292))
+    return ('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img"><title>SaaS workflow composition {0}</title><desc>Original native vector interface study showing capture, shape and deliver.</desc><defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#102d22"/><stop offset="1" stop-color="#091b15"/></linearGradient><radialGradient id="glow"><stop stop-color="{1}" stop-opacity=".24"/><stop offset="1" stop-color="{1}" stop-opacity="0"/></radialGradient></defs><rect width="1600" height="900" fill="url(#bg)"/><circle cx="1260" cy="120" r="480" fill="url(#glow)"/><g opacity=".12" stroke="{2}"><path d="M0 180H1600M0 720H1600M120 0V900M1480 0V900"/></g><text x="100" y="110" fill="{1}" font-size="18" letter-spacing="5">MOTION STUDIO / SAAS</text><text x="100" y="185" fill="{2}" font-size="52" font-weight="700">A clearer way to move work forward.</text><text x="100" y="222" fill="{3}" font-size="18">ORIGINAL PRODUCT INTERFACE STUDY / {0:02d}</text>{4}<path d="M245 700H1360" stroke="{1}" stroke-width="3" stroke-opacity=".7"/><text x="100" y="790" fill="{3}" font-size="14" letter-spacing="3">CAPTURE → SHAPE → DELIVER</text><text x="100" y="835" fill="{2}" font-size="12" opacity=".65">GENERATED VECTOR ARTWORK · NO THIRD-PARTY ASSETS</text></svg>').format(chapter,accent,pale,muted,"".join(cards))
+
+
 def main():
     doc=json.loads(REGISTER.read_text(encoding="utf-8")); rows=doc.get("assets",[])
     if len(rows)!=33: raise SystemExit(f"Expected 33 slots, got {len(rows)}")
     OUT.mkdir(parents=True,exist_ok=True)
     source_hash=hashlib.sha256(GENERATOR.read_bytes()).hexdigest()
     for row in rows:
-        slot=row["slotId"]; filename=slot+".png"; path=OUT/filename
-        image=make_art(row); image.save(path,"PNG",optimize=True)
+        slot=row["slotId"]
+        if row["template"]=="saas":
+            filename=slot+".svg"; path=OUT/filename
+            path.write_text(make_saas_svg(row),encoding="utf-8")
+        else:
+            filename=slot+".png"; path=OUT/filename
+            image=make_art(row); image.save(path,"PNG",optimize=True)
         digest=hashlib.sha256(path.read_bytes()).hexdigest()
         row.update({
             "mediaClass":"procedural","sourceType":"procedural-original-generative-art",
@@ -101,7 +122,7 @@ def main():
         for key in ("creator","sourcePageUrl","licenseId","licenseUrl","attribution","downloadedAtUtc","shareAlikeCompatibilityReviewed"):
             row.pop(key,None)
     doc["status"]="HOLD"
-    doc["note"]="33 deterministic original procedural artworks generated from repository source; no external imagery or API. Human visual approval and production eligibility remain false until reviewed."
+    doc["note"]="33 deterministic original procedural artworks generated from repository source; SaaS slots use native SVG and other slots use PNG. No external imagery or API. Human visual approval and production eligibility remain false until reviewed."
     REGISTER.write_text(json.dumps(doc,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"generated":len(rows),"dimensions":[W,H],"sourceSha256":source_hash,"externalApis":False,"humanVisualApproval":False,"productionEligible":False},indent=2))
 if __name__=="__main__": main()
