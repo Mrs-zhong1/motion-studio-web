@@ -82,3 +82,26 @@ Observed by inspecting the actual PNG/SVG files:
 - SaaS: workspace layout direction is correct; KPI delta labels overlap the metric values and need spacing correction. HOLD pending corrected SVG and visual check.
 
 Follow-up source commits `bd13ebb`, `be8ec41`, and `eafb738` address campaign-title clearance, camera aperture and narrative, gallery framing, and SaaS metric spacing. Fresh renders for the latest exact head are mandatory before accepting any of these changes. All outputs remain review-only; no human approval, commercial rights clearance or production eligibility is asserted.
+
+
+## 2026-11-21 — acceptance-scope correction (supersedes static-render interpretation)
+
+The prior Blender output is **not a website-template visual acceptance result**. It consists of three standalone procedural 3D still renders and one standalone SaaS SVG. Its dimensions, file format, and SHA-256 checks establish only artifact integrity. They do not demonstrate that the Creative Agency or SaaS templates render correctly, support their intended interactions, or meet the R43 design baseline.
+
+### Corrected R50 acceptance target
+
+The R50 workflow has been replaced with a real product-pipeline browser check:
+- Build the offline editor using `stage9/build-offline.mjs`.
+- Open the editor in Chromium, choose Creative Agency and SaaS from the real template gallery, and call the actual `exportDocument()` export path.
+- Load each exported standalone HTML document in a real browser at desktop (1440×900) and mobile (390×844).
+- Capture full-page screenshots: Agency opening + case navigation on both viewports; SaaS Capture, Shape and Deliver states on both viewports.
+- Verify Agency project-index navigation, SaaS tab state changes, mobile composition/touch targets, horizontal overflow, and browser runtime errors.
+- Save structured evidence to `stage9/R50_HTML_BROWSER_ACCEPTANCE.json`; screenshots are emitted under `/tmp/r50-html-browser` and uploaded best-effort by Actions.
+
+### Interpretation rules
+
+- `PASS_BROWSER_FUNCTIONALITY_ONLY` means the scripted real-HTML browser checks passed. It is **not** human visual approval.
+- Human art-direction review remains required against `release/R43_IMMERSIVE_TEMPLATE_DESIGN_BASELINE.md`, including typography, composition, image hierarchy, navigation obstruction, scene continuity, and mobile quality.
+- Commercial asset rights, R52/R53 approval, R54 physical-device evidence, and R55 exact-SHA HTTPS/live-smoke remain separate gates.
+- Blender still renders may remain as internal exploration assets only. They cannot satisfy R50 website-template acceptance.
+- PR #4 remains Draft; no merge, deployment, or production approval is implied.
