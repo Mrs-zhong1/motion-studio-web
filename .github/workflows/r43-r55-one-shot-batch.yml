@@ -9,7 +9,7 @@ on:
       - 'stage9/**'
       - 'release/**'
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: r43-r55-one-shot-${{ github.ref }}
   cancel-in-progress: true
@@ -77,9 +77,25 @@ jobs:
         run: |
           mkdir -p batch-report
           python release/validate_r52_photo_rights.py --allow-incomplete --report batch-report/R52_PHOTO_RIGHTS_REPORT.json
-      - name: R53 validate all 33 production slots (fail closed)
-        id: r53_validate
+      - name: Generate 33 original procedural artworks (no paid API, no stock imagery)
+        id: r53_generate
         if: always()
+        run: |
+          python release/generate_r53_original_assets.py
+      - name: Persist generated originals and evidence register to this PR branch
+        id: r53_commit_assets
+        if: always() && steps.r53_generate.outcome == 'success'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add stage9/ai-assets/ release/R53_PRODUCTION_ASSET_REGISTER.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(assets): generate 33 original procedural template visuals'
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+      - name: R53 validate all 33 generated slots (fail closed for human signoff)
+        id: r53_validate
+        if: always() && steps.r53_generate.outcome == 'success'
         continue-on-error: true
         run: |
           mkdir -p batch-report
