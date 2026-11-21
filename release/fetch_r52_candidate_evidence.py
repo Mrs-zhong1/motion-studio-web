@@ -4,6 +4,8 @@
 This script does not approve licenses, visual fit, or production eligibility.
 """
 import csv, hashlib, json, re, time, urllib.request, urllib.error
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from PIL import Image, UnidentifiedImageError
 
@@ -25,25 +27,32 @@ def main():
         if not re.fullmatch(r"[A-Za-z0-9_.-]+",name):
             report["errors"].append(row.get("candidate_id")+": unsafe filename")
             continue
-        request=urllib.request.Request(url,headers={"User-Agent":"MotionStudioR52EvidenceBot/1.0 (rights-review; contact via repository issues)"})
+        request=urllib.request.Request(url,headers={"User-Agent":"MotionStudioR52EvidenceBot/1.1 (+https://github.com/Mrs-zhong1/motion-studio-web; rights-review contact via repository issues)","Accept":"image/avif,image/webp,image/png,image/jpeg,*/*"})
         try:
             raw=None
             last_error=None
-            for attempt in range(5):
+            for attempt in range(7):
                 try:
                     with urllib.request.urlopen(request,timeout=45) as response:
                         raw=response.read()
                     break
                 except urllib.error.HTTPError as exc:
                     last_error=exc
-                    if exc.code not in (429,500,502,503,504) or attempt==4:
+                    if exc.code not in (429,500,502,503,504) or attempt==6:
                         raise
                     retry_after=exc.headers.get("Retry-After")
-                    try:
-                        delay=min(90.0,max(2.0,float(retry_after))) if retry_after else min(60.0,5.0*(2**attempt))
-                    except ValueError:
-                        delay=min(60.0,5.0*(2**attempt))
-                    print(f"RETRY {row.get('candidate_id')}: HTTP {exc.code}; attempt {attempt+1}/5; wait {delay:.1f}s",flush=True)
+                    delay=min(180.0,10.0*(2**attempt))
+                    if retry_after:
+                        try:
+                            delay=min(300.0,max(2.0,float(retry_after)))
+                        except ValueError:
+                            try:
+                                retry_at=parsedate_to_datetime(retry_after)
+                                if retry_at.tzinfo is None: retry_at=retry_at.replace(tzinfo=timezone.utc)
+                                delay=min(300.0,max(2.0,(retry_at-datetime.now(timezone.utc)).total_seconds()))
+                            except (TypeError,ValueError,OverflowError):
+                                pass
+                    print("RETRY {}: HTTP {}; attempt {}/7; wait {:.1f}s".format(row.get("candidate_id"),exc.code,attempt+1,delay),flush=True)
                     time.sleep(delay)
             if raw is None:
                 raise last_error or RuntimeError("download failed without response bytes")
