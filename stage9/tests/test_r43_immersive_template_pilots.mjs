@@ -22,6 +22,11 @@ test('R43 injects only into Agency and SaaS exported projects and preserves othe
  assert.match(out,/const id=project&&project.templateId/);
  assert.throws(()=>applyR43TemplatePilots(out),/duplicate/);
 });
+test('Agency pilot reuses the source hero and avoids duplicate title/status navigation',()=>{
+ assert.doesNotMatch(r43Runtime,/WORK THAT <em>MOVES<\/em> PEOPLE/);
+ assert.doesNotMatch(r43Runtime,/SELECT A CASE · SCROLL TO EXPLORE/);
+ assert.match(r43Runtime,/sections\[0\]\.after\(index\)/);
+});
 test('R43 runtime provides scene-linked case navigation and an actionable SaaS workflow',()=>{
  assert.match(r43Runtime,/scrollIntoView/);
  assert.match(r43Runtime,/Capture/);
