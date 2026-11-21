@@ -49,13 +49,45 @@ def api(params):
 def plain(value):
     return html.unescape(re.sub(r"<[^>]+>", " ", value or "")).strip()
 
+def read_ledger(path):
+    """Read CSV rows while preserving legacy overflow cells from malformed-width rows."""
+    with path.open(newline="", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f, restkey="_overflow_cells")
+        fields = list(reader.fieldnames or [])
+        if not fields:
+            raise SystemExit("R52 candidate ledger has no CSV header")
+        raw_rows = list(reader)
+    overflow_count = max((len(row.get("_overflow_cells") or []) for row in raw_rows), default=0)
+    extra_fields = []
+    index = 1
+    while len(extra_fields) < overflow_count:
+        name = f"legacy_extra_{index}"
+        index += 1
+        if name not in fields:
+            extra_fields.append(name)
+    fields.extend(extra_fields)
+    rows = []
+    for raw in raw_rows:
+        overflow = raw.pop("_overflow_cells", None) or []
+        row = {key: (value if value is not None else "") for key, value in raw.items()}
+        for key, value in zip(extra_fields, overflow):
+            row[key] = value
+        for key in fields:
+            row.setdefault(key, "")
+        rows.append(row)
+    return fields, rows
+
+def write_ledger(path, fields, rows):
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="raise")
+        writer.writeheader()
+        writer.writerows(rows)
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--max-new",type=int,default=10)
     args=ap.parse_args()
-    with LEDGER.open(newline="",encoding="utf-8-sig") as f:
-        reader=csv.DictReader(f); fields=reader.fieldnames; rows=list(reader)
-    if not fields: raise SystemExit("R52 candidate ledger has no CSV header")
+    fields, rows = read_ledger(LEDGER)
     used_slots={r.get("proposed_slot","") for r in rows}
     used_pages={r.get("source_page_url","") for r in rows}
     next_id=max([int(m.group(1)) for r in rows if (m:=re.match(r"R52-CAND-(\d+)$",r.get("candidate_id","")))]+[0])+1
@@ -102,8 +134,7 @@ def main():
             })
             rows.append(row); added.append({"candidate_id":cid,"slot":slot,"title":page.get("title"),"license":license_id,"dimensions":[info["width"],info["height"]]})
             used_slots.add(slot); used_pages.add(page_url); seen_files.add(info["url"])
-    with LEDGER.open("w",newline="",encoding="utf-8") as f:
-        writer=csv.DictWriter(f,fieldnames=fields); writer.writeheader(); writer.writerows(rows)
+    write_ledger(LEDGER, fields, rows)
     report={"discovered":len(added),"candidates":added,"unfilledSlots":rejected,
             "ledgerRows":len(rows),"status":"REVIEW_ONLY","autoApproval":False}
     Path("r52-candidates").mkdir(exist_ok=True)

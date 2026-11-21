@@ -12,8 +12,20 @@ def load(name, path):
 ROOT=Path(__file__).resolve().parents[2]
 R52=load("r52_validator",ROOT/"release/validate_r52_photo_rights.py")
 R53=load("r53_validator",ROOT/"release/validate_r53_production_assets.py")
+R52_DISCOVERY=load("r52_discovery",ROOT/"release/discover_r52_commons_candidates.py")
 
 class AssetGateUnitTests(unittest.TestCase):
+    def test_r52_discovery_preserves_overflow_csv_cells(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/"ledger.csv"
+            p.write_text('candidate_id,proposed_slot,notes\\nR52-CAND-001,cinematic-02,"legacy note",preserve-this-cell\\n',encoding="utf-8")
+            fields, rows=R52_DISCOVERY.read_ledger(p)
+            self.assertIn("legacy_extra_1",fields)
+            self.assertEqual(rows[0]["legacy_extra_1"],"preserve-this-cell")
+            R52_DISCOVERY.write_ledger(p,fields,rows)
+            fields2, rows2=R52_DISCOVERY.read_ledger(p)
+            self.assertEqual(rows2[0]["legacy_extra_1"],"preserve-this-cell")
+            self.assertEqual(rows2[0]["notes"],"legacy note")
     def test_r52_native_dimensions_accepts_1600x900(self):
         self.assertTrue(R52.valid_dimensions(1600,900))
         self.assertTrue(R52.valid_dimensions(1920,1080))
