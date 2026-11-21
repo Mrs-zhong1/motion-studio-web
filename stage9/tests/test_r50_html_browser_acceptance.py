@@ -31,7 +31,7 @@ server = None
 def capture(page, template, viewport, moment):
     SHOTS.mkdir(parents=True, exist_ok=True)
     path = SHOTS / f"{template}-{viewport}-{moment}.png"
-    page.screenshot(path=str(path), full_page=True, animations="disabled")
+    page.screenshot(path=str(path), full_page=(moment == "opening"), animations="disabled", timeout=90000)
     raw = path.read_bytes()
     assert len(raw) > 5000, f"Screenshot unexpectedly small: {path} ({len(raw)} bytes)"
     report["screenshots"].append({
@@ -71,6 +71,7 @@ try:
 
             template_result = {"exportBytes": len(html), "viewports": {},
                                "editorErrors": editor_errors, "exportErrors": []}
+            report["templates"][template] = template_result
             for viewport, width, height in (("desktop", 1440, 900), ("mobile", 390, 844)):
                 page = browser.new_page(viewport={"width": width, "height": height},
                                         device_scale_factor=1)
@@ -113,6 +114,7 @@ try:
                 else:
                     shell = page.locator(".r43-saas-shell")
                     shell.wait_for(state="visible", timeout=10000)
+                    capture(page, template, viewport, "opening")
                     tabs = page.get_by_role("tab")
                     assert tabs.count() == 3
                     title = page.locator(".r43-saas-copy h2")
@@ -145,7 +147,7 @@ try:
             editor.close()
         browser.close()
     assert set(report["templates"]) == set(TEMPLATES)
-    assert len(report["screenshots"]) == 10
+    assert len(report["screenshots"]) == 12
     report["status"] = "PASS_BROWSER_FUNCTIONALITY_ONLY"
 except Exception:
     report["status"] = "FAIL"
