@@ -98,6 +98,12 @@ jobs:
         id: r52_unit
         continue-on-error: true
         run: python -m unittest release.tests.test_asset_validation -v
+      - name: Discover additional Wikimedia Commons photo candidates (metadata-only; no approval)
+        id: r52_discover
+        if: always() && steps.r52_unit.outcome == 'success'
+        continue-on-error: true
+        run: |
+          python release/discover_r52_commons_candidates.py --max-new 10
       - name: R52 fetch candidate originals (review only; bounded per-file retries)
         id: r52_fetch
         if: always() && steps.r52_unit.outcome == 'success'
@@ -204,7 +210,7 @@ jobs:
           import json,os
           from pathlib import Path
           steps=json.loads(os.environ['STEPS_JSON'])
-          technical=['build_editor','design_contracts','r50_render','r50_validate','r52_unit','r52_fetch','r52_validate','r53_validate','r47_chromium','e2e_chromium','r48_candidate','r47_firefox','e2e_firefox','r47_webkit','e2e_webkit']
+          technical=['build_editor','design_contracts','r50_render','r50_validate','r52_unit','r52_discover','r52_fetch','r52_validate','r53_validate','r47_chromium','e2e_chromium','r48_candidate','r47_firefox','e2e_firefox','r47_webkit','e2e_webkit']
           failed=[name for name in technical if steps.get(name,{}).get('outcome') not in ('success','skipped')]
           report={
             'schema':'motion-studio-r43-r55-one-shot-batch-v1',
