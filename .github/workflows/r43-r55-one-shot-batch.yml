@@ -1,13 +1,6 @@
 name: R43-R55 One-Shot Batch Execution
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - release/r18-r21-acceptance-gates
-    paths:
-      - '.github/workflows/r43-r55-one-shot-batch.yml'
-      - 'stage9/**'
-      - 'release/**'
   push:
     branches:
       - design/r43-immersive-template-system
@@ -19,7 +12,7 @@ permissions:
   contents: write
 concurrency:
   group: r43-r55-one-shot-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   execute:
     name: Execute R50 → R52 → R53 → R47/R48 and publish one report
@@ -98,7 +91,13 @@ jobs:
           git add stage9/ai-assets/ release/R53_PRODUCTION_ASSET_REGISTER.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(assets): generate 33 original procedural template visuals'
-            git push origin HEAD:${GITHUB_REF_NAME}
+            # This workflow runs only on a real branch ref (push or workflow_dispatch).
+            # Never push to pull_request merge refs such as 4/merge.
+            case "${GITHUB_REF}" in
+              refs/heads/*) ;;
+              *) echo "Refusing asset persistence from non-branch ref: ${GITHUB_REF}" >&2; exit 1 ;;
+            esac
+            git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
           fi
       - name: R53 validate all 33 generated slots (fail closed for human signoff)
         id: r53_validate
@@ -186,7 +185,6 @@ jobs:
         env:
           STEPS_JSON: ${{ toJSON(steps) }}
           JOB_STATUS: ${{ job.status }}
-          HEAD_SHA: ${{ github.sha }}
           BRANCH: ${{ github.ref_name }}
         run: |
           mkdir -p batch-report
@@ -194,11 +192,12 @@ jobs:
           import json,os
           from pathlib import Path
           steps=json.loads(os.environ['STEPS_JSON'])
+          tested_sha=os.popen('git rev-parse HEAD').read().strip()
           technical=['build_editor','design_contracts','r50_browser','r52_unit','r52_discover','r52_fetch','r52_validate','r53_validate','r47_chromium','e2e_chromium','r48_candidate','r47_firefox','e2e_firefox','r47_webkit','e2e_webkit']
           failed=[name for name in technical if steps.get(name,{}).get('outcome') not in ('success','skipped')]
           report={
             'schema':'motion-studio-r43-r55-one-shot-batch-v1',
-            'commit':os.environ['HEAD_SHA'],'branch':os.environ['BRANCH'],
+            'commit':tested_sha,'branch':os.environ['BRANCH'],
             'workflowJobStatus':os.environ['JOB_STATUS'],
             'technicalStepOutcomes':{name:steps.get(name,{}).get('outcome','not-run') for name in technical},
             'technicalFailures':failed,
