@@ -18,7 +18,7 @@ class AssetGateUnitTests(unittest.TestCase):
     def test_r52_discovery_preserves_overflow_csv_cells(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)/"ledger.csv"
-            p.write_text('candidate_id,proposed_slot,notes\\nR52-CAND-001,cinematic-02,"legacy note",preserve-this-cell\\n',encoding="utf-8")
+            p.write_text('candidate_id,proposed_slot,notes\nR52-CAND-001,cinematic-02,"legacy note",preserve-this-cell\n',encoding="utf-8")
             fields, rows=R52_DISCOVERY.read_ledger(p)
             self.assertIn("legacy_extra_1",fields)
             self.assertEqual(rows[0]["legacy_extra_1"],"preserve-this-cell")
