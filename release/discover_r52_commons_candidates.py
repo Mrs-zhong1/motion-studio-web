@@ -25,10 +25,11 @@ SLOTS = {
     "fashion": [2,3,4,5],
 }
 QUERIES = {
-    "architecture": ['building architecture interior exterior'],
-    "cinematic": ['film production movie set cinematography studio'],
-    "editorial": ['editorial photography still life magazine portrait'],
-    "fashion": ['fashion editorial clothing runway portrait'],
+    # Multiple independent phrases avoid treating one narrow Commons search as exhaustive.
+    "architecture": ['modern architecture building facade exterior', 'architecture interior public building hall', 'office building skyscraper architecture', 'museum university campus architecture'],
+    "cinematic": ['film production movie set behind the scenes', 'cinematography film studio camera lighting', 'movie production sound stage film crew', 'cinema theater film production equipment'],
+    "editorial": ['editorial photography still life magazine', 'studio still life product editorial photography', 'magazine editorial portrait photography', 'editorial fashion photography composition'],
+    "fashion": ['fashion editorial clothing runway', 'traditional clothing fashion portrait', 'fashion design garment studio photography', 'fashion model clothing editorial'],
 }
 
 def api(params):
