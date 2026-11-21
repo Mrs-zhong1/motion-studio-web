@@ -33,7 +33,7 @@ def capture(page, template, viewport, moment):
     path = SHOTS / f"{template}-{viewport}-{moment}.png"
     page.screenshot(path=str(path), full_page=(moment == "opening"), animations="disabled", timeout=90000)
     raw = path.read_bytes()
-    assert raw[:8] == b"\\x89PNG\\r\\n\\x1a\\n", f"Screenshot is not a valid PNG: {path}"
+    assert raw[:8] == bytes.fromhex("89504e470d0a1a0a"), f"Screenshot is not a valid PNG: {path}"
     assert len(raw) > 1000, f"Screenshot unexpectedly empty: {path} ({len(raw)} bytes)"
     report["screenshots"].append({
         "file": path.name, "bytes": len(raw),
