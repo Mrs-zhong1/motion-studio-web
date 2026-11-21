@@ -17,7 +17,10 @@ def main():
     rows=list(csv.DictReader(LEDGER.open(newline="",encoding="utf-8-sig")))
     report={"candidates":[],"downloaded":0,"errors":[],"status":"REVIEW_ONLY"}
     for row in rows:
-        if row.get("rights_review_status")!="CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED":
+        if row.get("rights_review_status") not in (
+            "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+            "CANDIDATE_LICENSE_METADATA_DISCOVERED_NOT_HUMAN_REVIEWED",
+        ):
             continue
         url=row.get("original_file_url","")
         if not url.startswith("https://upload.wikimedia.org/"):
