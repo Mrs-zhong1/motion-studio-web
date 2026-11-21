@@ -5,8 +5,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 from PIL import Image, UnidentifiedImageError
 
-PROCEDURAL={"agency":{1,2,3,4,5},"product-3d":{2,3,4,5},"gallery":{2,3,4,5},"saas":{1,2,3,4,5}}
-PHOTOGRAPHY={"architecture":{2,3,4,5},"cinematic":{2,3,4,5},"editorial":{2,3,4},"fashion":{2,3,4,5}}
+PROCEDURAL={"agency":{1,2,3,4,5},"product-3d":{2,3,4,5},"gallery":{2,3,4,5},"saas":{1,2,3,4,5},"architecture":{2,3,4,5},"cinematic":{2,3,4,5},"editorial":{2,3,4},"fashion":{2,3,4,5}}
+PHOTOGRAPHY={}
 LICENSES={"CC0-1.0","PDM-1.0","PUBLIC-DOMAIN","CC-BY-2.0","CC-BY-3.0","CC-BY-4.0","CC-BY-SA-2.0","CC-BY-SA-3.0","CC-BY-SA-4.0"}
 
 def https(value):
