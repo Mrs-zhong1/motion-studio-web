@@ -24,6 +24,8 @@ on:
       - 'stage9/tests/test_r18_ai_provenance.py'
       - 'stage9/tests/test_r18_ai_folder_import.py'
       - 'stage9/tests/test_r19_browser_perf.py'
+      - 'stage9/tests/test_r47_roundtrip_parity.py'
+      - 'stage9/tests/test_r48_release_gate.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/shared-three-scene.js'
       - 'stage9/bundle-chapter-photos.mjs'
@@ -60,6 +62,16 @@ on:
       - 'stage9/r37-story-director.mjs'
       - 'stage9/r38-eight-art-directions.mjs'
       - 'stage9/tests/test_r38_eight_directions.mjs'
+      - 'stage9/r43-immersive-template-pilots.mjs'
+      - 'stage9/tests/test_r43_immersive_template_pilots.mjs'
+      - 'stage9/r44-single-canvas-preview.mjs'
+      - 'stage9/tests/test_r44_single_canvas_preview.mjs'
+      - 'stage9/r45-scene-composition.mjs'
+      - 'stage9/tests/test_r45_scene_composition.mjs'
+      - 'stage9/r46-responsive-accessibility.mjs'
+      - 'stage9/tests/test_r46_responsive_accessibility.mjs'
+      - 'stage9/tests/test_r47_roundtrip_parity.py'
+      - 'stage9/tests/test_r48_release_gate.py'
       - 'stage9/tests/test_r38_template_families.py'
       - 'stage9/tests/test_r14_chapter_navigation.py'
       - 'stage9/tests/test_r30_cinematic_trial.py'
@@ -95,10 +107,22 @@ jobs:
         run: npm run build
       - name: Verify offline Three.js bundle
         run: python tests/check_build.py
+      - name: R43 eight-template design contract and Agency/SaaS pilot interaction tests
+        run: node --test tests/test_r43_immersive_template_pilots.mjs
+      - name: R44 single-canvas preview contract
+        run: node --test tests/test_r44_single_canvas_preview.mjs
+      - name: R45 eight-template integrated composition contract
+        run: node --test tests/test_r45_scene_composition.mjs
+      - name: R46 responsive accessibility contract
+        run: node --test tests/test_r46_responsive_accessibility.mjs
       - name: Install Playwright browser
         run: |
           python -m pip install playwright
           python -m playwright install --with-deps ${{ matrix.browser }}
+      - name: R47 eight-template save, reopen and export parity
+        run: python tests/test_r47_roundtrip_parity.py
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
       - name: Real browser edit-save-reopen-export smoke
         run: python tests/test_web_product_e2e.py
         env:
@@ -164,6 +188,9 @@ jobs:
         run: python tests/test_product_restructure.py
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: R48 reproducible candidate integrity and final gate (candidate only)
+        if: matrix.browser == 'chromium'
+        run: python tests/test_r48_release_gate.py
       # GitHub Actions artifact storage quota is exhausted; publish concise verified evidence in job summaries.
       # Record the evidence in job logs and GitHub's step summary without uploading large HTML.
       - name: Publish template visual-audit geometry and hashes
@@ -194,9 +221,18 @@ jobs:
           echo "### Motion Studio E2E — ${{ matrix.browser }}" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           if [ -f WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json ]; then
-            echo '~~~json' >> "$GITHUB_STEP_SUMMARY"
-            cat WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json >> "$GITHUB_STEP_SUMMARY"
-            echo '~~~' >> "$GITHUB_STEP_SUMMARY"
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          doc=json.loads(Path("WEB_PRODUCT_E2E_RESULT_${{ matrix.browser }}.json").read_text())
+          keep={"status","pass","passed","failed","failed_checks","suite","browser","error","errors","checks","testcount","passedcount","failedcount","duration","summary","result"}
+          def compact(v):
+              if isinstance(v,dict): return {k:compact(x) for k,x in v.items() if k.lower() in keep}
+              if isinstance(v,list): return [compact(x) for x in v[:12]]
+              if isinstance(v,str): return v[:240]
+              return v
+          print(json.dumps(compact(doc),ensure_ascii=False,indent=2)[:12000])
+          PY
           else
             echo "Result JSON unavailable: build, setup, or browser launch failed before result creation." >> "$GITHUB_STEP_SUMMARY"
           fi

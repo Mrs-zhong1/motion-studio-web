@@ -15,11 +15,11 @@ class CandidateTests(unittest.TestCase):
   for ti,t in enumerate(TEMPLATES):
    for chapter in range(1,5 if t=='editorial' else 6):
     filename=f'{t}-{chapter}.jpg'
-    Image.new('RGB',(1280,720),(15+ti*24,chapter*31,20+ti*9)).save(assets/filename,'JPEG')
+    Image.new('RGB',(1600,900),(15+ti*24,chapter*31,20+ti*9)).save(assets/filename,'JPEG')
     raw=(assets/filename).read_bytes()
     rows.append(dict(template=t,chapter=chapter,file=filename,sha256=hashlib.sha256(raw).hexdigest(),
        source='AI_GENERATED',sourceType='individual-generation',trueHighResolutionGenerated=True,
-       nativeSourceDimensions=[1280,720],presentationDimensions=[1280,720],
+       nativeSourceDimensions=[1600,900],presentationDimensions=[1600,900],
        generationSystem='fixture',generationDate='2026-11-16',
        sourceReference=filename,termsUrl='https://example.com/terms',
        commercialUseTermsChecked=True))

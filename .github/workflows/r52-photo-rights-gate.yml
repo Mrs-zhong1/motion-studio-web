@@ -1,0 +1,61 @@
+name: R52 Photography Rights Evidence Gate (report-only until complete)
+on:
+  push:
+    branches:
+      - design/r43-immersive-template-system
+    paths:
+      - 'release/R52_PHOTO_RIGHTS_REGISTER.csv'
+      - 'release/R52_CANDIDATE_EVIDENCE_LEDGER.csv'
+      - 'release/fetch_r52_candidate_evidence.py'
+      - 'release/discover_r52_commons_candidates.py'
+      - 'release/validate_r52_photo_rights.py'
+      - '.github/workflows/r52-photo-rights-gate.yml'
+      - 'stage9/ai-assets/**'
+      - 'release/tests/test_asset_validation.py'
+  pull_request:
+    paths:
+      - 'release/R52_PHOTO_RIGHTS_REGISTER.csv'
+      - 'release/R52_CANDIDATE_EVIDENCE_LEDGER.csv'
+      - 'release/fetch_r52_candidate_evidence.py'
+      - 'release/validate_r52_photo_rights.py'
+      - '.github/workflows/r52-photo-rights-gate.yml'
+      - 'stage9/ai-assets/**'
+      - 'release/tests/test_asset_validation.py'
+permissions:
+  contents: read
+jobs:
+  report-rights-evidence:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image decoder for independent dimension verification
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Run asset gate unit tests
+        run: python -m unittest release.tests.test_asset_validation -v
+      - name: Discover additional Commons candidates (metadata only; never approve)
+        run: python release/discover_r52_commons_candidates.py --max-new 10
+      - name: Download and verify candidate originals for review only
+        run: python release/fetch_r52_candidate_evidence.py
+      - name: Validate evidence without treating missing sourcing as CI infrastructure failure
+        run: python release/validate_r52_photo_rights.py --allow-incomplete --report r52-photo-rights-report.json
+      - name: Publish itemized rights HOLD report
+        if: always()
+        run: |
+          echo "## R52 photography rights gate" >> "$GITHUB_STEP_SUMMARY"
+          cat r52-photo-rights-report.json >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r52-photo-rights-report
+          path: r52-photo-rights-report.json
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r52-candidate-originals-review-only
+          path: r52-candidates/
+          if-no-files-found: warn
+          retention-days: 14

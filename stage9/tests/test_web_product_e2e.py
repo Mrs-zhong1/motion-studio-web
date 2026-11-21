@@ -12,7 +12,7 @@ browser_name=os.environ.get("MOTION_BROWSER","chromium").strip().lower()
 if browser_name not in ("chromium","firefox","webkit"):
     raise ValueError("MOTION_BROWSER must be chromium, firefox, or webkit")
 result={"pass":False,"suite":"Motion Studio Web product E2E","checks":{},"errors":[],"browser":browser_name,
-        "webkitIsSafari":False,"scope":"Desktop automated engine smoke, not native Safari/mobile device acceptance"}
+        "webkitIsSafari":False,"scope":"Desktop automated engine smoke, not native Safari/mobile device acceptance","browserDiagnostics":{"pageErrors":[],"consoleErrors":[],"failedRequests":[],"frames":[],"inlineScripts":[]}}
 def check(name,condition):
     result["checks"][name]=bool(condition)
     assert condition,name
@@ -32,9 +32,16 @@ try:
         browser=engine.launch(**launch_args)
         page=browser.new_page(viewport={"width":1280,"height":800},accept_downloads=True)
         page_errors=[]
-        page.on("pageerror",lambda e:page_errors.append(str(e)))
+        console_errors=[]
+        failed_requests=[]
+        page.on("pageerror",lambda e:page_errors.append({"message":str(e),"stack":getattr(e,"stack",None)}))
+        page.on("framenavigated",lambda frame:result["browserDiagnostics"]["frames"].append({"url":frame.url,"name":frame.name}))
+        page.on("console",lambda msg:console_errors.append({"text":msg.text,"location":msg.location}) if msg.type=="error" else None)
+        page.on("requestfailed",lambda req:failed_requests.append({"url":req.url,"failure":req.failure}))
         page.goto(f"http://127.0.0.1:{server.server_port}/{EDITOR.name}",wait_until="domcontentloaded")
-        check("20_components",page.evaluate("registry.length")==20)
+        result["browserDiagnostics"]["inlineScripts"]=page.locator("script").evaluate_all("""nodes=>nodes.map((s,i)=>({index:i,id:s.id||null,type:s.type||'text/javascript',src:s.src||null,length:(s.textContent||'').length,head:(s.textContent||'').slice(0,100),tail:(s.textContent||'').slice(-700),lineCount:(s.textContent||'').split('\\n').length,tailLines:(s.textContent||'').split('\\n').slice(-12)}))""")
+        page.wait_for_function("() => !!window.MotionStudioUnified && Array.isArray(window.MotionStudioUnified.registry)",timeout=15000)
+        check("20_components",page.evaluate("window.MotionStudioUnified.registry.length")==20)
         check("template_discovery_default",page.locator("#discoveryView").is_visible())
         check("eight_full_templates",page.locator("[data-template-card]").count()==8)
         page.locator("[data-template-card='editorial']").click()
@@ -60,7 +67,7 @@ try:
         check("all_components_in_library",page.locator("#componentList .comp").count()==20)
         # E6-02: exercise every real component preview, not merely registry presence.
         if browser_name=="chromium":
-            effect_ids=page.evaluate("registry.slice(1).map(c=>c.id)")
+            effect_ids=page.evaluate("window.MotionStudioUnified.registry.slice(1).map(c=>c.id)")
             check("19_effects_discovered",len(effect_ids)==19)
             effect_results=[]
             for effect_id in effect_ids:
@@ -83,7 +90,7 @@ try:
                 check("effect_"+effect_id+"_no_horizontal_overflow",metrics["width"]<=metrics["viewport"]+48)
                 page.locator("#componentPreviewClose").click()
             result["effectRegression"]={"count":len(effect_results),"items":effect_results}
-        first_id=page.evaluate("registry[0].id")
+        first_id=page.evaluate("window.MotionStudioUnified.registry[0].id")
         page.locator("#componentList .comp").first.locator(".component-add-trigger").click()
         check("component_add_via_ui",page.evaluate("(id)=>project.sections.length===1 && project.sections[0].id===id",first_id))
         # A newly added section initially has no .section-art node. Image upload must create it.
@@ -150,6 +157,11 @@ finally:
     if "server" in locals():
         server.shutdown()
         server.server_close()
+    result["browserDiagnostics"]={"pageErrors":page_errors if "page_errors" in locals() else [],
+        "consoleErrors":console_errors if "console_errors" in locals() else [],
+        "failedRequests":failed_requests if "failed_requests" in locals() else [],
+        "frames":[{"url":frame.url,"name":frame.name} for frame in page.frames] if "page" in locals() else [],
+        "inlineScripts":result["browserDiagnostics"].get("inlineScripts",[])}
     REPORT.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
     print(json.dumps(result,ensure_ascii=False,indent=2))
 assert result["pass"],"Web product E2E failed; inspect WEB_PRODUCT_E2E_RESULT.json"

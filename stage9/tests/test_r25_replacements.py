@@ -29,14 +29,14 @@ class ReplacementTests(unittest.TestCase):
                     records.append(dict(template=template,chapter=chapter,file=f"{template}-{chapter}.png",
                                         sha256="0"*64,source="AI_GENERATED"))
             (assets/"manifest.json").write_text(json.dumps({"assets":records}))
-            image=Image.new("RGB",(1280,720),(32,80,120))
+            image=Image.new("RGB",(1600,900),(32,80,120))
             image.save(inbox/"editorial-1.png",format="PNG")
             raw=(inbox/"editorial-1.png").read_bytes()
-            self.assertEqual(native_dimensions(raw),(1280,720))
+            self.assertEqual(native_dimensions(raw),(1600,900))
             entry=dict(template="editorial",chapter=1,file="editorial-1.png",
                        source="AI_GENERATED",sourceType="individual-generation",
                        trueHighResolutionGenerated=True,
-                       nativeSourceDimensions=[1280,720],
+                       nativeSourceDimensions=[1600,900],
                        generationSystem="fixture-generator",generationDate="2026-11-16",
                        sourceReference="fixture-original",commercialUseTermsChecked=True,
                        termsUrl="https://example.com/terms")
@@ -48,7 +48,7 @@ class ReplacementTests(unittest.TestCase):
             self.assertEqual(result["replacements"],1)
             self.assertEqual((base/"backup"/"editorial-1.png").read_bytes(),before)
             self.assertEqual((assets/"editorial-1.png").read_bytes(),raw)
-            self.assertEqual(json.loads((assets/"manifest.json").read_text())["assets"][0]["nativeSourceDimensions"],[1280,720])
+            self.assertEqual(json.loads((assets/"manifest.json").read_text())["assets"][0]["nativeSourceDimensions"],[1600,900])
     def test_reject_collage_and_corrupt_image(self):
         with tempfile.TemporaryDirectory() as tmp:
             base=Path(tmp); inbox=base/"incoming";inbox.mkdir()
@@ -60,7 +60,7 @@ class ReplacementTests(unittest.TestCase):
             (assets/"manifest.json").write_text(json.dumps({"assets":rows}))
             entry=dict(template="editorial",chapter=1,file="editorial-1.png",source="AI_GENERATED",
                        sourceType="crop-of-AI-generated-collage",trueHighResolutionGenerated=False,
-                       nativeSourceDimensions=[1280,720],generationSystem="fixture",
+                       nativeSourceDimensions=[1600,900],generationSystem="fixture",
                        generationDate="2026-11-16",sourceReference="fixture",
                        termsUrl="https://example.com",commercialUseTermsChecked=True)
             (inbox/"editorial-1.png").write_bytes(b"not real pixels"*150)
@@ -90,13 +90,13 @@ class ReplacementTests(unittest.TestCase):
                 nativeSourceDimensions=[1600,900],generationSystem="Blender Eevee",
                 generationDate="2026-11-19",sourceReference="stage9/r26_blender_pilot.py",
                 termsUrl="https://github.com/Mrs-zhong1/motion-studio-web",
-                commercialUseTermsChecked=True,embeddedThirdPartyAssets=False)
+                commercialUseTermsChecked=True,embeddedThirdPartyAssets=False,thirdPartyAssets=False)
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             _,planned=plan(inbox,assets/"manifest.json")
             self.assertEqual(len(planned),1)
             entry["embeddedThirdPartyAssets"]=True
             (inbox/"replacement.json").write_text(json.dumps([entry]))
-            with self.assertRaisesRegex(ValueError,"embeddedThirdPartyAssets=false"):
+            with self.assertRaisesRegex(ValueError,"both third-party asset flags=false"):
                 plan(inbox,assets/"manifest.json")
 
     def test_open_license_requires_attribution_and_rejects_nc_nd(self):
@@ -119,13 +119,26 @@ class ReplacementTests(unittest.TestCase):
                 generationDate="2026-11-19",sourceReference="https://example.org/photo",
                 termsUrl="https://example.org/license",commercialUseTermsChecked=True,
                 creator="Photographer",licenseId="CC-BY-4.0",licenseUrl="https://creativecommons.org/licenses/by/4.0/",
-                attributionText="Photo by Photographer, CC BY 4.0")
+                originalSourceUrl="https://example.org/photo",attribution="Photo by Photographer, CC BY 4.0",
+                attributionText="Photo by Photographer, CC BY 4.0",downloadedAt="2026-11-19T00:00:00Z")
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             _,planned=plan(inbox,assets/"manifest.json")
             self.assertEqual(len(planned),1)
+            self.assertEqual(planned[0][3]["originalSourceUrl"],"https://example.org/photo")
+            self.assertEqual(planned[0][3]["attribution"],"Photo by Photographer, CC BY 4.0")
             entry["licenseId"]="CC-BY-NC-4.0"
             (inbox/"replacement.json").write_text(json.dumps([entry]))
             with self.assertRaisesRegex(ValueError,"not explicitly approved for commercial reuse"):
                 plan(inbox,assets/"manifest.json")
+            entry["licenseId"]="CC-BY-SA-4.0"
+            entry["licenseUrl"]="https://creativecommons.org/licenses/by-sa/4.0/"
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
+            with self.assertRaisesRegex(ValueError,"CC-BY-SA compatibility review missing"):
+                plan(inbox,assets/"manifest.json")
+            entry["shareAlikeCompatibilityReviewed"]=True
+            (inbox/"replacement.json").write_text(json.dumps([entry]))
+            _,reviewed=plan(inbox,assets/"manifest.json")
+            self.assertEqual(len(reviewed),1)
+
 
 if __name__=="__main__":unittest.main()

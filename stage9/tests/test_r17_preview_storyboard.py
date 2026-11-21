@@ -69,7 +69,7 @@ def test_r17_preview():
                 assert page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")
                 page.locator("#previewImmersive").click()
                 assert page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
-                assert page.locator(".preview-product-info").is_visible()
+                # R44 is the accepted single-canvas preview: legacy side metadata is hidden; the scene and toolbar remain the active surface.\n                assert not page.locator(".preview-product-info").is_visible()\n                assert page.locator(".preview-toolbar").is_visible()\n                assert page.locator("#previewDevice iframe").is_visible()
                 assert page.locator("#previewDevice").evaluate("el=>el.getBoundingClientRect().width>=innerWidth*.90")
                 page.locator("#previewDesktop").click()
                 assert not page.locator("#previewDevice").evaluate("el=>el.classList.contains('mobile')")

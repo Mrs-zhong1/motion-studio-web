@@ -1,9 +1,17 @@
 name: R25 Native-Quality Replacement Safety
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'stage9/replace_ai_chapters_r25.py'
+      - 'stage9/tests/test_r25_replacements.py'
+      - 'release/check_release.py'
+      - 'release/test_release.py'
+      - '.github/workflows/r25-native-replacement.yml'
   push:
     branches:
       - release/r18-r21-acceptance-gates
+      - design/r43-immersive-template-system
     paths:
       - 'stage9/replace_ai_chapters_r25.py'
       - 'stage9/tests/test_r25_replacements.py'

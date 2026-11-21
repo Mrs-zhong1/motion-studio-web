@@ -23,7 +23,7 @@ The original 33 flagged slots remain unchanged:
 
 Total: 33.
 
-## Production routing (initial hypothesis; visual review can re-route)
+## Production routing (user-approved baseline, 2026-11-19; visual review may re-route individual slots)
 
 | Template | Slots | Preferred route | Rationale |
 |---|---:|---|---|
@@ -36,7 +36,7 @@ Total: 33.
 | editorial | 3 | Open-licensed editorial still-life / studio photography first | Tactile material detail and photographic realism are important |
 | fashion | 4 | Open-licensed fashion / textile photography first; procedural drape study fallback | Human form, fabric and garment texture need credible visual references |
 
-The routing is a production hypothesis, not an approval. A source is not acceptable merely because it is free to download.
+The 18 procedural / 15 licensed-photography split is the approved production baseline. Individual files still require technical validation and human visual review. A source is not acceptable merely because it is free to download.
 
 ## First pilot
 
@@ -74,7 +74,7 @@ All final files must be independent originals, native >=1600×900 for R26 visual
 - Do not resume FLUX.2 downloads as a dependency. Existing Hugging Face cache may remain untouched.
 - Do not replace any of the 39 committed images in this pilot.
 - Do not mark any approval PASS from a script-generated result.
-- Keep PR #2 open, draft and unmerged.
+- Keep PR #4 open, draft and unmerged. Do not merge or publish until all four release gates close.
 
 ## Pilot review outcome — 2026-11-19
 
@@ -86,4 +86,33 @@ A second pilot now uses Blender Eevee with original procedural geometry, materia
 
 The first Blender CI attempt passed both source-safety and 33-slot validator tests, then aborted at renderer startup because the Ubuntu runner lacked `libEGL.so.1` (exit 134). This is an environment dependency failure, not a generated-image quality result.
 
-The workflow now explicitly installs Mesa/EGL/OpenGL runtime libraries (`libegl1`, `libgl1`, Mesa software drivers and required X11 runtime libraries) and runs headless Blender with `EGL_PLATFORM=surfaceless`, `LIBGL_ALWAYS_SOFTWARE=1`, and the llvmpipe software driver. The retry run is `44501248194`. As of the latest check, its Blender installation step is still running; no rendered images or artifacts are yet available. Do not proceed to the 18-slot expansion until four actual PNGs pass technical checks and human visual review.
+The workflow now explicitly installs Mesa/EGL/OpenGL runtime libraries (`libegl1`, `libgl1`, Mesa software drivers and required X11 runtime libraries) and runs headless Blender with `EGL_PLATFORM=surfaceless`, `LIBGL_ALWAYS_SOFTWARE=1`, and the llvmpipe software driver. The retry run `44501248194` completed with failure during Blender installation: Ubuntu archive/security mirrors returned repeated HTTP 503 responses for Blender dependencies. This is an infrastructure download failure, not a render-quality result; no rendered images or artifacts were produced. A further workflow hardening commit (`2ce0ff8`) now retries the complete apt update+install transaction with longer network timeouts and is enabled on the current PR #4 candidate branch. Do not proceed to the 18-slot expansion until four actual PNGs pass technical checks and human visual review.
+
+
+## Approved execution route — clarified 2026-11-20
+
+The user approved the following 33-slot split; this supersedes the earlier FLUX/MFLUX local-inference exploration as the production route:
+
+- **18 original procedural scenes**: Agency 5, Product 3D 4, Gallery 4, SaaS 5. Use Blender/Eevee for dimensional scenes and original Canvas/SVG for SaaS/data-led visuals. All scene sources must be committed and independently reproducible.
+- **15 commercially redistributable photographs**: Architecture 4, Cinematic 4, Editorial 3, Fashion 4. Use only CC0, Public Domain, CC BY or CC BY-SA after compatibility review. Each file requires creator, source-page URL, exact license URL, attribution, original dimensions, download timestamp and SHA-256.
+- **No paid APIs, subscriptions or asset purchases. Do not resume long FLUX.2 / MFLUX generation.** Existing model cache may remain untouched; it is not a dependency for the approved route.
+- The four-scene Blender pilot is still a prerequisite for visual review. Its latest retry failed before rendering due HTTP 503 package mirror errors; therefore there are no Blender pilot images to approve yet.
+- Once the four pilot renders exist, human visual review is required before expanding procedural production to 18 slots. The 15 photography slots can be researched and rights-screened in parallel, but no downloaded photo is accepted until its exact license and source evidence are recorded.
+- This plan remains a technical production route, not commercial legal advice or a release approval.
+
+
+## Blender pilot result — 2026-11-20
+
+Run `44690965370` completed successfully and produced four distinct 1600×900 PNG files. The workflow independently verified file decoding, PNG format, native pixel dimensions and unique SHA-256 hashes. Artifact: `r26-blender-3d-pilot-2ce0ff8fb68849cbdca559ccffaf37ddece31a56`.
+
+**Technical result: PASS for the four-file review artifact only. Art-direction result: REJECTED / NOT PRODUCTION-SUITABLE.**
+
+The visual inspection found the current renders too primitive and schematic for the premium visual baseline:
+- Agency: floating basic geometric props; insufficient material depth and art direction.
+- Product 3D: generic box-like audio object and oversized halo; not a convincing premium product render.
+- Editorial: simple tabletop primitives, not a convincing editorial environment.
+- Architecture: block-like building and sphere-canopy trees; not architectural photography quality.
+
+The four images are renderer smoke tests only. They are not approved samples, must not enter the 33-slot asset pack, and do not authorize expansion to the 18-scene batch. Editorial and Architecture are also in the approved 15-photo route, not the 18 procedural-scene allocation; their inclusion in this first smoke test was exploratory only.
+
+Next engineering iteration must replace the primitive scene compositions with higher-fidelity, scene-specific art direction and align the pilot slots to the approved procedural categories (Agency, Product 3D, Gallery, SaaS vector). SaaS must use original SVG/Canvas scenes, not Blender. Keep all generated output review-only until human review and rights evidence are complete.

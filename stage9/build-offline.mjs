@@ -1,5 +1,5 @@
 import {readFile,writeFile} from 'node:fs/promises';
-import {build} from 'esbuild';
+import {build,transform} from 'esbuild';
 import {fileURLToPath} from 'node:url';
 import {dirname,resolve} from 'node:path';
 import {injectOfflineEngine} from './inject-offline-engine.mjs';
@@ -19,6 +19,10 @@ import {injectR39Film} from './r39-cinematic-timeline.mjs';
 import {injectR40Product} from './r40-product-lab.mjs';
 import {applyR41PreviewFirst} from './r41-preview-first-layout.mjs';
 import {injectR42Editorial} from './r42-editorial-story-spreads.mjs';
+import {applyR43TemplatePilots} from './r43-immersive-template-pilots.mjs';
+import {applyR44TemplateExperience} from './r44-single-canvas-preview.mjs';
+import {applyR45TemplateComposition} from './r45-scene-composition.mjs';
+import {applyR46ResponsiveAccessibility} from './r46-responsive-accessibility.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 const result=await build({entryPoints:[resolve(root,'three-scene-entry.js')],bundle:true,platform:'browser',format:'iife',target:'es2022',minify:true,write:false,legalComments:'inline'});
 const engine=result.outputFiles[0].text;
@@ -30,28 +34,101 @@ const thumbnailIds=['editorial','product-3d','cinematic','architecture','agency'
 const thumbnailEntries=await Promise.all(thumbnailIds.map(async id=>[id,'data:image/jpeg;base64,'+await readFile(resolve(root,'template-thumbnails',id+'.jpg'),'base64')]));
 let thumbnailData=JSON.stringify(Object.fromEntries(thumbnailEntries));
 const source=await readFile(resolve(root,'Motion-Studio-Unified-Editor.html'),'utf8');
-// Accept both the legacy empty marker and U1's populated online preview mapping.
-// Offline releases always replace online covers with the bundled local JPEGs.
 const thumbnailPattern=/const templateThumbnailImages=\{[\s\S]*?\};/;
 if(!thumbnailPattern.test(source))throw Error('Template thumbnail declaration missing');
 let injected=source;
-// R15-04: bundle the secondary demo photographs inside the offline deliverable.
-// Successful downloads become local data URLs, failures stay explicit fallbacks.
 const aiChapterPhotos=await loadAIChapterAssets(root,{required:process.env.MOTION_REQUIRE_AI_ASSETS==='1'});
 const chapterPhotos=aiChapterPhotos || await bundleChapterPhotos(source,root);
-// When the complete AI pack is available, replace ALL eight preview covers too.
 if(aiChapterPhotos)thumbnailData=JSON.stringify(Object.fromEntries(thumbnailIds.map(id=>[id,aiChapterPhotos.data[id][0].media])));
 injected=injected.replace(thumbnailPattern,'const templateThumbnailImages='+thumbnailData+';');
 if(!injected.includes('const templateOfflinePhotoBundles={};'))throw Error('Offline photo bundle injection anchor missing');
-injected=injected.replace('const templateOfflinePhotoBundles={};',
-  'const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
-// Do not leave remote secondary demo photos as runtime dependencies.
+injected=injected.replace('const templateOfflinePhotoBundles={};','const templateOfflinePhotoBundles='+JSON.stringify(chapterPhotos.data)+';');
 injected=injected.replace(/const templateExtraPhotos=\{[\s\S]*?\};/,'const templateExtraPhotos={};');
-const editor=injectR42Editorial(applyR41PreviewFirst(injectR40Product(injectR39Film(applyR38EightDirectors(applyR37StoryDirector(injectR36Pilot(applyR31StoryContinuity(injectR30CinematicTrial(applyStoryArtDirection(applyVisualRefinement(addCameraEditorStage12(addCameraEditorStage11(addCameraEditorStage10(injected))))))))))))));
+const editorStages=[
+ ['Stage10 camera editor',addCameraEditorStage10],
+ ['Stage11 camera path',addCameraEditorStage11],
+ ['Stage12 camera editor',addCameraEditorStage12],
+ ['R22 visual refinement',applyVisualRefinement],
+ ['R23 story art direction',applyStoryArtDirection],
+ ['R30 cinematic trial',injectR30CinematicTrial],
+ ['R31 story continuity',applyR31StoryContinuity],
+ ['R36 pilot',injectR36Pilot],
+ ['R37 story director',applyR37StoryDirector],
+ ['R38 eight directors',applyR38EightDirectors],
+ ['R39 film timeline',injectR39Film],
+ ['R40 product lab',injectR40Product],
+ ['R41 preview first',applyR41PreviewFirst],
+ ['R42 editorial spreads',injectR42Editorial],
+ ['R43 template pilots',applyR43TemplatePilots],
+ ['R44 single canvas',applyR44TemplateExperience],
+ ['R45 scene composition',applyR45TemplateComposition],
+ ['R46 responsive accessibility',applyR46ResponsiveAccessibility]
+];
+let editor=injected;
+for(const [stageName,stageTransform] of editorStages){
+ editor=stageTransform(editor);
+ const firstScript=/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/i.exec(editor);
+ if(firstScript){
+  try{await transform(firstScript[2],{loader:'js',target:'es2022'});}
+  catch(error){throw new Error('Editor script first became invalid after '+stageName+': '+error.message);}
+ }
+}
 let output=injectOfflineEngine(editor,engine);
 const sharedUrl='const stage9SharedEngineURL="data:text/javascript;base64,'+Buffer.from(sharedEngine,'utf8').toString('base64')+'";\n';
 if(!output.includes('const stage9ThreeEngineURL='))throw Error('Existing Stage9 renderer injection missing');
 output=output.replace('const stage9ThreeEngineURL=',sharedUrl+'const stage9ThreeEngineURL=');
+
+// Parse the exact inline-script payloads produced by the HTML parser before
+// publishing build artifacts. This catches premature </script> termination
+// and malformed template literals at their originating script index.
+function locateOpenQuotedString(source){
+ const tick=String.fromCharCode(96),slash=String.fromCharCode(92),templates=[];
+ let state='code',quoteStart=-1,line=1,column=0,quoteLine=0,quoteColumn=0,escaped=false;
+ for(let i=0;i<source.length;i++){
+  const ch=source[i],next=source[i+1];
+  if(state==='line-comment'){if(ch==='\n')state='code';}
+  else if(state==='block-comment'){if(ch==='*'&&next==='/'){state='code';i++;column++;}}
+  else if(state==='single'||state==='double'){
+   if(ch==='\n'||ch==='\r')return {quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,i+90))};
+   if(escaped)escaped=false;else if(ch===slash)escaped=true;else if((state==='single'&&ch==="'")||(state==='double'&&ch==='"'))state='code';
+  } else if(state==='template'){
+   if(escaped)escaped=false;
+   else if(ch===slash)escaped=true;
+   else if(ch===tick){templates.pop();state='code';}
+   else if(ch==='$'&&next==='{'){templates[templates.length-1].depth=1;state='code';i++;column++;}
+  } else {
+   const active=templates.length?templates[templates.length-1]:null;
+   if(active&&active.depth>0&&ch==='{')active.depth++;
+   else if(active&&active.depth>0&&ch==='}'){active.depth--;if(active.depth===0)state='template';}
+   else if(ch==='/'&&next==='/'){state='line-comment';i++;column++;}
+   else if(ch==='/'&&next==='*'){state='block-comment';i++;column++;}
+   else if(ch==="'"){state='single';quoteStart=i;quoteLine=line;quoteColumn=column;}
+   else if(ch==='"'){state='double';quoteStart=i;quoteLine=line;quoteColumn=column;}
+   else if(ch===tick){templates.push({depth:0});state='template';}
+  }
+  if(ch==='\n'){line++;column=0;}else column++;
+ }
+ return (state==='single'||state==='double'||state==='template')?{quote:state,start:quoteStart,line:quoteLine,column:quoteColumn,breakLine:line,excerpt:source.slice(Math.max(0,quoteStart-90),Math.min(source.length,quoteStart+220))}:null;
+}
+const inlineScriptPattern=/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi;
+let inlineScriptMatch,inlineScriptIndex=0;
+while((inlineScriptMatch=inlineScriptPattern.exec(output))){
+ const attrs=inlineScriptMatch[1],body=inlineScriptMatch[2];
+ const isExternal=/\bsrc\s*=/i.test(attrs);
+ const type=(attrs.match(/\btype\s*=\s*["']?([^\s"'>]+)/i)||[])[1]||'text/javascript';
+ if(isExternal||!/(?:java|ecma)script/i.test(type)) {inlineScriptIndex++;continue;}
+ try { await transform(body,{loader:'js',target:'es2022'}); }
+ catch(error) {
+  const detail=error.errors?.[0];
+  const openQuote=locateOpenQuotedString(body);
+  const location=detail?.location?('line '+(detail.location.line||'?')+', column '+(detail.location.column||'?')+' '+(detail.text||'')):String(error.stack||error).split('\n').slice(0,3).join(' | ');
+  throw new Error('Generated inline script syntax failure at index '+inlineScriptIndex+
+   ' (id '+((attrs.match(/\bid\s*=\s*["']([^"']+)/i)||[])[1]||'none')+
+   ', '+body.length+' chars): '+error.message+'; '+location+'; quoteScan='+JSON.stringify(openQuote));
+ }
+ inlineScriptIndex++;
+}
+console.log('Validated generated executable inline scripts',inlineScriptIndex);
 await writeFile(resolve(root,'Motion-Studio-Stage9-THREE-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage10-Camera-Editor-OFFLINE.html'),output);
 await writeFile(resolve(root,'Motion-Studio-Stage11-Timeline-OFFLINE.html'),output);

@@ -1,0 +1,107 @@
+# R50 — Art-direction pilot visual inspection notes
+- Review artifact: [R50 review artifact, run 44722111917](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44722111917)
+- Candidate SHA: `69fe128d6591b21d6b9d4756c79656909d1e0e12`
+- Artifact: `r50-art-direction-review-e9acbcc4e76537d64bcce1e74399ecc0eedbc8ee`
+- Files inspected: `agency-r50.png`, `product-3d-r50.png`, `gallery-r50.png`, `saas-r50.svg`; all 1600×900.
+- This is an internal visual triage note, not the required human sign-off. No approval is inferred or recorded.
+
+## Findings
+1. **Agency — HOLD / direction mismatch.** The current frame is a small architectural/interior diorama titled “FORM FOLLOWS FEELING”. It reads as an interior/product scene, not a creative-agency portfolio or immersive case-study narrative. It does not demonstrate case switching, campaign work, or a multi-act agency story. Do not accept as the Creative Agency reference sample.
+2. **Product 3D — review candidate.** The camera object is clearly isolated and legible, with a strong focal hierarchy and no fixed right-side panel. It is a useful single-scene product-study render, but one still image cannot prove orbit interaction, scroll transitions, or export parity.
+3. **Gallery — review candidate with caveats.** The sculptural installation reads as a gallery environment and has a clear hero subject. The bright right-side wall clips/overpowers part of the composition; confirm it is intentional in the full scene and not a rendering defect. Still image does not prove visitor navigation or motion.
+4. **SaaS — directionally aligned, not production-approved.** The Capture → Shape → Deliver sequence is explicit and the three work areas are visually distinct. The inbox examples and workflow data are expressly illustrative/demo content; the design remains closer to a product workflow board than a fully animated product journey. Validate real interactions and motion in-browser before approval.
+
+## Gate status
+- `HUMAN_VISUAL_REVIEW_REQUIRED` remains open.
+- `productionEligible=false` remains unchanged for all four assets.
+- `commercialUseTermsChecked=false` remains unchanged in the manifest.
+- No third-party assets are listed, but source-code ownership and project licensing checks are not a substitute for commercial/legal review.
+- Required next work: redesign the Agency pilot to match the Creative Agency portfolio/storytelling baseline; inspect full-page scroll/transition behavior for the other three candidates; obtain explicit human approval against the exact artifact and commit SHA.
+
+## Follow-up implementation — 2026-11-20
+- Commit `3bca85f35a5f93392cc03770677599e8d1cf28e0` replaces the former Agency lobby/interior composition with a three-case immersive creative portfolio stage.
+- The new source includes three differentiated campaign canvases (Brand World, Digital Culture, Campaign), dimensional graphic objects, a continuous spatial ribbon, campaign artifacts, and integrated environmental typography.
+- This is a source-level redesign only. The previous review artifact predates this commit and must not be used to claim the redesign passes.
+- The R50 workflow is configured for branch pushes affecting this source file, but no new run/status was visible through the available run lookup at the time of this update. Rendering, image inspection, and all visual acceptance remain pending.
+- No human approval, rights approval, or production eligibility is granted by this implementation commit.
+
+
+## Rendered follow-up inspection — 2026-11-20, run 44730045990
+
+- Render candidate SHA: `bec308afe6293a96020eb7b274bbd8acd8a69783`; workflow completed successfully and produced three decoded 1600×900 PNGs plus one valid 1600×900 SVG. All four hashes and review-only flags passed the workflow's integrity checks.
+- Agency render now visibly contains three distinct case-study canvases and a continuous sculptural ribbon, so it no longer reads as a lobby/interior. However, the frame still has composition defects: upper case labels are clipped by the frame, the lower-left environmental typography is visually crowded, and the title overlay competes with foreground objects. This remains a redesign candidate, not an accepted reference.
+- Product 3D remains a coherent single-object camera study; no browser interaction or motion evidence is supplied by this render.
+- Gallery still has a visually dominant/clipping right return wall; the current render does not resolve the earlier concern.
+- SaaS remains a static SVG workflow board. Its sample data is marked illustrative and it does not demonstrate the required animated, interactive product journey.
+- Follow-up source adjustment committed as `e3f83cbc786caf330dab07ac7c4b9cbe143f6d37`: agency camera framing widened and foreground plinth/manifesto elements removed to reduce label collisions. That source commit is newer than the inspected render and must receive its own fresh render before evaluation.
+- The new source commit has not yet been verified by a corresponding R50 run/artifact in the available PR-run lookup. Do not treat the prior run as testing this change.
+- R50 status remains **HOLD**; human art-direction and commercial-rights approvals remain open.
+
+
+## Latest artifact inspection — 2026-11-20, R50 run #46
+
+- Run: [R50 Art Direction Review Pilot #46](https://github.com/Mrs-zhong1/motion-studio-web/actions/runs/44731093997)
+- Artifact: `r50-art-direction-review-2ef62b431c70811ec4b944341dac5079648acf03`
+- Inspected all three 1600×900 PNGs and the 1600×900 SaaS SVG.
+- Agency: the scene now reads as a three-case creative portfolio rather than an interior lobby. However, the first and second case kicker text is clipped at the top edge; the right case's lower title is crossed/obscured by the ribbon; the left case title is partly obstructed by the ribbon. The lower-left hero headline and caption are too close to the lower edge. **HOLD — composition still fails the approved art-direction standard.**
+- Gallery: the right return wall still dominates and occludes a significant portion of the third sculptural display. **HOLD — composition unresolved.**
+- Product 3D: camera remains legible and centered; this artifact alone is only a static render and provides no orbit/scroll interaction evidence.
+- SaaS: static workflow SVG remains a visual board, not evidence of a working animated SaaS journey. The sample content is illustrative.
+- This run is the fresh render for the source adjustment in commit `e3f83cbc786caf330dab07ac7c4b9cbe143f6d37`; the subsequent `e68b4c6` commit changes review documentation, not the scene source. The run #47 triggered on that documentation update was still in progress at inspection time and had no artifact yet.
+- No human sign-off or commercial rights sign-off has been recorded. All four assets remain `productionEligible=false`.
+
+## Current related gates
+- R52 run #37: report says 15 rows, 0 accepted, 0 validator errors, status HOLD. A successful report-only workflow means the report was generated, not that rights were approved.
+- R53 run #36: report says 33 expected, 0 accepted; all 33 slots fail the explicit human approval + `productionEligible=true` requirement. Status HOLD.
+- Product E2E run #1164 on commit `e68b4c6`: Chromium, Firefox and WebKit jobs all completed successfully. This is browser automation evidence only; it does not approve visual direction, third-party rights or release.
+
+
+## Agency composition correction — source commit 2026-11-20
+
+- Commit: `5f1e06925154de6a7c3b04a7c12a06082b94f24c`
+- Increased the Agency orthographic camera scale to 14.2 to create a wider safe frame for all three case canvases.
+- Repositioned and reduced the continuous gold ribbon to a low foreground path so it no longer crosses the case-study typography and artwork.
+- This is a source change only. The available GitHub Actions tools do not expose workflow dispatch, and no new R50 render run/artifact is associated with this SHA yet. The change is therefore **awaiting render**, not visually accepted.
+
+
+## R50 batch revision — 2026-11-20, source commits f9abc8c and 33b9a10
+
+- `f9abc8c`: rebuilt the Agency sample as a three-part campaign portfolio with distinct brand-identity packaging, digital-culture device art and campaign print/packaging; removed the crossing ribbon and tightened the case safe frame. Added optical barrel/aperture and tactile details to the cinema camera. Removed the foreground right gallery wall so it cannot occlude the third sculpture; opened the gallery front and widened the framing.
+- `33b9a10`: replaced the SaaS Capture/Shape/Deliver infographic with a conventional workspace product UI: navigation, metric cards, activity chart, team workload, recent projects and priority insight. All figures and project names are explicitly labeled illustrative demo content.
+- These are source changes only. They are not visually accepted until a fresh render for the exact PR head is downloaded and inspected. The generated manifest must continue to report `HUMAN_VISUAL_REVIEW_REQUIRED` and `productionEligible=false` until explicit approval. No commercial-rights or release signoff is implied.
+
+
+## R50 second visual review — 2026-11-20, render artifact 14627965629
+
+Exact source SHA: `72d7cf088eec8383bef3505e1951ddef0dd25060`; render workflow `44733233053` succeeded and produced four integrity-checked review outputs.
+
+Observed by inspecting the actual PNG/SVG files:
+- Agency: three campaign frames are present, but foreground objects still collide with campaign typography and the lower stage has excessive empty space. HOLD.
+- Product 3D: the camera silhouette is present, but the lens face reads too much like a speaker grille and the overlay title `SOUND IN PURE FORM` misidentifies the camera as an audio object. HOLD.
+- Gallery: all three objects are visible, but the upper lighting track and wall composition are too close to the frame edge. HOLD.
+- SaaS: workspace layout direction is correct; KPI delta labels overlap the metric values and need spacing correction. HOLD pending corrected SVG and visual check.
+
+Follow-up source commits `bd13ebb`, `be8ec41`, and `eafb738` address campaign-title clearance, camera aperture and narrative, gallery framing, and SaaS metric spacing. Fresh renders for the latest exact head are mandatory before accepting any of these changes. All outputs remain review-only; no human approval, commercial rights clearance or production eligibility is asserted.
+
+
+## 2026-11-21 — acceptance-scope correction (supersedes static-render interpretation)
+
+The prior Blender output is **not a website-template visual acceptance result**. It consists of three standalone procedural 3D still renders and one standalone SaaS SVG. Its dimensions, file format, and SHA-256 checks establish only artifact integrity. They do not demonstrate that the Creative Agency or SaaS templates render correctly, support their intended interactions, or meet the R43 design baseline.
+
+### Corrected R50 acceptance target
+
+The R50 workflow has been replaced with a real product-pipeline browser check:
+- Build the offline editor using `stage9/build-offline.mjs`.
+- Open the editor in Chromium, choose Creative Agency and SaaS from the real template gallery, and call the actual `exportDocument()` export path.
+- Load each exported standalone HTML document in a real browser at desktop (1440×900) and mobile (390×844).
+- Capture full-page screenshots: Agency opening + case navigation on both viewports; SaaS Capture, Shape and Deliver states on both viewports.
+- Verify Agency project-index navigation, SaaS tab state changes, mobile composition/touch targets, horizontal overflow, and browser runtime errors.
+- Save structured evidence to `stage9/R50_HTML_BROWSER_ACCEPTANCE.json`; screenshots are emitted under `/tmp/r50-html-browser` and uploaded best-effort by Actions.
+
+### Interpretation rules
+
+- `PASS_BROWSER_FUNCTIONALITY_ONLY` means the scripted real-HTML browser checks passed. It is **not** human visual approval.
+- Human art-direction review remains required against `release/R43_IMMERSIVE_TEMPLATE_DESIGN_BASELINE.md`, including typography, composition, image hierarchy, navigation obstruction, scene continuity, and mobile quality.
+- Commercial asset rights, R52/R53 approval, R54 physical-device evidence, and R55 exact-SHA HTTPS/live-smoke remain separate gates.
+- Blender still renders may remain as internal exploration assets only. They cannot satisfy R50 website-template acceptance.
+- PR #4 remains Draft; no merge, deployment, or production approval is implied.

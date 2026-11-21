@@ -1,0 +1,109 @@
+# R49 — Four-gate release closure plan
+
+Date: 2026-11-20
+Candidate branch: `design/r43-immersive-template-system`
+Candidate at start of this closure batch: `fdae2be18e39e26e9bd379366479350a0a7b7794`
+Decision: KEEP PR #4 OPEN + DRAFT. No merge or production deployment.
+
+## Verified candidate evidence
+
+- PR #4 remains open, draft and mergeable.
+- Product E2E run `44685130534`: Chromium, Firefox and WebKit jobs all succeeded on the candidate SHA.
+- Stage 9 standalone Three.js / strict GLB WebGL run `44685123953`: succeeded on the candidate SHA.
+- R18-R21 release-review run `44685130430`: succeeded; its success is a review-gate result, not a human release signoff.
+- R47 round-trip and R48 candidate-only PASS were reported in the PR's 2026-11-20 consolidated audit. R48 is explicitly `PASS_CANDIDATE_ONLY`, not production approval.
+
+## Gate 1 — Media
+
+Approved production route:
+- 18 procedural originals: Agency 5, Product 3D 4, Gallery 4, SaaS 5.
+- 15 commercially redistributable photographs: Architecture 4, Cinematic 4, Editorial 3, Fashion 4.
+
+Hard requirements:
+- Every slot is a distinct original, >=1600x900 native pixels, 16:9 within the validator tolerance, unique SHA-256, readable JPEG/PNG.
+- Procedural files record renderer/source reference/date and explicitly state `thirdPartyAssets=false`.
+- Photography records original source URL, creator, exact license ID/URL, attribution, download timestamp and native dimensions.
+- No collage crops, upscales, paid image APIs, paid asset purchases or resumed long FLUX/MFLUX generation.
+- The four-scene Blender pilot is a visual-review prerequisite before expanding the procedural batch to 18.
+
+Current state:
+- The earlier Pillow geometric pilot was rejected as too schematic; it is not production media.
+- Blender pilot run `44501248194` failed before rendering because Ubuntu mirrors returned HTTP 503 during package installation. No image artifact was produced.
+- The retry-hardened workflow is now enabled on this PR branch. Current run: `44690965370`.
+- No media replacement or production eligibility flag has been changed.
+
+## Gate 2 — Rights and authorization
+
+- The current asset manifest records 39 distributed scene images, of which 33 are collage-derived crops from six composite source images; the remaining six are individually generated.
+- The existing rights ledger still marks distributed photography, fonts, dependencies and certain model assets as NOT VERIFIED / UNKNOWN.
+- For the 15 photography replacements, use only CC0, Public Domain, CC BY or CC BY-SA after compatibility review. Reject NC, ND, missing, unclear or merely free-to-download terms.
+- Independently audit the rights of the six retained AI-generated images, procedural model sources, font files, Three.js and every other vendored dependency.
+- A technical asset validator or image-generation terms URL does not itself constitute itemized legal clearance.
+- Do not set `mediaRightsApproved=true` until every distributed item has evidence and a named human reviewer.
+
+## Gate 3 — Native Safari and physical devices
+
+Required manual evidence:
+- User's Apple Silicon Mac: native Safari and native Chrome; actual GPU renderer, not SwiftShader.
+- Physical iPhone: iOS Safari.
+- Physical Android: Chrome.
+- All eight templates: browse, edit, replace image, save, reopen, export and open exported HTML.
+- Product 3D: rotate, materials, camera presets, context-loss fallback.
+- 30-minute active interaction observation with device/OS/browser/build SHA, screenshots or video, diagnostics, defects and reviewer.
+- CI WebKit is not Safari; desktop emulation is not a physical phone. These tests remain NOT TESTED until the evidence is attached.
+
+## Gate 4 — Production HTTPS
+
+The existing `.github/workflows/web-release-pages.yml` is fail-closed:
+- Requires SHA-bound approval and R32 original-media audit.
+- Builds one exact candidate artifact and tests Chromium, Firefox, WebKit and GLB/WebGL before publishing.
+- Publishes the exact tested bytes, then waits for the exact source SHA at the Pages URL and runs live HTTPS edit/save/export smoke.
+- A Pages URL or HTTP 200 alone is not acceptance; the served HTML hash and `WEB_RELEASE.json` must match the tested artifact.
+
+Current state:
+- No successful current production Pages deployment and no live HTTPS smoke artifact are attached to this candidate.
+- Do not manually bypass the preflight or publish this draft candidate.
+- Pages configuration and workflow dispatch permissions must be verified by a repository administrator when the candidate is eligible.
+
+## Work performed in this closure batch
+
+- Hardened the Blender pilot workflow with full apt transaction retries and longer network timeouts after the observed HTTP 503 failure.
+- Added the current PR candidate branch to the workflow's push trigger so the retry can run without requiring an unavailable workflow-dispatch action.
+- Updated the hybrid asset plan to record the user's approved 18 procedural / 15 licensed-photo split and to remove the obsolete PR #2 reference.
+- Preserved fail-closed behavior: no replacement assets imported, no rights marked approved, no device signoff fabricated, no deployment or merge.
+
+## Remaining external evidence
+
+1. Review the four Blender pilot images in the Actions artifact once run `44690965370` succeeds. Only then authorize the 18-slot procedural batch.
+2. Complete and attach the 15-photo source/license manifest and all retained asset/dependency/font rights evidence.
+3. Perform the physical-device test matrix and attach the signed evidence to this exact candidate SHA.
+4. Run the production Pages workflow only after gates 1–3 are genuinely closed; attach the exact deployed SHA, live smoke JSON, served artifact hash and rollback reference.
+
+A green CI run, a completed documentation update, or a generated pilot image cannot replace human visual review, rights clearance, physical-device testing or live production acceptance.
+
+
+## Additional batch hardening — 2026-11-20
+
+A fresh source review found several integration defects in the existing media-gate implementation. These have been corrected on the candidate branch:
+
+1. **R32 CLI summary crash:** the per-template printer referenced a nonexistent `individualOriginals` key although the audit emits `sourceEligibleOriginals`. Corrected the field and added a CLI regression test so the actual 39-file audit can finish and print its report.
+2. **R32 candidate coverage:** the report-only audit workflow now runs on the PR candidate branch and on relevant pull requests. It remains report-only; the existing 33 collage-derived source images should produce an expected HOLD, not a false release failure.
+3. **R25/R26 provenance schema alignment:** procedural originals must explicitly set both `embeddedThirdPartyAssets=false` and `thirdPartyAssets=false`. The Blender pilot now records the source-code SHA, render engine, Blender version and both explicit no-third-party flags. Its commercial-rights status remains false and production eligibility remains false.
+4. **Photo license precision:** R25 import and R26 staging validation now accept only explicit versioned CC0 / Public Domain / CC BY / CC BY-SA identifiers in the reviewed set, reject NC/ND, require HTTPS source and license URLs, ISO-8601 download time, attribution and creator, and require a compatibility review for CC BY-SA.
+5. **Rights evidence preservation:** R25 now carries source URL, creator, exact license, attribution, download time and CC BY-SA review status into the committed asset manifest rather than validating and then discarding the rights evidence.
+6. **CI coverage:** R25 safety tests now run on the candidate branch and relevant pull requests.
+
+The previous `R26_LOCAL_MODEL_B1.md` FLUX.2 / Z-Image proposal is explicitly marked superseded historical research. The approved 18 procedural + 15 licensed-photography route remains authoritative.
+
+These changes improve the release controls; they do not clear any actual asset rights or approve any image. The 33-slot replacement pack remains unproduced, the Blender render job remains a separate review-only task, and physical-device / live-production evidence is still outstanding.
+
+
+## Final media-gate consistency pass — 2026-11-20
+
+- Unified R25 import and R32 source audit at **1600×900 minimum native source/output resolution**, 16:9 tolerance, and no source-to-output upscaling. R26 already enforces 1600×900 and exact source dimensions.
+- R32 now rejects both non-16:9 source/output and any output larger than its recorded native source dimensions. The old 1.25× amplification allowance is removed.
+- R25 photo evidence now includes the original source URL, exact license URL/version, creator, attribution text, ISO-8601 download timestamp and (for CC BY-SA) compatibility review. The importer preserves these fields in the main manifest.
+- R25 regression run `44692463986` passed at SHA `8706e821` before the final 1600×900 tightening. The newer strict-floor R25 and R32 runs are queued against the updated candidate; their results must be checked before calling these changes verified.
+- R32 regression test was also corrected to use the report's actual `byTemplate` key; the CLI summary field typo is separately covered by an end-to-end subprocess test.
+
+The successful Blender smoke run `44690965370` generated four technically valid 1600×900 PNGs, but manual inspection rejected all four for visual quality. They remain review artifacts only. No images have been imported, and no human visual approval has been inferred.
