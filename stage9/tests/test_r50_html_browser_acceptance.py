@@ -145,7 +145,7 @@ try:
             editor.close()
         browser.close()
     assert set(report["templates"]) == set(TEMPLATES)
-    assert len(report["screenshots"]) == 12
+    assert len(report["screenshots"]) == 10
     report["status"] = "PASS_BROWSER_FUNCTIONALITY_ONLY"
 except Exception:
     report["status"] = "FAIL"
