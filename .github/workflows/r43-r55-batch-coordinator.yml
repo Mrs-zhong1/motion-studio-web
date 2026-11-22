@@ -19,7 +19,7 @@ on:
       - 'R25 Native-Quality Replacement Safety'
       - 'R26 Blender Original Asset Pilot'
       - 'R32 Original Media Acceptance'
-      - 'Web Product E2E'
+      - 'Motion Studio Web Product E2E'
     types: [completed]
 permissions:
   actions: read
@@ -51,8 +51,21 @@ jobs:
           def get(path):
             req=urllib.request.Request(f'https://api.github.com/repos/{repo}/{path}',headers=headers)
             with urllib.request.urlopen(req,timeout=20) as r: return json.load(r)
-          runs=get('actions/runs?branch='+branch+'&per_page=100').get('workflow_runs',[])
+          import time
           wanted=('R50','R52','R53','R25','R26','R32','R47','R48','E2E','Web Product')
+          # PR checks start in parallel. Do not publish a stale coordinator snapshot
+          # while the same candidate SHA still has acceptance jobs running.
+          deadline=time.time()+240
+          while True:
+            runs=get('actions/runs?branch='+branch+'&per_page=100').get('workflow_runs',[])
+            latest={}
+            for item in runs:
+              name=item.get('name','')
+              if item.get('head_sha') and any(x.lower() in name.lower() for x in wanted):
+                if name not in latest: latest[name]=item
+            pending=[x for x in latest.values() if x.get('status')!='completed']
+            if not pending or time.time()>=deadline: break
+            time.sleep(15)
           latest={}
           for run in runs:
             name=run.get('name','')
