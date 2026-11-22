@@ -79,7 +79,32 @@ try:
                 errors = []
                 page.on("pageerror", lambda e: errors.append(str(e)))
                 page.set_content(html, wait_until="domcontentloaded", timeout=30000)
-                page.wait_for_timeout(350)
+                # Exported scenes embed generated media and may decode asynchronously.
+                # Avoid capturing the initial black/loading frame.
+                page.evaluate("document.fonts.ready")
+                page.wait_for_function("""() => Array.from(document.images).every(
+                    image => image.complete && image.naturalWidth > 0
+                )""", timeout=20000)
+                page.wait_for_timeout(1200)
+                media_audit = page.evaluate("""() => ({
+                    images: Array.from(document.images).map(image => ({
+                        src: image.currentSrc || image.src,
+                        complete: image.complete,
+                        naturalWidth: image.naturalWidth,
+                        naturalHeight: image.naturalHeight
+                    })),
+                    failedImages: Array.from(document.images)
+                        .filter(image => !image.complete || image.naturalWidth === 0)
+                        .map(image => image.currentSrc || image.src),
+                    canvas: Array.from(document.querySelectorAll('canvas')).map(canvas => ({
+                        width: canvas.width, height: canvas.height,
+                        cssWidth: Math.round(canvas.getBoundingClientRect().width),
+                        cssHeight: Math.round(canvas.getBoundingClientRect().height)
+                    }))
+                })""")
+                assert not media_audit["failedImages"], (
+                    template, viewport, "exported media failed to load", media_audit["failedImages"]
+                )
                 geometry = page.evaluate("""() => ({
                     width: document.documentElement.scrollWidth,
                     viewport: innerWidth,
