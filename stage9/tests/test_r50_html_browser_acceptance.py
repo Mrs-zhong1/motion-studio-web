@@ -79,6 +79,42 @@ try:
                 errors = []
                 page.on("pageerror", lambda e: errors.append(str(e)))
                 page.set_content(html, wait_until="domcontentloaded", timeout=30000)
+                # Each chapter is a sandboxed srcdoc iframe. The parent document's
+                # image/font readiness does not imply these child documents have rendered.
+                iframe_audit = []
+                for child in page.frames:
+                    if child.parent_frame is None:
+                        continue
+                    child_result = {"name": child.name, "url": child.url, "loadState": "unknown"}
+                    try:
+                        child.wait_for_load_state("domcontentloaded", timeout=15000)
+                        child_result["loadState"] = "domcontentloaded"
+                        child.evaluate("document.fonts.ready")
+                        child_result["document"] = child.evaluate("""() => ({
+                            readyState: document.readyState,
+                            title: document.title,
+                            textLength: (document.body?.innerText || '').trim().length,
+                            bodyChildCount: document.body?.children.length || 0,
+                            background: document.body ? getComputedStyle(document.body).backgroundColor : null,
+                            images: Array.from(document.images).map(img => ({
+                                complete: img.complete, naturalWidth: img.naturalWidth,
+                                naturalHeight: img.naturalHeight
+                            })),
+                            canvases: Array.from(document.querySelectorAll('canvas')).map(canvas => ({
+                                width: canvas.width, height: canvas.height
+                            })),
+                            visibleElements: Array.from(document.body?.querySelectorAll('*') || [])
+                                .filter(el => {
+                                    const r = el.getBoundingClientRect(), s = getComputedStyle(el);
+                                    return r.width > 8 && r.height > 8 && s.display !== 'none' &&
+                                        s.visibility !== 'hidden' && Number(s.opacity) > 0;
+                                }).length
+                        })""")
+                    except Exception as error:
+                        child_result["error"] = str(error)
+                    iframe_audit.append(child_result)
+                template_result.setdefault("iframeAudit", {})[viewport] = iframe_audit
+                page.wait_for_timeout(500)
                 # Exported scenes embed generated media and may decode asynchronously.
                 # Avoid capturing the initial black/loading frame.
                 page.evaluate("document.fonts.ready")
