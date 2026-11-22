@@ -100,11 +100,48 @@ try:
                         width: canvas.width, height: canvas.height,
                         cssWidth: Math.round(canvas.getBoundingClientRect().width),
                         cssHeight: Math.round(canvas.getBoundingClientRect().height)
-                    }))
+                    })),
+                    frames: Array.from(document.querySelectorAll('.page .section iframe')).map((frame, index) => {
+                        const rect = frame.getBoundingClientRect();
+                        const style = getComputedStyle(frame);
+                        let inner = null;
+                        try {
+                            const doc = frame.contentDocument;
+                            const body = doc && doc.body;
+                            inner = body ? {
+                                readyState: doc.readyState,
+                                textLength: (body.innerText || '').trim().length,
+                                childCount: body.children.length,
+                                images: Array.from(body.querySelectorAll('img')).map(img => ({
+                                    src: img.currentSrc || img.src,
+                                    complete: img.complete,
+                                    naturalWidth: img.naturalWidth,
+                                    naturalHeight: img.naturalHeight
+                                })),
+                                canvases: Array.from(body.querySelectorAll('canvas')).map(canvas => ({
+                                    width: canvas.width, height: canvas.height
+                                })),
+                                background: getComputedStyle(body).backgroundColor
+                            } : null;
+                        } catch (error) {
+                            inner = { crossOriginOrUnreadable: String(error) };
+                        }
+                        return {
+                            index, title: frame.title, src: frame.getAttribute('src'),
+                            srcdocBytes: (frame.getAttribute('srcdoc') || '').length,
+                            readyState: frame.contentDocument?.readyState || 'unreadable',
+                            rect: { x: Math.round(rect.x), y: Math.round(rect.y),
+                                width: Math.round(rect.width), height: Math.round(rect.height) },
+                            display: style.display, visibility: style.visibility,
+                            opacity: style.opacity, background: style.backgroundColor,
+                            inner
+                        };
+                    })
                 })""")
                 assert not media_audit["failedImages"], (
                     template, viewport, "exported media failed to load", media_audit["failedImages"]
                 )
+                template_result.setdefault("mediaAudit", {})[viewport] = media_audit
                 geometry = page.evaluate("""() => ({
                     width: document.documentElement.scrollWidth,
                     viewport: innerWidth,
