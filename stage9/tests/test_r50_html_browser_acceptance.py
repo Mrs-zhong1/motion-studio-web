@@ -137,6 +137,37 @@ try:
                         cssWidth: Math.round(canvas.getBoundingClientRect().width),
                         cssHeight: Math.round(canvas.getBoundingClientRect().height)
                     })),
+                    sectionAudit: Array.from(document.querySelectorAll('.page .section')).map((section, index) => {
+                        const box = element => {
+                            const r = element.getBoundingClientRect(), s = getComputedStyle(element);
+                            return {
+                                tag: element.tagName.toLowerCase(),
+                                className: typeof element.className === 'string' ? element.className : '',
+                                role: element.getAttribute('role'),
+                                rect: { x: Math.round(r.x), y: Math.round(r.y),
+                                    width: Math.round(r.width), height: Math.round(r.height) },
+                                display: s.display, visibility: s.visibility, opacity: s.opacity,
+                                background: s.backgroundColor, backgroundImage: s.backgroundImage,
+                                color: s.color,
+                                text: (element.innerText || element.getAttribute('aria-label') || '').trim().slice(0, 180),
+                                src: element.currentSrc || element.getAttribute('src') || null,
+                                childCount: element.children.length
+                            };
+                        };
+                        return {
+                            index,
+                            heading: section.querySelector('.designed-chapter-heading')?.innerText?.trim() || '',
+                            section: box(section),
+                            media: Array.from(section.querySelectorAll(
+                                '.section-art, img, picture, video, canvas, iframe, [class*="media"], [class*="visual"], [class*="art"]'
+                            )).map(box),
+                            largeVisibleElements: Array.from(section.querySelectorAll('*')).filter(element => {
+                                const r = element.getBoundingClientRect(), s = getComputedStyle(element);
+                                return r.width >= 100 && r.height >= 100 && s.display !== 'none' &&
+                                    s.visibility !== 'hidden' && Number(s.opacity) > 0;
+                            }).slice(0, 30).map(box)
+                        };
+                    }),
                     frames: Array.from(document.querySelectorAll('.page .section iframe')).map((frame, index) => {
                         const rect = frame.getBoundingClientRect();
                         const style = getComputedStyle(frame);
