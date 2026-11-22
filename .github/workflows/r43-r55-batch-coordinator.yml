@@ -1,6 +1,11 @@
 name: R43-R55 Batch Acceptance Coordinator
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - design/r43-immersive-template-system
+    paths:
+      - '.github/workflows/r43-r55-batch-coordinator.yml'
   pull_request:
     branches:
       - release/r18-r21-acceptance-gates
@@ -8,7 +13,7 @@ on:
       - '.github/workflows/r43-r55-batch-coordinator.yml'
   workflow_run:
     workflows:
-      - 'R50 Art Direction Review Pilot (never auto-approve)'
+      - 'R50 Real HTML Browser Review (visual approval remains manual)'
       - 'R52 Photography Rights Evidence Gate (report-only until complete)'
       - 'R53 33-Asset Integration Acceptance (fail closed)'
       - 'R25 Native-Quality Replacement Safety'
