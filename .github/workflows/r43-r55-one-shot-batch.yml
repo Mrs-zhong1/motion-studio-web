@@ -235,6 +235,7 @@ jobs:
           name: r43-r55-one-shot-batch-${{ github.sha }}
           path: |
             batch-report/
+            /tmp/r50-html-browser/
             r50-review/
             r52-candidates/
             stage9/R47_ROUNDTRIP_PARITY.json
