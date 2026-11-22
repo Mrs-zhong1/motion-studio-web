@@ -2,6 +2,7 @@ export const R45_CONTRACT=Object.freeze({families:['print','object','film','plan
 export const R45_CSS=`
 body[data-r38-family] .page .section{position:relative!important;isolation:isolate!important;overflow:hidden}
 body[data-r38-family] .page .section .section-art{z-index:0!important}
+body[data-r38-family] .page .section iframe{position:relative!important;z-index:2!important;pointer-events:auto!important}
 body[data-r38-family] .page .section .designed-chapter-heading{position:absolute!important;z-index:5!important;width:auto!important;max-width:78%!important}
 body[data-r38-family] .page .section::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,#07100b12,transparent 38%,#07100b70)}
 html[data-r43-template="agency"] .page{position:relative!important}
