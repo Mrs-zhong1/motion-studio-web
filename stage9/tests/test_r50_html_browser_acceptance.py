@@ -82,7 +82,8 @@ try:
                 # Each chapter is a sandboxed srcdoc iframe. The parent document's
                 # image/font readiness does not imply these child documents have rendered.
                 iframe_audit = []
-                for child in page.frames:
+                frame_screenshots = []
+                for frame_index, child in enumerate(page.frames):
                     if child.parent_frame is None:
                         continue
                     child_result = {"name": child.name, "url": child.url, "loadState": "unknown"}
@@ -113,7 +114,28 @@ try:
                     except Exception as error:
                         child_result["error"] = str(error)
                     iframe_audit.append(child_result)
+                    if child.parent_frame is not None:
+                        frame_path = SHOTS / f"{template}-{viewport}-frame-{frame_index:02d}.png"
+                        try:
+                            page.locator("iframe").nth(frame_index - 1).screenshot(
+                                path=str(frame_path), timeout=30000, animations="disabled"
+                            )
+                            frame_raw = frame_path.read_bytes()
+                            frame_screenshots.append({
+                                "frameIndex": frame_index - 1,
+                                "file": frame_path.name,
+                                "bytes": len(frame_raw),
+                                "sha256": hashlib.sha256(frame_raw).hexdigest(),
+                                "nonEmpty": len(frame_raw) > 1000,
+                            })
+                        except Exception as frame_error:
+                            frame_screenshots.append({
+                                "frameIndex": frame_index - 1,
+                                "file": frame_path.name,
+                                "error": str(frame_error),
+                            })
                 template_result.setdefault("iframeAudit", {})[viewport] = iframe_audit
+                template_result.setdefault("frameScreenshots", {})[viewport] = frame_screenshots
                 page.wait_for_timeout(500)
                 # Exported scenes embed generated media and may decode asynchronously.
                 # Avoid capturing the initial black/loading frame.
