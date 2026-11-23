@@ -83,6 +83,10 @@ try:
                 # image/font readiness does not imply these child documents have rendered.
                 iframe_audit = []
                 frame_screenshots = []
+                # Freeze CSS/Web Animations in the parent and srcdoc documents before
+                # capture. Locator.screenshot otherwise waits forever for continuously
+                # animated iframe transforms to become geometrically stable.
+                page.evaluate("""() => document.getAnimations({subtree: true}).forEach(a => a.pause())""")
                 for frame_index, child in enumerate(page.frames):
                     if child.parent_frame is None:
                         continue
@@ -90,6 +94,10 @@ try:
                     try:
                         child.wait_for_load_state("domcontentloaded", timeout=15000)
                         child_result["loadState"] = "domcontentloaded"
+                        child.evaluate("""() => {
+                            document.getAnimations({subtree: true}).forEach(a => a.pause());
+                            document.fonts.ready;
+                        }""")
                         child.evaluate("document.fonts.ready")
                         child_result["document"] = child.evaluate("""() => ({
                             readyState: document.readyState,
@@ -118,7 +126,7 @@ try:
                         frame_path = SHOTS / f"{template}-{viewport}-frame-{frame_index:02d}.png"
                         try:
                             page.locator("iframe").nth(frame_index - 1).screenshot(
-                                path=str(frame_path), timeout=30000, animations="disabled"
+                                path=str(frame_path), timeout=15000, animations="disabled"
                             )
                             frame_raw = frame_path.read_bytes()
                             frame_screenshots.append({
