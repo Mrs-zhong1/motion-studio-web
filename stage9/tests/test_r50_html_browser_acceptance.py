@@ -125,8 +125,27 @@ try:
                     if child.parent_frame is not None:
                         frame_path = SHOTS / f"{template}-{viewport}-frame-{frame_index:02d}.png"
                         try:
-                            page.locator("iframe").nth(frame_index - 1).screenshot(
-                                path=str(frame_path), timeout=15000, animations="disabled"
+                            # Capture the rendered iframe through the parent page's compositor.
+                            # Element.screenshot() waits for geometric stability; continuous
+                            # scroll/transform effects can prevent that condition forever even
+                            # after animations are paused. A clipped page screenshot avoids the
+                            # locator stability wait while preserving the actual iframe pixels.
+                            frame_element = page.locator("iframe").nth(frame_index - 1)
+                            frame_element.evaluate("(el) => el.scrollIntoView({block: 'center', inline: 'nearest'})")
+                            rect = frame_element.bounding_box()
+                            assert rect and rect["width"] > 8 and rect["height"] > 8, (
+                                "iframe has no renderable bounds", frame_index, rect
+                            )
+                            page.screenshot(
+                                path=str(frame_path),
+                                clip={
+                                    "x": max(0, rect["x"]),
+                                    "y": max(0, rect["y"]),
+                                    "width": min(rect["width"], width),
+                                    "height": min(rect["height"], height),
+                                },
+                                timeout=30000,
+                                animations="disabled",
                             )
                             frame_raw = frame_path.read_bytes()
                             frame_screenshots.append({
@@ -135,6 +154,7 @@ try:
                                 "bytes": len(frame_raw),
                                 "sha256": hashlib.sha256(frame_raw).hexdigest(),
                                 "nonEmpty": len(frame_raw) > 1000,
+                                "captureStrategy": "parent-page-clipped-compositor",
                             })
                         except Exception as frame_error:
                             frame_screenshots.append({
