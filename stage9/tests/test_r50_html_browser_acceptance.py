@@ -123,45 +123,10 @@ try:
                         child_result["error"] = str(error)
                     iframe_audit.append(child_result)
                     if child.parent_frame is not None:
-                        frame_path = SHOTS / f"{template}-{viewport}-frame-{frame_index:02d}.png"
-                        try:
-                            # Capture the rendered iframe through the parent page's compositor.
-                            # Element.screenshot() waits for geometric stability; continuous
-                            # scroll/transform effects can prevent that condition forever even
-                            # after animations are paused. A clipped page screenshot avoids the
-                            # locator stability wait while preserving the actual iframe pixels.
-                            frame_element = page.locator("iframe").nth(frame_index - 1)
-                            frame_element.evaluate("(el) => el.scrollIntoView({block: 'center', inline: 'nearest'})")
-                            rect = frame_element.bounding_box()
-                            assert rect and rect["width"] > 8 and rect["height"] > 8, (
-                                "iframe has no renderable bounds", frame_index, rect
-                            )
-                            page.screenshot(
-                                path=str(frame_path),
-                                clip={
-                                    "x": max(0, rect["x"]),
-                                    "y": max(0, rect["y"]),
-                                    "width": min(rect["width"], width),
-                                    "height": min(rect["height"], height),
-                                },
-                                timeout=30000,
-                                animations="disabled",
-                            )
-                            frame_raw = frame_path.read_bytes()
-                            frame_screenshots.append({
-                                "frameIndex": frame_index - 1,
-                                "file": frame_path.name,
-                                "bytes": len(frame_raw),
-                                "sha256": hashlib.sha256(frame_raw).hexdigest(),
-                                "nonEmpty": len(frame_raw) > 1000,
-                                "captureStrategy": "parent-page-clipped-compositor",
-                            })
-                        except Exception as frame_error:
-                            frame_screenshots.append({
-                                "frameIndex": frame_index - 1,
-                                "file": frame_path.name,
-                                "error": str(frame_error),
-                            })
+                        frame_screenshots.append({
+                            "frameIndex": frame_index - 1,
+                            "pendingCapture": True,
+                        })
                 template_result.setdefault("iframeAudit", {})[viewport] = iframe_audit
                 template_result.setdefault("frameScreenshots", {})[viewport] = frame_screenshots
                 page.wait_for_timeout(500)
@@ -259,6 +224,56 @@ try:
                     template, viewport, "exported media failed to load", media_audit["failedImages"]
                 )
                 template_result.setdefault("mediaAudit", {})[viewport] = media_audit
+
+                # Capture the full exported page once, then crop each iframe from that
+                # compositor image. This avoids both locator stability waits and viewport-
+                # limited clip coordinates for chapters below the fold.
+                full_page_path = SHOTS / f"{template}-{viewport}-all-chapters.png"
+                page.screenshot(path=str(full_page_path), full_page=True,
+                                animations="disabled", timeout=90000)
+                from PIL import Image
+                with Image.open(full_page_path) as full_page_image:
+                    full_page_image.load()
+                    captured_frames = []
+                    for frame_index, frame_element in enumerate(page.locator(".page .section iframe").all()):
+                        rect = frame_element.evaluate("""el => {
+                            const r = el.getBoundingClientRect();
+                            return {x: r.x, y: r.y + window.scrollY,
+                                    width: r.width, height: r.height};
+                        }""")
+                        left, top = round(rect["x"]), round(rect["y"])
+                        right = round(rect["x"] + rect["width"])
+                        bottom = round(rect["y"] + rect["height"])
+                        right = min(right, full_page_image.width)
+                        bottom = min(bottom, full_page_image.height)
+                        assert right - left > 8 and bottom - top > 8, (
+                            "iframe crop outside full-page capture", template, viewport,
+                            frame_index, rect, full_page_image.size
+                        )
+                        frame_path = SHOTS / f"{template}-{viewport}-frame-{frame_index + 1:02d}.png"
+                        full_page_image.crop((left, top, right, bottom)).save(frame_path, format="PNG")
+                        frame_raw = frame_path.read_bytes()
+                        captured_frames.append({
+                            "frameIndex": frame_index,
+                            "file": frame_path.name,
+                            "bytes": len(frame_raw),
+                            "sha256": hashlib.sha256(frame_raw).hexdigest(),
+                            "nonEmpty": len(frame_raw) > 1000,
+                            "captureStrategy": "full-page-compositor-crop",
+                            "width": right - left,
+                            "height": bottom - top,
+                        })
+                    assert len(captured_frames) == 5, (
+                        "expected five rendered chapter iframe captures",
+                        template, viewport, len(captured_frames)
+                    )
+                    assert all(item["nonEmpty"] for item in captured_frames), (
+                        "one or more chapter captures are empty", template, viewport,
+                        captured_frames
+                    )
+                    template_result.setdefault("frameScreenshots", {})[viewport] = captured_frames
+                full_page_path.unlink()
+
                 geometry = page.evaluate("""() => ({
                     width: document.documentElement.scrollWidth,
                     viewport: innerWidth,
