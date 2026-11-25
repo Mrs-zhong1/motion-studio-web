@@ -1,7 +1,7 @@
 """R50 browser acceptance for the real Agency and SaaS standalone HTML exports.
 
 This is a rendering/interaction evidence gate, not subjective art-direction approval.
-It captures desktop/mobile full-page views and verifies the actual exported runtime.
+It captures desktop/mobile full-page views plus all five rendered chapter iframes per viewport, and verifies the actual exported runtime.
 """
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -343,6 +343,16 @@ try:
         browser.close()
     assert set(report["templates"]) == set(TEMPLATES)
     assert len(report["screenshots"]) == 12
+    for template in TEMPLATES:
+        for viewport in ("desktop", "mobile"):
+            frames = report["templates"][template]["frameScreenshots"][viewport]
+            assert len(frames) == 5 and all(frame.get("nonEmpty") for frame in frames), (
+                "incomplete chapter screenshot evidence", template, viewport, frames
+            )
+    report["chapterScreenshotCount"] = sum(
+        len(viewports) for row in report["templates"].values()
+        for viewports in row.get("frameScreenshots", {}).values()
+    )
     report["status"] = "PASS_BROWSER_FUNCTIONALITY_ONLY"
 except Exception:
     report["status"] = "FAIL"
