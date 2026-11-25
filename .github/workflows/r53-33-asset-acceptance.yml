@@ -26,13 +26,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install 'Pillow==11.3.0'
+      - run: python -m pip install 'Pillow==11.3.0' 'CairoSVG==2.8.2'
       - name: Run asset gate unit tests
         run: python -m unittest release.tests.test_asset_validation -v
       - name: Regenerate original procedural artwork from repository source
         run: python release/generate_r53_original_assets.py
       - name: Validate all 33 original slots without manufacturing approval
         run: python release/validate_r53_production_assets.py --report r53-asset-report.json
+      - name: Generate hash-verified contact sheet for human visual review
+        run: python release/create_r53_review_contact_sheet.py
       - name: Publish HOLD/PASS evidence
         if: always()
         run: |
@@ -42,5 +44,7 @@ jobs:
         if: always()
         with:
           name: r53-33-asset-acceptance-report
-          path: r53-asset-report.json
+          path: |
+            r53-asset-report.json
+            r53-review-contact-sheet.png
           if-no-files-found: error
