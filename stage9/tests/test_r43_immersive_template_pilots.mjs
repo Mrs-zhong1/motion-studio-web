@@ -27,6 +27,11 @@ test('Agency pilot reuses the source hero and avoids duplicate title/status navi
  assert.doesNotMatch(r43Runtime,/SELECT A CASE · SCROLL TO EXPLORE/);
  assert.match(r43Runtime,/sections\[0\]\.after\(index\)/);
 });
+test('Agency project index follows scroll position and keyboard focus',()=>{
+ assert.match(r43Runtime,/new IntersectionObserver/);
+ assert.match(r43Runtime,/button\.addEventListener\('focus'/);
+ assert.match(r43Runtime,/const setActive=/);
+});
 test('R43 runtime provides scene-linked case navigation and an actionable SaaS workflow',()=>{
  assert.match(r43Runtime,/scrollIntoView/);
  assert.match(r43Runtime,/Capture/);

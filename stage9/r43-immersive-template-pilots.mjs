@@ -65,15 +65,25 @@ export const r43Runtime = String.raw`
    // Reuse the source template's own hero. R43 must not stack a second headline or duplicate nav/status copy.
    const index=make('ol','r43-agency-index');
    const labels=sections.map((s,i)=>text(s,'.designed-chapter-heading')||('Selected project '+String(i+1).padStart(2,'0')));
+   const setActive=activeIndex=>index.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===activeIndex)));
    sections.forEach((section,i)=>{
      const li=make('li'),button=make('button');button.type='button';button.setAttribute('aria-pressed',String(i===0));
      const small=make('small',null,'CASE / '+String(i+1).padStart(2,'0'));
      const strong=make('strong',null,labels[i]);button.append(small,strong);
-     button.addEventListener('mouseenter',()=>{index.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));button.setAttribute('aria-pressed','true')});
-     button.addEventListener('click',()=>{section.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});index.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));button.setAttribute('aria-pressed','true')});
+     button.addEventListener('mouseenter',()=>setActive(i));
+     button.addEventListener('focus',()=>setActive(i));
+     button.addEventListener('click',()=>{setActive(i);section.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})});
      li.append(button);index.append(li);
    });
    if(sections[0]) sections[0].after(index); else page.prepend(index);
+   // Keep the project index truthful while users scroll, not only after a button click.
+   if('IntersectionObserver' in window){
+     const observer=new IntersectionObserver(entries=>{
+       const current=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+       if(current){const activeIndex=sections.indexOf(current.target);if(activeIndex>=0)setActive(activeIndex)}
+     },{rootMargin:'-15% 0px -55% 0px',threshold:[0.1,0.25,0.5,0.75]});
+     sections.forEach(section=>observer.observe(section));
+   }
  } else {
    const shell=make('section','r43-saas-shell');shell.setAttribute('aria-label','Interactive product workflow demo');
    const top=make('div','r43-saas-top');top.append(make('span',null,'WORKFLOW / LIVE DEMO'),make('span',null,'01 — 03'));
