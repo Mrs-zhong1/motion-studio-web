@@ -33,7 +33,7 @@ server = None
 def capture(page, template, viewport, moment):
     SHOTS.mkdir(parents=True, exist_ok=True)
     path = SHOTS / f"{template}-{viewport}-{moment}.png"
-    page.screenshot(path=str(path), full_page=(moment == "opening"), animations="disabled", timeout=90000)
+    page.screenshot(path=str(path), full_page=False, animations="disabled", timeout=90000)
     raw = path.read_bytes()
     assert raw[:8] == bytes.fromhex("89504e470d0a1a0a"), f"Screenshot is not a valid PNG: {path}"
     assert len(raw) > 1000, f"Screenshot unexpectedly empty: {path} ({len(raw)} bytes)"
@@ -228,6 +228,16 @@ try:
                     child.wait_for_load_state("domcontentloaded", timeout=15000)
                     child.evaluate("document.fonts.ready")
                     child.wait_for_timeout(700)
+                    # Freeze the rendered moment only after the scene has had time to appear.
+                    # Fix the child viewport box so animated descendants cannot keep the body
+                    # bounding box unstable during Playwright's screenshot actionability check.
+                    child.evaluate("""() => {
+                        const style = document.createElement('style');
+                        style.textContent = 'html,body{width:100%!important;height:100%!important;min-height:100%!important;overflow:hidden!important;scroll-behavior:auto!important}*,*::before,*::after{animation-play-state:paused!important;transition:none!important}';
+                        document.head.appendChild(style);
+                        document.getAnimations({subtree:true}).forEach(animation => animation.pause());
+                    }""")
+                    child.wait_for_timeout(100)
                     frame_path = SHOTS / f"{template}-{viewport}-frame-{frame_index + 1:02d}.png"
                     child.locator("body").screenshot(
                         path=str(frame_path), animations="disabled", timeout=90000
@@ -240,6 +250,16 @@ try:
                         "chapter iframe screenshot is unexpectedly empty", template, viewport,
                         frame_index, len(frame_raw)
                     )
+                    from PIL import Image, ImageStat
+                    with Image.open(frame_path) as rendered_image:
+                        rendered_image.load()
+                        rgb = rendered_image.convert("RGB")
+                        color_count = len(rgb.getcolors(maxcolors=1000000) or [])
+                        color_spread = max(ImageStat.Stat(rgb).stddev)
+                    assert color_count >= 24 and color_spread >= 2.5, (
+                        "chapter screenshot appears visually blank/monochrome",
+                        template, viewport, frame_index, color_count, color_spread
+                    )
                     captured_frames.append({
                         "frameIndex": frame_index,
                         "title": child.title(),
@@ -249,6 +269,8 @@ try:
                         "nonEmpty": True,
                         "captureStrategy": "direct-srcdoc-body-screenshot",
                         "documentTextLength": len(child.locator("body").inner_text().strip()),
+                        "uniqueColorCount": color_count,
+                        "maxChannelStdDev": round(color_spread, 2),
                     })
                 template_result.setdefault("frameScreenshots", {})[viewport] = captured_frames
 
