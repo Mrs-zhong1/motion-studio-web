@@ -10,24 +10,12 @@ on:
       - 'stage9/r46-responsive-accessibility.mjs'
       - 'stage9/tests/test_r50_html_browser_acceptance.py'
       - '.github/workflows/r50-art-direction-pilot.yml'
-  push:
-    branches:
-      - design/r43-immersive-template-system
-    paths:
-      - 'stage9/Motion-Studio-Unified-Editor.html'
-      - 'stage9/build-offline.mjs'
-      - 'stage9/r43-immersive-template-pilots.mjs'
-      - 'stage9/r44-single-canvas-preview.mjs'
-      - 'stage9/r45-scene-composition.mjs'
-      - 'stage9/r46-responsive-accessibility.mjs'
-      - 'stage9/tests/test_r50_html_browser_acceptance.py'
-      - '.github/workflows/r50-art-direction-pilot.yml'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: r50-real-html-browser-${{ github.ref }}
-  cancel-in-progress: false
+  group: r50-real-html-browser-${{ github.event.pull_request.head.ref || github.ref }}
+  cancel-in-progress: true
 jobs:
   actual-html-browser-acceptance:
     name: Build and inspect actual Agency + SaaS exported HTML
