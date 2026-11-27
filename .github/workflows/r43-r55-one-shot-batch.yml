@@ -72,30 +72,30 @@ jobs:
         run: python -m unittest release.tests.test_asset_validation -v
       - name: Discover additional Wikimedia Commons photo candidates (metadata-only; no approval)
         id: r52_discover
-        if: always() && steps.r52_unit.outcome == 'success'
+        if: ${{ !cancelled() && steps.r52_unit.outcome == 'success' }}
         continue-on-error: true
         run: |
           python release/discover_r52_commons_candidates.py --max-new 10
       - name: R52 fetch candidate originals (review only; bounded per-file retries)
         id: r52_fetch
-        if: always() && steps.r52_unit.outcome == 'success'
+        if: ${{ !cancelled() && steps.r52_unit.outcome == 'success' }}
         continue-on-error: true
         run: python release/fetch_r52_candidate_evidence.py
       - name: R52 itemized rights evidence report (never auto-approve)
         id: r52_validate
-        if: always() && steps.r52_unit.outcome == 'success'
+        if: ${{ !cancelled() && steps.r52_unit.outcome == 'success' }}
         continue-on-error: true
         run: |
           mkdir -p batch-report
           python release/validate_r52_photo_rights.py --allow-incomplete --report batch-report/R52_PHOTO_RIGHTS_REPORT.json
       - name: Generate 33 original procedural artworks (no paid API, no stock imagery)
         id: r53_generate
-        if: always()
+        if: ${{ !cancelled() }}
         run: |
           python release/generate_r53_original_assets.py
       - name: Persist generated originals and evidence register to this PR branch
         id: r53_commit_assets
-        if: always() && steps.r53_generate.outcome == 'success'
+        if: ${{ !cancelled() && steps.r53_generate.outcome == 'success' }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -139,14 +139,14 @@ jobs:
           cp WEB_PRODUCT_E2E_RESULT_chromium.json ../batch-report/E2E_chromium.json
       - name: R48 reproducible candidate gate (candidate only; never release approval)
         id: r48_candidate
-        if: always() && steps.r47_chromium.outcome == 'success' && steps.e2e_chromium.outcome == 'success'
+        if: ${{ !cancelled() && steps.r47_chromium.outcome == 'success' && steps.e2e_chromium.outcome == 'success' }}
         continue-on-error: true
         working-directory: stage9
         run: |
           python tests/test_r48_release_gate.py
           cp R48_RELEASE_GATE.json ../batch-report/R48_CANDIDATE_GATE.json
       - name: Mark R48 HOLD when Chromium evidence is incomplete
-        if: always() && (steps.r47_chromium.outcome != 'success' || steps.e2e_chromium.outcome != 'success')
+        if: ${{ !cancelled() && (steps.r47_chromium.outcome != 'success' || steps.e2e_chromium.outcome != 'success') }}
         run: |
           mkdir -p batch-report
           printf '%s\n' '{"status":"HOLD","scope":"candidate-only","reason":"Chromium R47 and E2E evidence must both pass before R48 can run.","releaseApproval":false}' > batch-report/R48_CANDIDATE_GATE.json
