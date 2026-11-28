@@ -23,6 +23,8 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -45,6 +47,7 @@ jobs:
         working-directory: stage9
         env:
           R50_SCREENSHOT_DIR: /tmp/r50-html-browser
+          R50_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: python tests/test_r50_html_browser_acceptance.py
       - name: Publish real HTML browser evidence and manual approval boundary
         if: always()
@@ -80,7 +83,7 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-          name: r50-real-html-browser-evidence-${{ github.sha }}
+          name: r50-real-html-browser-evidence-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             /tmp/r50-html-browser/
             stage9/R50_HTML_BROWSER_ACCEPTANCE.json

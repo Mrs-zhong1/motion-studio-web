@@ -1,7 +1,7 @@
-# R56.1 — Reference register (verified 2026-11-27)
+# R56.1 — Reference register (verified 2026-11-28)
 
 Branch: design/r43-immersive-template-system  
-Research baseline: PR #4 head 398a81c7c59effb4348276384ef23ea91f385aa7  
+Research baseline: PR #4 head 21757995403366f1b977b705caab44142a6eef56 (before the 2026-11-28 harness and CSS corrections)  
 Purpose: record real, inspectable references for visual and interaction study. This is not a license grant and does not authorize copying assets, source code, layouts, text, brand identifiers, or client work.
 
 ## How to use threejs.cc
@@ -37,6 +37,40 @@ Purpose: record real, inspectable references for visual and interaction study. T
 - SaaS references support a guided product story: plain-language value proposition, one primary CTA, proof close to the claim, then a user-operated Capture → Shape → Deliver demo with meaningful state changes. A static dashboard image or decorative tab strip is insufficient.
 - The two templates must not share a generic hero/section skeleton with only color changes.
 - No reference image, logo, copy, client work, code, or downloadable media is to be copied into production without an item-specific rights check.
+
+## 2026-11-28 live revalidation
+
+The following pages were opened and inspected on 2026-11-28. These notes describe observable structure and interaction intent; they do not grant rights to copy the underlying site, client assets, copy, models, textures, or source code.
+
+### Three.js project discovery index
+
+- [threejs.cc English catalog](https://threejs.cc/en/catalog/) currently reports **1,039 projects**. Its visible taxonomy includes **Sites (63), Showcase (46), Tools (47), and Visual art (356)**. Counts are dynamic and should be rechecked when selecting new references.
+- The catalog is a discovery index, not a template marketplace. The most useful Agency-facing entries currently include:
+  - [Noomo Storytelling](https://threejs.cc/en/item/x-archive-auth-2102816849092378776-f95f8be0/) — glowing abstract forms, a glass phoenix, scroll-driven transitions and dramatic lighting; high-value reference for a single authored case narrative.
+  - [Noomo — Immersive Showcase](https://threejs.cc/en/item/x-archive-auth-2067340550521696688-109ffcd5/) — rotating geometry and animated imagery used to present projects instead of a conventional showreel; useful for a restrained 3D project transition.
+  - [Locomotive Agency Website](https://threejs.cc/en/item/x-archive-auth-2061252490826555706-4516d9fd/) — human/monitor 3D character paired with minimal typography; useful as a hero-art direction, not a whole page skeleton.
+  - [Bruno Simon Portfolio](https://threejs.cc/en/item/bruno-simon-com/) and [Active Theory](https://threejs.cc/en/item/activetheory-net/) — examples of navigable 3D portfolio storytelling and cinematic WebGL work.
+- The live [Locomotive work archive](https://locomotive.ca/en/work) exposes category filters with project counts and case cards containing client, location, concise context and case-study/visit links. The live [Noomo work archive](https://noomoagency.com/work) groups work with explicit tags such as 3D, storytelling, SaaS, enterprise and brand activation. These are useful for case metadata and portfolio information architecture.
+
+### Creative Agency — live site observations
+
+- [Pear](https://pear.no/) leads with a differentiated commercial model (no upfront/hourly fees; revenue share) and supports the claim with baseline measurement, attribution, service explanation, qualification and a short application path. Its chapter navigation separates Model / Work / Terms / Questions. Transfer the clarity of the proposition and evidence order, not its copy or revenue-share positioning.
+- [Grande Charte](https://grandecharte.co/) opens with a multi-language greeting/progress treatment, then moves through positioning, a featured case, client marks, service taxonomy, latest case studies, expertise and contact. Use the sequencing of proof and services; do not reproduce its brand, copy or imagery.
+- [Bruno Simon](https://bruno-simon.com/) is an interactive 3D world with published mouse/keyboard, mobile/tablet and gamepad controls, plus quality/renderer options and a behind-the-scenes explanation. The page states that its public source is under MIT; this does not clear third-party dependencies, fonts, models, music or any other asset for reuse. Motion Studio uses only the interaction principle of progressive controls and a graceful non-3D route.
+
+### SaaS — live product-tour observations
+
+- [Vercel Product Tour](https://vercel.com/product-tour) presents a multi-step product journey with visible actions including Develop, Import, Commit, Check build, View deployment, Monitor, Preview, Comment, Ship and Inspect.
+- [Vercel's tour design article](https://vercel.com/blog/designing-the-vercel-virtual-product-tour) explains the self-paced slideshow/progress model and the goal of letting prospective users experience product UI before sign-in, reducing friction until an "aha" moment.
+- [ThreeUI](https://threeui.com/) indexes sections, landing pages, buttons, 3D assets, backgrounds, text animation and UI effects, with source-backed component examples. Treat it as a component discovery source only; each component's actual license/terms must be checked before reuse.
+- [Framer Product Demo Builder](https://www.framer.com/marketplace/plugins/product-demo-builder/) advertises clickable hotspots, chapters, multiple visual skins, phone layouts and reopen/update workflows. The marketplace listing currently marks its license **Limited** and lists a one-time price; this is a workflow/competitor reference, not a reusable asset or implementation license.
+- [Noomo's Salesforce Platform case](https://noomoagency.com/work) is tagged Website / 3D / Storytelling / SaaS / Enterprise and is useful for presenting a complex platform as a guided story rather than a static dashboard.
+
+### Rights and evidence disposition
+
+- All ten curated references remain **reference-only**. No page image, logo, client mark, text, video, model, texture, font, source code or downloadable asset was copied into Motion Studio by this research.
+- Bruno Simon's stated MIT source license is a lead for a future exact-repository/dependency audit, not a blanket license for the live site or its media.
+- **External reference screenshots were not captured in this automation pass.** This revalidation is based on live-page HTML/text and catalog metadata with direct URLs. Do not describe it as screenshot evidence. A dedicated browser screenshot capture remains open if side-by-side image comparison is required.
 
 ## Evidence limitations
 

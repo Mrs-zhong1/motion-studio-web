@@ -25,6 +25,8 @@ on:
       - 'stage9/tests/test_r18_ai_folder_import.py'
       - 'stage9/tests/test_r19_browser_perf.py'
       - 'stage9/tests/test_r47_roundtrip_parity.py'
+      - 'stage9/tests/test_r50_html_browser_acceptance.py'
+      - '.github/workflows/r50-art-direction-pilot.yml'
       - 'stage9/tests/test_r48_release_gate.py'
       - 'stage9/three-scene-entry.js'
       - 'stage9/shared-three-scene.js'
@@ -95,6 +97,8 @@ jobs:
         working-directory: stage9
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

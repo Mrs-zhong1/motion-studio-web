@@ -1,6 +1,6 @@
 # R56.2 — Agency + SaaS flagship visual specifications
 
-Baseline: PR #4 head 398a81c7c59effb4348276384ef23ea91f385aa7  
+Baseline: PR #4 head 21757995403366f1b977b705caab44142a6eef56 (pre-correction audit baseline)  
 Design constraints: R43/R44/R45/R46 remain binding. These are implementation specifications, not approval claims.
 
 ## Creative Agency — Project Index / Case Story
@@ -102,3 +102,11 @@ Design constraints: R43/R44/R45/R46 remain binding. These are implementation spe
 - Test the actual standalone HTML produced by exportDocument(), not only editor preview.
 - Run Chromium, Firefox and WebKit round-trip tests. Capture desktop and mobile screenshots against the exact commit SHA.
 - Report functionality, visual evidence completeness, rights, physical-device and live-deployment gates separately. CI cannot grant human visual or legal approval.
+
+
+## 2026-11-28 implementation audit — open acceptance gaps
+
+- **R50 capture harness:** the 2026-11-27 run failed before it could produce page-level evidence. The exact error was Playwright `Locator.screenshot` timing out while waiting for the animated child iframe `body` bounding box to become stable. This is a capture-harness failure, not proof that the exported page is blank. The capture path is being changed to a parent-page viewport clip of the live iframe; new screenshots must be inspected before any visual conclusion.
+- **Agency project index placement:** R43 inserts the index after the first chapter while R45 positions it against the page container. The latest failed R50 run did not capture the parent page, so first-screen placement is not yet visually verified. Do not move or restyle it based on the child-frame screenshot alone.
+- **SaaS product-stage depth:** the current R43 workflow changes its title, explanatory copy, one text card and progress percentage across Capture / Shape / Deliver. That is a valid stateful interaction smoke, but it is not yet a convincing task-level product UI. R56.3 remains HOLD until the stage presents a real, coherent illustrative product surface whose content, ownership/priority and release state visibly change with each step.
+- The current R50 and R43/R45/R46 automated contracts are not human art-direction approval. The actual editor/export parity and Chromium/Firefox/WebKit runs must be tied to the exact new head SHA; human visual approval remains a separate gate.

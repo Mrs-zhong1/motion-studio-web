@@ -5,3 +5,8 @@ test('Agency project index overlays the hero scene',()=>{assert.match(R45_CSS,/r
 test('SaaS workflow is vertical and full width',()=>{assert.match(R45_CSS,/r43-saas-workflow\{display:flex!important;flex-direction:column/);assert.match(R45_CSS,/r43-saas-preview\{width:100%!important/)});
 test('R45 styles editor and standalone export',()=>{const out=applyR45TemplateComposition(fixture);assert.match(out,/id="r45-scene-composition-css"/);assert.match(out,/id="r45-composition-source"/);assert.match(out,/r45-export-composition/);assert.throws(()=>applyR45TemplateComposition(out),/duplicate/)});
 test('R45 fails closed if export hook is missing',()=>assert.throws(()=>applyR45TemplateComposition('<html><head></head><body></body></html>'),/hook missing/));
+test('R45 family rules use real CSS line breaks, not escaped nbody selectors',()=>{
+ assert.doesNotMatch(R45_CSS,/\\nbody/);
+ for(const family of ['play','print','object','film','plan','runway','museum','system'])
+  assert.ok(R45_CSS.includes('\nbody[data-r38-family="'+family+'"]'), 'missing independent '+family+' selector');
+});
