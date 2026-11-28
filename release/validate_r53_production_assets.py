@@ -27,6 +27,36 @@ def validate_svg(path):
   raise ValueError("SVG width/height must be 1600x900")
  return (1600,900)
 
+def audit_page_references(rows, manifest_path):
+ """Check whether candidate files enter the manifest consumed by the live export loader."""
+ try:
+  manifest=json.loads(manifest_path.read_text(encoding="utf-8"))
+  manifest_rows=manifest.get("assets",[])
+  if not isinstance(manifest_rows,list): raise ValueError("assets must be a list")
+  manifest_files={row.get("file") for row in manifest_rows if isinstance(row,dict)}
+  available=True
+  error=None
+ except (OSError,ValueError,TypeError) as exc:
+  manifest_rows=[]; manifest_files=set(); available=False; error=str(exc)
+ items=[{
+  "slotId":row.get("slotId",""),
+  "file":row.get("file",""),
+  "referencedByLiveExportManifest":bool(available and row.get("file") in manifest_files)
+ } for row in rows]
+ referenced=sum(1 for item in items if item["referencedByLiveExportManifest"])
+ return {
+  "manifestPath":str(manifest_path),
+  "manifestAvailable":available,
+  "manifestAssetCount":len(manifest_rows),
+  "expected":len(rows),
+  "referenced":referenced,
+  "unreferenced":len(rows)-referenced,
+  "unreferencedSlots":[item["slotId"] for item in items if not item["referencedByLiveExportManifest"]],
+  "items":items,
+  "error":error,
+  "status":"PASS" if available and referenced==len(rows) else "HOLD"
+ }
+
 def main():
  ap=argparse.ArgumentParser()
  ap.add_argument("--register",type=Path,default=Path("release/R53_PRODUCTION_ASSET_REGISTER.json"))
@@ -35,6 +65,10 @@ def main():
  ap.add_argument("--require-release",action="store_true")
  a=ap.parse_args(); doc=json.loads(a.register.read_text()); rows=doc.get("assets",[])
  errors=[]; accepted=[]; seen=set()
+ page_reference_audit=audit_page_references(rows,a.asset_root/"manifest.json")
+ for item in page_reference_audit["items"]:
+  if not item["referencedByLiveExportManifest"]:
+   errors.append(f"{item.get('slotId','')}: candidate file is not referenced by the live 39-chapter export manifest; remains review-only")
  expected={(t,c,"procedural") for t,cs in PROCEDURAL.items() for c in cs}|{(t,c,"photography") for t,cs in PHOTOGRAPHY.items() for c in cs}
  if len(rows)!=33: errors.append(f"expected 33 records, found {len(rows)}")
  for row in rows:
@@ -93,7 +127,7 @@ def main():
   if approval_ok: accepted.append(slot)
  missing=expected-seen
  if missing: errors.append(f"missing slots: {sorted(missing)}")
- report={"expected":33,"accepted":len(accepted),"acceptedSlots":accepted,"errors":errors,"status":"PASS" if not errors and len(accepted)==33 else "HOLD"}
+ report={"expected":33,"accepted":len(accepted),"acceptedSlots":accepted,"pageReferenceAudit":page_reference_audit,"errors":errors,"status":"PASS" if not errors and len(accepted)==33 and page_reference_audit["status"]=="PASS" else "HOLD"}
  print(json.dumps(report,indent=2))
  if a.report: a.report.write_text(json.dumps(report,indent=2)+"\n")
  if a.require_release and report["status"]!="PASS": raise SystemExit(1)

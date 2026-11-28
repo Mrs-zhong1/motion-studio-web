@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -41,6 +42,17 @@ class AssetGateUnitTests(unittest.TestCase):
         self.assertFalse(R53.valid_dimensions([1599,900]))
         self.assertFalse(R53.valid_dimensions([1600,1000]))
         self.assertFalse(R53.valid_dimensions([1600]))
+
+    def test_r53_page_reference_audit_uses_live_export_manifest(self):
+        with tempfile.TemporaryDirectory() as d:
+            manifest=Path(d)/"manifest.json"
+            manifest.write_text(json.dumps({"assets":[{"file":"agency-1.png"},{"file":"saas-1.svg"}]}),encoding="utf-8")
+            rows=[{"slotId":"agency-1","file":"agency-1.png"},{"slotId":"saas-1","file":"saas-1.svg"},{"slotId":"gallery-2","file":"gallery-2.png"}]
+            audit=R53.audit_page_references(rows,manifest)
+            self.assertEqual(audit["expected"],3)
+            self.assertEqual(audit["referenced"],2)
+            self.assertEqual(audit["unreferencedSlots"],["gallery-2"])
+            self.assertEqual(audit["status"],"HOLD")
 
     def test_r53_svg_requires_real_svg_root_and_canvas(self):
         with tempfile.TemporaryDirectory() as d:

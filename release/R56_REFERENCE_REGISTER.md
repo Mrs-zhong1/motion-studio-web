@@ -1,13 +1,13 @@
 # R56.1 — Reference register (verified 2026-11-28)
 
 Branch: design/r43-immersive-template-system  
-Research baseline: PR #4 head 21757995403366f1b977b705caab44142a6eef56 (before the 2026-11-28 harness and CSS corrections)  
+Research baseline: PR #4 head b9e73693c4ab538f657282149679c797d7f875df (pre-R56.3 product correction baseline)  
 Purpose: record real, inspectable references for visual and interaction study. This is not a license grant and does not authorize copying assets, source code, layouts, text, brand identifiers, or client work.
 
 ## How to use threejs.cc
 
 - Index: https://threejs.cc/en/ and https://threejs.cc/en/catalog/
-- The live index described itself as a collection of 1,028–1,034 projects during the 2026-11-26/27 checks, with categories including Sites, Showcase, Tools, Visual art, and interactive simulations.
+- The live English catalog reported 1,039 projects on 2026-11-28, with visible categories including Sites (63), Showcase (46), Tools (47), and Visual art (356). Counts are dynamic and should be rechecked.
 - It is a discovery/index layer, not a ready-made template pack. Open a listing, inspect the creator's original live site, and follow its source-code link only when present.
 - A listing or an outbound link is not a license. Reuse requires a separate review of the exact repository/file and its license; otherwise the item remains visual inspiration only.
 
@@ -72,6 +72,14 @@ The following pages were opened and inspected on 2026-11-28. These notes describ
 - Bruno Simon's stated MIT source license is a lead for a future exact-repository/dependency audit, not a blanket license for the live site or its media.
 - **External reference screenshots were not captured in this automation pass.** This revalidation is based on live-page HTML/text and catalog metadata with direct URLs. Do not describe it as screenshot evidence. A dedicated browser screenshot capture remains open if side-by-side image comparison is required.
 
+## Exact-SHA screenshot capture
+
+- Script: stage9/tests/capture_r56_references.py.
+- The R50 workflow now captures first-screen reference screenshots at 1440×900 and 390×844 for the nine unique URLs above, records response status/title/text sample/visible media counts/page errors, and hashes every PNG.
+- The reference captures are uploaded in the same exact-SHA artifact as the R50 exported-page screenshots: r50-r56-real-html-and-reference-evidence-<candidate SHA>.
+- This capture step is best-effort because third-party pages may block automation or change. A missing/blocked capture is recorded as unavailable, never inferred from a search snippet.
+- Screenshots are first-screen evidence only. They do not establish full interactive parity, source-code rights, asset licenses, or visual approval for Motion Studio.
+
 ## Evidence limitations
 
-This is a public-page content/interaction inspection record, not a complete device lab. Live motion, viewport-specific behavior and all interactive states still require browser inspection in the R56 evidence run. A reference's current appearance may change; record screenshots and capture date when the visual review batch is produced.
+This is a public-page content/interaction inspection record, not a complete device lab. Live motion and all interactive states still require human browser review. Mobile screenshot capture is automated evidence, not physical-device acceptance. A reference's current appearance may change; use the exact capture date and screenshot hashes from the R50/R56 artifact.

@@ -44,11 +44,34 @@ html[data-r43-template="saas"] .r43-saas-copy h2{font-size:clamp(30px,5vw,66px);
 html[data-r43-template="saas"] .r43-saas-copy p{max-width:38em;line-height:1.65;color:#476252}
 html[data-r43-template="saas"] .r43-saas-preview{min-height:220px;border-radius:16px;background:#14291f;color:#eaf4e7;padding:22px;display:grid;align-content:start;gap:14px}
 html[data-r43-template="saas"] .r43-saas-preview-bar{display:flex;gap:6px}
+html[data-r43-template="saas"] .r43-saas-preview-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid #ffffff28}
+html[data-r43-template="saas"] .r43-saas-preview-brand{font:800 10px ui-monospace,monospace;letter-spacing:.14em;color:#e7f5e5}
+html[data-r43-template="saas"] .r43-saas-preview-status{font:700 9px ui-monospace,monospace;letter-spacing:.1em;color:#b4f47d}
+html[data-r43-template="saas"] .r43-saas-preview-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+html[data-r43-template="saas"] .r43-saas-kpi{display:grid;gap:6px;padding:11px 12px;border:1px solid #ffffff25;border-radius:9px;background:#ffffff0a}
+html[data-r43-template="saas"] .r43-saas-kpi span{font:600 9px ui-monospace,monospace;color:#b8cfc0}
+html[data-r43-template="saas"] .r43-saas-kpi strong{font:700 clamp(18px,2vw,25px)/1 system-ui,sans-serif;color:#f2f8ef}
+html[data-r43-template="saas"] .r43-saas-preview-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(150px,.8fr);gap:10px;min-height:0}
+html[data-r43-template="saas"] .r43-saas-preview-list{display:grid;gap:8px;align-content:start}
+html[data-r43-template="saas"] .r43-saas-preview-item{display:grid;gap:6px;padding:11px 12px;border:1px solid #ffffff24;border-radius:9px;background:#ffffff09}
+html[data-r43-template="saas"] .r43-saas-preview-item-meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+html[data-r43-template="saas"] .r43-saas-preview-source,.r43-saas-preview-item-detail,.r43-saas-preview-owner{font:600 9px/1.4 ui-monospace,monospace;color:#b8cfc0}
+html[data-r43-template="saas"] .r43-saas-preview-tag{padding:3px 6px;border-radius:4px;background:#b4f47d20;color:#c8f4a5;font:800 8px ui-monospace,monospace;letter-spacing:.08em}
+html[data-r43-template="saas"] .r43-saas-preview-title{font:700 12px/1.3 system-ui,sans-serif;color:#f2f8ef}
+html[data-r43-template="saas"] .r43-saas-preview-item-detail{margin:0;color:#b8cfc0}
+html[data-r43-template="saas"] .r43-saas-preview-owner{justify-self:start;padding:3px 7px;border:1px solid #ffffff25;border-radius:20px}
+html[data-r43-template="saas"] .r43-saas-preview-side{display:flex;flex-direction:column;gap:10px;padding:15px;border:1px solid #ffffff2a;border-radius:10px;background:linear-gradient(145deg,#ffffff12,#ffffff04)}
+html[data-r43-template="saas"] .r43-saas-preview-side-kicker{font:700 9px ui-monospace,monospace;letter-spacing:.12em;color:#b4f47d}
+html[data-r43-template="saas"] .r43-saas-preview-side h3{margin:0;font:700 17px/1.15 system-ui,sans-serif;color:#f2f8ef}
+html[data-r43-template="saas"] .r43-saas-preview-side p{margin:0;font:400 11px/1.55 system-ui,sans-serif;color:#b8cfc0}
+html[data-r43-template="saas"] .r43-saas-preview-side-note{margin-top:auto;font:600 9px/1.45 ui-monospace,monospace;color:#e2efd9}
+html[data-r43-template="saas"] .r43-saas-preview-footer{font:700 8px ui-monospace,monospace;letter-spacing:.1em;color:#9db9a4}
+
 html[data-r43-template="saas"] .r43-saas-preview-bar i{width:7px;height:7px;border-radius:50%;background:#9fbea5}
 html[data-r43-template="saas"] .r43-saas-preview-card{border:1px solid #ffffff25;border-radius:10px;padding:16px;background:#ffffff0c}
 html[data-r43-template="saas"] .r43-saas-progress{height:5px;background:#ffffff24;border-radius:5px;overflow:hidden}
 html[data-r43-template="saas"] .r43-saas-progress span{display:block;height:100%;width:var(--r43-progress,25%);background:#b4f47d;transition:width .35s}
-html[data-r43-template="saas"] .r43-saas-cta{display:inline-flex;margin-top:16px;padding:11px 16px;background:#173428;color:#f0f5ed;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px}
+html[data-r43-template="saas"] .r43-saas-cta{display:inline-flex;align-items:center;justify-content:center;margin-top:16px;padding:11px 16px;background:#173428;color:#f0f5ed;border:0;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px;cursor:pointer}html[data-r43-template="saas"] .r43-saas-cta:focus-visible{outline:3px solid #173428;outline-offset:4px}
 @media(max-width:760px){html[data-r43-template="saas"] .r43-saas-shell{width:calc(100% - 24px);border-radius:14px}html[data-r43-template="saas"] .r43-saas-workflow{grid-template-columns:1fr;padding:22px;min-height:0}html[data-r43-template="saas"] .r43-saas-preview{min-height:190px}}
 `;
 
@@ -85,21 +108,67 @@ export const r43Runtime = String.raw`
      sections.forEach(section=>observer.observe(section));
    }
  } else {
-   const shell=make('section','r43-saas-shell');shell.setAttribute('aria-label','Interactive product workflow demo');
-   const top=make('div','r43-saas-top');top.append(make('span',null,'WORKFLOW / LIVE DEMO'),make('span',null,'01 — 03'));
-   const tabs=make('div','r43-saas-tabs');tabs.setAttribute('role','tablist');
-   const workflow=make('div','r43-saas-workflow');const copy=make('div','r43-saas-copy'),preview=make('div','r43-saas-preview');
-   const title=make('h2'),desc=make('p'),cta=make('a','r43-saas-cta','TRY THIS STEP');cta.href='#';cta.addEventListener('click',e=>{e.preventDefault();setStep(Math.min(2,active+1))});
+   const shell=make('section','r43-saas-shell');shell.setAttribute('aria-label','Interactive product workflow demo');shell.dataset.r43SaasDemo='true';
+   const top=make('div','r43-saas-top'),topBrand=make('span',null,'NORTHSTAR / PRODUCT WORKSPACE'),topStatus=make('span',null,'ILLUSTRATIVE DEMO DATA');top.append(topBrand,topStatus);
+   const tabs=make('div','r43-saas-tabs');tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','Product workflow steps');
+   const workflow=make('div','r43-saas-workflow'),copy=make('div','r43-saas-copy'),preview=make('div','r43-saas-preview');
+   preview.id='r43-saas-preview';preview.setAttribute('aria-label','Illustrative product workspace; not connected to a live account');
+   const title=make('h2'),desc=make('p'),cta=make('button','r43-saas-cta','CONTINUE TO SHAPE');cta.type='button';
    copy.append(title,desc,cta);
-   const bar=make('div','r43-saas-preview-bar');for(let i=0;i<3;i++)bar.append(make('i'));
-   const card=make('div','r43-saas-preview-card'),progress=make('div','r43-saas-progress'),fill=make('span');progress.append(fill);preview.append(bar,card,progress);workflow.append(copy,preview);
+   const previewHeader=make('div','r43-saas-preview-header');
+   previewHeader.append(make('strong','r43-saas-preview-brand','SIGNAL WORKSPACE'),make('span','r43-saas-preview-status','DEMO DATA'));
+   const metrics=make('div','r43-saas-preview-kpis');
+   const body=make('div','r43-saas-preview-body'),list=make('div','r43-saas-preview-list'),side=make('aside','r43-saas-preview-side');
+   const progress=make('div','r43-saas-progress');progress.setAttribute('role','progressbar');progress.setAttribute('aria-label','Workflow progress');progress.setAttribute('aria-valuemin','0');progress.setAttribute('aria-valuemax','100');
+   const fill=make('span');progress.append(fill);
+   body.append(list,side);
+   const footer=make('div','r43-saas-preview-footer','ILLUSTRATIVE WORKSPACE · SAMPLE DATA');
+   preview.append(previewHeader,metrics,body,footer);workflow.append(copy,preview);
    const steps=[
-    {name:'Capture',title:'Bring every signal into one place.',desc:'Collect requests, feedback and work items without losing their source.',card:'INBOX / 24 NEW SIGNALS',progress:'33%'},
-    {name:'Shape',title:'Turn raw input into clear work.',desc:'Group related signals, assign owners and make the next action visible.',card:'WORKSPACE / 08 PRIORITIES',progress:'66%'},
-    {name:'Deliver',title:'Move from decision to delivery.',desc:'Track progress, review outcomes and share a finished result.',card:'RELEASE / READY TO SHARE',progress:'100%'}
-   ];let active=0;
-   function setStep(n){active=n;const step=steps[n];title.textContent=step.title;desc.textContent=step.desc;card.textContent=step.card;fill.style.setProperty('--r43-progress',step.progress);tabs.querySelectorAll('button').forEach((b,i)=>{b.setAttribute('aria-pressed',String(i===n));b.setAttribute('aria-selected',String(i===n))});top.lastChild.textContent=String(n+1).padStart(2,'0')+' — 03';cta.textContent=n===2?'WORKFLOW COMPLETE':'CONTINUE TO '+steps[n+1].name.toUpperCase();cta.setAttribute('aria-label',cta.textContent)}
-   steps.forEach((step,i)=>{const b=make('button',null,step.name);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',()=>setStep(i));tabs.append(b)});
+    {name:'Capture',title:'Bring every signal into one place.',desc:'Collect customer requests, support themes and sales feedback while keeping every item connected to its source.',progress:33,
+     metrics:[['Signals','24'],['Sources','06'],['High priority','03']],
+     items:[
+      {source:'CUSTOMER VOICE',tag:'HIGH',title:'Checkout friction on mobile',detail:'14 mentions · Last 7 days',owner:'PRODUCT'},
+      {source:'SUPPORT INBOX',tag:'MEDIUM',title:'Saved views are hard to find',detail:'8 mentions · Last 7 days',owner:'DESIGN'},
+      {source:'SALES CALLS',tag:'HIGH',title:'Need a shared approval trail',detail:'5 mentions · Last 14 days',owner:'OPERATIONS'}
+     ],
+     sideKicker:'SIGNAL SOURCES',sideTitle:'Keep the context.',sideCopy:'Customer voice, support and sales notes stay connected to the original request instead of becoming disconnected tasks.',sideNote:'24 signals grouped from 6 sample sources.'},
+    {name:'Shape',title:'Turn raw input into clear work.',desc:'Group related signals, assign an owner and make priority, scope and the next action visible to the whole team.',progress:66,
+     metrics:[['Work groups','08'],['Owners','04'],['Ready','06']],
+     items:[
+      {source:'PRIORITY / 01',tag:'P1',title:'Reduce checkout friction',detail:'Owner: Maya · Due: 12 Dec',owner:'MAYA'},
+      {source:'PRIORITY / 02',tag:'P2',title:'Surface saved views',detail:'Owner: Leo · Due: 15 Dec',owner:'LEO'},
+      {source:'PRIORITY / 03',tag:'P2',title:'Add approval activity log',detail:'Owner: Ana · Due: 18 Dec',owner:'ANA'}
+     ],
+     sideKicker:'DECISION QUEUE',sideTitle:'Make ownership clear.',sideCopy:'A small, ranked queue turns repeated feedback into work with an owner, a due date and a visible reason to act.',sideNote:'3 sample priorities have named owners.'},
+    {name:'Deliver',title:'Move from decision to delivery.',desc:'Review the finished work, confirm release readiness and share a clear outcome with the people who raised the need.',progress:100,
+     metrics:[['Released','05'],['Ready to share','02'],['Next up','01']],
+     items:[
+      {source:'RELEASE / 01',tag:'SHIPPED',title:'Checkout flow improvements',detail:'QA complete · 4 of 4 checks',owner:'LIVE'},
+      {source:'RELEASE / 02',tag:'READY',title:'Saved views navigation',detail:'Release notes ready · 3 of 3 checks',owner:'LIVE'},
+      {source:'NEXT / 03',tag:'NEXT',title:'Approval activity log',detail:'Queued for the next cycle · 2 checks',owner:'TEAM'}
+     ],
+     sideKicker:'RELEASE HEALTH',sideTitle:'Close the loop.',sideCopy:'The team can see what shipped, what is ready to share and which request is moving into the next cycle.',sideNote:'2 sample updates are ready to share.'}
+   ];
+   let active=0;
+   function setStep(n){
+     active=n;const step=steps[n];title.textContent=step.title;desc.textContent=step.desc;
+     preview.dataset.step=step.name.toLowerCase();topStatus.textContent='DEMO DATA / '+String(n+1).padStart(2,'0')+' OF 03';
+     metrics.replaceChildren(...step.metrics.map(([label,value])=>{const metric=make('div','r43-saas-kpi');metric.append(make('span',null,label),make('strong',null,value));return metric}));
+     list.replaceChildren(...step.items.map(item=>{
+       const row=make('article','r43-saas-preview-item');row.setAttribute('data-demo-item','true');
+       const meta=make('div','r43-saas-preview-item-meta');meta.append(make('span','r43-saas-preview-source',item.source),make('span','r43-saas-preview-tag',item.tag));
+       row.append(meta,make('strong','r43-saas-preview-title',item.title),make('p','r43-saas-preview-item-detail',item.detail),make('span','r43-saas-preview-owner',item.owner));
+       return row;
+     }));
+     side.replaceChildren(make('span','r43-saas-preview-side-kicker',step.sideKicker),make('h3',null,step.sideTitle),make('p',null,step.sideCopy),progress,make('span','r43-saas-preview-side-note',step.sideNote));
+     progress.setAttribute('aria-valuenow',String(step.progress));fill.style.width=step.progress+'%';
+     footer.textContent='ILLUSTRATIVE WORKSPACE · SAMPLE DATA · NOT A LIVE ACCOUNT';
+     tabs.querySelectorAll('button').forEach((button,i)=>{button.setAttribute('aria-pressed',String(i===n));button.setAttribute('aria-selected',String(i===n))});
+     cta.textContent=n===2?'RESTART WORKFLOW':'CONTINUE TO '+steps[n+1].name.toUpperCase();cta.setAttribute('aria-label',cta.textContent);
+   }
+   steps.forEach((step,i)=>{const button=make('button',null,step.name);button.type='button';button.setAttribute('role','tab');button.setAttribute('aria-controls',preview.id);button.addEventListener('click',()=>setStep(i));tabs.append(button)});
+   cta.addEventListener('click',()=>setStep(active===2?0:active+1));
    shell.append(top,tabs,workflow);const anchor=sections[0]||page.firstChild;if(anchor)anchor.before(shell);else page.append(shell);setStep(0);
  }
 })();

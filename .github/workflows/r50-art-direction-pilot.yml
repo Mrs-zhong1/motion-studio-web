@@ -9,6 +9,9 @@ on:
       - 'stage9/r45-scene-composition.mjs'
       - 'stage9/r46-responsive-accessibility.mjs'
       - 'stage9/tests/test_r50_html_browser_acceptance.py'
+      - 'stage9/tests/capture_r56_references.py'
+      - 'release/R56_REFERENCE_REGISTER.md'
+      - 'release/R56_AGENCY_SAAS_VISUAL_SPEC.md'
       - '.github/workflows/r50-art-direction-pilot.yml'
   workflow_dispatch:
 permissions:
@@ -43,6 +46,12 @@ jobs:
         run: |
           python -m pip install playwright Pillow==11.3.0
           python -m playwright install --with-deps chromium
+      - name: R56 — capture live reference first screens (reference only)
+        continue-on-error: true
+        env:
+          R56_REFERENCE_DIR: /tmp/r56-reference-screenshots
+          R56_REFERENCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python stage9/tests/capture_r56_references.py
       - name: R50 — real standalone HTML browser acceptance (Agency + SaaS)
         working-directory: stage9
         env:
@@ -83,9 +92,10 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-          name: r50-real-html-browser-evidence-${{ github.event.pull_request.head.sha || github.sha }}
+          name: r50-r56-real-html-and-reference-evidence-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             /tmp/r50-html-browser/
+            /tmp/r56-reference-screenshots/
             stage9/R50_HTML_BROWSER_ACCEPTANCE.json
           if-no-files-found: warn
           retention-days: 14

@@ -6,12 +6,13 @@ It captures desktop/mobile full-page views plus all five rendered chapter iframe
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-import hashlib, json, os, subprocess, threading, traceback
+import base64, hashlib, json, os, subprocess, threading, traceback
 
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 EDITOR = ROOT / "Motion-Studio-Stage15-Meshopt-OFFLINE.html"
+R53_REGISTER = ROOT.parent / "release" / "R53_PRODUCTION_ASSET_REGISTER.json"
 OUT = ROOT / "R50_HTML_BROWSER_ACCEPTANCE.json"
 SHOTS = Path(os.environ.get("R50_SCREENSHOT_DIR", "/tmp/r50-html-browser"))
 TEMPLATES = ("agency", "saas")
@@ -84,8 +85,24 @@ try:
             assert 'id="r43-export-runtime"' in html
             assert 'data-r43-template="' + template + '"' in html
 
+            r53_register = json.loads(R53_REGISTER.read_text(encoding="utf-8"))
+            r53_candidates = [row for row in r53_register.get("assets", []) if row.get("template") == template]
+            r53_referenced = []
+            for row in r53_candidates:
+                candidate_path = ROOT / "ai-assets" / row["file"]
+                if candidate_path.is_file():
+                    encoded_asset = base64.b64encode(candidate_path.read_bytes()).decode("ascii")
+                    if encoded_asset in html:
+                        r53_referenced.append(row.get("slotId", row["file"]))
             template_result = {"exportBytes": len(html), "viewports": {},
-                               "editorErrors": editor_errors, "exportErrors": []}
+                               "editorErrors": editor_errors, "exportErrors": [],
+                               "r53CandidatePageReferenceAudit": {
+                                   "expectedSlots": len(r53_candidates),
+                                   "referencedSlots": r53_referenced,
+                                   "unreferencedSlots": [row.get("slotId", row["file"]) for row in r53_candidates
+                                                         if row.get("slotId", row["file"]) not in r53_referenced],
+                                   "status": "PASS" if len(r53_referenced) == len(r53_candidates) else "HOLD_REVIEW_ONLY"
+                               }}
             report["templates"][template] = template_result
             for viewport, width, height in (("desktop", 1440, 900), ("mobile", 390, 844)):
                 page = browser.new_page(viewport={"width": width, "height": height},
@@ -360,6 +377,19 @@ try:
                     buttons = index.locator("button")
                     count = buttons.count()
                     assert count >= 4, f"Agency project index too small: {count}"
+                    page.evaluate("window.scrollTo({top:0,behavior:'instant'})")
+                    page.wait_for_timeout(100)
+                    assert page.evaluate("scrollY") <= 1, "Agency opening capture did not reset to page top"
+                    first_section = page.locator(".page .section").nth(0).bounding_box()
+                    second_section = page.locator(".page .section").nth(1).bounding_box()
+                    index_box = index.bounding_box()
+                    assert first_section and second_section and index_box
+                    assert index_box["y"] >= first_section["y"] + first_section["height"] - 2, (
+                        "Agency index must follow the hero section in normal flow", first_section, index_box
+                    )
+                    assert index_box["y"] + index_box["height"] <= second_section["y"] + 2, (
+                        "Agency index must sit between the first and second case chapters", index_box, second_section
+                    )
                     capture(page, template, viewport, "opening")
                     buttons.nth(1).click()
                     page.wait_for_timeout(250)
@@ -384,18 +414,40 @@ try:
                     tabs = page.get_by_role("tab")
                     assert tabs.count() == 3
                     title = page.locator(".r43-saas-copy h2")
+                    preview = page.locator(".r43-saas-preview")
+                    metrics = preview.locator(".r43-saas-kpi")
+                    items = preview.locator("[data-demo-item='true']")
+                    side = preview.locator(".r43-saas-preview-side")
+                    progress = preview.locator("[role='progressbar']")
+                    assert metrics.count() == 3, "SaaS product stage must show three real summary metrics"
+                    assert items.count() == 3, "SaaS product stage must show three workflow records"
+                    assert side.is_visible() and progress.is_visible()
                     states = []
-                    for i, expected in enumerate(("Bring every signal", "Turn raw input", "Move from decision")):
+                    fingerprints = []
+                    expected_titles = ("Bring every signal", "Turn raw input", "Move from decision")
+                    expected_steps = ("capture", "shape", "deliver")
+                    expected_progress = ("33", "66", "100")
+                    for i, expected in enumerate(expected_titles):
                         tabs.nth(i).click()
                         assert expected in title.inner_text(), (i, title.inner_text())
                         assert tabs.nth(i).get_attribute("aria-selected") == "true"
+                        assert preview.get_attribute("data-step") == expected_steps[i]
+                        assert items.count() == 3 and metrics.count() == 3
+                        assert progress.get_attribute("aria-valuenow") == expected_progress[i]
                         states.append(title.inner_text())
+                        fingerprints.append(preview.inner_text())
                         capture(page, template, viewport, ("capture", "shape", "deliver")[i])
+                    assert len(set(fingerprints)) == 3, "SaaS step changes must update actual product content"
+                    cta = page.locator(".r43-saas-cta")
+                    assert cta.inner_text() == "RESTART WORKFLOW", "SaaS final step needs a meaningful restart action"
+                    cta.click()
+                    assert preview.get_attribute("data-step") == "capture"
+                    assert tabs.nth(0).get_attribute("aria-selected") == "true"
                     if viewport == "mobile":
-                        layout = page.locator(".r43-saas-workflow").evaluate(
-                            "e => getComputedStyle(e).flexDirection"
+                        columns = page.locator(".r43-saas-workflow").evaluate(
+                            "e => getComputedStyle(e).gridTemplateColumns.split(' ').length"
                         )
-                        assert layout == "column", f"SaaS mobile workflow not vertical: {layout}"
+                        assert columns == 1, f"SaaS mobile workflow must stack vertically: {columns}"
                         targets = tabs.evaluate_all(
                             "els => els.map(e => Math.round(e.getBoundingClientRect().height))"
                         )
@@ -403,6 +455,9 @@ try:
                     template_result["viewports"][viewport] = {
                         "workflowSteps": len(states), "states": states,
                         "workflowInteraction": "PASS",
+                        "productRecordsPerStep": 3,
+                        "metricsPerStep": 3,
+                        "progressValues": list(expected_progress),
                         "horizontalOverflow": max(0, geometry["width"]-geometry["viewport"]),
                     }
                 assert not errors, f"{template}/{viewport} browser errors: {errors}"
