@@ -74,6 +74,13 @@ jobs:
         run: |
           npm run build
           python tests/check_build.py
+      - name: R56 — capture live reference first screens (reference only)
+        id: r56_reference_capture
+        continue-on-error: true
+        env:
+          R56_REFERENCE_DIR: /tmp/r56-reference-screenshots
+          R56_REFERENCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python stage9/tests/capture_r56_references.py
       - name: Run R43-R46 design and interaction contracts
         id: design_contracts
         working-directory: stage9
@@ -88,6 +95,7 @@ jobs:
         working-directory: stage9
         env:
           R50_SCREENSHOT_DIR: /tmp/r50-html-browser
+          R50_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           python tests/test_r50_html_browser_acceptance.py
           mkdir -p ../batch-report
@@ -247,6 +255,7 @@ jobs:
             'technicalStepOutcomes':{name:steps.get(name,{}).get('outcome','not-run') for name in technical},
             'technicalFailures':failed,
             'R50':'REAL_HTML_BROWSER_CHECK; human visual art-direction and rights approval still required',
+            'R56_reference_capture':steps.get('r56_reference_capture',{}).get('outcome','not-run'),
             'R52':'REPORT_ONLY; every photo requires itemized source/license and human review',
             'R53':'FAIL_CLOSED; all 33 original assets and explicit approvals required',
             'R47':'PASS only if Chromium, Firefox and WebKit parity reports pass on this SHA',
@@ -281,6 +290,7 @@ jobs:
           path: |
             batch-report/
             /tmp/r50-html-browser/
+            /tmp/r56-reference-screenshots/
             r50-review/
             r52-candidates/
             stage9/R47_ROUNDTRIP_PARITY.json
