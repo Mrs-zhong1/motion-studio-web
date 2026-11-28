@@ -40,21 +40,9 @@ on:
       - 'release/validate_r52_photo_rights.py'
       - 'release/fetch_r52_candidate_evidence.py'
       - 'release/discover_r52_commons_candidates.py'
-    paths:
-      - '.github/workflows/r43-r55-one-shot-batch.yml'
-      - 'stage9/Motion-Studio-Unified-Editor.html'
-      - 'stage9/build-offline.mjs'
-      - 'stage9/r43-immersive-template-pilots.mjs'
-      - 'stage9/r44-single-canvas-preview.mjs'
-      - 'stage9/r45-scene-composition.mjs'
-      - 'stage9/r46-responsive-accessibility.mjs'
-      - 'stage9/tests/**'
-      - 'release/generate_r53_original_assets.py'
-      - 'release/validate_r53_production_assets.py'
-      - 'release/create_r53_review_contact_sheet.py'
-      - 'release/validate_r52_photo_rights.py'
-      - 'release/fetch_r52_candidate_evidence.py'
-      - 'release/discover_r52_commons_candidates.py'
+      - 'release/tests/test_asset_validation.py'
+      - 'release/R56_REFERENCE_REGISTER.md'
+      - 'release/R56_AGENCY_SAAS_VISUAL_SPEC.md'
 permissions:
   contents: write
 concurrency:
