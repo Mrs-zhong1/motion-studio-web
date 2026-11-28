@@ -1,0 +1,626 @@
+{
+  "schema": "motion-studio-r52-itemized-rights-evidence-v2",
+  "candidateSha": "844026ba40e121dd2213696599dd9f62787c29d6",
+  "rows": 15,
+  "expected": 15,
+  "accepted": 0,
+  "acceptedSlots": [],
+  "heldSlots": [
+    "architecture-02",
+    "architecture-03",
+    "architecture-04",
+    "architecture-05",
+    "cinematic-02",
+    "cinematic-03",
+    "cinematic-04",
+    "cinematic-05",
+    "editorial-02",
+    "editorial-03",
+    "editorial-04",
+    "fashion-02",
+    "fashion-03",
+    "fashion-04",
+    "fashion-05"
+  ],
+  "slots": [
+    {
+      "slotId": "architecture-02",
+      "template": "architecture",
+      "chapter": 2,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-002",
+          "proposedSlot": "architecture-02",
+          "template": "architecture",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Office_building_in_Bereslavka.jpg",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/9/92/Office_building_in_Bereslavka.jpg",
+          "creator": "Alexander One Rule",
+          "licenseId": "CC0-1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceSha1": "09fdfbb8c29298f4de7f68b512dac6670cc34189",
+          "localFile": "R52-CAND-002-Office_building_in_Bereslavka.jpg",
+          "localSha256": "ea168a3bc3731d0fc2b188c953d5e06ee07f0341b5b5d7b16fc58a98ff2a512e",
+          "downloadIntegrity": "PASS",
+          "rightsReviewStatus": "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+          "visualReviewStatus": "NOT_REVIEWED",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    },
+    {
+      "slotId": "architecture-03",
+      "template": "architecture",
+      "chapter": 3,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-003",
+          "proposedSlot": "architecture-03",
+          "template": "architecture",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Loyola_College.jpg",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Loyola_College.jpg",
+          "creator": "Venkatabhaskar",
+          "licenseId": "CC0-1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceSha1": "60adbca06ae5caeba66de9b4580c1ae7cc4390c0",
+          "localFile": "R52-CAND-003-Loyola_College.jpg",
+          "localSha256": "f20aeb3de809f687120915b47ba510718bf134680fb378eb8c8d49ca55be009e",
+          "downloadIntegrity": "PASS",
+          "rightsReviewStatus": "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+          "visualReviewStatus": "NOT_REVIEWED",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    },
+    {
+      "slotId": "architecture-04",
+      "template": "architecture",
+      "chapter": 4,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "NOT_SOURCED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "no_candidate_lead_recorded",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": []
+    },
+    {
+      "slotId": "architecture-05",
+      "template": "architecture",
+      "chapter": 5,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "NOT_SOURCED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "no_candidate_lead_recorded",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": []
+    },
+    {
+      "slotId": "cinematic-02",
+      "template": "cinematic",
+      "chapter": 2,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-001",
+          "proposedSlot": "cinematic-02",
+          "template": "cinematic",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Green_screen_hollywood_studio_staging_direction_recording_1080p_with_illumination_cc0_1080p.png",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/6/61/Green_screen_hollywood_studio_staging_direction_recording_1080p_with_illumination_cc0_1080p.png",
+          "creator": "Sourecgunart1",
+          "licenseId": "CC0-1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceSha1": "3dbf3e1f353a3302238163bb31f66d34e58352a3",
+          "localFile": "R52-CAND-001-Green_screen_hollywood_studio_staging_direction_recording_1080p_with_illumination_cc0_1080p.png",
+          "localSha256": "90b8096cc7609610970a531749f719b57238e35509f645ebd62ce3101563e96d",
+          "downloadIntegrity": "PASS",
+          "rightsReviewStatus": "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+          "visualReviewStatus": "NOT_REVIEWED",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    },
+    {
+      "slotId": "cinematic-03",
+      "template": "cinematic",
+      "chapter": 3,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "NOT_SOURCED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "no_candidate_lead_recorded",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": []
+    },
+    {
+      "slotId": "cinematic-04",
+      "template": "cinematic",
+      "chapter": 4,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "NOT_SOURCED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "no_candidate_lead_recorded",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": []
+    },
+    {
+      "slotId": "cinematic-05",
+      "template": "cinematic",
+      "chapter": 5,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "NOT_SOURCED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "no_candidate_lead_recorded",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": []
+    },
+    {
+      "slotId": "editorial-02",
+      "template": "editorial",
+      "chapter": 2,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-004",
+          "proposedSlot": "editorial-02",
+          "template": "editorial",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Presss_meet.png",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Presss_meet.png",
+          "creator": "Gunjan Raj Giri",
+          "licenseId": "CC0-1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceSha1": "",
+          "localFile": null,
+          "localSha256": null,
+          "downloadIntegrity": "NOT_DOWNLOADED",
+          "rightsReviewStatus": "",
+          "visualReviewStatus": "REJECTED_VISUAL_CONTENT",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    },
+    {
+      "slotId": "editorial-03",
+      "template": "editorial",
+      "chapter": 3,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "NOT_SOURCED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "no_candidate_lead_recorded",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": []
+    },
+    {
+      "slotId": "editorial-04",
+      "template": "editorial",
+      "chapter": 4,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "NOT_SOURCED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "no_candidate_lead_recorded",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": []
+    },
+    {
+      "slotId": "fashion-02",
+      "template": "fashion",
+      "chapter": 2,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-005",
+          "proposedSlot": "fashion-02",
+          "template": "fashion",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Ayollar_milliy_libosi_01.png",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Ayollar_milliy_libosi_01.png",
+          "creator": "AIDEPCUL",
+          "licenseId": "CC-BY-4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "sourceSha1": "",
+          "localFile": null,
+          "localSha256": null,
+          "downloadIntegrity": "NOT_DOWNLOADED",
+          "rightsReviewStatus": "",
+          "visualReviewStatus": "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    },
+    {
+      "slotId": "fashion-03",
+      "template": "fashion",
+      "chapter": 3,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-006",
+          "proposedSlot": "fashion-03",
+          "template": "fashion",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Yoshi_katta_ayol_obrazi.png",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Yoshi_katta_ayol_obrazi.png",
+          "creator": "AIDEPCUL",
+          "licenseId": "CC-BY-4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "sourceSha1": "3bc105f7de14378e3de138255c4864f4b821964f",
+          "localFile": "R52-CAND-006-Yoshi_katta_ayol_obrazi.png",
+          "localSha256": "7436b1a0355a2be045a05778dd48a35a4df7d3ec2268916dd9936e8928520426",
+          "downloadIntegrity": "PASS",
+          "rightsReviewStatus": "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+          "visualReviewStatus": "NOT_REVIEWED",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    },
+    {
+      "slotId": "fashion-04",
+      "template": "fashion",
+      "chapter": 4,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-007",
+          "proposedSlot": "fashion-04",
+          "template": "fashion",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Xorazmlik_ayol_obrazi.png",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Xorazmlik_ayol_obrazi.png",
+          "creator": "AIDEPCUL",
+          "licenseId": "CC-BY-4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "sourceSha1": "27a33282b1a9115728f09aa247df827ee9bf19a2",
+          "localFile": "R52-CAND-007-Xorazmlik_ayol_obrazi.png",
+          "localSha256": "e96853a5572ca55da0bb946a13d60fc0bcf26f4df7460143d8ef03f7e7b10f8a",
+          "downloadIntegrity": "PASS",
+          "rightsReviewStatus": "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+          "visualReviewStatus": "NOT_REVIEWED",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    },
+    {
+      "slotId": "fashion-05",
+      "template": "fashion",
+      "chapter": 5,
+      "registerReviewStatus": "NOT_SOURCED",
+      "status": "CANDIDATE_REVIEW_REQUIRED",
+      "accepted": false,
+      "productionEligible": false,
+      "missingFields": [
+        "attribution",
+        "creator",
+        "downloaded_at_utc",
+        "license_id",
+        "license_url",
+        "local_file",
+        "original_height",
+        "original_width",
+        "sha256",
+        "source_page_url"
+      ],
+      "holdReasons": [
+        "register_missing_fields:attribution,creator,downloaded_at_utc,license_id,license_url,local_file,original_height,original_width,sha256,source_page_url",
+        "candidate_leads_exist_but_are_not_accepted_into_the_rights_register",
+        "explicit_human_approval_missing"
+      ],
+      "candidates": [
+        {
+          "candidateId": "R52-CAND-008",
+          "proposedSlot": "fashion-05",
+          "template": "fashion",
+          "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Ayollar_kundalik_kiyimi.png",
+          "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Ayollar_kundalik_kiyimi.png",
+          "creator": "AIDEPCUL",
+          "licenseId": "CC-BY-4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "sourceSha1": "006020b57e33d59cd7863f81e88be44783651231",
+          "localFile": "R52-CAND-008-Ayollar_kundalik_kiyimi.png",
+          "localSha256": "839e01dead48277d16a65e8ef55d8763c3dc0d987c8df9a55402f566fbf8775e",
+          "downloadIntegrity": "PASS",
+          "rightsReviewStatus": "CANDIDATE_LICENSE_PAGE_VERIFIED_ORIGINAL_NOT_DOWNLOADED",
+          "visualReviewStatus": "NOT_REVIEWED",
+          "productionEligible": false,
+          "approvalBoundary": "Downloaded candidate evidence is not human rights or visual approval."
+        }
+      ]
+    }
+  ],
+  "candidateSummary": {
+    "ledgerRows": 8,
+    "candidateLeads": 8,
+    "downloadedOriginals": 6,
+    "downloadErrors": [],
+    "unfilledDiscoverySlots": [
+      {
+        "slot": "architecture-04",
+        "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+      },
+      {
+        "slot": "architecture-05",
+        "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+      },
+      {
+        "slot": "cinematic-03",
+        "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+      },
+      {
+        "slot": "cinematic-04",
+        "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+      },
+      {
+        "slot": "cinematic-05",
+        "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+      },
+      {
+        "slot": "editorial-03",
+        "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+      },
+      {
+        "slot": "editorial-04",
+        "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+      }
+    ],
+    "autoApproval": false
+  },
+  "errors": [],
+  "humanApprovalRequired": true,
+  "productionEligible": false,
+  "status": "HOLD",
+  "boundary": "Commons metadata, source pages, downloaded originals and hashes are evidence only; no visual suitability, legal or production approval is inferred."
+}

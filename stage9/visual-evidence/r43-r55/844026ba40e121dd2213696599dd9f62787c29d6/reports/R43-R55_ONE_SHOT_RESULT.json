@@ -1,0 +1,283 @@
+{
+  "schema": "motion-studio-r43-r55-one-shot-batch-v2",
+  "commit": "844026ba40e121dd2213696599dd9f62787c29d6",
+  "candidateSha": "844026ba40e121dd2213696599dd9f62787c29d6",
+  "workflowHeadSha": "301d991f87edb895168804fde4069a0328a415fd",
+  "stageShas": {
+    "R50": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "R56": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "R52": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "R53": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "R48": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "R47_chromium": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "E2E_chromium": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "R47_firefox": null,
+    "E2E_firefox": null,
+    "R47_webkit": null,
+    "E2E_webkit": null
+  },
+  "shaMismatches": {},
+  "branch": "4/merge",
+  "workflowJobStatus": "success",
+  "technicalStepOutcomes": {
+    "r53_generate": "success",
+    "r53_commit_assets": "success",
+    "build_editor": "success",
+    "design_contracts": "success",
+    "r50_browser": "success",
+    "r52_unit": "success",
+    "r52_discover": "success",
+    "r52_fetch": "success",
+    "r52_validate": "success",
+    "r52_contact_sheet": "success",
+    "r53_validate": "success",
+    "r53_contact_sheet": "success",
+    "r47_chromium": "success",
+    "e2e_chromium": "success",
+    "r48_candidate": "success",
+    "r47_firefox": "success",
+    "e2e_firefox": "success",
+    "r47_webkit": "success",
+    "e2e_webkit": "success"
+  },
+  "technicalFailures": [],
+  "R50": "PASS_BROWSER_FUNCTIONALITY_ONLY; human visual art-direction and rights approval still required",
+  "R56_reference_capture": "PASS",
+  "R52": "HOLD; every photo requires itemized source/license and human review",
+  "R53": "HOLD; all 33 original assets and explicit approvals required",
+  "R53_pageReferenceAudit": {
+    "manifestPath": "stage9/ai-assets/manifest.json",
+    "manifestAvailable": true,
+    "manifestAssetCount": 39,
+    "expected": 33,
+    "referenced": 0,
+    "unreferenced": 33,
+    "unreferencedSlots": [
+      "agency-1",
+      "agency-2",
+      "agency-3",
+      "agency-4",
+      "agency-5",
+      "product-3d-2",
+      "product-3d-3",
+      "product-3d-4",
+      "product-3d-5",
+      "gallery-2",
+      "gallery-3",
+      "gallery-4",
+      "gallery-5",
+      "saas-1",
+      "saas-2",
+      "saas-3",
+      "saas-4",
+      "saas-5",
+      "architecture-2",
+      "architecture-3",
+      "architecture-4",
+      "architecture-5",
+      "cinematic-2",
+      "cinematic-3",
+      "cinematic-4",
+      "cinematic-5",
+      "editorial-2",
+      "editorial-3",
+      "editorial-4",
+      "fashion-2",
+      "fashion-3",
+      "fashion-4",
+      "fashion-5"
+    ],
+    "items": [
+      {
+        "slotId": "agency-1",
+        "file": "agency-1.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "agency-2",
+        "file": "agency-2.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "agency-3",
+        "file": "agency-3.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "agency-4",
+        "file": "agency-4.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "agency-5",
+        "file": "agency-5.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "product-3d-2",
+        "file": "product-3d-2.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "product-3d-3",
+        "file": "product-3d-3.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "product-3d-4",
+        "file": "product-3d-4.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "product-3d-5",
+        "file": "product-3d-5.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "gallery-2",
+        "file": "gallery-2.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "gallery-3",
+        "file": "gallery-3.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "gallery-4",
+        "file": "gallery-4.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "gallery-5",
+        "file": "gallery-5.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "saas-1",
+        "file": "saas-1.svg",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "saas-2",
+        "file": "saas-2.svg",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "saas-3",
+        "file": "saas-3.svg",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "saas-4",
+        "file": "saas-4.svg",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "saas-5",
+        "file": "saas-5.svg",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "architecture-2",
+        "file": "architecture-2.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "architecture-3",
+        "file": "architecture-3.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "architecture-4",
+        "file": "architecture-4.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "architecture-5",
+        "file": "architecture-5.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "cinematic-2",
+        "file": "cinematic-2.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "cinematic-3",
+        "file": "cinematic-3.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "cinematic-4",
+        "file": "cinematic-4.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "cinematic-5",
+        "file": "cinematic-5.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "editorial-2",
+        "file": "editorial-2.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "editorial-3",
+        "file": "editorial-3.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "editorial-4",
+        "file": "editorial-4.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "fashion-2",
+        "file": "fashion-2.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "fashion-3",
+        "file": "fashion-3.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "fashion-4",
+        "file": "fashion-4.png",
+        "referencedByLiveExportManifest": false
+      },
+      {
+        "slotId": "fashion-5",
+        "file": "fashion-5.png",
+        "referencedByLiveExportManifest": false
+      }
+    ],
+    "error": null,
+    "status": "HOLD"
+  },
+  "R47_by_browser": {
+    "chromium": "NOT_RUN",
+    "firefox": "NOT_RUN",
+    "webkit": "NOT_RUN"
+  },
+  "E2E_by_browser": {
+    "chromium": "NOT_RUN",
+    "firefox": "NOT_RUN",
+    "webkit": "NOT_RUN"
+  },
+  "R48_status": "PASS_CANDIDATE_ONLY",
+  "R47_gate": "PASS only if Chromium, Firefox and WebKit parity reports pass on this SHA",
+  "R48_gate": "CANDIDATE_ONLY; never a merge, publish or production approval",
+  "overall": "HOLD",
+  "releaseEligible": false,
+  "humanGates": [
+    "R50 exact-SHA real exported-HTML visual art-direction review",
+    "R52 photo-by-photo source/license/attribution review",
+    "R53 33 original asset approvals",
+    "R54 physical-device evidence",
+    "R55 exact-SHA HTTPS deployment and live smoke"
+  ],
+  "automationBoundary": "The 33-asset persistence commit happens before build, reference capture, exported-page screenshots, rights reports, R47/E2E and R48. All stage reports must match candidateSha. The later evidence-only archive commit is stored separately under this SHA. No legal approval, visual signoff, device evidence, or production approval is fabricated."
+}

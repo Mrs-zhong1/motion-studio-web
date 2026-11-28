@@ -1,0 +1,86 @@
+{
+  "pass": true,
+  "suite": "R47 eight-template save/reopen/export parity",
+  "templates": {
+    "editorial": {
+      "sections": 4,
+      "exportBytes": 154128,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "product-3d": {
+      "sections": 5,
+      "exportBytes": 1794151,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "cinematic": {
+      "sections": 5,
+      "exportBytes": 187423,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "architecture": {
+      "sections": 5,
+      "exportBytes": 370715,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "agency": {
+      "sections": 5,
+      "exportBytes": 355594,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "fashion": {
+      "sections": 5,
+      "exportBytes": 339003,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "gallery": {
+      "sections": 5,
+      "exportBytes": 365044,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "saas": {
+      "sections": 5,
+      "exportBytes": 317520,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    }
+  },
+  "errors": [],
+  "browserDiagnostics": {
+    "pageErrors": [],
+    "consoleErrors": []
+  },
+  "browser": "chromium",
+  "candidateSha": "844026ba40e121dd2213696599dd9f62787c29d6",
+  "candidateShaSource": "git rev-parse HEAD after R53 asset persistence"
+}
