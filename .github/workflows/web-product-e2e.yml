@@ -86,6 +86,7 @@ permissions:
   contents: write
 jobs:
   web-product-e2e:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     strategy:

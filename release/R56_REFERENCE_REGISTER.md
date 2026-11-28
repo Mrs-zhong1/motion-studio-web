@@ -7,7 +7,7 @@ Purpose: record real, inspectable references for visual and interaction study. T
 ## How to use threejs.cc
 
 - Index: https://threejs.cc/en/ and https://threejs.cc/en/catalog/
-- The live English catalog reported 1,039 projects on 2026-11-28, with visible categories including Sites (63), Showcase (46), Tools (47), and Visual art (356). Counts are dynamic and should be rechecked.
+- The live English catalog reported 1,172 projects on 2026-11-28, with visible categories including Sites (65), Showcase (49), Tools (52), and Visual art (404). Counts are dynamic and should be rechecked.
 - It is a discovery/index layer, not a ready-made template pack. Open a listing, inspect the creator's original live site, and follow its source-code link only when present.
 - A listing or an outbound link is not a license. Reuse requires a separate review of the exact repository/file and its license; otherwise the item remains visual inspiration only.
 
@@ -44,7 +44,7 @@ The following pages were opened and inspected on 2026-11-28. These notes describ
 
 ### Three.js project discovery index
 
-- [threejs.cc English catalog](https://threejs.cc/en/catalog/) currently reports **1,039 projects**. Its visible taxonomy includes **Sites (63), Showcase (46), Tools (47), and Visual art (356)**. Counts are dynamic and should be rechecked when selecting new references.
+- [threejs.cc English catalog](https://threejs.cc/en/catalog/) currently reports **1,172 projects**. Its visible taxonomy includes **Sites (65), Showcase (49), Tools (52), and Visual art (404)**. Counts are dynamic and should be rechecked when selecting new references.
 - The catalog is a discovery index, not a template marketplace. The most useful Agency-facing entries currently include:
   - [Noomo Storytelling](https://threejs.cc/en/item/x-archive-auth-2102816849092378776-f95f8be0/) — glowing abstract forms, a glass phoenix, scroll-driven transitions and dramatic lighting; high-value reference for a single authored case narrative.
   - [Noomo — Immersive Showcase](https://threejs.cc/en/item/x-archive-auth-2067340550521696688-109ffcd5/) — rotating geometry and animated imagery used to present projects instead of a conventional showreel; useful for a restrained 3D project transition.
@@ -55,7 +55,7 @@ The following pages were opened and inspected on 2026-11-28. These notes describ
 ### Creative Agency — live site observations
 
 - [Pear](https://pear.no/) leads with a differentiated commercial model (no upfront/hourly fees; revenue share) and supports the claim with baseline measurement, attribution, service explanation, qualification and a short application path. Its chapter navigation separates Model / Work / Terms / Questions. Transfer the clarity of the proposition and evidence order, not its copy or revenue-share positioning.
-- [Grande Charte](https://grandecharte.co/) opens with a multi-language greeting/progress treatment, then moves through positioning, a featured case, client marks, service taxonomy, latest case studies, expertise and contact. Use the sequencing of proof and services; do not reproduce its brand, copy or imagery.
+- [Grande Charte](https://grandecharte.co/en) currently leads with an 8+ years positioning statement for websites, AI products, brands and systems, followed by a featured business-intelligence case, client proof, service categories, case studies and a direct project-contact path. Its [legal notice](https://grandecharte.co/en/legal-notice) explicitly protects text, photographs, illustrations, video, graphics, logos, trademarks, interfaces, navigation, site structure, developments and source code; reproduction or exploitation without prior authorization is prohibited. Use only the information hierarchy as inspiration; do not reproduce its brand, copy, imagery or implementation.
 - [Bruno Simon](https://bruno-simon.com/) is an interactive 3D world with published mouse/keyboard, mobile/tablet and gamepad controls, plus quality/renderer options and a behind-the-scenes explanation. The page states that its public source is under MIT; this does not clear third-party dependencies, fonts, models, music or any other asset for reuse. Motion Studio uses only the interaction principle of progressive controls and a graceful non-3D route.
 
 ### SaaS — live product-tour observations
@@ -70,13 +70,13 @@ The following pages were opened and inspected on 2026-11-28. These notes describ
 
 - All ten curated references remain **reference-only**. No page image, logo, client mark, text, video, model, texture, font, source code or downloadable asset was copied into Motion Studio by this research.
 - Bruno Simon's stated MIT source license is a lead for a future exact-repository/dependency audit, not a blanket license for the live site or its media.
-- **External reference screenshots were not captured in this automation pass.** This revalidation is based on live-page HTML/text and catalog metadata with direct URLs. Do not describe it as screenshot evidence. A dedicated browser screenshot capture remains open if side-by-side image comparison is required.
+- The initial text/HTML revalidation recorded live-page structure and catalog metadata but did not itself capture reference screenshots. The current R43–R55 one-shot pipeline now performs the separate browser capture at desktop and mobile viewports, records exact candidate SHA and image hashes, and archives the review copies under stage9/visual-evidence/r43-r55/<candidate SHA>. Do not treat those screenshots as visual approval or reuse permission.
 
 ## Exact-SHA screenshot capture
 
 - Script: stage9/tests/capture_r56_references.py.
 - The R50 workflow now captures first-screen reference screenshots at 1440×900 and 390×844 for the ten unique URLs above, records response status/title/text sample/visible media counts/page errors, and hashes every PNG.
-- The reference captures are uploaded in the same exact-SHA artifact as the R50 exported-page screenshots: r50-r56-real-html-and-reference-evidence-<candidate SHA>.
+- The reference captures are uploaded in the R43–R55 exact-SHA artifact and persisted as compressed review copies with their original PNG SHA-256 values in stage9/visual-evidence/r43-r55/<candidate SHA>/.
 - This capture step is best-effort because third-party pages may block automation or change. A missing/blocked capture is recorded as unavailable, never inferred from a search snippet.
 - Screenshots are first-screen evidence only. They do not establish full interactive parity, source-code rights, asset licenses, or visual approval for Motion Studio.
 

@@ -1,19 +1,5 @@
 name: R50 Real HTML Browser Review (visual approval remains manual)
 on:
-  pull_request:
-    paths:
-      - 'stage9/Motion-Studio-Unified-Editor.html'
-      - 'stage9/build-offline.mjs'
-      - 'stage9/r43-immersive-template-pilots.mjs'
-      - 'stage9/r44-single-canvas-preview.mjs'
-      - 'stage9/r45-scene-composition.mjs'
-      - 'stage9/r46-responsive-accessibility.mjs'
-      - 'stage9/tests/test_r50_html_browser_acceptance.py'
-      - 'stage9/tests/test_r45_scene_composition.mjs'
-      - 'stage9/tests/capture_r56_references.py'
-      - 'release/R56_REFERENCE_REGISTER.md'
-      - 'release/R56_AGENCY_SAAS_VISUAL_SPEC.md'
-      - '.github/workflows/r50-art-direction-pilot.yml'
   workflow_dispatch:
 permissions:
   contents: read

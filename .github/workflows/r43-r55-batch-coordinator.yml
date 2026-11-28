@@ -20,6 +20,7 @@ on:
       - 'R26 Blender Original Asset Pilot'
       - 'R32 Original Media Acceptance'
       - 'Motion Studio Web Product E2E'
+      - 'R43-R55 One-Shot Batch Execution'
     types: [completed]
 permissions:
   actions: read
@@ -30,7 +31,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   consolidate:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.head_branch == 'design/r43-immersive-template-system'
+    if: github.event_name != 'push' && (github.event_name != 'workflow_run' || github.event.workflow_run.head_branch == 'design/r43-immersive-template-system')
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -52,7 +53,7 @@ jobs:
             req=urllib.request.Request(f'https://api.github.com/repos/{repo}/{path}',headers=headers)
             with urllib.request.urlopen(req,timeout=20) as r: return json.load(r)
           import time
-          wanted=('R50','R52','R53','R25','R26','R32','R47','R48','E2E','Web Product')
+          wanted=('R43-R55 One-Shot Batch Execution','R50','R52','R53','R25','R26','R32','R47','R48','E2E','Web Product')
           # PR checks start in parallel. Do not publish a stale coordinator snapshot
           # while the same candidate SHA still has acceptance jobs running.
           deadline=time.time()+240

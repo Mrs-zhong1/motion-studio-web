@@ -1,21 +1,6 @@
 name: R53 33-Asset Integration Acceptance (fail closed)
 on:
-  push:
-    branches:
-      - design/r43-immersive-template-system
-    paths:
-      - 'release/R53_PRODUCTION_ASSET_REGISTER.json'
-      - 'release/validate_r53_production_assets.py'
-      - '.github/workflows/r53-33-asset-acceptance.yml'
-      - 'stage9/ai-assets/**'
-      - 'release/tests/test_asset_validation.py'
-  pull_request:
-    paths:
-      - 'release/R53_PRODUCTION_ASSET_REGISTER.json'
-      - 'release/validate_r53_production_assets.py'
-      - '.github/workflows/r53-33-asset-acceptance.yml'
-      - 'stage9/ai-assets/**'
-      - 'release/tests/test_asset_validation.py'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -32,6 +17,8 @@ jobs:
       - name: Regenerate original procedural artwork from repository source
         run: python release/generate_r53_original_assets.py
       - name: Validate all 33 original slots without manufacturing approval
+        env:
+          MOTION_CANDIDATE_SHA: ${{ github.sha }}
         run: python release/validate_r53_production_assets.py --report r53-asset-report.json
       - name: Generate hash-verified contact sheet for human visual review
         run: python release/create_r53_review_contact_sheet.py

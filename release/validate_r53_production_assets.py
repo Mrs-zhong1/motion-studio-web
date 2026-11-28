@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """R53 fail-closed validator for all 33 approved replacement slots."""
-import argparse, hashlib, json, re, xml.etree.ElementTree as ET
+import argparse, hashlib, json, os, re, xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urlparse
 from PIL import Image, UnidentifiedImageError
@@ -127,7 +127,7 @@ def main():
   if approval_ok: accepted.append(slot)
  missing=expected-seen
  if missing: errors.append(f"missing slots: {sorted(missing)}")
- report={"expected":33,"accepted":len(accepted),"acceptedSlots":accepted,"pageReferenceAudit":page_reference_audit,"errors":errors,"status":"PASS" if not errors and len(accepted)==33 and page_reference_audit["status"]=="PASS" else "HOLD"}
+ report={"candidateSha":os.environ.get("MOTION_CANDIDATE_SHA"),"expected":33,"accepted":len(accepted),"acceptedSlots":accepted,"pageReferenceAudit":page_reference_audit,"errors":errors,"status":"PASS" if not errors and len(accepted)==33 and page_reference_audit["status"]=="PASS" else "HOLD"}
  print(json.dumps(report,indent=2))
  if a.report: a.report.write_text(json.dumps(report,indent=2)+"\n")
  if a.require_release and report["status"]!="PASS": raise SystemExit(1)

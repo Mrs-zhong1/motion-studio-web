@@ -1,26 +1,6 @@
 name: R52 Photography Rights Evidence Gate (report-only until complete)
 on:
-  push:
-    branches:
-      - design/r43-immersive-template-system
-    paths:
-      - 'release/R52_PHOTO_RIGHTS_REGISTER.csv'
-      - 'release/R52_CANDIDATE_EVIDENCE_LEDGER.csv'
-      - 'release/fetch_r52_candidate_evidence.py'
-      - 'release/discover_r52_commons_candidates.py'
-      - 'release/validate_r52_photo_rights.py'
-      - '.github/workflows/r52-photo-rights-gate.yml'
-      - 'stage9/ai-assets/**'
-      - 'release/tests/test_asset_validation.py'
-  pull_request:
-    paths:
-      - 'release/R52_PHOTO_RIGHTS_REGISTER.csv'
-      - 'release/R52_CANDIDATE_EVIDENCE_LEDGER.csv'
-      - 'release/fetch_r52_candidate_evidence.py'
-      - 'release/validate_r52_photo_rights.py'
-      - '.github/workflows/r52-photo-rights-gate.yml'
-      - 'stage9/ai-assets/**'
-      - 'release/tests/test_asset_validation.py'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -40,7 +20,11 @@ jobs:
       - name: Download and verify candidate originals for review only
         run: python release/fetch_r52_candidate_evidence.py
       - name: Validate evidence without treating missing sourcing as CI infrastructure failure
+        env:
+          MOTION_CANDIDATE_SHA: ${{ github.sha }}
         run: python release/validate_r52_photo_rights.py --allow-incomplete --report r52-photo-rights-report.json
+      - name: Create R52 review contact sheet (never approve candidates)
+        run: python release/create_r52_review_contact_sheet.py --output r52-review-contact-sheet.png
       - name: Publish itemized rights HOLD report
         if: always()
         run: |
