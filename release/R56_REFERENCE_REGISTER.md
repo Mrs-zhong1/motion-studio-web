@@ -75,7 +75,7 @@ The following pages were opened and inspected on 2026-11-28. These notes describ
 ## Exact-SHA screenshot capture
 
 - Script: stage9/tests/capture_r56_references.py.
-- The R50 workflow now captures first-screen reference screenshots at 1440×900 and 390×844 for the nine unique URLs above, records response status/title/text sample/visible media counts/page errors, and hashes every PNG.
+- The R50 workflow now captures first-screen reference screenshots at 1440×900 and 390×844 for the ten unique URLs above, records response status/title/text sample/visible media counts/page errors, and hashes every PNG.
 - The reference captures are uploaded in the same exact-SHA artifact as the R50 exported-page screenshots: r50-r56-real-html-and-reference-evidence-<candidate SHA>.
 - This capture step is best-effort because third-party pages may block automation or change. A missing/blocked capture is recorded as unavailable, never inferred from a search snippet.
 - Screenshots are first-screen evidence only. They do not establish full interactive parity, source-code rights, asset licenses, or visual approval for Motion Studio.

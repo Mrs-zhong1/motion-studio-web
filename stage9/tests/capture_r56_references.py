@@ -22,6 +22,7 @@ REFERENCES = (
     {"id": "locomotive-work", "templates": ["agency"], "url": "https://locomotive.ca/en/work", "label": "Locomotive — filterable project archive"},
     {"id": "noomo-work", "templates": ["agency", "saas"], "url": "https://noomoagency.com/work", "label": "Noomo — case-led portfolio and Salesforce SaaS story"},
     {"id": "bruno-simon", "templates": ["agency"], "url": "https://bruno-simon.com/", "label": "Bruno Simon — navigable 3D portfolio and progressive controls"},
+    {"id": "active-theory", "templates": ["agency"], "url": "https://activetheory.net/", "label": "Active Theory — cinematic WebGL agency work"},
     {"id": "vercel-product-tour", "templates": ["saas"], "url": "https://vercel.com/product-tour", "label": "Vercel — staged self-guided product tour"},
     {"id": "vercel-tour-article", "templates": ["saas"], "url": "https://vercel.com/blog/designing-the-vercel-virtual-product-tour", "label": "Vercel — product-tour design rationale"},
     {"id": "threeui", "templates": ["saas"], "url": "https://threeui.com/", "label": "ThreeUI — source-backed component discovery"},

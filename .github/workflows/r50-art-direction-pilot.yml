@@ -9,6 +9,7 @@ on:
       - 'stage9/r45-scene-composition.mjs'
       - 'stage9/r46-responsive-accessibility.mjs'
       - 'stage9/tests/test_r50_html_browser_acceptance.py'
+      - 'stage9/tests/test_r45_scene_composition.mjs'
       - 'stage9/tests/capture_r56_references.py'
       - 'release/R56_REFERENCE_REGISTER.md'
       - 'release/R56_AGENCY_SAAS_VISUAL_SPEC.md'
