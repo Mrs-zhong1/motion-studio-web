@@ -69,7 +69,8 @@ def test_product_restructure():
             assert viewport_before["width"]>=1440*.90,viewport_before
             info.click()
             assert info.get_attribute("aria-pressed")=="true"
-            assert page.locator(".preview-product-info").is_visible()
+            # R44 removes the information drawer entirely; the focus toggle must never restore a second column.
+            assert page.locator(".preview-product-info").is_hidden()
             viewport_open=page.locator("#previewDevice").bounding_box()
             assert abs(viewport_open["width"]-viewport_before["width"])<3
             page.keyboard.press("Escape")
@@ -93,10 +94,12 @@ def test_product_restructure():
             assert page.locator("#previewDevice").evaluate(
                 "el => el.classList.contains('mobile')"
             )
-            replay_before = page.locator("#templatePreviewFrame").get_attribute("srcdoc")
+            # WebKit does not consistently expose the reflected srcdoc attribute through
+            # Playwright's get_attribute(); inspect the actual rendered iframe document instead.
+            replay_before = frame.locator("html").evaluate("el => el.outerHTML")
             page.locator("#previewReplay").click()
             frame.locator("section.section").first.wait_for()
-            replay_after = page.locator("#templatePreviewFrame").get_attribute("srcdoc")
+            replay_after = frame.locator("html").evaluate("el => el.outerHTML")
             assert replay_before and replay_after
             assert "3D Product Experience" in replay_after
 

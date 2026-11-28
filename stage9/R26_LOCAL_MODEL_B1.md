@@ -129,3 +129,18 @@ If one model fails, retain the evidence and evaluate the other. Do not automatic
 - Z-Image-Turbo model card and Apache-2.0 license: https://huggingface.co/Tongyi-MAI/Z-Image-Turbo
 - MFLUX installation, model support and quantization: https://github.com/mflux-community/mflux
 - FLUX 3 Image Klein license and commercial restrictions: https://huggingface.co/black-forest-labs/flux-3-image-klein
+
+
+## Superseded production route — 2026-11-20
+
+This B1 FLUX.2 Klein / Z-Image-Turbo local inference proposal is retained as historical feasibility research only. It is **not the approved production route** and must not be started as part of the current release batch.
+
+The user-approved R26 production baseline is now:
+- 18 original procedural scenes: Agency 5, Product 3D 4, Gallery 4, SaaS 5.
+- 15 commercially redistributable photographs: Architecture 4, Cinematic 4, Editorial 3, Fashion 4.
+- No paid image APIs, paid asset purchases, subscriptions or renewed long FLUX/MFLUX model downloads.
+- The Blender pilot is review-only. Its output is not production-eligible and must not be imported before visual review, itemized rights review and strict R25/R32 validation.
+- SaaS procedural scenes are to be produced as original vector/canvas scenes, not as Blender renders.
+- A model card's permissive license does not replace per-asset commercial and distribution review.
+
+If this historical B1 route is ever reconsidered, it requires a separate explicit user decision and a new cost/quality review. Do not infer approval from the presence of this document.

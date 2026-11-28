@@ -1,0 +1,590 @@
+{
+  "schema": "r56-reference-first-screen-evidence-v1",
+  "candidateSha": "844026ba40e121dd2213696599dd9f62787c29d6",
+  "capturedAtUtc": "2026-11-28T03:48:35.960470+00:00",
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "references": [
+    {
+      "id": "pear",
+      "templates": [
+        "agency"
+      ],
+      "url": "https://pear.no/",
+      "label": "Pear — differentiated agency model and proof order",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "Pear — not an agency on the clock, a partner in the upside",
+          "textSample": "Asked before\n\nWhat does it cost to work with Pear?\n\nNothing upfront and nothing hourly. We fund the strategy, the software, the content and the link building ourselves. Our payment is an agreed percentage of the new revenue that work generates. If your revenue doesn’t grow, you owe us nothing.\n\nWhat share of the revenue do you take?\n\nIt’s agreed per partnership before we start, and depends on how much building the opportunity needs. It applies only to growth above your existing baseline, never to the revenue you already had.\n\nWhy revenue share instead of fees?\n\nBecause hourly billing pays agencies for effort, not results. An agency on a retainer earns the same whether you grow or not. We removed the retainer, so the only way for us to get paid is to grow your revenue.\n\nHow do you measure the revenue you create?\n\nBefore we begin, we agree on a baseline from your existing numbers and on how new organic revenue is attributed: analytics, order data or bookings, depending on your business. Both sides see the same dashboard.\n\nHow long before it pays off?\n\nSearch compounds slowly, then quickly. Software and technical fixes land in weeks; rankings and revenue typically move within months. The model means the waiting costs you nothing: we’re the ones financing the ramp.\n\nNot an agency on the clock, a\npartner in the upside.\n\nPEAR AS · ORG NR 919 062 517 · OSLO\n\nINFO@PEAR.NO\n\nTHE APPLICAT",
+          "scrollWidth": 1440,
+          "scrollHeight": 48150,
+          "imageCount": 1,
+          "canvasCount": 5,
+          "iframeCount": 0,
+          "file": "pear-desktop.png",
+          "bytes": 434546,
+          "sha256": "fabed1cfc1e359dc2b8d527a73f1a63e9d5b1efe0f087bfc52cb7c76d015af8a",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "Pear — not an agency on the clock, a partner in the upside",
+          "textSample": "Asked before\n\nWhat does it cost to work with Pear?\n\nNothing upfront and nothing hourly. We fund the strategy, the software, the content and the link building ourselves. Our payment is an agreed percentage of the new revenue that work generates. If your revenue doesn’t grow, you owe us nothing.\n\nWhat share of the revenue do you take?\n\nIt’s agreed per partnership before we start, and depends on how much building the opportunity needs. It applies only to growth above your existing baseline, never to the revenue you already had.\n\nWhy revenue share instead of fees?\n\nBecause hourly billing pays agencies for effort, not results. An agency on a retainer earns the same whether you grow or not. We removed the retainer, so the only way for us to get paid is to grow your revenue.\n\nHow do you measure the revenue you create?\n\nBefore we begin, we agree on a baseline from your existing numbers and on how new organic revenue is attributed: analytics, order data or bookings, depending on your business. Both sides see the same dashboard.\n\nHow long before it pays off?\n\nSearch compounds slowly, then quickly. Software and technical fixes land in weeks; rankings and revenue typically move within months. The model means the waiting costs you nothing: we’re the ones financing the ramp.\n\nNot an agency on the clock, a\npartner in the upside.\n\nPEAR AS · ORG NR 919 062 517 · OSLO\n\nINFO@PEAR.NO\n\nTHE APPLICAT",
+          "scrollWidth": 390,
+          "scrollHeight": 61612,
+          "imageCount": 1,
+          "canvasCount": 5,
+          "iframeCount": 0,
+          "file": "pear-mobile.png",
+          "bytes": 176419,
+          "sha256": "9a9ba260dc974b2329e85c2a49da4dbb69ba1f665336c27b076bdf492d7bf458",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "grande-charte",
+      "templates": [
+        "agency"
+      ],
+      "url": "https://grandecharte.co/en",
+      "label": "Grande Charte — agency narrative and service taxonomy",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "UX & Web Agency | Mobile & Ecommerce ✦ Casablanca, Morocco",
+          "textSample": "Ciao\n\nHOME\nABOUT US\nSERVICES\nCASE STUDIES\nCONTACT US\nMENU\nCLOSE\nEST. 2018\n\n8+ YEARS SHAPING\nDIGITAL DIRECTION.\n\nWeb and digital agency in Casablanca: websites, e-commerce and mobile apps in Morocco.\nScroll to discover\nDO\n \nYOU\n\n\nHAVE\n \nA\n \nPROJET\n \n?\nLET’S\n \nTALK!\nINFO@\nGRANDECHARTE.CO\n\nThe insight of an independent agency with the precision of an engineering studio.\n\nQUICK\n \nACCESS\nHome\nAbout Us\nServices\nCase Studies\nContact us\nUSEFUL\n \nLINKS\nBlog\nFAQ\nPrivacy Policy\nLegal Notice\nSOCIAL\n \nMEDIA\nInstagram\nLinkedin\nFacebook\nX.com\nSTART A PROJECT\n\ninfo@grandecharte.co\n\n© 2026 Grande Charte SARL\n\nAll rights reserved",
+          "scrollWidth": 1440,
+          "scrollHeight": 8332,
+          "imageCount": 53,
+          "canvasCount": 6,
+          "iframeCount": 2,
+          "file": "grande-charte-desktop.png",
+          "bytes": 8442,
+          "sha256": "bea84cae9b5dd5c3854914722a938a8fb951c47b6a321b6927b878c8c4ea012a",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "UX & Web Agency | Mobile & Ecommerce ✦ Casablanca, Morocco",
+          "textSample": "Ciao\n\nHOME\nABOUT US\nSERVICES\nCASE STUDIES\nCONTACT US\nMENU\nCLOSE\nEST. 2018\n\n8+ YEARS SHAPING\nDIGITAL DIRECTION.\n\nWeb and digital agency in Casablanca:\nwebsites, e-commerce and mobile apps\nin Morocco.\nDO\n \nYOU\n\n\nHAVE\n \nA\n \nPROJET\n \n?\nLET’S\n \nTALK!\nINFO@\nGRANDECHARTE.CO\n\nThe insight of an independent agency with the precision of an engineering studio.\n\nQUICK\n \nACCESS\nHome\nAbout Us\nServices\nCase Studies\nContact us\nUSEFUL\n \nLINKS\nBlog\nFAQ\nPrivacy Policy\nLegal Notice\nSOCIAL\n \nMEDIA\nInstagram\nLinkedin\nFacebook\nX.com\nSTART A PROJECT\n\ninfo@grandecharte.co\n\n© 2026 Grande Charte SARL\n\nAll rights reserved",
+          "scrollWidth": 390,
+          "scrollHeight": 8371,
+          "imageCount": 50,
+          "canvasCount": 6,
+          "iframeCount": 2,
+          "file": "grande-charte-mobile.png",
+          "bytes": 5242,
+          "sha256": "bbefe648f5132cfceb0ea2d9e38add4cca6fdcaae998ad30fb0232f5886ba2d7",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "locomotive-work",
+      "templates": [
+        "agency"
+      ],
+      "url": "https://locomotive.ca/en/work",
+      "label": "Locomotive — filterable project archive",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "Work | Locomotive",
+          "textSample": "Locomotive®\nWork Agency Careers Store\nLet's talk\nWe design, develop and ship digital products that drive success for our clients through fresh websites, strong brand systems and compelling creative content.\nAll projects 47\nFinalFinal\nMusic\nNew York, USA\nClose\nAir Inuit Careers\nTransportation\nMontreal, Canada\nClose\nSiriusXM\nMedia\nNew York, USA\nClose\nZap Energy\nEnergy\nEverett, USA\nClose\nTruck'n Roll\nLogistics\nMontreal, Canada\nClose\nWolverine Worldwide\nFashion\nRockford, USA\nClose\nZero.fun\nCurator\nMontreal, Canada\nClose\nDulcedo\nTalent management\nMontreal, Canada\nClose\nLightship\nAutomotive\nSan Francisco, USA\nClose\nThe Drake Hotel\nHospitality\nToronto, Canada\nClose\nSainte-Anne College\nEducation\nLachine, Canada\nClose\nStructured\nFinance\nZürich, Switzerland\nClose\nTheory Verse\nLicensing\nMontreal, Canada\nClose\nDésourdy\nConstruction\nBromont, Canada\nClose\nPME MTL\nBusiness support\nMontreal, Canada\nClose\nScout Motors\nAutomotive\nSan Francisco, USA\nClose\nDestigmatize\nSocial cause\nToronto, Canada\nClose\nGPS Climat\nEnvironnement\nMontreal, Canada\nClose\nAu fil de l'eau\nMunicipality\nLongueuil, Canada\nClose\nPopulous\nArchitecture\nKansas City, USA\nClose\nStenger Bike\nE-Commerce\nHösbach, Germany\nClose\nWebisoft\nSoftware\nMontreal, Canada\nClose\nSundae Creative\nMarketing\nMontreal, Canada\nClose\nMate Libre\nBeverage\nMontreal, Canada\nClose\nHervé Baillargeon\nCinema\nMontreal, Canada\nClose\nEthnocare\nMedical\nMontreal,",
+          "scrollWidth": 1440,
+          "scrollHeight": 3246,
+          "imageCount": 141,
+          "canvasCount": 0,
+          "iframeCount": 1,
+          "file": "locomotive-work-desktop.png",
+          "bytes": 9423,
+          "sha256": "d4eb185f80f66489010e8df75a5a363c6d45bb1a894008898ab32e9f7b7dda01",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "Work | Locomotive",
+          "textSample": "Locomotive®\nMenu\nWe design, develop and ship digital products that drive success for our clients through fresh websites, strong brand systems and compelling creative content.\nAll projects (47)\nBranding (15)\nDigital (46)\nExperience (34)\nE-commerce (07)\nContent (10)\nAll projects 47\nFinalFinal\nMusic\nClose\nAir Inuit Careers\nTransportation\nClose\nSiriusXM\nMedia\nClose\nZap Energy\nEnergy\nClose\nTruck'n Roll\nLogistics\nClose\nWolverine Worldwide\nFashion\nClose\nZero.fun\nCurator\nClose\nDulcedo\nTalent management\nClose\nLightship\nAutomotive\nClose\nThe Drake Hotel\nHospitality\nClose\nSainte-Anne College\nEducation\nClose\nStructured\nFinance\nClose\nTheory Verse\nLicensing\nClose\nDésourdy\nConstruction\nClose\nPME MTL\nBusiness support\nClose\nScout Motors\nAutomotive\nClose\nDestigmatize\nSocial cause\nClose\nGPS Climat\nEnvironnement\nClose\nAu fil de l'eau\nMunicipality\nClose\nPopulous\nArchitecture\nClose\nStenger Bike\nE-Commerce\nClose\nWebisoft\nSoftware\nClose\nSundae Creative\nMarketing\nClose\nMate Libre\nBeverage\nClose\nHervé Baillargeon\nCinema\nClose\nEthnocare\nMedical\nClose\nHéma-Québec\nEvent\nClose\nLightship\nTechnology\nClose\nPP Fragment\nTypography\nClose\nSWTCH\nTechnology\nClose\nPandaPay\nFintech\nClose\nCarlton Villa\nReal Estate\nClose\nAge of Union\nSocial cause\nClose\nPangram Pangram Foundry\nTypography\nClose\nHaven Studios\nGaming\nClose\nElektra Virtual Museum\nArt and culture\nClose\nAwwwards Conferences\nConferences\nClose\nBaillat Studio\nDesi",
+          "scrollWidth": 390,
+          "scrollHeight": 7347,
+          "imageCount": 141,
+          "canvasCount": 0,
+          "iframeCount": 1,
+          "file": "locomotive-work-mobile.png",
+          "bytes": 6079,
+          "sha256": "92593b63cbb7021fb13bd70ce1e32ca4b72983d4f3b28654fa714869071467fc",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "noomo-work",
+      "templates": [
+        "agency",
+        "saas"
+      ],
+      "url": "https://noomoagency.com/work",
+      "label": "Noomo — case-led portfolio and Salesforce SaaS story",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Permissions policy violation: unload is not allowed in this document.",
+            "Permissions policy violation: unload is not allowed in this document."
+          ],
+          "title": "Our Work | Digital Experiences & Creative Technology | Noomo",
+          "textSample": "WORK\nAI TRANSFORMATION\nOUR STORY\nLABS\nINSIGHTS\nCONNECT\nSTORIES BROUGHT TO LIFE THROUGH CREATIVE TECHNOLOGY\nClients we helped to transform their digital presence, stand out, and create experiences that evolve with new technology and AI.\nCase Study\nWarriors and Coinbase Fan Collectible\n\nWeb3, 3D, Microsite, Brand Activation\n\nCase Study\nInteractive website for the Salesforce Platform\n\nWebsite, 3D, Storytelling, SaaS, Enterprise\n\nCase Study\nGen Z Broke the Marketing Funnel, a report for Vogue Business / Archrival\n\nWebsite, Storytelling, Interactive\n\nThe Power of Digital Storytelling\n\n3D, Immersive, WebGL\n\nCase Study\nImmersive 3D Experience for AMD at Cisco Live\n\n3D, Brand Activation, Event Experience\n\nCase Study\nSalesforce OEHU Website Redesign\n\nWebsite, Storytelling, Enterprise\n\nCase Study\nStorytelling Website for Dandy Vision\n\n3D, Storytelling, Interactive, Website\n\nNoomo Valentime - Immersive 3D Storytelling About Love\n\n3D, Immersive, Storytelling\n\nCase Study\nBattalion Website\n\nWeb, Interactive, Finance, Real Estate\n\nNoomo Showcase\n\n3D, WebGPU, Three.Js, Immersive\n\nCase Study\nVibrant Wellness Interactive Event Experience\n\n3D, Immersive, Brand Activation, Event\n\nNoomo Labs\n\nImmersive, 3D, Animation\n\nThe Future of XR\n\nWebsite, Storytelling, Interactive, Illustrations\n\nCase Study\nJasmina Denner Storytelling Website\n\nWebsite, Storytelling, Interactive\n\nNoomo Beat - AI-powered Brand ",
+          "scrollWidth": 1440,
+          "scrollHeight": 17793,
+          "imageCount": 64,
+          "canvasCount": 0,
+          "iframeCount": 10,
+          "file": "noomo-work-desktop.png",
+          "bytes": 108340,
+          "sha256": "aaddd8bf4f0b51ed510dddf67630e87678c0d6ee5bad38d76c4f52fdef582eca",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Permissions policy violation: unload is not allowed in this document.",
+            "Permissions policy violation: unload is not allowed in this document."
+          ],
+          "title": "Our Work | Digital Experiences & Creative Technology | Noomo",
+          "textSample": "MENU\nHOME\nWORK\nAI TRANSFORMATION\nOUR STORY\nLABS\nINSIGHTS\nCONNECT\nSTORIES BROUGHT TO LIFE THROUGH CREATIVE TECHNOLOGY\nClients we helped to transform their digital presence, stand out, and create experiences that evolve with new technology and AI.\nWarriors and Coinbase Fan Collectible\n\nWeb3, 3D, Microsite, Brand Activation\n\nInteractive website for the Salesforce Platform\n\nWebsite, 3D, Storytelling, SaaS, Enterprise\n\nGen Z Broke the Marketing Funnel, a report for Vogue Business / Archrival\n\nWebsite, Storytelling, Interactive\n\nThe Power of Digital Storytelling\n\n3D, Immersive, WebGL\n\nImmersive 3D Experience for AMD at Cisco Live\n\n3D, Brand Activation, Event Experience\n\nSalesforce OEHU Website Redesign\n\nWebsite, Storytelling, Enterprise\n\nStorytelling Website for Dandy Vision\n\n3D, Storytelling, Interactive, Website\n\nNoomo Valentime - Immersive 3D Storytelling About Love\n\n3D, Immersive, Storytelling\n\nBattalion Website\n\nWeb, Interactive, Finance, Real Estate\n\nNoomo Showcase\n\n3D, WebGPU, Three.Js, Immersive\n\nVibrant Wellness Interactive Event Experience\n\n3D, Immersive, Brand Activation, Event\n\nNoomo Labs\n\nImmersive, 3D, Animation\n\nThe Future of XR\n\nWebsite, Storytelling, Interactive, Illustrations\n\nJasmina Denner Storytelling Website\n\nWebsite, Storytelling, Interactive\n\nNoomo Beat - AI-powered Brand Activation Microsite\n\nWeb3, 3D, Microsite, Brand Activation, AI\n\nIntel | ai.io AI-powered",
+          "scrollWidth": 390,
+          "scrollHeight": 10866,
+          "imageCount": 64,
+          "canvasCount": 0,
+          "iframeCount": 10,
+          "file": "noomo-work-mobile.png",
+          "bytes": 178087,
+          "sha256": "88f3b56f00f738026b75115301ff530f5cd64bd9573cd75c71ea6c1ed322eb46",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "bruno-simon",
+      "templates": [
+        "agency"
+      ],
+      "url": "https://bruno-simon.com/",
+      "label": "Bruno Simon — navigable 3D portfolio and progressive controls",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "Bruno's",
+          "textSample": "",
+          "scrollWidth": 1440,
+          "scrollHeight": 900,
+          "imageCount": 44,
+          "canvasCount": 1,
+          "iframeCount": 0,
+          "file": "bruno-simon-desktop.png",
+          "bytes": 197168,
+          "sha256": "1c7d1bf29b0c012aea39149f8615d4f5f2d7c16f173e084611e9431d1d906137",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "Bruno's",
+          "textSample": "",
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "imageCount": 44,
+          "canvasCount": 1,
+          "iframeCount": 0,
+          "file": "bruno-simon-mobile.png",
+          "bytes": 70892,
+          "sha256": "d64bd9398045fc1c80bf0139259757b82577911203d7e84beb0171e76e667b2f",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "active-theory",
+      "templates": [
+        "agency"
+      ],
+      "url": "https://activetheory.net/",
+      "label": "Active Theory — cinematic WebGL agency work",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "Not Supported",
+          "textSample": "Your browser is not supported",
+          "scrollWidth": 1440,
+          "scrollHeight": 900,
+          "imageCount": 0,
+          "canvasCount": 0,
+          "iframeCount": 0,
+          "file": "active-theory-desktop.png",
+          "bytes": 873726,
+          "sha256": "ecf13090c49c82037bf65ca001e4863a33adeb26ba78584eeb801334e7750460",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [],
+          "title": "Not Supported",
+          "textSample": "Your browser is not supported",
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "imageCount": 0,
+          "canvasCount": 0,
+          "iframeCount": 0,
+          "file": "active-theory-mobile.png",
+          "bytes": 315401,
+          "sha256": "a89bdb8a48b844328a3728ad73ee1af922c3908d4bfe91a3f78e9e518d6ad81b",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "vercel-product-tour",
+      "templates": [
+        "saas"
+      ],
+      "url": "https://vercel.com/product-tour",
+      "label": "Vercel — staged self-guided product tour",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "Product Tour",
+          "textSample": "Skip to content\nDevelop\nImport\nCommit\nCheck build\nView deployment\nBuild\nMonitor\nPreview\nPreview\nComment\nShip\nInspect\nVercel git integration\nLive in production\nContact Sales\n\nImport your project\n\nWhen you import a project, commits are automatically built and deployed with Vercel.\n\nClick the dot to advance\n\nGit Provider\n\nAcme\n\nEnterprise\n\nFeedback\n\nBlog\n\nSupport\n\nDocs\n\nImport Git Repository\n\nlennard\n\nSearch\n\nvercel-times\n\n·\n\nJust now\n\nImport\n\nrequiem\n\n·\n\n4m ago\n\nImport\n\nvalkyrie\n\n·\n\n1d ago\n\nImport\n\nImport Third-Party Git Repository →\n\nProduct Tour\n\nVercel Demo\nStep 1\nWelcome to your Vercel Interactive Product Tour\nWe're glad you're here. Tell us a bit about yourself.\nYour Email\nCompany Website\nStep 1 of 2\nSkip\nNext",
+          "scrollWidth": 1440,
+          "scrollHeight": 900,
+          "imageCount": 6,
+          "canvasCount": 0,
+          "iframeCount": 0,
+          "file": "vercel-product-tour-desktop.png",
+          "bytes": 30392,
+          "sha256": "4d874ff5e5495f703904e09dc093b2bba97f4dbcf7a50768a46c65a68399de8d",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "Product Tour",
+          "textSample": "Skip to content\nProduct Tour\nWelcome to your Vercel Interactive product tour. We're glad you're here.\nGet Started\nSSO/SAML login\nSecurely authenticate with platforms like Okta, Auth0, and more.\nImport your project\nWhen you import a project, commits are automatically built and deployed with Vercel.\nCommit a change\nAfter importing your repo, push a change to your code.\nCheck your deployments\nIn your projects you'll be able to see the state of your deployments.\nView your deployment\nYou can view your most recent preview deployment to see the progression of your build.\nPreview deployment in progress\nThe zero-config CI/CD pipeline ensures your changes in production land seamlessly.\nVercel custom checks\nAccess to application performance optimization with every update.\nSharable live preview link\nA preview URL is automatically generated with every deploy to share with your team.\nCollaborative feedback\nCollaborate with your team through comments in real time before pushing changes to production.\nInspect\nYou'll be able to see your build logs in your git account.\nYour site is live in production\nContact Sales\n\nProduct Tour\n\nVercel Demo\nStep 1\nWelcome to your Vercel Interactive Product Tour\nWe're glad you're here. Tell us a bit about yourself.\nYour Email\nCompany Website\nStep 1 of 2\nSkip\nNext",
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "imageCount": 11,
+          "canvasCount": 1,
+          "iframeCount": 0,
+          "file": "vercel-product-tour-mobile.png",
+          "bytes": 24460,
+          "sha256": "c3e866cc13b3ee46ccad6b3fe08fc5946792c76b0dc715122a23e2c0f666db86",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "vercel-tour-article",
+      "templates": [
+        "saas"
+      ],
+      "url": "https://vercel.com/blog/designing-the-vercel-virtual-product-tour",
+      "label": "Vercel — product-tour design rationale",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "How to build an engaging virtual product tour - Vercel",
+          "textSample": "Skip to content\nProducts\nResources\nEnterprise\nPricing\nGet a Demo\nLog In\nSign Up\nDesigning the Vercel virtual product tour\n+3\nAlice Alexandra Moore, Carmel Schetrit, Jueun Grace Yun, Yasmin Pessoa, Elijah Cobb\nBlogField Engineering\n\n2 Jun 2023\n\n8 min read\n\nCopy\n\nHow we addressed the need for an interactive, no-commitment experience of our toolkit.\n\nIf you've tried a new tech tool recently, this experience might sound familiar: you visit the website, skim the homepage content, but still struggle to understand what the tool will do for you.\n\nThe Vercel virtual product tour is a key resource for prospective teams to interactively understand what Vercel can offer. It takes the breadth of information about Vercel and breaks the product down into the most relevant parts.\n\nFirst, we’ll talk about why we designed the tour the way we did. Then, for the technically curious, we’ll walk through some of the most interesting hows.\n\nSee for yourself.\n\nExperience the frontend platform customers and developers love.\n\nTake the Tour\n\nCopy link to heading\nThe need\n\nThe virtual product tour addresses several challenges we encountered in our marketing funnel. At the core, we were after a digital experience that allows users to interact with the Vercel product before creating an account or talking to our sales team. We wanted users, with minimal effort on their end, to have the next-best-thing to full",
+          "scrollWidth": 1440,
+          "scrollHeight": 12155,
+          "imageCount": 9,
+          "canvasCount": 0,
+          "iframeCount": 0,
+          "file": "vercel-tour-article-desktop.png",
+          "bytes": 96485,
+          "sha256": "61a1cc980336f68b67a279232703f88e4aa3e060828509c1a84c8a7148c4ecf6",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "How to build an engaging virtual product tour - Vercel",
+          "textSample": "Skip to content\nDesigning the Vercel virtual product tour\n+3\nAlice Alexandra Moore, Carmel Schetrit, Jueun Grace Yun, Yasmin Pessoa, Elijah Cobb\nBlogField Engineering\n\n2 Jun 2023\n\n8 min read\n\nCopy\n\nHow we addressed the need for an interactive, no-commitment experience of our toolkit.\n\nIf you've tried a new tech tool recently, this experience might sound familiar: you visit the website, skim the homepage content, but still struggle to understand what the tool will do for you.\n\nThe Vercel virtual product tour is a key resource for prospective teams to interactively understand what Vercel can offer. It takes the breadth of information about Vercel and breaks the product down into the most relevant parts.\n\nFirst, we’ll talk about why we designed the tour the way we did. Then, for the technically curious, we’ll walk through some of the most interesting hows.\n\nSee for yourself.\n\nExperience the frontend platform customers and developers love.\n\nTake the Tour\n\nCopy link to heading\nThe need\n\nThe virtual product tour addresses several challenges we encountered in our marketing funnel. At the core, we were after a digital experience that allows users to interact with the Vercel product before creating an account or talking to our sales team. We wanted users, with minimal effort on their end, to have the next-best-thing to full engagement with our product.\n\nAdditionally, we needed the tour ",
+          "scrollWidth": 390,
+          "scrollHeight": 13670,
+          "imageCount": 9,
+          "canvasCount": 0,
+          "iframeCount": 0,
+          "file": "vercel-tour-article-mobile.png",
+          "bytes": 59630,
+          "sha256": "a5fdb60a7fa3b1debf107660f64ec3cdda3457a4be986a8ff1ce175bc583fce5",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "threeui",
+      "templates": [
+        "saas"
+      ],
+      "url": "https://threeui.com/",
+      "label": "ThreeUI — source-backed component discovery",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "Three.js Components, Templates & Interactive Shaders | ThreeUI",
+          "textSample": "0\nSearch...\n⌘ K\nDOCUMENTATION\nBrowse\nInstallation\nMCP\nSponsorship\nBlack Friday Pricing\nTHREEUI\nLanding Pages\nVanta Rift\nKibori\nsublevel.studio\nSketchbook\nKage\nHero\nDark Souls Holo Card\n2\nSylva\n4\nComplete Shelf\nBestsellers Book Showcase\nThree.js\n3D Paper\n4\nAshen Press\nWoven Cloth\n4\nWarp Field\n4\nSylva Living World\n4\nTemple Night\n4\nLandscape\n7\nCountry Towers\n6\nBookshelf\nStructure Flow\n13\n3D Assets\nKibori\n10\nWorking Volumes\nBestseller Books\nAshen Books\nSections\nVanta Rift · Gameplay Tabs\nÉtale · Numeral Plates\nForma AI · FAQ\nPocket Quest · Heroes\nBackgrounds\nCRT\n4\nGlobe\n3\nElements\n5\nPortal Field\n5\nSpark Badge\n4\nLaser\n4\nPredictive Arc\n8\nLiquid Form\nConstellation Field\n8\nButtons\nVanta Rift · Expedition Button\nMarcus · Book a Shoot\nForma AI · CTA Button\nPocket Quest · CTA Button\nECLIPSE · Descent Button\nShader Buttons\n28\nGlass AI Button\nSign Up Button\nGet Started Button\nRectangle Buttons\n24\nLiquid Metal Button\n3\nCircle Buttons\n3\nText Animation\nGallery Heading\n4\nArticle Headings\n3\nSemantic Bloom\nTypography Vortex\nText Path Studies\n6\nUI Elements\nOrb Gallery\nSkeuomorphic Toggle\n4\nWireframe Forms\n3\nDiagnostics Panel\n3\nGallery\nCharacter Carousel\n2\nBrand Orbs\n23\nEngraved Certificate\nCSS\nAnimated Top Dock\n4\nPerformance Gauges\n4\nKoi Studies\nUplink Loader\nSketchbook\nTHREEUI PRO\nLanding Pages\nCloud Pass\nSaltmere\nSylva — Into the living world\nTracewood\nCHRONOS\nAZURA Yacht\nVANTA — Designed for Mo",
+          "scrollWidth": 1440,
+          "scrollHeight": 900,
+          "imageCount": 28,
+          "canvasCount": 0,
+          "iframeCount": 0,
+          "file": "threeui-desktop.png",
+          "bytes": 601548,
+          "sha256": "1f097b69b4fd58fc85353f2968e8a52b47858bc06f2f575fdd5df443303b2976",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 403 ()"
+          ],
+          "title": "Three.js Components, Templates & Interactive Shaders | ThreeUI",
+          "textSample": "Sign in\n0\nSearch...\n⌘ K\nDOCUMENTATION\nBrowse\nInstallation\nMCP\nSponsorship\nBlack Friday Pricing\nTHREEUI\nLanding Pages\nVanta Rift\nKibori\nsublevel.studio\nSketchbook\nKage\nHero\nDark Souls Holo Card\n2\nSylva\n4\nComplete Shelf\nBestsellers Book Showcase\nThree.js\n3D Paper\n4\nAshen Press\nWoven Cloth\n4\nWarp Field\n4\nSylva Living World\n4\nTemple Night\n4\nLandscape\n7\nCountry Towers\n6\nBookshelf\nStructure Flow\n13\n3D Assets\nKibori\n10\nWorking Volumes\nBestseller Books\nAshen Books\nSections\nVanta Rift · Gameplay Tabs\nÉtale · Numeral Plates\nForma AI · FAQ\nPocket Quest · Heroes\nBackgrounds\nCRT\n4\nGlobe\n3\nElements\n5\nPortal Field\n5\nSpark Badge\n4\nLaser\n4\nPredictive Arc\n8\nLiquid Form\nConstellation Field\n8\nButtons\nVanta Rift · Expedition Button\nMarcus · Book a Shoot\nForma AI · CTA Button\nPocket Quest · CTA Button\nECLIPSE · Descent Button\nShader Buttons\n28\nGlass AI Button\nSign Up Button\nGet Started Button\nRectangle Buttons\n24\nLiquid Metal Button\n3\nCircle Buttons\n3\nText Animation\nGallery Heading\n4\nArticle Headings\n3\nSemantic Bloom\nTypography Vortex\nText Path Studies\n6\nUI Elements\nOrb Gallery\nSkeuomorphic Toggle\n4\nWireframe Forms\n3\nDiagnostics Panel\n3\nGallery\nCharacter Carousel\n2\nBrand Orbs\n23\nEngraved Certificate\nCSS\nAnimated Top Dock\n4\nPerformance Gauges\n4\nKoi Studies\nUplink Loader\nSketchbook\nTHREEUI PRO\nLanding Pages\nCloud Pass\nSaltmere\nSylva — Into the living world\nTracewood\nCHRONOS\nAZURA Yacht\nVANTA — Designe",
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "imageCount": 28,
+          "canvasCount": 0,
+          "iframeCount": 0,
+          "file": "threeui-mobile.png",
+          "bytes": 174388,
+          "sha256": "1bbfee5b23b9857e5bfcc25dea5ba4172754b277be45f08e02d79d615c1cd152",
+          "status": "CAPTURED"
+        }
+      ]
+    },
+    {
+      "id": "framer-product-demo",
+      "templates": [
+        "saas"
+      ],
+      "url": "https://www.framer.com/marketplace/plugins/product-demo-builder/",
+      "label": "Framer — clickable demo chapters and reopen/update workflow",
+      "captures": [
+        {
+          "viewport": "desktop",
+          "width": 1440,
+          "height": 900,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Provider's accounts list is empty.",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()"
+          ],
+          "title": "Product Demo Builder — Plugin for Framer",
+          "textSample": "Product Demo Builder\n\nBuild interactive screenshot tours\n\nPlugin\nUtilities\nOpen Plugin\nAbout Product Demo Builder\n\nTurn flat screenshots into a product demo your visitors click through.\n\nShow how your product works before anyone signs up. No video to record, no code to write, and it lives right on your Framer site.\n\nTry the real plugin in your browser, free. Build a full demo before you spend a cent.\n\n$49 once. Lifetime access for one Framer project. Unlimited demos, every update included, no subscription.\n\nWhat you get the moment you unlock\n\nClickable hotspots and focus areas, placed right on your screenshots\n\nChapters, so visitors jump straight to the workflow they care about\n\nStudio, Cinema and Editorial looks you restyle to match your brand\n\nPhone layouts with their own framing, previewed side by side\n\nSwap in a new screenshot and keep every caption, step and link\n\nReopen any demo from the canvas and update it in one click\n\nKeyboard controls and reduced-motion support, built in\n\nBuilt on Framer’s official plugin SDK\n\nRuns natively inside Framer’s own plugin window and adds each demo as one component, keeping your existing layers and CMS collections completely untouched. It makes no network requests of its own and loads no remote code. Published demos run as part of your Framer site, with no outside scripts, no plugin subscription and no per-view fees.\n\nUnlocked in a minute\n",
+          "scrollWidth": 1425,
+          "scrollHeight": 2476,
+          "imageCount": 23,
+          "canvasCount": 0,
+          "iframeCount": 1,
+          "file": "framer-product-demo-desktop.png",
+          "bytes": 359258,
+          "sha256": "c6f88a0c5669308114eacc0f2a549f84a2e1de39c42f94db77aeca3e1dc134ab",
+          "status": "CAPTURED"
+        },
+        {
+          "viewport": "mobile",
+          "width": 390,
+          "height": 844,
+          "httpStatus": 200,
+          "navigationError": null,
+          "screenshotError": null,
+          "pageErrors": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()",
+            "Failed to load resource: the server responded with a status of 401 ()"
+          ],
+          "title": "Product Demo Builder — Plugin for Framer",
+          "textSample": "Product Demo Builder\n\nBuild interactive screenshot tours\n\nPlugin\nUtilities\nOpen Plugin\nAbout Product Demo Builder\n\nTurn flat screenshots into a product demo your visitors click through.\n\nShow how your product works before anyone signs up. No video to record, no code to write, and it lives right on your Framer site.\n\nTry the real plugin in your browser, free. Build a full demo before you spend a cent.\n\n$49 once. Lifetime access for one Framer project. Unlimited demos, every update included, no subscription.\n\nWhat you get the moment you unlock\n\nClickable hotspots and focus areas, placed right on your screenshots\n\nChapters, so visitors jump straight to the workflow they care about\n\nStudio, Cinema and Editorial looks you restyle to match your brand\n\nPhone layouts with their own framing, previewed side by side\n\nSwap in a new screenshot and keep every caption, step and link\n\nReopen any demo from the canvas and update it in one click\n\nKeyboard controls and reduced-motion support, built in\n\nBuilt on Framer’s official plugin SDK\n\nRuns natively inside Framer’s own plugin window and adds each demo as one component, keeping your existing layers and CMS collections completely untouched. It makes no network requests of its own and loads no remote code. Published demos run as part of your Framer site, with no outside scripts, no plugin subscription and no per-view fees.\n\nUnlocked in a minute\n",
+          "scrollWidth": 375,
+          "scrollHeight": 2854,
+          "imageCount": 23,
+          "canvasCount": 0,
+          "iframeCount": 1,
+          "file": "framer-product-demo-mobile.png",
+          "bytes": 100739,
+          "sha256": "0171ad8f5160a8df7f31364cee14a89ca786c17fe8ec9b6577bf7ed2f55fba5d",
+          "status": "CAPTURED"
+        }
+      ]
+    }
+  ],
+  "screenshotCount": 20,
+  "status": "PASS",
+  "rightsBoundary": "Reference-only screenshots. No third-party assets, source code, logos or copy are reused.",
+  "expectedScreenshotCount": 20
+}

@@ -1,0 +1,84 @@
+{
+  "pass": true,
+  "suite": "R47 eight-template save/reopen/export parity",
+  "templates": {
+    "editorial": {
+      "sections": 4,
+      "exportBytes": 164404,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "product-3d": {
+      "sections": 5,
+      "exportBytes": 1804028,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "cinematic": {
+      "sections": 5,
+      "exportBytes": 199459,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "architecture": {
+      "sections": 5,
+      "exportBytes": 383296,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "agency": {
+      "sections": 5,
+      "exportBytes": 366575,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "fashion": {
+      "sections": 5,
+      "exportBytes": 348260,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "gallery": {
+      "sections": 5,
+      "exportBytes": 374821,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    },
+    "saas": {
+      "sections": 5,
+      "exportBytes": 332589,
+      "horizontalOverflow": 0,
+      "editorErrors": 0,
+      "exportErrors": 0,
+      "saveReopen": "pass",
+      "exportParity": "pass"
+    }
+  },
+  "errors": [],
+  "browserDiagnostics": {
+    "pageErrors": [],
+    "consoleErrors": []
+  },
+  "browser": "firefox"
+}

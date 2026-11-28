@@ -1,0 +1,711 @@
+{
+  "schema": "motion-studio-r43-r55-evidence-v1",
+  "testedSha": "844026ba40e121dd2213696599dd9f62787c29d6",
+  "summary": {
+    "testedSha": "844026ba40e121dd2213696599dd9f62787c29d6",
+    "overall": "HOLD",
+    "R50": "PASS_BROWSER_FUNCTIONALITY_ONLY",
+    "R56": "PASS",
+    "R52": {
+      "status": "HOLD",
+      "accepted": 0,
+      "expected": 15
+    },
+    "R53": {
+      "status": "HOLD",
+      "accepted": 0,
+      "expected": 33,
+      "referenced": 0,
+      "unreferenced": 33
+    },
+    "R47": {
+      "chromium": "NOT_AVAILABLE",
+      "firefox": "NOT_AVAILABLE",
+      "webkit": "NOT_AVAILABLE"
+    },
+    "E2E": {
+      "chromium": "NOT_AVAILABLE",
+      "firefox": "NOT_AVAILABLE",
+      "webkit": "NOT_AVAILABLE"
+    },
+    "R48": "PASS_CANDIDATE_ONLY",
+    "R54": "HOLD_REAL_DEVICE_REQUIRED",
+    "R55": "HOLD_DEPLOYMENT_NOT_AUTHORIZED",
+    "humanVisualApproval": false,
+    "rightsApproval": false,
+    "productionEligible": false,
+    "missingEvidenceFiles": []
+  },
+  "files": [
+    {
+      "path": "reports/E2E_chromium.json",
+      "bytes": 53761,
+      "sha256": "5d42a9e327c1401490380db97d92b6eeefc9183e4ccbbaf612aa5bf491756bae"
+    },
+    {
+      "path": "reports/E2E_firefox.json",
+      "bytes": 5053162,
+      "sha256": "f380cc9478eb30426b092cc32aa9fe34443c5893780d7a1c111d1383486c503e"
+    },
+    {
+      "path": "reports/E2E_webkit.json",
+      "bytes": 47279,
+      "sha256": "5ae4f79955984c2eac04825a15f6e075e802c03773f696816a19329d72da4ae2"
+    },
+    {
+      "path": "reports/HUMAN_ACTION_REQUIRED.md",
+      "bytes": 610,
+      "sha256": "9baef463bbc86b531e0581987ad253f34c48c2d12d1ef27b3a069e17a392d73b"
+    },
+    {
+      "path": "reports/R43-R55_ONE_SHOT_RESULT.json",
+      "bytes": 8177,
+      "sha256": "96c1170c47991b7a8956239cba16a78ced24ea8d8226466edb70962f469c536b"
+    },
+    {
+      "path": "reports/R47_chromium.json",
+      "bytes": 2058,
+      "sha256": "28662ac8ceaf62707aedc75c6fa3604c48a499f41b847122768c68a6c4fb82c3"
+    },
+    {
+      "path": "reports/R47_firefox.json",
+      "bytes": 1920,
+      "sha256": "a11d188c4d2e4d56d2e1cf4c460bad1bf350d3237ad67782623f1af371788a5b"
+    },
+    {
+      "path": "reports/R47_webkit.json",
+      "bytes": 1919,
+      "sha256": "541ce152ae6095643eb6778e68ee2464989e900ed2478a1b74af0ef441af040c"
+    },
+    {
+      "path": "reports/R48_CANDIDATE_GATE.json",
+      "bytes": 4918,
+      "sha256": "2096b2a063fb5b1fa574bbf486bfd97b891170c271eaf632761d12449bf13b02"
+    },
+    {
+      "path": "reports/R50_HTML_BROWSER_ACCEPTANCE.json",
+      "bytes": 1233596,
+      "sha256": "af18aeab6ef923863d652ad399fcd3e286c6ba84e9ca9b332608bb7d16bea7c2"
+    },
+    {
+      "path": "reports/R52_CANDIDATE_EVIDENCE_LEDGER.csv",
+      "bytes": 4805,
+      "sha256": "0e030d1e713d2126db29c434607b1f48ffc6a073a0794f561da87d6316953ba5"
+    },
+    {
+      "path": "reports/R52_DISCOVERY_REPORT.json",
+      "bytes": 1047,
+      "sha256": "c06ddbca1399d9197030df73f4ba6be77c8f8efa8ff32c8235b5782d14d17fe2"
+    },
+    {
+      "path": "reports/R52_DOWNLOAD_REPORT.json",
+      "bytes": 5355,
+      "sha256": "64ff78d06d18792197795fb6fc3ebf748eeb35736a6b600a842c9794ffb18100"
+    },
+    {
+      "path": "reports/R52_PHOTO_RIGHTS_REGISTER.csv",
+      "bytes": 928,
+      "sha256": "cdd2ef386ceb3a8aae9a1224380fca38847c1e62fd7309339205ba5285b06507"
+    },
+    {
+      "path": "reports/R52_PHOTO_RIGHTS_REPORT.json",
+      "bytes": 22603,
+      "sha256": "cd21e182eba62d09abfaa1a59458e28b6ac125bb785053234c50744edb3e39fb"
+    },
+    {
+      "path": "reports/R53_33_ASSET_REPORT.json",
+      "bytes": 11453,
+      "sha256": "e6089697edc1ead5a6203edfa7d8c120b33445176c409d4607132308c926cc18"
+    },
+    {
+      "path": "reports/R53_PRODUCTION_ASSET_REGISTER.json",
+      "bytes": 24115,
+      "sha256": "78fe89af1461ff7300538ff197649fde37c4a1a36137fe9ad68716a3e6e4d92e"
+    },
+    {
+      "path": "reports/R56_REFERENCE_SCREENSHOTS.json",
+      "bytes": 40930,
+      "sha256": "eaa9c9d82c303264aad61100030f06cafe8c6b2a5b106e98fb31972e324c49c0"
+    },
+    {
+      "path": "review-sheets/R52_REVIEW_CONTACT_SHEET.jpg",
+      "sourcePath": "batch-report/R52_REVIEW_CONTACT_SHEET.png",
+      "sourceSha256": "74255cb0312a6ee26581967e9158efde0693594a71dc9a53e93626b350605379",
+      "bytes": 193752,
+      "sha256": "baf6ce223ab45e35a47f24a3f1b42e9de4b121eb6b8f5e1592b61a453df357e3",
+      "width": 1560,
+      "height": 866,
+      "format": "jpeg"
+    },
+    {
+      "path": "review-sheets/R53_REVIEW_CONTACT_SHEET.jpg",
+      "sourcePath": "batch-report/R53_REVIEW_CONTACT_SHEET.png",
+      "sourceSha256": "39fd91ad0e8d508f1acddaafc9075a73a52cc5e8660bd9a4b82730a3658c2492",
+      "bytes": 431968,
+      "sha256": "4e64449efc0ce2bcd7bc66f9e4cee11a16e57769d1d283da3e7f2eeba8343ea3",
+      "width": 1128,
+      "height": 2850,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/agency-desktop-all-chapters.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-all-chapters.png",
+      "sourceSha256": "09be06c5e307c14e6057f2641829da8e0bf0e607e8eaa2b7bac7ba7ee6a20c23",
+      "bytes": 631917,
+      "sha256": "faf9bcef89862caf76b7a888951040dd61c6fb42958f0bdb23eb04cc9faf9013",
+      "width": 1440,
+      "height": 5148,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/agency-desktop-case-navigation.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-case-navigation.png",
+      "sourceSha256": "e534d008802087cf950f9d7b05508b11e8cad2feccdaa616a6b0af233cb69588",
+      "bytes": 34057,
+      "sha256": "60fad35ac28eeb83586072d852ff54cfc39888dc1d570ab76b6075220bda78ea",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/agency-desktop-opening.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-opening.png",
+      "sourceSha256": "d89ae2e67888bda6c8e4e93089649107a54f8cfbffc764090cda213df690fb32",
+      "bytes": 113300,
+      "sha256": "422b3ae3bd15e9869e96993e2d364de1246d9bc1408a47658bcd90712adb9f1c",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/agency-mobile-all-chapters.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-all-chapters.png",
+      "sourceSha256": "fc101a3239963b0f27190bf2149f0f3b2ea52b06595d29788043faf01b5a4945",
+      "bytes": 308541,
+      "sha256": "ca778cbd74a3ddb67f7a3b495efea48879ad8f00c993c0a6b3e6c1e19d611993",
+      "width": 390,
+      "height": 5735,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/agency-mobile-case-navigation.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-case-navigation.png",
+      "sourceSha256": "1b06f82ede46155cce4cf0762f5793f8141a7abeb4316def9db72022573041c8",
+      "bytes": 7005,
+      "sha256": "557ac80f0fc5d46a4dfe11671f532e156929b3413895c6d3f4b218d8e5086e57",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/agency-mobile-opening.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-opening.png",
+      "sourceSha256": "7157126f93ecbbbe6d3128891799180561619a5aa15535b3895613a3d3d11dd4",
+      "bytes": 48243,
+      "sha256": "3c8361ccb8498ad99a300c708e42420157fb14c85a6058b7dc3ba40d144e5038",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-desktop-agency-desktop-frame-01.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-frame-01.png",
+      "sourceSha256": "5cf046ddcfd4a9139ad2bd47a863f5e322bd2118048b5e62bbc12471a14c2d7b",
+      "bytes": 35807,
+      "sha256": "0c14091be440414f1b0fc9fcfb690054e04f73dcb728bb997fd423fa718d3dcf",
+      "width": 738,
+      "height": 440,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-desktop-agency-desktop-frame-02.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-frame-02.png",
+      "sourceSha256": "4a9a8aefd0cdba3086ccc3e40615bc95ca415899682b5377d529c937fea69a4a",
+      "bytes": 15342,
+      "sha256": "73b177be750b09dcc9e355692be0679aea732de96ba7133fd2ad0a933b044545",
+      "width": 539,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-desktop-agency-desktop-frame-03.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-frame-03.png",
+      "sourceSha256": "a8b40e97f48f21b74b982b6a57d53a0de8012178a5f65916f1d9b3d4da7e3315",
+      "bytes": 16523,
+      "sha256": "55bd6ab64d83d9de1eece17fdfc86c7adb3e77842747b1cecb2166689b90ce44",
+      "width": 498,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-desktop-agency-desktop-frame-04.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-frame-04.png",
+      "sourceSha256": "41f4298607a130e88180670794d61d87c12cb7db281beb306bb78175a903e08e",
+      "bytes": 27347,
+      "sha256": "d8b425db546221a2c1d01e032f7bf6b6bc12112e0e0e78b1dc3c7f739f4d8714",
+      "width": 498,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-desktop-agency-desktop-frame-05.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-desktop-frame-05.png",
+      "sourceSha256": "ffa724ba4b856225aac09f9edef12e72978c5c4832eec4ec93c2aa620ebe8a4a",
+      "bytes": 28786,
+      "sha256": "70c705f43a7332f9d5c185b379cef1a05c398004aac6a40650e7ed45cf805b9f",
+      "width": 738,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-mobile-agency-mobile-frame-01.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-frame-01.png",
+      "sourceSha256": "2e763f417285f9501fcdd8c2c754ca4308c2ac38dc158552f22920414c7cb24a",
+      "bytes": 17816,
+      "sha256": "4f996a507c21666da543b412cdaa7f4ddcbe80d0cc9e49ef734aea0209955a02",
+      "width": 356,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-mobile-agency-mobile-frame-02.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-frame-02.png",
+      "sourceSha256": "79e189bbf6f1fcb68daa053134fcb710b2d9cc72cafc611a8414e64a401db63a",
+      "bytes": 11302,
+      "sha256": "d6354a54c0ba9cfcfd0805fd592589a2c89cd2d0bdc56d77b4af928afc1eefe3",
+      "width": 358,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-mobile-agency-mobile-frame-03.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-frame-03.png",
+      "sourceSha256": "7107c27b2efa65436c2bbf3fd57b7902a31412842f0ff2de79f2a39b4ad9b76c",
+      "bytes": 16352,
+      "sha256": "eca3da00ceab43fd9bb31c1834ce5c2d55c959158dab0e80cfed0314bb041e80",
+      "width": 358,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-mobile-agency-mobile-frame-04.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-frame-04.png",
+      "sourceSha256": "83f73ad01037e6f8c28176fc715a00f415543de82374b99f4e7854ddbb9accaa",
+      "bytes": 20106,
+      "sha256": "7613f035166bdcbf6a1bbc808049c5c3a91ceb5bcafa303b9ad66b958e2efa92",
+      "width": 358,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/agency-mobile-agency-mobile-frame-05.jpg",
+      "sourcePath": "/tmp/r50-html-browser/agency-mobile-frame-05.png",
+      "sourceSha256": "194712c0996cb6f2e2bfe5e2fa1d130346b06b2fc3164770d003205488059045",
+      "bytes": 17320,
+      "sha256": "05ca53c6cb9e7a5f8be751f69145b109f8ae7490961106335a48b97bbc1a4a32",
+      "width": 356,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-desktop-saas-desktop-frame-01.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-frame-01.png",
+      "sourceSha256": "d88434d2fb62923047b8fda015a791fc3d1d8dc6cd050edcabd6a74db1f1c308",
+      "bytes": 24018,
+      "sha256": "ebc29ed428bd85b05855e3bfcced19584472162559c6fbbcc0b8667611131c04",
+      "width": 500,
+      "height": 440,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-desktop-saas-desktop-frame-02.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-frame-02.png",
+      "sourceSha256": "480e0d9503ddf193cbd0b3fecfd4211ed817a74c6857e1313779874aef325e74",
+      "bytes": 20963,
+      "sha256": "67a71f3e744641e339cd586e89ee85d5b87015fcf31db247fd6eced792d48ea5",
+      "width": 429,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-desktop-saas-desktop-frame-03.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-frame-03.png",
+      "sourceSha256": "9d1866d1721053cfe7978d21f0bb80a61ca3f0240f6116a76df913e33889d263",
+      "bytes": 16779,
+      "sha256": "5582ef52df107e24c1910e191ebe0d946ea52b3e7f7b11a51ff0f1211373253f",
+      "width": 396,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-desktop-saas-desktop-frame-04.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-frame-04.png",
+      "sourceSha256": "134e160e4a81ce28d2f294762dc59384ace060a0155a737ad9901a4a9940db6d",
+      "bytes": 13651,
+      "sha256": "6e5ea494c7c811b90376e38c8aee4fbd36a20498f0937d8d44aef319eafe55ed",
+      "width": 396,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-desktop-saas-desktop-frame-05.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-frame-05.png",
+      "sourceSha256": "d2965b833870d635d8a1a8f841ab59b9e7ede5b6a0f4ac1f51c1462277f298d0",
+      "bytes": 18172,
+      "sha256": "6005538b11317383b746adbfa6d8844ac3c8651118a749820b84b2aed4f3e535",
+      "width": 500,
+      "height": 370,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-mobile-saas-mobile-frame-01.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-frame-01.png",
+      "sourceSha256": "2c0bac7e97332259f2c4757e6d44204aa957793c318ed5310570c06fa630747c",
+      "bytes": 18707,
+      "sha256": "b52b34c0fdc7530e92d307cc782094e7c85abd733fa29bcf75492a2129a1c552",
+      "width": 356,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-mobile-saas-mobile-frame-02.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-frame-02.png",
+      "sourceSha256": "35e32e8dac2b6e0f8721847a27865b5eb8d7461b24fc31e306215f980e145156",
+      "bytes": 20283,
+      "sha256": "cf913825642dde629f8aa0d2b98f9c5544d5c21ba102b589d3210d18f4a9d699",
+      "width": 358,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-mobile-saas-mobile-frame-03.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-frame-03.png",
+      "sourceSha256": "7447aaddfe5668428ff10d867584a88e2f1be626c8d4149b6b7b4c3dd35f3871",
+      "bytes": 16112,
+      "sha256": "9e7dc6461ecc3260e40a18f3d0a90aa4c04a9a98a9e2377dc18696731d41306a",
+      "width": 358,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-mobile-saas-mobile-frame-04.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-frame-04.png",
+      "sourceSha256": "db38aa449b09e3211c8b8b318be03e3265383d0cbd1caa7faaa8aa0df120ec86",
+      "bytes": 11503,
+      "sha256": "014ebfb9b31db9d38c19ab066d3dae0043f90f5c690fdad364694069a32471e2",
+      "width": 358,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/chapters/saas-mobile-saas-mobile-frame-05.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-frame-05.png",
+      "sourceSha256": "2e3fb3e07f903de6c6abe0d7525692eb85ee8eef35e9d049cd820f55fadb3d17",
+      "bytes": 18477,
+      "sha256": "f146e5a3c55379c279b35306ee5b4e197bb40f07242154a586779fc1554d0cfe",
+      "width": 356,
+      "height": 350,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-desktop-all-chapters.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-all-chapters.png",
+      "sourceSha256": "e75bcfb851b1df072ee0b4c815b185c0ea8108968a083412b5e0f358438fd15f",
+      "bytes": 560998,
+      "sha256": "6eb574809b765893ed6fccc804e51e912f87416ad2aba81be17008624c2bda83",
+      "width": 1440,
+      "height": 6027,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-desktop-capture.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-capture.png",
+      "sourceSha256": "8d2a998caa70f22bef72e2c45959a6372414ceac2fd27e11c6ca1aa3fe635145",
+      "bytes": 112175,
+      "sha256": "bb4e2eb2589a4901b59d019a8ad30b112a576af60cb522e5252d91d8969fb14f",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-desktop-deliver.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-deliver.png",
+      "sourceSha256": "ff4f66a179210a0cdac68fcdbcf392b389e7b13a05df074e25e7cc68a2526c77",
+      "bytes": 109419,
+      "sha256": "deee23c629b0255abf61d125ebb9124cb1932408f6e165eb86796c98c4a05f55",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-desktop-opening.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-opening.png",
+      "sourceSha256": "57e83c11ff4fe222a6fb90489fa83e955a801488f8999520eaac4806f36e9066",
+      "bytes": 95570,
+      "sha256": "49ffd88c164e7d1812f824696c5001821025484242220768302facd74b2b4204",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-desktop-shape.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-desktop-shape.png",
+      "sourceSha256": "80c492bca074c425a6b156f5b874eb3eafc1ced6328b412d42928ba182c89334",
+      "bytes": 104780,
+      "sha256": "0e4eb5989cf336f4882b8ab7f9055438fb76b0d3a14071a3bd577764a5b19258",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-mobile-all-chapters.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-all-chapters.png",
+      "sourceSha256": "fac7303abedb11d38ec719a8903d856ca702fea6501617f561cbc909bc7ac885",
+      "bytes": 315408,
+      "sha256": "15d5b1502b76f5eb44829bfe24339524062e8b8fe956980cd0cbdac9b737daf9",
+      "width": 390,
+      "height": 6526,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-mobile-capture.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-capture.png",
+      "sourceSha256": "ed9465bba0206bc98214abfa6b1e721baf16d9ac8b49103906dd8fa6eb26b0d6",
+      "bytes": 54310,
+      "sha256": "1c8857b983e71bd4bc5c33027e1fb541b1e88339818cd42a93a862388fce1148",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-mobile-deliver.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-deliver.png",
+      "sourceSha256": "294a1b5753d4e6d414343e009d5700929c825339a4edaef538a2995187b1f238",
+      "bytes": 53371,
+      "sha256": "893cc25d209e80b7b5abe4a32ab621c525ac691ac1bad9eba1c1db6f67513670",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-mobile-opening.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-opening.png",
+      "sourceSha256": "4bdda2741f2a8b54a40f361fcad045942adb2dc8bc200651b012b92a22dcb7e6",
+      "bytes": 40539,
+      "sha256": "8bc4135b3fa6d55bb3f3ac22b5c67fc15c0b31f6d8528b9b30fad182917ae677",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r50/saas-mobile-shape.jpg",
+      "sourcePath": "/tmp/r50-html-browser/saas-mobile-shape.png",
+      "sourceSha256": "f8b7f42ff5b32bf3e6380ec1a57f08560d9057bfe1c39c5b3b0c10291c354958",
+      "bytes": 51373,
+      "sha256": "e540539467b40d2c8457a753b9744228434bba73b1bb4ff754c5fd995953b65e",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/active-theory-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/active-theory-desktop.png",
+      "sourceSha256": "ecf13090c49c82037bf65ca001e4863a33adeb26ba78584eeb801334e7750460",
+      "bytes": 127605,
+      "sha256": "26eb0613d4c57cc216ada5e47f3f3963325dc4d5ce9a25ef4ee56b52f3e0f08a",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/active-theory-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/active-theory-mobile.png",
+      "sourceSha256": "a89bdb8a48b844328a3728ad73ee1af922c3908d4bfe91a3f78e9e518d6ad81b",
+      "bytes": 56418,
+      "sha256": "d81d1af99768d9d05709b41d1a4cf17044797fd31ed1c1c69e04362cbae446c6",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/bruno-simon-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/bruno-simon-desktop.png",
+      "sourceSha256": "1c7d1bf29b0c012aea39149f8615d4f5f2d7c16f173e084611e9431d1d906137",
+      "bytes": 65856,
+      "sha256": "3caabb2a90eb754835da45cc85fe2082f9706f9d3e342dfdc8c156e2123ab25b",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/bruno-simon-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/bruno-simon-mobile.png",
+      "sourceSha256": "d64bd9398045fc1c80bf0139259757b82577911203d7e84beb0171e76e667b2f",
+      "bytes": 21948,
+      "sha256": "73502fd8d8f5cb61877a3189788b8c40b26b4d82bcbe162e4d3fa19ee610a54e",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/framer-product-demo-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/framer-product-demo-desktop.png",
+      "sourceSha256": "c6f88a0c5669308114eacc0f2a549f84a2e1de39c42f94db77aeca3e1dc134ab",
+      "bytes": 131412,
+      "sha256": "fa78d7b9fb1d78cd585b97cc0c239e5b8d739f681957d9307d95bce8a8a00549",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/framer-product-demo-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/framer-product-demo-mobile.png",
+      "sourceSha256": "0171ad8f5160a8df7f31364cee14a89ca786c17fe8ec9b6577bf7ed2f55fba5d",
+      "bytes": 59769,
+      "sha256": "14aa95b1eff5683556847ae145aa449c5fc0d02698fc281e4bbcdb0de4520e33",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/grande-charte-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/grande-charte-desktop.png",
+      "sourceSha256": "bea84cae9b5dd5c3854914722a938a8fb951c47b6a321b6927b878c8c4ea012a",
+      "bytes": 9701,
+      "sha256": "acb84b00c5b538ba6f8d4d29984e16d4411d2ffb1eb94e34ccad0b17cee53afd",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/grande-charte-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/grande-charte-mobile.png",
+      "sourceSha256": "bbefe648f5132cfceb0ea2d9e38add4cca6fdcaae998ad30fb0232f5886ba2d7",
+      "bytes": 4144,
+      "sha256": "ae90bb1ec99d3ab98c086209b79cdb4bc92d09f5623fc4e432be5abf866be532",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/locomotive-work-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/locomotive-work-desktop.png",
+      "sourceSha256": "d4eb185f80f66489010e8df75a5a363c6d45bb1a894008898ab32e9f7b7dda01",
+      "bytes": 12116,
+      "sha256": "152b1c673e2c7dae56f5fee480695d0da5282dcb8c7950a7cd71f7a6f7a4f61e",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/locomotive-work-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/locomotive-work-mobile.png",
+      "sourceSha256": "92593b63cbb7021fb13bd70ce1e32ca4b72983d4f3b28654fa714869071467fc",
+      "bytes": 5889,
+      "sha256": "893ee67d9893da3ee6d71cbe9c30c3a7edd2fd90dfe59124b600e1a849470173",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/noomo-work-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/noomo-work-desktop.png",
+      "sourceSha256": "aaddd8bf4f0b51ed510dddf67630e87678c0d6ee5bad38d76c4f52fdef582eca",
+      "bytes": 84237,
+      "sha256": "ffc47acb293feae4244addc12130659edb553ea44a52d6815ec75b87c0ef26f5",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/noomo-work-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/noomo-work-mobile.png",
+      "sourceSha256": "88f3b56f00f738026b75115301ff530f5cd64bd9573cd75c71ea6c1ed322eb46",
+      "bytes": 56932,
+      "sha256": "8cb02c4a4886b4668ddd072ea5ee48fed7fd09c28edd37b3af052e582a1d4323",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/pear-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/pear-desktop.png",
+      "sourceSha256": "fabed1cfc1e359dc2b8d527a73f1a63e9d5b1efe0f087bfc52cb7c76d015af8a",
+      "bytes": 83766,
+      "sha256": "fa3bdd8f6912f986dc060f5aeff3a6c27e2a5e9dc9143c2a892ca7c35c4b90ea",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/pear-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/pear-mobile.png",
+      "sourceSha256": "9a9ba260dc974b2329e85c2a49da4dbb69ba1f665336c27b076bdf492d7bf458",
+      "bytes": 25749,
+      "sha256": "e6d7df95537d04f40987a8a271895e7278d85dc2091be0cd65c564956d408b63",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/threeui-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/threeui-desktop.png",
+      "sourceSha256": "1f097b69b4fd58fc85353f2968e8a52b47858bc06f2f575fdd5df443303b2976",
+      "bytes": 182262,
+      "sha256": "d0e9fbceb3982b01e7a1594a9687e3c179c5560e94a351a1c2398aa72b3eb977",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/threeui-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/threeui-mobile.png",
+      "sourceSha256": "1bbfee5b23b9857e5bfcc25dea5ba4172754b277be45f08e02d79d615c1cd152",
+      "bytes": 62255,
+      "sha256": "52fcfbb3d55acf9935ce0c4b45701f4b6176307a899318ecbf8ec34eb44d1d16",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/vercel-product-tour-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/vercel-product-tour-desktop.png",
+      "sourceSha256": "4d874ff5e5495f703904e09dc093b2bba97f4dbcf7a50768a46c65a68399de8d",
+      "bytes": 20656,
+      "sha256": "def7b8209faaf281cd0a9d36563b4eba078d17633645e441bbe162a691588fb3",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/vercel-product-tour-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/vercel-product-tour-mobile.png",
+      "sourceSha256": "c3e866cc13b3ee46ccad6b3fe08fc5946792c76b0dc715122a23e2c0f666db86",
+      "bytes": 22470,
+      "sha256": "29a38c5e5fd1df5f9e339f524ee6860727c1dbd767daf9b33eb4e63866d4f44f",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/vercel-tour-article-desktop.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/vercel-tour-article-desktop.png",
+      "sourceSha256": "61a1cc980336f68b67a279232703f88e4aa3e060828509c1a84c8a7148c4ecf6",
+      "bytes": 114541,
+      "sha256": "2e061110b43f8939ef5f8532d60271c54630dd119d79f1d91858a09011e8364e",
+      "width": 1440,
+      "height": 900,
+      "format": "jpeg"
+    },
+    {
+      "path": "screenshots/r56/vercel-tour-article-mobile.jpg",
+      "sourcePath": "/tmp/r56-reference-screenshots/vercel-tour-article-mobile.png",
+      "sourceSha256": "a5fdb60a7fa3b1debf107660f64ec3cdda3457a4be986a8ff1ce175bc583fce5",
+      "bytes": 73394,
+      "sha256": "80a9ba8d45754ad82b0cd5238ba31cd726a0d3339f5477520cdac17b76018501",
+      "width": 390,
+      "height": 844,
+      "format": "jpeg"
+    }
+  ]
+}

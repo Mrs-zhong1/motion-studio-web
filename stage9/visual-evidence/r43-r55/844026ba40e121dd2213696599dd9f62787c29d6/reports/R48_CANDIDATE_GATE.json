@@ -1,0 +1,127 @@
+{
+  "status": "PASS_CANDIDATE_ONLY",
+  "suite": "R48 reproducible candidate and release-integrity gate",
+  "scope": "candidate-only; no deployment, publication, or production signoff",
+  "checks": {
+    "built_editor_exists": true,
+    "build_manifest_exists": true,
+    "r47_report_exists": true,
+    "chromium_e2e_report_exists": true,
+    "r47_all_eight_templates_pass": true,
+    "chromium_product_e2e_pass": true,
+    "offline_build_manifest": true,
+    "three_engine_bundle_present": true,
+    "shared_three_engine_bundle_present": true,
+    "release_not_self_approved": true,
+    "eight_template_catalog_in_build": true,
+    "r45_composition_css_in_editor": true,
+    "r46_accessibility_css_in_editor": true,
+    "reproducible_editor_build": true,
+    "reproducible_build_manifest": true,
+    "build_log_contains_inline_script_validation": true
+  },
+  "evidence": {
+    "r47_all_eight_templates_pass": {
+      "pass": true,
+      "templates": [
+        "agency",
+        "architecture",
+        "cinematic",
+        "editorial",
+        "fashion",
+        "gallery",
+        "product-3d",
+        "saas"
+      ]
+    },
+    "chromium_product_e2e_pass": {
+      "pass": true,
+      "failed_checks": []
+    },
+    "reproducible_editor_build": {
+      "before": "0dde03f068ddec0cd9ac4254730e801cde00fb765872d0efc8fd95348862b0bc",
+      "after": "0dde03f068ddec0cd9ac4254730e801cde00fb765872d0efc8fd95348862b0bc"
+    },
+    "reproducible_build_manifest": {
+      "before": "3f88906c0750576186d8989f16321e7b68d7d0970bd30ce4088bfb98560b537b",
+      "after": "3f88906c0750576186d8989f16321e7b68d7d0970bd30ce4088bfb98560b537b"
+    },
+    "build_log_contains_inline_script_validation": "\n> build\n> node build-offline.mjs\n\nValidated generated executable inline scripts 15\nStage9 genuine offline Three.js bundle 625469 9106527\nR15 offline actual photo bundle inventory {\"editorial\":{\"bundledPhotos\":4,\"fallbackChapters\":0,\"total\":4,\"origin\":\"AI_GENERATED\"},\"product-3d\":{\"bundledPhotos\":5,\"fallbackChapters\":0,\"total\":5,\"origin\":\"AI_GENERATED\"},\"cinematic\":{\"bundledPhotos\":5,\"fallbackChapters\":0,\"total\":5,\"origin\":\"AI_GENERATED\"},\"architecture\":{\"bundledPhotos\":5,\"fallbackChapters\":0,\"total\":5,\"origin\":\"AI_GENERATED\"},\"agency\":{\"bundledPhotos\":5,\"fallbackChapters\":0,\"total\":5,\"origin\":\"AI_GENERATED\"},\"fashion\":{\"bundledPhotos\":5,\"fallbackChapters\":0,\"total\":5,\"origin\":\"AI_GENERATED\"},\"gallery\":{\"bundledPhotos\":5,\"fallbackChapters\":0,\"total\":5,\"origin\":\"AI_GENERATED\"},\"saas\":{\"bundledPhotos\":5,\"fallbackChapters\":0,\"total\":5,\"origin\":\"AI_GENERATED\"}}\n",
+    "candidate_html_sha256": "0dde03f068ddec0cd9ac4254730e801cde00fb765872d0efc8fd95348862b0bc",
+    "manifest_sha256": "3f88906c0750576186d8989f16321e7b68d7d0970bd30ce4088bfb98560b537b",
+    "editor_bytes": 9106527,
+    "build_manifest": {
+      "three": "0.180.0",
+      "engineBytes": 625469,
+      "sharedEngineBytes": 622938,
+      "editorBytes": 9106527,
+      "photoBundle": {
+        "editorial": {
+          "bundledPhotos": 4,
+          "fallbackChapters": 0,
+          "total": 4,
+          "origin": "AI_GENERATED"
+        },
+        "product-3d": {
+          "bundledPhotos": 5,
+          "fallbackChapters": 0,
+          "total": 5,
+          "origin": "AI_GENERATED"
+        },
+        "cinematic": {
+          "bundledPhotos": 5,
+          "fallbackChapters": 0,
+          "total": 5,
+          "origin": "AI_GENERATED"
+        },
+        "architecture": {
+          "bundledPhotos": 5,
+          "fallbackChapters": 0,
+          "total": 5,
+          "origin": "AI_GENERATED"
+        },
+        "agency": {
+          "bundledPhotos": 5,
+          "fallbackChapters": 0,
+          "total": 5,
+          "origin": "AI_GENERATED"
+        },
+        "fashion": {
+          "bundledPhotos": 5,
+          "fallbackChapters": 0,
+          "total": 5,
+          "origin": "AI_GENERATED"
+        },
+        "gallery": {
+          "bundledPhotos": 5,
+          "fallbackChapters": 0,
+          "total": 5,
+          "origin": "AI_GENERATED"
+        },
+        "saas": {
+          "bundledPhotos": 5,
+          "fallbackChapters": 0,
+          "total": 5,
+          "origin": "AI_GENERATED"
+        }
+      },
+      "aiOriginalMedia": true,
+      "offline": true,
+      "source": "Motion Studio Stage9-15, real offline MeshoptDecoder and 4MB GLB validation",
+      "releasePolicy": "web-browser-matrix",
+      "gpuAcceptanceRequired": false,
+      "gpuTested": false,
+      "macHardwareGpuOptional": true,
+      "requiredChecks": [
+        "web-product-e2e",
+        "offline-export",
+        "cross-browser-acceptance",
+        "deployment-smoke"
+      ],
+      "releaseAccepted": false
+    }
+  },
+  "errors": [],
+  "candidateSha": "844026ba40e121dd2213696599dd9f62787c29d6",
+  "candidateShaSource": "git rev-parse HEAD after R53 asset persistence"
+}

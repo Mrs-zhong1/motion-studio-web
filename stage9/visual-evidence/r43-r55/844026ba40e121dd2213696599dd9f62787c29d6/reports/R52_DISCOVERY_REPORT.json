@@ -1,0 +1,37 @@
+{
+  "discovered": 0,
+  "candidates": [],
+  "unfilledSlots": [
+    {
+      "slot": "architecture-04",
+      "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+    },
+    {
+      "slot": "architecture-05",
+      "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+    },
+    {
+      "slot": "cinematic-03",
+      "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+    },
+    {
+      "slot": "cinematic-04",
+      "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+    },
+    {
+      "slot": "cinematic-05",
+      "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+    },
+    {
+      "slot": "editorial-03",
+      "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+    },
+    {
+      "slot": "editorial-04",
+      "reason": "No matching explicit-license 16:9 candidate found in Commons search"
+    }
+  ],
+  "ledgerRows": 8,
+  "status": "REVIEW_ONLY",
+  "autoApproval": false
+}

@@ -153,6 +153,9 @@ def main():
    "generationSystem":"Blender Eevee procedural scene / stage9/r26_blender_pilot.py",
    "generationDate":datetime.now(timezone.utc).isoformat(),
    "sourceReference":"stage9/r26_blender_pilot.py#"+row["template"],
+   "sourceCodeSha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+   "renderEngine":scene.render.engine,"blenderVersion":bpy.app.version_string,
+   "embeddedThirdPartyAssets":False,"thirdPartyAssets":False,
    "termsUrl":"https://github.com/Mrs-zhong1/motion-studio-web",
    "commercialUseTermsChecked":False,"sha256":hashlib.sha256(raw).hexdigest(),
    "reviewStatus":"HUMAN_VISUAL_REVIEW_REQUIRED","productionEligible":False})

@@ -2,7 +2,13 @@ name: V1 R32 Native Artwork Acceptance (report-only until original replacement)
 on:
   workflow_dispatch:
   push:
-    branches: [release/r18-r21-acceptance-gates]
+    branches: [release/r18-r21-acceptance-gates, design/r43-immersive-template-system]
+    paths:
+      - 'stage9/ai-assets/**'
+      - 'stage9/audit_r32_real_media.py'
+      - 'stage9/tests/test_r32_real_media.py'
+      - '.github/workflows/r32-original-media-acceptance.yml'
+  pull_request:
     paths:
       - 'stage9/ai-assets/**'
       - 'stage9/audit_r32_real_media.py'

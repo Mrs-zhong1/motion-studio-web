@@ -1,0 +1,453 @@
+name: R43-R55 One-Shot Batch Execution
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - release/r18-r21-acceptance-gates
+    paths:
+      - '.github/workflows/r43-r55-one-shot-batch.yml'
+      - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/build-offline.mjs'
+      - 'stage9/r43-immersive-template-pilots.mjs'
+      - 'stage9/r44-single-canvas-preview.mjs'
+      - 'stage9/r45-scene-composition.mjs'
+      - 'stage9/r46-responsive-accessibility.mjs'
+      - 'stage9/tests/**'
+      - 'release/generate_r53_original_assets.py'
+      - 'release/validate_r53_production_assets.py'
+      - 'release/create_r53_review_contact_sheet.py'
+      - 'release/validate_r52_photo_rights.py'
+      - 'release/create_r52_review_contact_sheet.py'
+      - 'release/publish_r43_r55_evidence.py'
+      - 'release/stamp_candidate_sha.py'
+      - 'release/fetch_r52_candidate_evidence.py'
+      - 'release/discover_r52_commons_candidates.py'
+      - 'release/tests/test_asset_validation.py'
+      - 'release/R56_REFERENCE_REGISTER.md'
+      - 'release/R56_AGENCY_SAAS_VISUAL_SPEC.md'
+  push:
+    branches:
+      - design/r43-immersive-template-system
+    paths:
+      - '.github/workflows/r43-r55-one-shot-batch.yml'
+      - 'stage9/Motion-Studio-Unified-Editor.html'
+      - 'stage9/build-offline.mjs'
+      - 'stage9/r43-immersive-template-pilots.mjs'
+      - 'stage9/r44-single-canvas-preview.mjs'
+      - 'stage9/r45-scene-composition.mjs'
+      - 'stage9/r46-responsive-accessibility.mjs'
+      - 'stage9/tests/**'
+      - 'release/generate_r53_original_assets.py'
+      - 'release/validate_r53_production_assets.py'
+      - 'release/create_r53_review_contact_sheet.py'
+      - 'release/validate_r52_photo_rights.py'
+      - 'release/create_r52_review_contact_sheet.py'
+      - 'release/publish_r43_r55_evidence.py'
+      - 'release/stamp_candidate_sha.py'
+      - 'release/fetch_r52_candidate_evidence.py'
+      - 'release/discover_r52_commons_candidates.py'
+      - 'release/tests/test_asset_validation.py'
+      - 'release/R56_REFERENCE_REGISTER.md'
+      - 'release/R56_AGENCY_SAAS_VISUAL_SPEC.md'
+permissions:
+  actions: write
+  contents: write
+concurrency:
+  group: r43-r55-one-shot-${{ github.event.pull_request.head.ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  cancel-duplicate-push-runs:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Cancel superseded same-SHA runs now consolidated by the one-shot pipeline
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TARGET_SHA: ${{ github.event.pull_request.head.sha }}
+          TARGET_BRANCH: ${{ github.event.pull_request.head.ref }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.parse, urllib.request, urllib.error
+          repo=os.environ["GH_REPO"]
+          branch=urllib.parse.quote(os.environ["TARGET_BRANCH"],safe="")
+          token=os.environ["GH_TOKEN"]
+          headers={"Authorization":f"Bearer {token}","Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"}
+          url=f"https://api.github.com/repos/{repo}/actions/runs?branch={branch}&per_page=100"
+          request=urllib.request.Request(url,headers=headers)
+          with urllib.request.urlopen(request,timeout=20) as response:
+              runs=json.load(response).get("workflow_runs",[])
+          current=int(os.environ["CURRENT_RUN_ID"])
+          target=os.environ["TARGET_SHA"]
+          duplicate_names={
+              "R43-R55 One-Shot Batch Execution",
+              "R50 Real HTML Browser Review (visual approval remains manual)",
+              "R52 Photography Rights Evidence Gate (report-only until complete)",
+              "R53 33-Asset Integration Acceptance (fail closed)",
+          }
+          cancelled=[]
+          for run in runs:
+              if run.get("id")==current or run.get("head_sha")!=target:
+                  continue
+              if run.get("name") not in duplicate_names or run.get("status") not in ("queued","in_progress"):
+                  continue
+              cancel_url=f"https://api.github.com/repos/{repo}/actions/runs/{run['id']}/cancel"
+              req=urllib.request.Request(cancel_url,headers=headers,method="POST")
+              try:
+                  with urllib.request.urlopen(req,timeout=20) as response:
+                      cancelled.append({"id":run["id"],"name":run["name"],"httpStatus":response.status})
+              except urllib.error.HTTPError as exc:
+                  print(f"Could not cancel duplicate run {run['id']}: HTTP {exc.code}")
+          print(json.dumps({"targetSha":target,"cancelled":cancelled},indent=2))
+          PY
+  execute:
+    needs: cancel-duplicate-push-runs
+    if: always() && github.event_name != 'push'
+    name: Execute R50 → R52 → R53 → R47/R48 and publish one report
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned image and browser test dependencies
+        run: |
+          python -m pip install 'Pillow==11.3.0' 'CairoSVG==2.8.2' playwright
+          npm --prefix stage9 install --no-audit --no-fund
+          python -m playwright install --with-deps chromium firefox webkit
+
+
+
+
+
+
+
+
+
+
+
+      - name: R52 asset validator unit tests
+        id: r52_unit
+        continue-on-error: true
+        run: python -m unittest release.tests.test_asset_validation -v
+      - name: Discover additional Wikimedia Commons photo candidates (metadata-only; no approval)
+        id: r52_discover
+        if: ${{ !cancelled() && steps.r52_unit.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          python release/discover_r52_commons_candidates.py --max-new 10
+      - name: R52 fetch candidate originals (review only; bounded per-file retries)
+        id: r52_fetch
+        if: ${{ !cancelled() && steps.r52_unit.outcome == 'success' }}
+        continue-on-error: true
+        run: python release/fetch_r52_candidate_evidence.py
+      - name: Generate 33 original procedural artworks (no paid API, no stock imagery)
+        id: r53_generate
+        if: ${{ !cancelled() }}
+        run: |
+          python release/generate_r53_original_assets.py
+      - name: Persist generated originals and evidence register to this PR branch
+        id: r53_commit_assets
+        if: ${{ !cancelled() && steps.r53_generate.outcome == 'success' }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add stage9/ai-assets/ release/R53_PRODUCTION_ASSET_REGISTER.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(assets): generate 33 original procedural template visuals'
+            # This workflow runs only on a real branch ref (push or workflow_dispatch).
+            # Never push to pull_request merge refs such as 4/merge.
+            if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+              target_branch="${GITHUB_HEAD_REF}"
+            elif [[ "${GITHUB_REF}" == refs/heads/* ]]; then
+              target_branch="${GITHUB_REF_NAME}"
+            else
+              echo "Refusing asset persistence from non-branch ref: ${GITHUB_REF}" >&2
+              exit 1
+            fi
+            if [ -z "${target_branch}" ]; then
+              echo "Refusing asset persistence without a branch name" >&2
+              exit 1
+            fi
+            git push origin "HEAD:refs/heads/${target_branch}"
+          fi
+      - name: Build the standalone web editor and verify offline Three.js bundle
+        id: build_editor
+        working-directory: stage9
+        run: |
+          npm run build
+          python tests/check_build.py
+      - name: R56 — capture live reference first screens (reference only)
+        id: r56_reference_capture
+        continue-on-error: true
+        env:
+          R56_REFERENCE_DIR: /tmp/r56-reference-screenshots
+          R56_REFERENCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: R56_REFERENCE_SHA="$(git rev-parse HEAD)" python stage9/tests/capture_r56_references.py
+      - name: Run R43-R46 design and interaction contracts
+        id: design_contracts
+        working-directory: stage9
+        run: |
+          node --test tests/test_r43_immersive_template_pilots.mjs
+          node --test tests/test_r44_single_canvas_preview.mjs
+          node --test tests/test_r45_scene_composition.mjs
+          node --test tests/test_r46_responsive_accessibility.mjs
+      - name: R50 actual exported HTML browser acceptance (Agency + SaaS)
+        id: r50_browser
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          R50_SCREENSHOT_DIR: /tmp/r50-html-browser
+          R50_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          R50_COMMIT_SHA="$(git rev-parse HEAD)" python tests/test_r50_html_browser_acceptance.py
+          mkdir -p ../batch-report
+          cp R50_HTML_BROWSER_ACCEPTANCE.json ../batch-report/R50_HTML_BROWSER_ACCEPTANCE.json
+      - name: R52 itemized rights evidence report (never auto-approve)
+        id: r52_validate
+        if: ${{ !cancelled() && steps.r52_unit.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          mkdir -p batch-report
+          MOTION_CANDIDATE_SHA="$(git rev-parse HEAD)" python release/validate_r52_photo_rights.py --allow-incomplete --report batch-report/R52_PHOTO_RIGHTS_REPORT.json
+      - name: Create R52 visual review contact sheet (no approval)
+        id: r52_contact_sheet
+        if: ${{ !cancelled() && steps.r52_validate.outcome == 'success' }}
+        continue-on-error: true
+        run: python release/create_r52_review_contact_sheet.py --output batch-report/R52_REVIEW_CONTACT_SHEET.png
+      - name: R53 validate all 33 generated slots (fail closed for human signoff)
+        id: r53_validate
+        if: always() && steps.r53_generate.outcome == 'success'
+        continue-on-error: true
+        run: |
+          mkdir -p batch-report
+          MOTION_CANDIDATE_SHA="$(git rev-parse HEAD)" python release/validate_r53_production_assets.py --report batch-report/R53_33_ASSET_REPORT.json
+      - name: Generate R53 hash-verified review contact sheet (no approval)
+        id: r53_contact_sheet
+        if: ${{ !cancelled() && steps.r53_validate.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          python release/create_r53_review_contact_sheet.py
+          cp r53-review-contact-sheet.png batch-report/R53_REVIEW_CONTACT_SHEET.png
+
+      - name: R47 Chromium save/reopen/export parity
+        id: r47_chromium
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: chromium
+        run: |
+          mkdir -p ../batch-report
+          python tests/test_r47_roundtrip_parity.py
+          python ../release/stamp_candidate_sha.py --file R47_ROUNDTRIP_PARITY.json
+          cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_chromium.json
+      - name: Chromium product journey E2E
+        id: e2e_chromium
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: chromium
+        run: |
+          mkdir -p ../batch-report
+          python tests/test_web_product_e2e.py
+          python ../release/stamp_candidate_sha.py --file "WEB_PRODUCT_E2E_RESULT_${MOTION_BROWSER}.json"
+          cp WEB_PRODUCT_E2E_RESULT_chromium.json ../batch-report/E2E_chromium.json
+      - name: R48 reproducible candidate gate (candidate only; never release approval)
+        id: r48_candidate
+        if: ${{ !cancelled() && steps.r47_chromium.outcome == 'success' && steps.e2e_chromium.outcome == 'success' }}
+        continue-on-error: true
+        working-directory: stage9
+        run: |
+          python tests/test_r48_release_gate.py
+          python ../release/stamp_candidate_sha.py --file R48_RELEASE_GATE.json
+          cp R48_RELEASE_GATE.json ../batch-report/R48_CANDIDATE_GATE.json
+      - name: Mark R48 HOLD when Chromium evidence is incomplete
+        if: ${{ !cancelled() && (steps.r47_chromium.outcome != 'success' || steps.e2e_chromium.outcome != 'success') }}
+        run: |
+          mkdir -p batch-report
+          printf '%s\n' '{"status":"HOLD","scope":"candidate-only","reason":"Chromium R47 and E2E evidence must both pass before R48 can run.","releaseApproval":false}' > batch-report/R48_CANDIDATE_GATE.json
+      - name: R47 Firefox save/reopen/export parity
+        id: r47_firefox
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: firefox
+        run: |
+          mkdir -p ../batch-report
+          python tests/test_r47_roundtrip_parity.py
+          cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_firefox.json
+      - name: Firefox product journey E2E
+        id: e2e_firefox
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: firefox
+        run: |
+          mkdir -p ../batch-report
+          python tests/test_web_product_e2e.py
+          cp WEB_PRODUCT_E2E_RESULT_firefox.json ../batch-report/E2E_firefox.json
+      - name: R47 WebKit save/reopen/export parity
+        id: r47_webkit
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: webkit
+        run: |
+          mkdir -p ../batch-report
+          python tests/test_r47_roundtrip_parity.py
+          cp R47_ROUNDTRIP_PARITY.json ../batch-report/R47_webkit.json
+      - name: WebKit product journey E2E
+        id: e2e_webkit
+        continue-on-error: true
+        working-directory: stage9
+        env:
+          MOTION_BROWSER: webkit
+        run: |
+          mkdir -p ../batch-report
+          python tests/test_web_product_e2e.py
+          cp WEB_PRODUCT_E2E_RESULT_webkit.json ../batch-report/E2E_webkit.json
+      - name: Generate one consolidated result and human-action list
+        id: consolidate
+        if: always()
+        env:
+          STEPS_JSON: ${{ toJSON(steps) }}
+          JOB_STATUS: ${{ job.status }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          mkdir -p batch-report
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          steps=json.loads(os.environ['STEPS_JSON'])
+          tested_sha=os.popen('git rev-parse HEAD').read().strip()
+          def read_report(path):
+            try: return json.loads(Path(path).read_text())
+            except (OSError,ValueError): return {}
+          r50=read_report('stage9/R50_HTML_BROWSER_ACCEPTANCE.json')
+          r56=read_report('/tmp/r56-reference-screenshots/R56_REFERENCE_SCREENSHOTS.json')
+          r52=read_report('batch-report/R52_PHOTO_RIGHTS_REPORT.json')
+          r53=read_report('batch-report/R53_33_ASSET_REPORT.json')
+          r48=read_report('batch-report/R48_CANDIDATE_GATE.json')
+          stage_shas={'R50':r50.get('commitSha'),'R56':r56.get('candidateSha'),'R52':r52.get('candidateSha'),'R53':r53.get('candidateSha'),'R48':r48.get('candidateSha')}
+          for browser in ('chromium','firefox','webkit'):
+            for prefix in ('R47','E2E'):
+              doc=read_report(f'batch-report/{prefix}_{browser}.json')
+              stage_shas[f'{prefix}_{browser}']=doc.get('candidateSha')
+          sha_mismatches={name:value for name,value in stage_shas.items() if value and value!=tested_sha}
+          technical=['r53_generate','r53_commit_assets','build_editor','design_contracts','r50_browser','r52_unit','r52_discover','r52_fetch','r52_validate','r52_contact_sheet','r53_validate','r53_contact_sheet','r47_chromium','e2e_chromium','r48_candidate','r47_firefox','e2e_firefox','r47_webkit','e2e_webkit']
+          failed=[name for name in technical if steps.get(name,{}).get('outcome') not in ('success','skipped')]
+          if sha_mismatches: failed.append('exact_sha_mismatch')
+          report={
+            'schema':'motion-studio-r43-r55-one-shot-batch-v2',
+            'commit':tested_sha,'candidateSha':tested_sha,'workflowHeadSha':os.environ.get('GITHUB_SHA'),'stageShas':stage_shas,'shaMismatches':sha_mismatches,'branch':os.environ['BRANCH'],
+            'workflowJobStatus':os.environ['JOB_STATUS'],
+            'technicalStepOutcomes':{name:steps.get(name,{}).get('outcome','not-run') for name in technical},
+            'technicalFailures':failed,
+            'R50':r50.get('status','NOT_RUN')+'; human visual art-direction and rights approval still required',
+            'R56_reference_capture':r56.get('status',steps.get('r56_reference_capture',{}).get('outcome','not-run')),
+            'R52':r52.get('status','NOT_RUN')+'; every photo requires itemized source/license and human review',
+            'R53':r53.get('status','NOT_RUN')+'; all 33 original assets and explicit approvals required',
+            'R53_pageReferenceAudit':r53.get('pageReferenceAudit',{}),
+            'R47_by_browser':{browser:read_report(f'batch-report/R47_{browser}.json').get('status','NOT_RUN') for browser in ('chromium','firefox','webkit')},
+            'E2E_by_browser':{browser:read_report(f'batch-report/E2E_{browser}.json').get('status','NOT_RUN') for browser in ('chromium','firefox','webkit')},
+            'R48_status':r48.get('status','NOT_RUN'),
+            'R47_gate':'PASS only if Chromium, Firefox and WebKit parity reports pass on this SHA',
+            'R48_gate':'CANDIDATE_ONLY; never a merge, publish or production approval',
+            'overall':'FAILED' if failed else 'HOLD',
+            'releaseEligible':False,
+            'humanGates':['R50 exact-SHA real exported-HTML visual art-direction review','R52 photo-by-photo source/license/attribution review','R53 33 original asset approvals','R54 physical-device evidence','R55 exact-SHA HTTPS deployment and live smoke'],
+            'automationBoundary':'The 33-asset persistence commit happens before build, reference capture, exported-page screenshots, rights reports, R47/E2E and R48. All stage reports must match candidateSha. The later evidence-only archive commit is stored separately under this SHA. No legal approval, visual signoff, device evidence, or production approval is fabricated.'
+          }
+          Path('batch-report/R43-R55_ONE_SHOT_RESULT.json').write_text(json.dumps(report,indent=2)+'\n')
+          Path('batch-report/HUMAN_ACTION_REQUIRED.md').write_text(
+            '# Human / external gates still required\n\n'
+            '- Inspect actual Agency/SaaS exported-page screenshots from the exact SHA; explicitly approve or request visual changes. Browser functionality PASS is not human art-direction approval.\n'
+            '- Review every R52 photograph source, creator, exact license, attribution, compatibility and local hash.\n'
+            '- Supply and approve all 33 R53 originals; the validator must report 33/33 accepted.\n'
+            '- Perform physical-device checks for R54.\n'
+            '- Run R55 only after the prior gates; verify the exact deployed SHA and live HTTPS flows.\n'
+            '- Keep PR #4 Draft and do not merge or publish automatically.\n')
+          print(json.dumps(report,indent=2))
+          if failed: raise SystemExit(1)
+          PY
+      - name: Assemble exact-SHA review evidence archive
+        id: assemble_review_evidence
+        if: always()
+        continue-on-error: true
+        run: |
+          TESTED_SHA="$(git rev-parse HEAD)"
+          python release/publish_r43_r55_evidence.py --tested-sha "$TESTED_SHA" --output /tmp/r43-r55-review-evidence
+      - name: Persist exact-SHA review evidence to the PR branch
+        id: persist_review_evidence
+        if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'design/r43-immersive-template-system'
+        continue-on-error: true
+        env:
+          TARGET_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          test -d /tmp/r43-r55-review-evidence
+          TESTED_SHA="$(git rev-parse HEAD)"
+          git fetch origin "$TARGET_BRANCH"
+          git checkout -B "r43-r55-evidence-publish" "origin/$TARGET_BRANCH"
+          destination="stage9/visual-evidence/r43-r55/$TESTED_SHA"
+          mkdir -p "$destination"
+          cp -a /tmp/r43-r55-review-evidence/. "$destination/"
+          git add -f "$destination"
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m "chore(evidence): archive R43-R55 review evidence for $TESTED_SHA"
+            git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          fi
+      - name: Finalize batch report with evidence archive outcome
+        if: always()
+        env:
+          EVIDENCE_ASSEMBLY: ${{ steps.assemble_review_evidence.outcome }}
+          EVIDENCE_PERSISTENCE: ${{ steps.persist_review_evidence.outcome }}
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          path=Path('batch-report/R43-R55_ONE_SHOT_RESULT.json')
+          if path.is_file():
+              report=json.loads(path.read_text())
+              archive={'assembly':os.environ.get('EVIDENCE_ASSEMBLY'),'prBranchPersistence':os.environ.get('EVIDENCE_PERSISTENCE'),'path':'stage9/visual-evidence/r43-r55/<candidateSha>','evidenceOnlyCommit':True}
+              report['evidenceArchive']=archive
+              if archive['assembly']!='success' or archive['prBranchPersistence'] not in ('success','skipped'):
+                  report.setdefault('technicalFailures',[]).append('evidence_archive_persistence')
+                  report['overall']='FAILED'
+              path.write_text(json.dumps(report,indent=2)+'\n')
+              print(json.dumps(report.get('evidenceArchive'),indent=2))
+          PY
+      - name: Publish consolidated batch report
+        if: always()
+        run: |
+          echo "## R43–R55 one-shot batch result" >> "$GITHUB_STEP_SUMMARY"
+          cat batch-report/R43-R55_ONE_SHOT_RESULT.json >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          cat batch-report/HUMAN_ACTION_REQUIRED.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r43-r55-one-shot-batch-${{ github.sha }}
+          path: |
+            batch-report/
+            /tmp/r50-html-browser/
+            /tmp/r56-reference-screenshots/
+            /tmp/r43-r55-review-evidence/
+            r50-review/
+            r52-candidates/
+            stage9/R47_ROUNDTRIP_PARITY.json
+            stage9/R48_RELEASE_GATE.json
+          if-no-files-found: warn
+          retention-days: 30

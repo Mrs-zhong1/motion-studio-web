@@ -180,7 +180,8 @@ def run_audit():
                 frame.locator("section.section").first.wait_for(timeout=30000)
                 assert page.locator("#previewHeroTitle").inner_text().strip()
                 assert page.locator("#previewUse").is_visible()
-                assert page.locator("#previewUsePanel").is_hidden()  # R41 default full-width preview
+                assert page.locator("#previewUsePanel").is_visible()  # R44 relocates the primary action into the single canvas
+                assert page.locator("#previewUsePanel").evaluate("el=>el.parentElement.id==='previewDevice'")
                 assert page.locator(".preview-product-layout").is_visible()
                 if template_id in ("editorial", "product-3d"):
                     assert frame.locator(".section.designed-hero").count()==1
@@ -278,10 +279,12 @@ def run_audit():
                     (SCREENSHOTS / f"{template_id}-immersive-{device}.png").write_bytes(immersive_shot)
                     geometry["immersivePngSHA256"] = hashlib.sha256(immersive_shot).hexdigest()[:16]
                     immersive.click()
-                    assert page.locator(".preview-product-info").is_visible()
+                    assert page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
+                    assert page.locator(".preview-product-info").is_hidden()
                     assert abs(page.locator("#previewDevice").evaluate(
                         "el => el.getBoundingClientRect().width") - stage_width) < 4
                     immersive.click()
+                    assert not page.locator("#templatePreview").evaluate("el=>el.classList.contains('r41-info-open')")
                     assert page.locator(".preview-product-info").is_hidden()
                     # R4: all six newly authored templates must have complete,
                     # nonoverlapping image/renderer zones in every chapter.

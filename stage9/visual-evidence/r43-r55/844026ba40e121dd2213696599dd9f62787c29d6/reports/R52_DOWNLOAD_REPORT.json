@@ -1,0 +1,127 @@
+{
+  "candidates": [
+    {
+      "candidate_id": "R52-CAND-001",
+      "proposed_slot": "cinematic-02",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Green_screen_hollywood_studio_staging_direction_recording_1080p_with_illumination_cc0_1080p.png",
+      "original_file_url": "https://upload.wikimedia.org/wikipedia/commons/6/61/Green_screen_hollywood_studio_staging_direction_recording_1080p_with_illumination_cc0_1080p.png",
+      "creator": "Sourecgunart1",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "dimensions": [
+        1921,
+        1080
+      ],
+      "format": "PNG",
+      "bytes": 784613,
+      "source_sha1": "3dbf3e1f353a3302238163bb31f66d34e58352a3",
+      "local_sha256": "90b8096cc7609610970a531749f719b57238e35509f645ebd62ce3101563e96d",
+      "file": "R52-CAND-001-Green_screen_hollywood_studio_staging_direction_recording_1080p_with_illumination_cc0_1080p.png",
+      "reviewStatus": "HUMAN_VISUAL_AND_RIGHTS_REVIEW_REQUIRED",
+      "productionEligible": false
+    },
+    {
+      "candidate_id": "R52-CAND-002",
+      "proposed_slot": "architecture-02",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Office_building_in_Bereslavka.jpg",
+      "original_file_url": "https://upload.wikimedia.org/wikipedia/commons/9/92/Office_building_in_Bereslavka.jpg",
+      "creator": "Alexander One Rule",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "format": "JPEG",
+      "bytes": 866181,
+      "source_sha1": "09fdfbb8c29298f4de7f68b512dac6670cc34189",
+      "local_sha256": "ea168a3bc3731d0fc2b188c953d5e06ee07f0341b5b5d7b16fc58a98ff2a512e",
+      "file": "R52-CAND-002-Office_building_in_Bereslavka.jpg",
+      "reviewStatus": "HUMAN_VISUAL_AND_RIGHTS_REVIEW_REQUIRED",
+      "productionEligible": false
+    },
+    {
+      "candidate_id": "R52-CAND-003",
+      "proposed_slot": "architecture-03",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Loyola_College.jpg",
+      "original_file_url": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Loyola_College.jpg",
+      "creator": "Venkatabhaskar",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "format": "JPEG",
+      "bytes": 1796499,
+      "source_sha1": "60adbca06ae5caeba66de9b4580c1ae7cc4390c0",
+      "local_sha256": "f20aeb3de809f687120915b47ba510718bf134680fb378eb8c8d49ca55be009e",
+      "file": "R52-CAND-003-Loyola_College.jpg",
+      "reviewStatus": "HUMAN_VISUAL_AND_RIGHTS_REVIEW_REQUIRED",
+      "productionEligible": false
+    },
+    {
+      "candidate_id": "R52-CAND-006",
+      "proposed_slot": "fashion-03",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Yoshi_katta_ayol_obrazi.png",
+      "original_file_url": "https://upload.wikimedia.org/wikipedia/commons/4/43/Yoshi_katta_ayol_obrazi.png",
+      "creator": "AIDEPCUL",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "format": "PNG",
+      "bytes": 2333223,
+      "source_sha1": "3bc105f7de14378e3de138255c4864f4b821964f",
+      "local_sha256": "7436b1a0355a2be045a05778dd48a35a4df7d3ec2268916dd9936e8928520426",
+      "file": "R52-CAND-006-Yoshi_katta_ayol_obrazi.png",
+      "reviewStatus": "HUMAN_VISUAL_AND_RIGHTS_REVIEW_REQUIRED",
+      "productionEligible": false
+    },
+    {
+      "candidate_id": "R52-CAND-007",
+      "proposed_slot": "fashion-04",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Xorazmlik_ayol_obrazi.png",
+      "original_file_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Xorazmlik_ayol_obrazi.png",
+      "creator": "AIDEPCUL",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "format": "PNG",
+      "bytes": 2529818,
+      "source_sha1": "27a33282b1a9115728f09aa247df827ee9bf19a2",
+      "local_sha256": "e96853a5572ca55da0bb946a13d60fc0bcf26f4df7460143d8ef03f7e7b10f8a",
+      "file": "R52-CAND-007-Xorazmlik_ayol_obrazi.png",
+      "reviewStatus": "HUMAN_VISUAL_AND_RIGHTS_REVIEW_REQUIRED",
+      "productionEligible": false
+    },
+    {
+      "candidate_id": "R52-CAND-008",
+      "proposed_slot": "fashion-05",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Ayollar_kundalik_kiyimi.png",
+      "original_file_url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Ayollar_kundalik_kiyimi.png",
+      "creator": "AIDEPCUL",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "format": "PNG",
+      "bytes": 7607063,
+      "source_sha1": "006020b57e33d59cd7863f81e88be44783651231",
+      "local_sha256": "839e01dead48277d16a65e8ef55d8763c3dc0d987c8df9a55402f566fbf8775e",
+      "file": "R52-CAND-008-Ayollar_kundalik_kiyimi.png",
+      "reviewStatus": "HUMAN_VISUAL_AND_RIGHTS_REVIEW_REQUIRED",
+      "productionEligible": false
+    }
+  ],
+  "downloaded": 6,
+  "errors": [],
+  "status": "REVIEW_ONLY"
+}

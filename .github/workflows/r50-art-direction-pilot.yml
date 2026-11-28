@@ -1,0 +1,88 @@
+name: R50 Real HTML Browser Review (visual approval remains manual)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: r50-real-html-browser-${{ github.event.pull_request.head.ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  actual-html-browser-acceptance:
+    name: Build and inspect actual Agency + SaaS exported HTML
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned project dependencies
+        working-directory: stage9
+        run: npm install --no-audit --no-fund
+      - name: Build the actual offline editor and template export pipeline
+        working-directory: stage9
+        run: |
+          npm run build
+          python tests/check_build.py
+      - name: Install Playwright Chromium
+        run: |
+          python -m pip install playwright Pillow==11.3.0
+          python -m playwright install --with-deps chromium
+      - name: R56 — capture live reference first screens (reference only)
+        continue-on-error: true
+        env:
+          R56_REFERENCE_DIR: /tmp/r56-reference-screenshots
+          R56_REFERENCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python stage9/tests/capture_r56_references.py
+      - name: R50 — real standalone HTML browser acceptance (Agency + SaaS)
+        working-directory: stage9
+        env:
+          R50_SCREENSHOT_DIR: /tmp/r50-html-browser
+          R50_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python tests/test_r50_html_browser_acceptance.py
+      - name: Publish real HTML browser evidence and manual approval boundary
+        if: always()
+        run: |
+          echo "## R50 — real standalone HTML browser acceptance" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f stage9/R50_HTML_BROWSER_ACCEPTANCE.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          d=json.loads(Path("stage9/R50_HTML_BROWSER_ACCEPTANCE.json").read_text())
+          print("**Browser gate:**", d.get("status"))
+          print("**Source:**", d.get("source"))
+          print("**Templates:**", ", ".join(d.get("templates",{}).keys()))
+          print("**Screenshots:**", len(d.get("screenshots",[])), "actual exported-page captures")
+          for name,row in d.get("templates",{}).items():
+              print("\n###", name)
+              print("| Viewport | Checks | Horizontal overflow |")
+              print("|---|---|---:|")
+              for viewport,v in row.get("viewports",{}).items():
+                  checks=v.get("caseNavigation",v.get("workflowInteraction","NOT_RUN"))
+                  print(f'| {viewport} | {checks} | {v.get("horizontalOverflow","?")}px |')
+          if d.get("errors"):
+              print("\n**Errors:**")
+              print("\n".join("    "+x for x in d["errors"]))
+          print("\n**Important:** browser functionality PASS is not human visual/art-direction approval, rights approval, or production eligibility.")
+          print("Human visual approval:", d.get("humanVisualApproval"))
+          PY
+          else
+            echo "R50 HTML report was not produced; build/setup/test may have failed before report creation." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload review screenshots and structured report (best effort; quota may be exhausted)
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: r50-r56-real-html-and-reference-evidence-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            /tmp/r50-html-browser/
+            /tmp/r56-reference-screenshots/
+            stage9/R50_HTML_BROWSER_ACCEPTANCE.json
+          if-no-files-found: warn
+          retention-days: 14

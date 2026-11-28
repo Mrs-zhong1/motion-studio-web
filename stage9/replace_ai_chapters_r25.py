@@ -12,6 +12,7 @@ import hashlib
 import json
 import shutil
 import struct
+import re
 from io import BytesIO
 from PIL import Image, UnidentifiedImageError
 from datetime import datetime, timezone
@@ -82,16 +83,24 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
             if not isinstance(entry.get(field),str) or not entry[field].strip():
                 raise ValueError("missing provenance "+field+" for "+name)
         if source_type in ("procedural-3d-render","procedural-vector-render"):
-            if entry.get("embeddedThirdPartyAssets") is not False:
-                raise ValueError("procedural original must explicitly declare embeddedThirdPartyAssets=false: "+name)
+            if entry.get("embeddedThirdPartyAssets") is not False or entry.get("thirdPartyAssets") is not False:
+                raise ValueError("procedural original must explicitly declare both third-party asset flags=false: "+name)
         if source_type=="open-licensed-photography":
-            for field in ("creator","licenseId","licenseUrl","attributionText"):
+            for field in ("originalSourceUrl","creator","licenseId","licenseUrl","attribution","attributionText","downloadedAt"):
                 if not isinstance(entry.get(field),str) or not entry[field].strip():
                     raise ValueError("open-license provenance missing "+field+" for "+name)
-            license_id=entry["licenseId"].upper().replace(" ","").replace("_","-")
-            allowed=(license_id.startswith(("CC0-","CC-BY-","CC-BY-SA-")) or license_id in ("CC0","PUBLIC-DOMAIN","PDM-1.0"))
-            if not allowed or "NC" in license_id or "ND" in license_id:
+            if not entry["originalSourceUrl"].startswith("https://") or not entry["licenseUrl"].startswith("https://"):
+                raise ValueError("open-license source and license URLs must use HTTPS: "+name)
+            license_id=re.sub(r"[^A-Z0-9.]+","-",entry["licenseId"].upper()).strip("-")
+            allowed=bool(re.fullmatch(r"(?:CC0(?:-1[.]0)?|PUBLIC-DOMAIN|PDM-1[.]0|CC-BY-(?:2[.]0|2[.]5|3[.]0|4[.]0)|CC-BY-SA-(?:2[.]0|2[.]5|3[.]0|4[.]0))",license_id))
+            if not allowed:
                 raise ValueError("license is not explicitly approved for commercial reuse: "+name)
+            if license_id.startswith("CC-BY-SA-") and entry.get("shareAlikeCompatibilityReviewed") is not True:
+                raise ValueError("CC-BY-SA compatibility review missing: "+name)
+            try:
+                datetime.fromisoformat(entry["downloadedAt"].replace("Z","+00:00"))
+            except ValueError as exc:
+                raise ValueError("downloadedAt must be an ISO-8601 timestamp: "+name) from exc
         raw=(folder/name).read_bytes()
         if len(raw)<1000 or len(raw)>5_000_000: raise ValueError("image file size out of bounds "+name)
         dimensions=native_dimensions(raw)
@@ -104,8 +113,10 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
                     raise ValueError("header/decoded dimensions disagree: "+name)
         except (UnidentifiedImageError, OSError) as e:
             raise ValueError("unreadable or corrupted original image: "+name) from e
-        if dimensions[0]<1280 or dimensions[1]<720:
-            raise ValueError("native image below 1280×720: "+name+" "+str(dimensions))
+        if dimensions[0]<1600 or dimensions[1]<900:
+            raise ValueError("native image below 1600×900: "+name+" "+str(dimensions))
+        if abs(dimensions[0]/dimensions[1]-16/9)>0.015:
+            raise ValueError("native image aspect ratio outside 16:9 tolerance: "+name)
         if list(dimensions)!=entry.get("nativeSourceDimensions"):
             raise ValueError("manifest native dimensions do not match original bytes: "+name)
         if hashlib.sha256(raw).hexdigest()==existing[key]["sha256"]:
@@ -113,7 +124,8 @@ def plan(folder,manifest_path=ASSETS/"manifest.json"):
         updated=dict(existing[key])
         provenance_fields=("source","sourceType","trueHighResolutionGenerated","nativeSourceDimensions",
                   "generationSystem","generationDate","sourceReference","termsUrl","commercialUseTermsChecked",
-                  "embeddedThirdPartyAssets","creator","licenseId","licenseUrl","attributionText")
+                  "embeddedThirdPartyAssets","thirdPartyAssets","creator","licenseId","licenseUrl",
+                  "originalSourceUrl","attribution","attributionText","downloadedAt","shareAlikeCompatibilityReviewed")
         for k in provenance_fields:
             if k in entry: updated[k]=entry[k]
             else: updated.pop(k,None)
