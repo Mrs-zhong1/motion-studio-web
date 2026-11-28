@@ -37,7 +37,7 @@ html[data-r43-template="saas"]{--r43-accent:#a9f278;--r43-ink:#10251c;background
 html[data-r43-template="saas"] .r43-saas-shell{width:min(100% - 48px,1240px);margin:4vh auto 8vh;border:1px solid #b9cbbb;background:#e4eee3;border-radius:22px;overflow:hidden;box-shadow:0 25px 80px #244b391c}
 html[data-r43-template="saas"] .r43-saas-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;border-bottom:1px solid #b9cbbb;font:700 10px ui-monospace,monospace;letter-spacing:.12em}
 html[data-r43-template="saas"] .r43-saas-tabs{display:flex;gap:8px;flex-wrap:wrap;padding:16px 22px 0}
-html[data-r43-template="saas"] .r43-saas-tabs button{border:1px solid #a8c0ac;border-radius:999px;padding:10px 15px;background:transparent;color:#173428;font:600 11px system-ui;cursor:pointer}
+html[data-r43-template="saas"] .r43-saas-tabs button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:1px solid #a8c0ac;border-radius:999px;padding:12px 16px;background:transparent;color:#173428;font:600 11px system-ui;cursor:pointer}
 html[data-r43-template="saas"] .r43-saas-tabs button[aria-pressed="true"]{background:#173428;color:#f0f5ed;border-color:#173428}
 html[data-r43-template="saas"] .r43-saas-workflow{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(18px,4vw,56px);padding:clamp(22px,5vw,64px);align-items:center;min-height:340px}
 html[data-r43-template="saas"] .r43-saas-copy h2{font-size:clamp(30px,5vw,66px);line-height:.96;letter-spacing:-.06em;margin:0 0 18px}
